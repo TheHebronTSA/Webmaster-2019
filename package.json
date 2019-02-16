@@ -2,9 +2,11 @@
   "name": "webmaster-2019",
   "version": "1.0.0",
   "description": "Hebron TSA's Webmaster submission",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify main.js -o bundle.js",
+    "watch": "watchify main.js -o bundle.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,20 @@
   "bugs": {
     "url": "https://github.com/eeshaan/Webmaster-2019/issues"
   },
-  "homepage": "https://github.com/eeshaan/Webmaster-2019#readme"
+  "homepage": "https://github.com/eeshaan/Webmaster-2019#readme",
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.7"
+  },
+  "devDependencies": {
+    "browserify": "^16.2.3",
+    "cssify": "^1.0.3",
+    "watchify": "^3.11.0"
+  },
+  "browserify": {
+      "transform": [
+          "cssify"
+      ]
+  }
 }
