@@ -1,0 +1,19 @@
+{
+  "name": "webmaster-2019",
+  "version": "1.0.0",
+  "description": "Hebron TSA's Webmaster submission",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eeshaan/Webmaster-2019.git"
+  },
+  "author": "Bruce Moe, Eeshaan Pirani, Sonal Verma, Faizaan Vidhani, Sanjana Yadav",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eeshaan/Webmaster-2019/issues"
+  },
+  "homepage": "https://github.com/eeshaan/Webmaster-2019#readme"
+}
