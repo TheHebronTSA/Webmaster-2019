@@ -8,7 +8,7 @@
 ### What are your goals associated with this project?
 * Improve team-building and communication skills
 * Create an inspiring design, something that doesn't look like it was made by high-schoolers
-* Learn how to utilize [npm](https://npmjs.com) effectively
+* Learn how to utilize [yarn](https://yarnpkg.com) effectively
 * "Push the web to its limits" by integrating advanced features like page transitions and 3D animations
 * Get 1st Place at Nationals
 * Inspire the next generation of Hebron TSA
