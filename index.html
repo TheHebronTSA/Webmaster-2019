@@ -1,15 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Hebron TSA</title>
-  
-  <script src="bundle.js"></script>
+	<title>Hebron TSA</title>
 
+	<link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans" rel="stylesheet">
+
+	<script src="bundle.js" charset="utf-8"></script>
 </head>
+
 <body>
+	<div id="popup" class="popup">
+		<nav class="st-menu scale-rotate" id="menu">
+			<h2 class="">Sidebar</h2>
+			<ul>
+				<li><a class="" href="#">Data Management</a></li>
+				<li><a class="" href="#">Location</a></li>
+				<li><a class="" href="#">Study</a></li>
+				<li><a class="" href="#">Collections</a></li>
+				<li><a class="" href="#">Credits</a></li>
+			</ul>
+		</nav>
+
+		<div class="pusher">
+			<div class="inner">
+				<div class="inner-content">
+					<div id="menu">
+						<h1 class="main-header no-select">
+							Hebron TSA
+						</h1>
+						<button data-effect="scale-rotate">Menu</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="nav-icon3">
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+	</div>
+
+  <script src="classie.js" charset="utf-8"></script>
+  <script src="sidebarEffects.js" charset="utf-8"></script>
+	<script src="./node_modules/mo-js/build/mo.min.js" charset="utf-8"></script>
+	<script>
+	const COLORS = {
+  RED:      '#FD5061',
+  YELLOW:   '#FFCEA5',
+  BLACK:    '#29363B',
+  WHITE:    'white',
+  VINOUS:   '#A50710'
+	}
+
+	const burst1 = new mojs.Burst({
+	  left: 0, top: 0,
+	  count:          8,
+	  radius:         { 50: 150 },
+	  children: {
+	    shape:        'line',
+	    stroke:       [ 'white', '#FFE217', '#FC46AD', '#D0D202', '#B8E986', '#D0D202' ],
+	    scale:        1,
+	    scaleX:       { 1 : 0 },
+	    // pathScale:    'rand(.5, 1.25)',
+	    degreeShift:  'rand(-90, 90)',
+	    radius:       'rand(20, 40)',
+	    // duration:     200,
+	    delay:        'rand(0, 150)',
+	    isForce3d:    true,
+			isShowEnd: false
+	  }
+	});
+
+	const largeBurst = new mojs.Burst({
+	  left: 0, top: 0,
+	  count:          4,
+	  radius:         0,
+	  angle:         45,
+	  radius:        { 0: 450  },
+	  children: {
+	    shape:        'line',
+	    stroke:       '#4ACAD9',
+	    scale:        1,
+	    scaleX:       { 1 : 0 },
+	    radius:       100,
+	    duration:     450,
+	    isForce3d:    true,
+	    easing:       'cubic.inout',
+			isShowEnd: false
+	  }
+	});
+
+	const CIRCLE_OPTS = {
+	  left: 0, top: 0,
+	  scale:      { 0: 1 },
+		isShowEnd: false
+	}
+
+	const largeCircle = new mojs.Shape({
+	  ...CIRCLE_OPTS,
+	  fill:       'none',
+	  stroke:     'white',
+	  strokeWidth: 4,
+	  opacity:    { .25 : 0 },
+	  radius:     250,
+	  duration:   600,
+		isShowEnd: false
+	});
+
+	const smallCircle = new mojs.Shape({
+	  ...CIRCLE_OPTS,
+	  fill:       'white',
+	  opacity:    { .5 : 0 },
+	  radius:     30,
+		isShowEnd: false
+	});
+
+	document.addEventListener( 'click', function (e) {
+
+	  burst1
+	    .tune({ x: e.pageX, y: e.pageY })
+	    .generate()
+	    .replay();
+
+	  largeBurst
+	    .tune({ x: e.pageX, y: e.pageY })
+	    .replay();
+
+	  largeCircle
+	    .tune({ x: e.pageX, y: e.pageY })
+	    .replay();
+
+	  smallCircle
+	    .tune({ x: e.pageX, y: e.pageY })
+	    .replay();
+
+	});
+
+	</script>
 </body>
+
 </html>
