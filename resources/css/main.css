@@ -65,7 +65,7 @@ body {
 	transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;
 }
 
-.st-menu-open .pusher::after {
+.menu-open .pusher::after {
 	width: 100%;
 	height: 100%;
 	opacity: 1;
@@ -73,7 +73,7 @@ body {
 	transition: opacity 0.5s;
 }
 
-.st-menu {
+.menu {
 	font-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;
 	font-weight: 700;
 	position: absolute;
@@ -88,7 +88,7 @@ body {
 	transition: all 0.5s;
 }
 
-.st-menu::after {
+.menu::after {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -101,7 +101,7 @@ body {
 	transition: opacity 0.5s;
 }
 
-.st-menu-open .st-menu::after {
+.menu-open .menu::after {
 	width: 0;
 	height: 0;
 	opacity: 0;
@@ -111,13 +111,13 @@ body {
 
 /* content style */
 
-.st-menu ul {
+.menu ul {
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
 
-.st-menu h2 {
+.menu h2 {
 	margin: 0;
 	padding: 1em;
 	color: rgba(0,0,0,0.4);
@@ -126,7 +126,7 @@ body {
 	font-size: 2em;
 }
 
-.st-menu ul li a {
+.menu ul li a {
 	display: block;
 	padding: 1em 1em 1em 1.2em;
 	outline: none;
@@ -139,11 +139,11 @@ body {
 	transition: background 0.3s, box-shadow 0.3s;
 }
 
-.st-menu ul li:first-child a {
+.menu ul li:first-child a {
 	box-shadow: inset 0 -1px rgba(0,0,0,0.2), inset 0 1px rgba(0,0,0,0.2);
 }
 
-.st-menu ul li a:hover {
+.menu ul li a:hover {
 	background: rgba(0,0,0,0.2);
 	box-shadow: inset 0 -1px rgba(0,0,0,0);
 	color: #fff;
@@ -159,18 +159,18 @@ body {
 	transform-style: preserve-3d;
 }
 
-.scale-rotate.st-menu-open .pusher {
+.scale-rotate.menu-open .pusher {
 	-webkit-transform: translate3d(100px, 0, -600px) rotateY(-20deg);
 	transform: translate3d(100px, 0, -600px) rotateY(-20deg);
 }
 
-.scale-rotate.st-menu {
+.scale-rotate.menu {
 	opacity: 1;
 	-webkit-transform: translate3d(-100%, 0, 0);
 	transform: translate3d(-100%, 0, 0);
 }
 
-.scale-rotate.st-menu-open .scale-rotate.st-menu {
+.scale-rotate.menu-open .scale-rotate.menu {
 	visibility: visible;
 	-webkit-transition: -webkit-transform 0.5s;
 	transition: transform 0.5s;
@@ -178,7 +178,7 @@ body {
 	transform: translate3d(0, 0, 0);
 }
 
-.scale-rotate.st-menu::after {
+.scale-rotate.menu::after {
 	display: none;
 }
 

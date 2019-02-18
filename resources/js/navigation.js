@@ -105,10 +105,10 @@ var SidebarMenuEffects = (function () {
 			// event type (if mobile use touch events)
 			eventtype = mobilecheck() ? 'touchstart' : 'click',
 			resetMenu = function () {
-				classie.remove(container, 'st-menu-open');
+				classie.remove(container, 'menu-open');
 			},
 			bodyClickFn = function (evt) {
-				if (!hasParentClass(evt.target, 'st-menu')) {
+				if (!hasParentClass(evt.target, 'menu')) {
 					resetMenu();
 					document.removeEventListener(eventtype, bodyClickFn);
 				}
@@ -123,7 +123,7 @@ var SidebarMenuEffects = (function () {
 				container.className = 'popup'; // clear
 				classie.add(container, effect);
 				setTimeout(function () {
-					classie.add(container, 'st-menu-open');
+					classie.add(container, 'menu-open');
 				}, 25);
 				document.addEventListener(eventtype, bodyClickFn);
 			});
