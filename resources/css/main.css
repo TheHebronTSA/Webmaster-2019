@@ -158,16 +158,6 @@ body {
 	perspective: 1500px;
 }
 
-.scale-rotate .pusher {
-	-webkit-transform-style: preserve-3d;
-	transform-style: preserve-3d;
-}
-
-.scale-rotate.menu-open .pusher {
-	-webkit-transform: translate3d(250px, 0, -500px) rotateY(-50deg);
-	transform: translate3d(250px, 0, -500px) rotateY(-50deg);
-}
-
 .scale-rotate.menu {
 	opacity: 1;
 	-webkit-transform: translate3d(-100%, 0, 0);
@@ -184,6 +174,18 @@ body {
 
 .scale-rotate.menu::after {
 	display: none;
+}
+
+@media (min-width: 630px) {
+	.scale-rotate .pusher {
+		-webkit-transform-style: preserve-3d;
+		transform-style: preserve-3d;
+	}
+	
+	.scale-rotate.menu-open .pusher {
+		-webkit-transform: translate3d(250px, 0, -500px) rotateY(-50deg);
+		transform: translate3d(250px, 0, -500px) rotateY(-50deg);
+	}
 }
 
 /* Fallback example for browsers that don't support 3D transforms (and no JS fallback) */
