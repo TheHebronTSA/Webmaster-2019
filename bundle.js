@@ -16,7 +16,7 @@ $('#nav-icon1,#nav-icon2,#nav-icon3,#nav-icon4').click(function(){
   $(this).toggleClass('open');
 });
 });
-alert('Welcome to Hebron TSA');
+//alert('Welcome to Hebron TSA');
 
 },{"./node_modules/bootstrap/dist/css/bootstrap.min.css":2,"./node_modules/bootstrap/dist/js/bootstrap.min.js":3,"./resources/css/main.css":7,"./resources/js/navigation.js":8,"jquery":5}],2:[function(require,module,exports){
 var inject = require('./../../../cssify');
