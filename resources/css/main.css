@@ -161,8 +161,8 @@ body {
 }
 
 .scale-rotate.menu-open .pusher {
-	-webkit-transform: translate3d(250px, 0, -600px) rotateY(-20deg);
-	transform: translate3d(250px, 0, -600px) rotateY(-20deg);
+	-webkit-transform: translate3d(250px, 0, -500px) rotateY(-50deg);
+	transform: translate3d(250px, 0, -500px) rotateY(-50deg);
 }
 
 .scale-rotate.menu {
