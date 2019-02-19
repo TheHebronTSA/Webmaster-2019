@@ -1,14 +1,12 @@
-
-
 var bootstrap_style = require('./node_modules/bootstrap/dist/css/bootstrap.min.css')
 var css = require('./resources/css/main.css')
 var $ = require('jquery');
 var bootstrap = require('bootstrap');
 // var animation = require('./resources/js/animation.js');
-var navigation = require('./resources/js/navigation.js');
 
 $(document).ready(function() {
   var mojs = require('mo-js');
+  var navigation = require('./resources/js/navigation');
 
   /** DEFINE MOJS BURSTS */
 
