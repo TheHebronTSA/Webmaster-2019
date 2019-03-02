@@ -101,7 +101,7 @@ var SidebarMenuEffects = (function () {
 	function init() {
 
 		var container = document.getElementById('popup'),
-			buttons = Array.prototype.slice.call(document.querySelectorAll('#popup > #nav-icon1')),
+			buttons = Array.prototype.slice.call(document.querySelectorAll('#popup > #nav-icon')),
 			// event type (if mobile use touch events)
 			eventtype = mobilecheck() ? 'touchstart' : 'click',
 			resetMenu = function () {
