@@ -102,7 +102,7 @@ $(document).ready(function() {
       .replay();
   });
 
-  $('#nav-icon,#nav-icon2,#nav-icon3,#nav-icon4').click(function(){
+  $('#nav-icon').click(function(){
     $(this).toggleClass('open');
   });
 });
