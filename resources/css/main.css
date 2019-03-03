@@ -49,6 +49,22 @@ body {
 	background: #2D4B9B;
 }
 
+.inner-what-is-tsa {
+	background: #8DCEE4;
+}
+
+.inner-our-members {
+	background: #E20068;
+}
+
+.inner-stem {
+	background: #F5D300;
+}
+
+.inner-gallery {
+	background: #000;
+}
+
 .pusher {
 	position: relative;
 	left: 0;
