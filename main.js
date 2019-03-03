@@ -210,6 +210,7 @@ $(document).ready(function () {
   };
 
   Barba.Pjax.start();
+  Barba.Prefetch.init();
 });
 
 //alert('Welcome to Hebron TSA');
