@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+body {
+  font-family: 'Montserrat', 'Lato', sans-serif;
+  background-color: #Bf0222;
+  color: #fff;
+}
+
+p {
+  font-family: 'Lato', 'Montserrat', sans-serif;
+}
+
+noframes {
+  font-family: 'Montserrat', 'Lato', sans-serif;
+}
