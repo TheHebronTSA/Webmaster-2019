@@ -65,6 +65,11 @@ body {
 	background: #000;
 }
 
+.inner-about {
+	background: #fff;
+	color: #000;
+}
+
 .pusher {
 	position: relative;
 	left: 0;
@@ -205,7 +210,7 @@ ul {
 
 	.menu {
 		font-size: 2rem;
-		padding-left: 7%;
+		padding-left: 9%;
 		transform: translate(-50%, -50%);
 		min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
   	min-height: 100vh; /* These two lines are counted as one :-)       */
@@ -216,7 +221,7 @@ ul {
 
 	.menu ul li a {
 		box-shadow: none;
-		padding: 0.5em 0.5em 0.5em 0.6em;
+		padding: 0.25em 0.25em 0.25em 0.36em;
 	}
 
 	.menu ul:hover li:hover a:hover {
@@ -267,6 +272,10 @@ ul {
   -moz-transition: .25s ease-in-out;
   -o-transition: .25s ease-in-out;
   transition: .25s ease-in-out;
+}
+
+.nav-icon-about span {
+	background: #000;
 }
 
 #nav-icon span:nth-child(1) {
