@@ -23,7 +23,7 @@ body {
 }
 
 .main-header {
-	font-size: 5rem;
+	font-size: 4.74rem;
 	font-weight: 700;
 	font-family: 'IBM Plex Sans', sans-serif;
 	text-transform: uppercase;
@@ -35,6 +35,12 @@ body {
 
 .main-header .thin {
 	font-weight: 200;
+}
+
+@media(min-width: 1350px) {
+	.main-header {
+		font-size: 5rem;
+	}
 }
 
 .no-select {
