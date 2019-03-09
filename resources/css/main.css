@@ -280,7 +280,7 @@ ul {
   transition: .25s ease-in-out;
 }
 
-.nav-icon-about span {
+#nav-icon.nav-icon-about span {
 	background: #000;
 }
 
