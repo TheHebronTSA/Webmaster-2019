@@ -1,16 +1,13 @@
-// import Barba from 'barba.js';
-// CAUSES 'import' and 'export' may appear only with 'sourceType: module' (1:0)
-
 var bootstrap_style = require('./node_modules/bootstrap/dist/css/bootstrap.min.css')
 var css = require('./resources/css/main.css')
 var $ = require('jquery');
 var bootstrap = require('bootstrap');
-var barbajs = require('barba.js')
 
 // var animation = require('./resources/js/animation.js');
 
 $(document).ready(function () {
   var mojs = require('mo-js');
+  var Barba = require('barba.js');
   var navigation = require('./resources/js/navigation');
 
   /** DEFINE MOJS BURSTS */
