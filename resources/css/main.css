@@ -23,7 +23,7 @@ body {
 }
 
 .main-header {
-	font-size: 5rem;
+	font-size: 4.74rem;
 	font-weight: 700;
 	font-family: 'IBM Plex Sans', sans-serif;
 	text-transform: uppercase;
@@ -35,6 +35,12 @@ body {
 
 .main-header .thin {
 	font-weight: 200;
+}
+
+@media(min-width: 1350px) {
+	.main-header {
+		font-size: 5rem;
+	}
 }
 
 .no-select {
@@ -63,6 +69,11 @@ body {
 
 .inner-gallery {
 	background: #000;
+}
+
+.inner-about {
+	background: #fff;
+	color: #000;
 }
 
 .pusher {
@@ -205,7 +216,7 @@ ul {
 
 	.menu {
 		font-size: 2rem;
-		padding-left: 7%;
+		padding-left: 9%;
 		transform: translate(-50%, -50%);
 		min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
   	min-height: 100vh; /* These two lines are counted as one :-)       */
@@ -216,7 +227,7 @@ ul {
 
 	.menu ul li a {
 		box-shadow: none;
-		padding: 0.5em 0.5em 0.5em 0.6em;
+		padding: 0.25em 0.25em 0.25em 0.36em;
 	}
 
 	.menu ul:hover li:hover a:hover {
@@ -267,6 +278,10 @@ ul {
   -moz-transition: .25s ease-in-out;
   -o-transition: .25s ease-in-out;
   transition: .25s ease-in-out;
+}
+
+#nav-icon.nav-icon-about span {
+	background: #000;
 }
 
 #nav-icon span:nth-child(1) {
