@@ -14,12 +14,23 @@ body,
 .inner {
 	height: 100%;
 	width: 100%;
-	overflow: hidden;
+	overflow: scroll;
 }
 
 body {
 	background-color: #BF0222;
 	color: #fff;
+	font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.splash {
+	width: 100%;
+	height: 40rem;
+}
+
+.container {
+	width: 100%;
+	height: 100%;
 }
 
 .main-header {
@@ -35,6 +46,17 @@ body {
 
 .main-header .thin {
 	font-weight: 200;
+}
+
+h2, h3, h4 {
+	text-transform: uppercase;
+	font-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;
+	font-weight: 700;
+}
+
+h5, h6 {
+	font-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;
+	font-style: italic;
 }
 
 @media(min-width: 1350px) {
