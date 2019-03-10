@@ -133,10 +133,6 @@ $(document).ready(function () {
       .replay();
   });
 
-  $('#nav-icon').click(function () {
-    $(this).toggleClass('open');
-  });
-
   // DEFINE BARBA.JS FADE TRANSITION
 
   var FadeTransition = Barba.BaseTransition.extend({
