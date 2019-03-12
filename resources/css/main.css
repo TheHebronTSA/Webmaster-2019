@@ -284,6 +284,10 @@ a:visited:hover {
 }
 
 @media (min-width: 630px) {
+	.main-header {
+		white-space: nowrap;
+	}
+
 	.scale-rotate .pusher {
 		-webkit-transform-style: preserve-3d;
 		transform-style: preserve-3d;

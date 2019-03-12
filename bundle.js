@@ -10,6 +10,7 @@ $(document).ready(function () {
   var mojs = require('mo-js');
   var Barba = require('barba.js');
   var navigation = require('./resources/js/navigation');
+  var blockReveal = require('./resources/js/blockReveal');
 
   /** DEFINE MOJS BURSTS */
 
@@ -208,7 +209,7 @@ $(document).ready(function () {
 });
 
 //alert('Welcome to Hebron TSA');
-},{"./node_modules/bootstrap/dist/css/bootstrap.min.css":3,"./resources/css/main.css":9,"./resources/js/navigation":10,"barba.js":2,"bootstrap":4,"jquery":6,"mo-js":7}],2:[function(require,module,exports){
+},{"./node_modules/bootstrap/dist/css/bootstrap.min.css":3,"./resources/css/main.css":9,"./resources/js/blockReveal":10,"./resources/js/navigation":11,"barba.js":2,"bootstrap":4,"jquery":6,"mo-js":7}],2:[function(require,module,exports){
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -31391,11 +31392,228 @@ return Popper;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],9:[function(require,module,exports){
 var inject = require('./../../node_modules/cssify');
-var css = "*,\n*:after,\n*::before {\n\tmargin: 0;\n\tpadding: 0;\n\t-moz-box-sizing: border-box;\n\tbox-sizing: border-box;\n}\n\nhtml,\nbody,\n.popup,\n.pusher,\n.inner {\n\theight: 100%;\n\twidth: 100%;\n\toverflow-x: hidden;\n\toverflow-y: scroll;\n\t-webkit-overflow-scrolling: touch;\n}\n\nbody {\n\tbackground-color: #BF0222;\n\tcolor: #fff;\n\tfont-family: 'IBM Plex Sans', 'Work Sans', 'Karla', 'Lato', sans-serif;\n}\n\n.condensed {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n}\n\n.splash {\n\twidth: 100%;\n\theight: 40rem;\n}\n\n.container {\n\twidth: 100%;\n\theight: 100%;\n}\n\n.main-header {\n\tfont-size: 4.74rem;\n\tfont-weight: 700;\n\tfont-family: 'IBM Plex Sans', sans-serif;\n\ttext-transform: uppercase;\n\tposition: absolute;\n\ttop: 50%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n}\n\n.main-header .thin {\n\tfont-weight: 200;\n}\n\nh2, h3, h4 {\n\ttext-transform: uppercase;\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-weight: 700;\n}\n\nh5, h6 {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-style: italic;\n}\n\na {\n  background: linear-gradient(to bottom, #BF0222 0%, #BF0222 100%);\n  background-position: 0 100%;\n  background-repeat: repeat-x;\n\tbackground-size: 3px 3px;\n\tfont-weight: 600;\n  color: #000;\n\ttext-decoration: none;\n\t-webkit-transition: all 0.3s ease-in-out;\n\ttransition: all 0.3s ease-in-out;\n}\n\na:hover {\n\tcolor: #000;\n  background-image: url(\"data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23bf0222' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E\");\n  background-position: 0 100%;\n  background-size: auto 6px;\n  background-repeat: repeat-x;\n  text-decoration: none;\n}\n\na:visited {\n  background: linear-gradient(to bottom, #4d0099 0%, #4d0099 100%);\n  background-position: 0 100%;\n  background-repeat: repeat-x;\n\tbackground-size: 3px 3px;\n\tfont-weight: 600;\n  color: #000;\n\ttext-decoration: none;\n\ttransition: all ease-in-out 0.5s;\n}\n\na:visited:hover {\n\tcolor: #000;\n  background-image: url(\"data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%234d0099' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E\");\n  background-position: 0 100%;\n  background-size: auto 6px;\n  background-repeat: repeat-x;\n  text-decoration: none;\n}\n\n@media(min-width: 1350px) {\n\t.main-header {\n\t\tfont-size: 5rem;\n\t}\n}\n\n.no-select {\n\t-webkit-touch-callout: none;\n\t-webkit-user-select: none;\n\t-moz-user-select: none;\n\t-ms-user-select: none;\n\tuser-select: none;\n}\n\n.inner {\n\tbackground: #2D4B9B;\n}\n\n.inner-what-is-tsa {\n\tbackground: #07A9DF;\n}\n\n.inner-our-members {\n\tbackground: #E20069;\n}\n\n.inner-stem {\n\tbackground: #F5B800;\n}\n\n.inner-gallery {\n\tbackground: #000;\n}\n\n.inner-about {\n\tbackground: #fff;\n\tcolor: #000;\n}\n\n.pusher {\n\tposition: relative;\n\tleft: 0;\n\tz-index: 3;\n\theight: 100%;\n\twidth: 100%;\n\t-webkit-transition: -webkit-transform 0.5s;\n\ttransition: transform 0.5s;\n\t-webkit-box-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n\t-moz-box-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n\tbox-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n}\n\n.pusher::after {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n\twidth: 0;\n\theight: 0;\n\tbackground: rgba(0, 0, 0, 0.2);\n\tcontent: '';\n\topacity: 0;\n\t-webkit-transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n\ttransition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n}\n\n.menu-open .pusher::after {\n\twidth: 100%;\n\theight: 100%;\n\topacity: 1;\n\t-webkit-transition: opacity 0.5s;\n\ttransition: opacity 0.5s;\n}\n\n.menu ul {\n\tlist-style-type: none;\n}\n\n.menu {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-weight: 700;\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tz-index: 4;\n\tvisibility: hidden;\n\theight: 100%;\n\tbackground: #BF0222;\n\t-webkit-transition: all 0.5s;\n\ttransition: all 0.5s;\n}\n\n.menu::after {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbackground: rgba(0, 0, 0, 0.2);\n\tcontent: '';\n\topacity: 1;\n\t-webkit-transition: opacity 0.5s;\n\ttransition: opacity 0.5s;\n}\n\n.menu-open .menu::after {\n\twidth: 0;\n\theight: 0;\n\topacity: 0;\n\t-webkit-transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n\ttransition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n}\n\n.menu ul li a {\n\tdisplay: block;\n\tpadding: 1em 1em 1em 1.2em;\n\toutline: none;\n\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0.2);\n\tcolor: #f3efe0;\n\ttext-transform: uppercase;\n\ttext-decoration: none;\n\ttext-shadow: 0 0 1px rgba(255, 255, 255, 0.1);\n\tfont-weight: 700;\n\t-webkit-transition: all 1.3s;\n\ttransition: all 1.3s;\n}\n\n/* .menu ul li:first-child a {\n\tbox-shadow: inset 0 -1px rgba(0,0,0,0.2), inset 0 1px rgba(0,0,0,0.2);\n} */\n\n.menu ul li a:hover {\n\tbackground: rgba(0, 0, 0, 0.2);\n\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0);\n\tcolor: #fff;\n}\n\n.scale-rotate.popup {\n\t-webkit-perspective: 1500px;\n\tperspective: 1500px;\n}\n\n.scale-rotate.menu {\n\topacity: 1;\n\t-webkit-transform: translate3d(-100%, 0, 0);\n\ttransform: translate3d(-100%, 0, 0);\n}\n\n.scale-rotate.menu-open .scale-rotate.menu {\n\tvisibility: visible;\n\t-webkit-transition: -webkit-transform 0.5s;\n\ttransition: transform 0.5s;\n\t-webkit-transform: translate3d(0, 0, 0);\n\ttransform: translate3d(0, 0, 0);\n}\n\n.scale-rotate.menu::after {\n\tdisplay: none;\n}\n\n@media (max-width: 630px) {\n\t.menu {\n\t\twidth: 300px;\n\t\tpadding-top: 95px;\n\t}\n}\n\n@media (min-width: 630px) {\n\t.scale-rotate .pusher {\n\t\t-webkit-transform-style: preserve-3d;\n\t\ttransform-style: preserve-3d;\n\t}\n\n\t.scale-rotate.menu-open .pusher {\n\t\t-webkit-transform: translate3d(250px, 0, -500px) rotateY(-50deg);\n\t\ttransform: translate3d(250px, 0, -500px) rotateY(-50deg);\n\t}\n\n\t.menu {\n\t\tfont-size: 2rem;\n\t\tpadding-left: 9%;\n\t\ttransform: translate(-50%, -50%);\n\t\tmin-height: 100%;  /* Fallback for browsers do NOT support vh unit */\n  \tmin-height: 100vh; /* These two lines are counted as one :-)       */\n\n  \tdisplay: flex;\n  \talign-items: center;\n\t}\n\n\t.menu ul li a {\n\t\tbox-shadow: none;\n\t\tpadding: 0.25em 0.25em 0.25em 0.36em;\n\t}\n\n\t.menu ul:hover li:hover a:hover {\n\t\tbox-shadow: none;\n\t\t-moz-text-fill-color: transparent;\n\t\t-webkit-text-fill-color: transparent;\n\t\t-moz-text-stroke-color: #fff;\n\t\t-webkit-text-stroke-color: #fff;\n\t\t-moz-text-stroke-width: 1px;\n\t\t-webkit-text-stroke-width: 1px;\n\t}\n\n\t.menu ul li a:hover {\n\t\tbackground: rgba(0, 0, 0, 0);\n\t\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0);\n\t\tcolor: #fff;\n\t}\n}\n\n/* Fallback example for browsers that don't support 3D transforms (and no JS fallback) */\n.no-csstransforms3d .pusher,\n.no-js .pusher {\n\tpadding-left: 300px;\n}\n\n#nav-icon {\n  width: 60px;\n  height: 45px;\n  position: absolute;\n  margin: 25px;\n\tz-index: 5;\n  -webkit-transition: .5s ease-in-out;\n  -moz-transition: .5s ease-in-out;\n  -o-transition: .5s ease-in-out;\n  transition: .5s ease-in-out;\n  cursor: pointer;\n}\n\n#nav-icon span {\n  display: block;\n  position: absolute;\n  height: 5px;\n  width: 100%;\n  background: #fff;\n  opacity: 1;\n  left: 0;\n  -webkit-transition: .25s ease-in-out;\n  -moz-transition: .25s ease-in-out;\n  -o-transition: .25s ease-in-out;\n  transition: .25s ease-in-out;\n}\n\n#nav-icon.nav-icon-about span {\n\tbackground: #000;\n}\n\n#nav-icon span:nth-child(1) {\n  top: 0px;\n}\n\n#nav-icon span:nth-child(2) {\n  top: 15px;\n}\n\n#nav-icon span:nth-child(3) {\n  top: 30px;\n}\n\n#nav-icon.open span:nth-child(1) {\n  top: 18px;\n  -webkit-transform: rotate(135deg);\n  -moz-transform: rotate(135deg);\n  -o-transform: rotate(135deg);\n  transform: rotate(135deg);\n}\n\n#nav-icon.open span:nth-child(2) {\n  opacity: 0;\n  left: -60px;\n}\n\n#nav-icon.open span:nth-child(3) {\n  top: 18px;\n  -webkit-transform: rotate(-135deg);\n  -moz-transform: rotate(-135deg);\n  -o-transform: rotate(-135deg);\n  transform: rotate(-135deg);\n}\n\n.color-block-1 {\n\twidth: 100%;\n\theight: 2rem;\n\tbackground: #BF0222;\n}\n\n.color-block-2 {\n\twidth: 100%;\n\theight: 2rem;\n\tbackground: #2D4B9B;\n}\n\n.color-block-3 {\n\twidth: 100%;\n\theight: 2rem;\n\tbackground: #07A9DF;\n}\n\n.color-block-4 {\n\twidth: 100%;\n\theight: 2rem;\n\tbackground: #E20069;\n}\n\n.color-block-5 {\n\twidth: 100%;\n\theight: 2rem;\n\tbackground: #F5B800;\n}\n\n.color-block-6 {\n\twidth: 100%;\n\theight: 2rem;\n\tbackground: #fff;\n}\n\n.color-block-7 {\n\twidth: 100%;\n\theight: 2rem;\n\tbackground: #000;\n}";
+var css = "*,\n*:after,\n*::before {\n\tmargin: 0;\n\tpadding: 0;\n\t-moz-box-sizing: border-box;\n\tbox-sizing: border-box;\n}\n\nhtml,\nbody,\n.popup,\n.pusher,\n.inner {\n\theight: 100%;\n\twidth: 100%;\n\toverflow-x: hidden;\n\toverflow-y: scroll;\n\t-webkit-overflow-scrolling: touch;\n}\n\nbody {\n\tbackground-color: #BF0222;\n\tcolor: #fff;\n\tfont-family: 'IBM Plex Sans', 'Work Sans', 'Karla', 'Lato', sans-serif;\n}\n\n.condensed {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n}\n\n.block-revealer__element {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbackground: #000;\n\tpointer-events: none;\n\topacity: 0;\n}\n\n.splash {\n\twidth: 100%;\n\theight: 40rem;\n}\n\n.container {\n\twidth: 100%;\n\theight: 100%;\n}\n\n.main-header {\n\tfont-size: 4.74rem;\n\tfont-weight: 700;\n\tfont-family: 'IBM Plex Sans', sans-serif;\n\ttext-transform: uppercase;\n\tposition: absolute;\n\ttop: 50%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n}\n\n.main-header .thin {\n\tfont-weight: 200;\n}\n\nh2, h3, h4 {\n\ttext-transform: uppercase;\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-weight: 700;\n}\n\nh5, h6 {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-style: italic;\n}\n\na {\n  background: linear-gradient(to bottom, #BF0222 0%, #BF0222 100%);\n  background-position: 0 100%;\n  background-repeat: repeat-x;\n\tbackground-size: 3px 3px;\n\tfont-weight: 600;\n  color: #000;\n\ttext-decoration: none;\n\t-webkit-transition: all 0.3s ease-in-out;\n\ttransition: all 0.3s ease-in-out;\n}\n\na:hover {\n\tcolor: #000;\n  background-image: url(\"data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23bf0222' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E\");\n  background-position: 0 100%;\n  background-size: auto 6px;\n  background-repeat: repeat-x;\n  text-decoration: none;\n}\n\na:visited {\n  background: linear-gradient(to bottom, #4d0099 0%, #4d0099 100%);\n  background-position: 0 100%;\n  background-repeat: repeat-x;\n\tbackground-size: 3px 3px;\n\tfont-weight: 600;\n  color: #000;\n\ttext-decoration: none;\n\ttransition: all ease-in-out 0.5s;\n}\n\na:visited:hover {\n\tcolor: #000;\n  background-image: url(\"data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%234d0099' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E\");\n  background-position: 0 100%;\n  background-size: auto 6px;\n  background-repeat: repeat-x;\n  text-decoration: none;\n}\n\n@media(min-width: 1350px) {\n\t.main-header {\n\t\tfont-size: 5rem;\n\t}\n}\n\n.no-select {\n\t-webkit-touch-callout: none;\n\t-webkit-user-select: none;\n\t-moz-user-select: none;\n\t-ms-user-select: none;\n\tuser-select: none;\n}\n\n.inner {\n\tbackground: #2D4B9B;\n}\n\n.inner-what-is-tsa {\n\tbackground: #07A9DF;\n}\n\n.inner-our-members {\n\tbackground: #E20069;\n}\n\n.inner-stem {\n\tbackground: #F5B800;\n}\n\n.inner-gallery {\n\tbackground: #000;\n}\n\n.inner-about {\n\tbackground: #fff;\n\tcolor: #000;\n}\n\n.pusher {\n\tposition: relative;\n\tleft: 0;\n\tz-index: 3;\n\theight: 100%;\n\twidth: 100%;\n\t-webkit-transition: -webkit-transform 0.5s;\n\ttransition: transform 0.5s;\n\t-webkit-box-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n\t-moz-box-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n\tbox-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n}\n\n.pusher::after {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n\twidth: 0;\n\theight: 0;\n\tbackground: rgba(0, 0, 0, 0.2);\n\tcontent: '';\n\topacity: 0;\n\t-webkit-transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n\ttransition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n}\n\n.menu-open .pusher::after {\n\twidth: 100%;\n\theight: 100%;\n\topacity: 1;\n\t-webkit-transition: opacity 0.5s;\n\ttransition: opacity 0.5s;\n}\n\n.menu ul {\n\tlist-style-type: none;\n}\n\n.menu {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-weight: 700;\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tz-index: 4;\n\tvisibility: hidden;\n\theight: 100%;\n\tbackground: #BF0222;\n\t-webkit-transition: all 0.5s;\n\ttransition: all 0.5s;\n}\n\n.menu::after {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbackground: rgba(0, 0, 0, 0.2);\n\tcontent: '';\n\topacity: 1;\n\t-webkit-transition: opacity 0.5s;\n\ttransition: opacity 0.5s;\n}\n\n.menu-open .menu::after {\n\twidth: 0;\n\theight: 0;\n\topacity: 0;\n\t-webkit-transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n\ttransition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n}\n\n.menu ul li a {\n\tdisplay: block;\n\tpadding: 1em 1em 1em 1.2em;\n\toutline: none;\n\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0.2);\n\tcolor: #f3efe0;\n\ttext-transform: uppercase;\n\ttext-decoration: none;\n\ttext-shadow: 0 0 1px rgba(255, 255, 255, 0.1);\n\tfont-weight: 700;\n\t-webkit-transition: all 1.3s;\n\ttransition: all 1.3s;\n}\n\n/* .menu ul li:first-child a {\n\tbox-shadow: inset 0 -1px rgba(0,0,0,0.2), inset 0 1px rgba(0,0,0,0.2);\n} */\n\n.menu ul li a:hover {\n\tbackground: rgba(0, 0, 0, 0.2);\n\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0);\n\tcolor: #fff;\n}\n\n.scale-rotate.popup {\n\t-webkit-perspective: 1500px;\n\tperspective: 1500px;\n}\n\n.scale-rotate.menu {\n\topacity: 1;\n\t-webkit-transform: translate3d(-100%, 0, 0);\n\ttransform: translate3d(-100%, 0, 0);\n}\n\n.scale-rotate.menu-open .scale-rotate.menu {\n\tvisibility: visible;\n\t-webkit-transition: -webkit-transform 0.5s;\n\ttransition: transform 0.5s;\n\t-webkit-transform: translate3d(0, 0, 0);\n\ttransform: translate3d(0, 0, 0);\n}\n\n.scale-rotate.menu::after {\n\tdisplay: none;\n}\n\n@media (max-width: 630px) {\n\t.menu {\n\t\twidth: 300px;\n\t\tpadding-top: 95px;\n\t}\n}\n\n@media (min-width: 630px) {\n\t.main-header {\n\t\twhite-space: nowrap;\n\t}\n\n\t.scale-rotate .pusher {\n\t\t-webkit-transform-style: preserve-3d;\n\t\ttransform-style: preserve-3d;\n\t}\n\n\t.scale-rotate.menu-open .pusher {\n\t\t-webkit-transform: translate3d(250px, 0, -500px) rotateY(-50deg);\n\t\ttransform: translate3d(250px, 0, -500px) rotateY(-50deg);\n\t}\n\n\t.menu {\n\t\tfont-size: 2rem;\n\t\tpadding-left: 9%;\n\t\ttransform: translate(-50%, -50%);\n\t\tmin-height: 100%;  /* Fallback for browsers do NOT support vh unit */\n  \tmin-height: 100vh; /* These two lines are counted as one :-)       */\n\n  \tdisplay: flex;\n  \talign-items: center;\n\t}\n\n\t.menu ul li a {\n\t\tbox-shadow: none;\n\t\tpadding: 0.25em 0.25em 0.25em 0.36em;\n\t}\n\n\t.menu ul:hover li:hover a:hover {\n\t\tbox-shadow: none;\n\t\t-moz-text-fill-color: transparent;\n\t\t-webkit-text-fill-color: transparent;\n\t\t-moz-text-stroke-color: #fff;\n\t\t-webkit-text-stroke-color: #fff;\n\t\t-moz-text-stroke-width: 1px;\n\t\t-webkit-text-stroke-width: 1px;\n\t}\n\n\t.menu ul li a:hover {\n\t\tbackground: rgba(0, 0, 0, 0);\n\t\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0);\n\t\tcolor: #fff;\n\t}\n}\n\n/* Fallback example for browsers that don't support 3D transforms (and no JS fallback) */\n.no-csstransforms3d .pusher,\n.no-js .pusher {\n\tpadding-left: 300px;\n}\n\n#nav-icon {\n  width: 60px;\n  height: 45px;\n  position: absolute;\n  margin: 25px;\n\tz-index: 5;\n  -webkit-transition: .5s ease-in-out;\n  -moz-transition: .5s ease-in-out;\n  -o-transition: .5s ease-in-out;\n  transition: .5s ease-in-out;\n  cursor: pointer;\n}\n\n#nav-icon span {\n  display: block;\n  position: absolute;\n  height: 5px;\n  width: 100%;\n  background: #fff;\n  opacity: 1;\n  left: 0;\n  -webkit-transition: .25s ease-in-out;\n  -moz-transition: .25s ease-in-out;\n  -o-transition: .25s ease-in-out;\n  transition: .25s ease-in-out;\n}\n\n#nav-icon.nav-icon-about span {\n\tbackground: #000;\n}\n\n#nav-icon span:nth-child(1) {\n  top: 0px;\n}\n\n#nav-icon span:nth-child(2) {\n  top: 15px;\n}\n\n#nav-icon span:nth-child(3) {\n  top: 30px;\n}\n\n#nav-icon.open span:nth-child(1) {\n  top: 18px;\n  -webkit-transform: rotate(135deg);\n  -moz-transform: rotate(135deg);\n  -o-transform: rotate(135deg);\n  transform: rotate(135deg);\n}\n\n#nav-icon.open span:nth-child(2) {\n  opacity: 0;\n  left: -60px;\n}\n\n#nav-icon.open span:nth-child(3) {\n  top: 18px;\n  -webkit-transform: rotate(-135deg);\n  -moz-transform: rotate(-135deg);\n  -o-transform: rotate(-135deg);\n  transform: rotate(-135deg);\n}\n\n.color-block-1 {\n\twidth: 100%;\n\theight: 2rem;\n\tbackground: #BF0222;\n}\n\n.color-block-2 {\n\twidth: 100%;\n\theight: 2rem;\n\tbackground: #2D4B9B;\n}\n\n.color-block-3 {\n\twidth: 100%;\n\theight: 2rem;\n\tbackground: #07A9DF;\n}\n\n.color-block-4 {\n\twidth: 100%;\n\theight: 2rem;\n\tbackground: #E20069;\n}\n\n.color-block-5 {\n\twidth: 100%;\n\theight: 2rem;\n\tbackground: #F5B800;\n}\n\n.color-block-6 {\n\twidth: 100%;\n\theight: 2rem;\n\tbackground: #fff;\n}\n\n.color-block-7 {\n\twidth: 100%;\n\theight: 2rem;\n\tbackground: #000;\n}";
 inject(css, undefined, '_xhba26');
 module.exports = css;
 
 },{"./../../node_modules/cssify":5}],10:[function(require,module,exports){
+/**
+ * main.js
+ * http://www.codrops.com
+ *
+ * Licensed under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ * 
+ * Copyright 2016, Codrops
+ * http://www.codrops.com
+ */
+;(function(window) {
+
+	'use strict';
+
+	// Helper vars and functions.
+	function extend(a, b) {
+		for(var key in b) { 
+			if( b.hasOwnProperty( key ) ) {
+				a[key] = b[key];
+			}
+		}
+		return a;
+	}
+
+	function createDOMEl(type, className, content) {
+		var el = document.createElement(type);
+		el.className = className || '';
+		el.innerHTML = content || '';
+		return el;
+	}
+
+	/**
+	 * RevealFx obj.
+	 */
+	function RevealFx(el, options) {
+		this.el = el;
+		this.options = extend({}, this.options);
+		extend(this.options, options);
+		this._init();
+	}
+
+	/**
+	 * RevealFx options.
+	 */
+	RevealFx.prototype.options = {
+		// If true, then the content will be hidden until it´s "revealed".
+		isContentHidden: true,
+		// The animation/reveal settings. This can be set initially or passed when calling the reveal method.
+		revealSettings: {
+			// Animation direction: left right (lr) || right left (rl) || top bottom (tb) || bottom top (bt).
+			direction: 'lr',
+			// Revealer´s background color.
+			bgcolor: '#f0f0f0',
+			// Animation speed. This is the speed to "cover" and also "uncover" the element (seperately, not the total time).
+			duration: 500,
+			// Animation easing. This is the easing to "cover" and also "uncover" the element.
+			easing: 'easeInOutQuint',
+			// percentage-based value representing how much of the area should be left covered.
+			coverArea: 0,
+			// Callback for when the revealer is covering the element (halfway through of the whole animation).
+			onCover: function(contentEl, revealerEl) { return false; },
+			// Callback for when the animation starts (animation start).
+			onStart: function(contentEl, revealerEl) { return false; },
+			// Callback for when the revealer has completed uncovering (animation end).
+			onComplete: function(contentEl, revealerEl) { return false; }
+		}
+	};
+
+	/**
+	 * Init.
+	 */
+	RevealFx.prototype._init = function() {
+		this._layout();
+	};
+
+	/**
+	 * Build the necessary structure.
+	 */
+	RevealFx.prototype._layout = function() {
+		var position = getComputedStyle(this.el).position;
+		if( position !== 'fixed' && position !== 'absolute' && position !== 'relative' ) {
+			this.el.style.position = 'relative';
+		}
+		// Content element.
+		this.content = createDOMEl('div', 'block-revealer__content', this.el.innerHTML);
+		if( this.options.isContentHidden) {
+			this.content.style.opacity = 0;
+		}
+		// Revealer element (the one that animates)
+		this.revealer = createDOMEl('div', 'block-revealer__element');
+		this.el.classList.add('block-revealer');
+		this.el.innerHTML = '';
+		this.el.appendChild(this.content);
+		this.el.appendChild(this.revealer);
+	};
+
+	/**
+	 * Gets the revealer element´s transform and transform origin.
+	 */
+	RevealFx.prototype._getTransformSettings = function(direction) {
+		var val, origin, origin_2;
+
+		switch (direction) {
+			case 'lr' : 
+				val = 'scale3d(0,1,1)';
+				origin = '0 50%';
+				origin_2 = '100% 50%';
+				break;
+			case 'rl' : 
+				val = 'scale3d(0,1,1)';
+				origin = '100% 50%';
+				origin_2 = '0 50%';
+				break;
+			case 'tb' : 
+				val = 'scale3d(1,0,1)';
+				origin = '50% 0';
+				origin_2 = '50% 100%';
+				break;
+			case 'bt' : 
+				val = 'scale3d(1,0,1)';
+				origin = '50% 100%';
+				origin_2 = '50% 0';
+				break;
+			default : 
+				val = 'scale3d(0,1,1)';
+				origin = '0 50%';
+				origin_2 = '100% 50%';
+				break;
+		};
+
+		return {
+			// transform value.
+			val: val,
+			// initial and halfway/final transform origin.
+			origin: {initial: origin, halfway: origin_2},
+		};
+	};
+
+	/**
+	 * Reveal animation. If revealSettings is passed, then it will overwrite the options.revealSettings.
+	 */
+	RevealFx.prototype.reveal = function(revealSettings) {
+		// Do nothing if currently animating.
+		if( this.isAnimating ) {
+			return false;
+		}
+		this.isAnimating = true;
+		
+		// Set the revealer element´s transform and transform origin.
+		var defaults = { // In case revealSettings is incomplete, its properties deafault to:
+				duration: 500,
+				easing: 'easeInOutQuint',
+				delay: 0,
+				bgcolor: '#f0f0f0',
+				direction: 'lr',
+				coverArea: 0
+			},
+			revealSettings = revealSettings || this.options.revealSettings,
+			direction = revealSettings.direction || defaults.direction,
+			transformSettings = this._getTransformSettings(direction);
+
+		this.revealer.style.WebkitTransform = this.revealer.style.transform =  transformSettings.val;
+		this.revealer.style.WebkitTransformOrigin = this.revealer.style.transformOrigin =  transformSettings.origin.initial;
+		
+		// Set the Revealer´s background color.
+		this.revealer.style.backgroundColor = revealSettings.bgcolor || defaults.bgcolor;
+		
+		// Show it. By default the revealer element has opacity = 0 (CSS).
+		this.revealer.style.opacity = 1;
+
+		// Animate it.
+		var self = this,
+			// Second animation step.
+			animationSettings_2 = {
+				complete: function() {
+					self.isAnimating = false;
+					if( typeof revealSettings.onComplete === 'function' ) {
+						revealSettings.onComplete(self.content, self.revealer);
+					}
+				}
+			},
+			// First animation step.
+			animationSettings = {
+				delay: revealSettings.delay || defaults.delay,
+				complete: function() {
+					self.revealer.style.WebkitTransformOrigin = self.revealer.style.transformOrigin = transformSettings.origin.halfway;		
+					if( typeof revealSettings.onCover === 'function' ) {
+						revealSettings.onCover(self.content, self.revealer);
+					}
+					anime(animationSettings_2);		
+				}
+			};
+
+		animationSettings.targets = animationSettings_2.targets = this.revealer;
+		animationSettings.duration = animationSettings_2.duration = revealSettings.duration || defaults.duration;
+		animationSettings.easing = animationSettings_2.easing = revealSettings.easing || defaults.easing;
+
+		var coverArea = revealSettings.coverArea || defaults.coverArea;
+		if( direction === 'lr' || direction === 'rl' ) {
+			animationSettings.scaleX = [0,1];
+			animationSettings_2.scaleX = [1,coverArea/100];
+		}
+		else {
+			animationSettings.scaleY = [0,1];
+			animationSettings_2.scaleY = [1,coverArea/100];
+		}
+
+		if( typeof revealSettings.onStart === 'function' ) {
+			revealSettings.onStart(self.content, self.revealer);
+		}
+		anime(animationSettings);
+	};
+	
+	window.RevealFx = RevealFx;
+
+})(window);
+},{}],11:[function(require,module,exports){
 /**
  * Navigation
  */
