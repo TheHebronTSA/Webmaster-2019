@@ -178,7 +178,7 @@ a:visited:hover {
 	transition: opacity 0.5s;
 }
 
-ul {
+.menu ul {
 	list-style-type: none;
 }
 
