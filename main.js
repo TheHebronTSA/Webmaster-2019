@@ -9,6 +9,7 @@ $(document).ready(function () {
   var mojs = require('mo-js');
   var Barba = require('barba.js');
   var navigation = require('./resources/js/navigation');
+  var blockReveal = require('./resources/js/blockReveal');
 
   /** DEFINE MOJS BURSTS */
 

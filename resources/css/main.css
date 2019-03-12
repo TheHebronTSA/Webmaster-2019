@@ -29,6 +29,17 @@ body {
 	font-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;
 }
 
+.block-revealer__element {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #000;
+	pointer-events: none;
+	opacity: 0;
+}
+
 .splash {
 	width: 100%;
 	height: 40rem;

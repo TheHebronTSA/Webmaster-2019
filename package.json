@@ -19,11 +19,13 @@
   },
   "homepage": "https://github.com/eeshaan/Webmaster-2019#readme",
   "dependencies": {
+    "animejs": "^3.0.1",
     "barba.js": "^1.0.0",
     "bootstrap": "^4.3.1",
     "jquery": "^3.3.1",
     "mo-js": "^0.288.2",
-    "popper.js": "^1.14.7"
+    "popper.js": "^1.14.7",
+    "scrollmonitor": "^1.2.4"
   },
   "devDependencies": {
     "browserify": "^16.2.3",
