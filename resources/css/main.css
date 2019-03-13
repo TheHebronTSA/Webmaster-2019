@@ -55,10 +55,11 @@ body {
 	font-weight: 700;
 	font-family: 'IBM Plex Sans', sans-serif;
 	text-transform: uppercase;
-	position: absolute;
+	position: relative;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+	text-align: center;
 }
 
 .main-header .thin {
