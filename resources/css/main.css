@@ -457,5 +457,9 @@ a:visited:hover {
 }
 
 blockquote {
+	display: block;
+	margin: 0 auto;
 	font-size: 2rem;
+	font-weight: 400;
+	font-style: oblique;
 }
