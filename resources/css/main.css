@@ -143,6 +143,11 @@ a:visited:hover {
 	user-select: none;
 }
 
+.overlay {
+	display: block;
+	opacity: 0.5;
+}
+
 .inner-nav {
 	background: #BF0222;
 }
