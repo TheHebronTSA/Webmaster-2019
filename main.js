@@ -1,5 +1,6 @@
-var bootstrap_style = require('./node_modules/bootstrap/dist/css/bootstrap.min.css')
-var css = require('./resources/css/main.css')
+var bootstrap_style = require('./node_modules/bootstrap/dist/css/bootstrap.min.css');
+var block_rev_css = require('./resources/css/block-reveal.css');
+var css = require('./resources/css/main.css');
 var $ = require('jquery');
 var bootstrap = require('bootstrap');
 
