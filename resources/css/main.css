@@ -441,7 +441,8 @@ a:visited:hover {
 	width: 0;
 	height: 0;
 	right: 0;
-	border-style: solid;
+	border-style: inset;
+	-webkit-transform:rotate(360deg);
 	border-width: 0 110px 120px 0;
 	border-color: transparent #fff transparent transparent;
 }
