@@ -87,20 +87,6 @@ $(document).ready(function () {
         y: e.pageY
       })
       .replay();
-
-    largeCircle
-      .tune({
-        x: e.pageX,
-        y: e.pageY
-      })
-      .replay();
-
-    smallCircle
-      .tune({
-        x: e.pageX,
-        y: e.pageY
-      })
-      .replay();
   });
 
   // DEFINE BARBA.JS FADE TRANSITION
