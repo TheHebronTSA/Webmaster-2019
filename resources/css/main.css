@@ -309,6 +309,9 @@ a:visited:hover.dark-link {
 		-moz-columns: 2;
 	}
 
+	.main-header {
+		font-size: 4.5rem;
+	}
 }
 
 @media (min-width: 630px) {
@@ -448,4 +451,11 @@ blockquote {
 	font-size: 2rem;
 	font-weight: 400;
 	font-style: oblique;
+}
+
+@media (max-width: 360px)
+{
+	.main-header{
+		font-size: 3.5rem;
+	}
 }
