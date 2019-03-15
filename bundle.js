@@ -70,38 +70,6 @@ $(document).ready(function () {
     }
   });
 
-  const CIRCLE_OPTS = {
-    left: 0,
-    top: 0,
-    scale: {
-      0: 1
-    },
-    isShowEnd: false
-  }
-
-  const largeCircle = new mojs.Shape({
-    ...CIRCLE_OPTS,
-    fill: 'none',
-    stroke: 'white',
-    strokeWidth: 4,
-    opacity: {
-      .25: 0
-    },
-    radius: 250,
-    duration: 600,
-    isShowEnd: false
-  });
-
-  const smallCircle = new mojs.Shape({
-    ...CIRCLE_OPTS,
-    fill: 'white',
-    opacity: {
-      .5: 0
-    },
-    radius: 30,
-    isShowEnd: false
-  });
-
   /** END BURST DEFINITIONS */
 
   $(document).click(function (e) {
