@@ -23,6 +23,10 @@ body,
 	-webkit-overflow-scrolling: touch;
 }
 
+.inner-content {
+	height: 100%;
+}
+
 body {
 	background-color: #BF0222;
 	color: #fff;
@@ -46,7 +50,7 @@ body {
 
 .splash {
 	width: 100%;
-	height: 40rem;
+	height: 100%;
 }
 
 .container {
