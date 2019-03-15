@@ -143,6 +143,10 @@ a:visited:hover {
 	user-select: none;
 }
 
+.inner-nav {
+	background: #BF0222;
+}
+
 .inner {
 	background: #044BDA;
 }
@@ -427,46 +431,9 @@ a:visited:hover {
 	transform: rotate(-135deg);
 }
 
-.color-block-1 {
+.color-block {
 	width: 100%;
 	height: 2rem;
-	background: #BF0222;
-}
-
-.color-block-2 {
-	width: 100%;
-	height: 2rem;
-	background: #044BDA;
-}
-
-.color-block-3 {
-	width: 100%;
-	height: 2rem;
-	background: #07A9DF;
-}
-
-.color-block-4 {
-	width: 100%;
-	height: 2rem;
-	background: #E20069;
-}
-
-.color-block-5 {
-	width: 100%;
-	height: 2rem;
-	background: #F5B800;
-}
-
-.color-block-6 {
-	width: 100%;
-	height: 2rem;
-	background: #fff;
-}
-
-.color-block-7 {
-	width: 100%;
-	height: 2rem;
-	background: #000;
 }
 
 blockquote {
