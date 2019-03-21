@@ -10,7 +10,13 @@ $(document).ready(function () {
   var Barba = require('barba.js');
   var navigation = require('./resources/js/navigation');
   var blockReveal = require('./resources/js/blockReveal');
+  var VanillaTilt = require('vanilla-tilt');
 
+  VanillaTilt.init(document.querySelector(".box"), {
+    reverse: true,
+    scale: 1,
+    "max-glare": 1,
+  });
   /** DEFINE MOJS BURSTS */
 
   const COLORS = {
