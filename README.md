@@ -1,3 +1,4 @@
+<p align="center"><img src="https://github.com/TheHebronTSA/Webmaster-2019/blob/master/resources/design-assets/new-profile.png?raw=true" height="200"><p>
 <h1 align="center">The Hebron TSA Webmaster Submission</h1>
 <p align="center">for the 2019 TSA Competitive Season</p>
 
