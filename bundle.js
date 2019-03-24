@@ -1,16 +1,18 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-var bootstrap_style = require('./node_modules/bootstrap/dist/css/bootstrap.min.css')
-var css = require('./resources/css/main.css')
 var $ = require('jquery');
+var jQuery = require('jquery');
+var bootstrap_style = require('./node_modules/bootstrap/dist/css/bootstrap.min.css')
 var bootstrap = require('bootstrap');
+var css = require('./resources/css/main.css')
 
 // var animation = require('./resources/js/animation.js');
-
 $(document).ready(function () {
   var mojs = require('mo-js');
   var Barba = require('barba.js');
   var navigation = require('./resources/js/navigation');
   var blockReveal = require('./resources/js/blockReveal');
+
+  var fancybox = require('@fancyapps/fancybox')
 
   /** DEFINE MOJS BURSTS */
 
@@ -163,7 +165,5640 @@ $(document).ready(function () {
 });
 
 //alert('Welcome to Hebron TSA');
-},{"./node_modules/bootstrap/dist/css/bootstrap.min.css":3,"./resources/css/main.css":9,"./resources/js/blockReveal":10,"./resources/js/navigation":11,"barba.js":2,"bootstrap":4,"jquery":6,"mo-js":7}],2:[function(require,module,exports){
+},{"./node_modules/bootstrap/dist/css/bootstrap.min.css":4,"./resources/css/main.css":10,"./resources/js/blockReveal":11,"./resources/js/navigation":12,"@fancyapps/fancybox":2,"barba.js":3,"bootstrap":5,"jquery":7,"mo-js":8}],2:[function(require,module,exports){
+// ==================================================
+// fancyBox v3.5.7
+//
+// Licensed GPLv3 for open source use
+// or fancyBox Commercial License for commercial use
+//
+// http://fancyapps.com/fancybox/
+// Copyright 2019 fancyApps
+//
+// ==================================================
+(function (window, document, $, undefined) {
+  "use strict";
+
+  window.console = window.console || {
+    info: function (stuff) {}
+  };
+
+  // If there's no jQuery, fancyBox can't work
+  // =========================================
+
+  if (!$) {
+    return;
+  }
+
+  // Check if fancyBox is already initialized
+  // ========================================
+
+  if ($.fn.fancybox) {
+    console.info("fancyBox already initialized");
+
+    return;
+  }
+
+  // Private default settings
+  // ========================
+
+  var defaults = {
+    // Close existing modals
+    // Set this to false if you do not need to stack multiple instances
+    closeExisting: false,
+
+    // Enable infinite gallery navigation
+    loop: false,
+
+    // Horizontal space between slides
+    gutter: 50,
+
+    // Enable keyboard navigation
+    keyboard: true,
+
+    // Should allow caption to overlap the content
+    preventCaptionOverlap: true,
+
+    // Should display navigation arrows at the screen edges
+    arrows: true,
+
+    // Should display counter at the top left corner
+    infobar: true,
+
+    // Should display close button (using `btnTpl.smallBtn` template) over the content
+    // Can be true, false, "auto"
+    // If "auto" - will be automatically enabled for "html", "inline" or "ajax" items
+    smallBtn: "auto",
+
+    // Should display toolbar (buttons at the top)
+    // Can be true, false, "auto"
+    // If "auto" - will be automatically hidden if "smallBtn" is enabled
+    toolbar: "auto",
+
+    // What buttons should appear in the top right corner.
+    // Buttons will be created using templates from `btnTpl` option
+    // and they will be placed into toolbar (class="fancybox-toolbar"` element)
+    buttons: [
+      "zoom",
+      //"share",
+      "slideShow",
+      //"fullScreen",
+      //"download",
+      "thumbs",
+      "close"
+    ],
+
+    // Detect "idle" time in seconds
+    idleTime: 3,
+
+    // Disable right-click and use simple image protection for images
+    protect: false,
+
+    // Shortcut to make content "modal" - disable keyboard navigtion, hide buttons, etc
+    modal: false,
+
+    image: {
+      // Wait for images to load before displaying
+      //   true  - wait for image to load and then display;
+      //   false - display thumbnail and load the full-sized image over top,
+      //           requires predefined image dimensions (`data-width` and `data-height` attributes)
+      preload: false
+    },
+
+    ajax: {
+      // Object containing settings for ajax request
+      settings: {
+        // This helps to indicate that request comes from the modal
+        // Feel free to change naming
+        data: {
+          fancybox: true
+        }
+      }
+    },
+
+    iframe: {
+      // Iframe template
+      tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" allowfullscreen="allowfullscreen" allow="autoplay; fullscreen" src=""></iframe>',
+
+      // Preload iframe before displaying it
+      // This allows to calculate iframe content width and height
+      // (note: Due to "Same Origin Policy", you can't get cross domain data).
+      preload: true,
+
+      // Custom CSS styling for iframe wrapping element
+      // You can use this to set custom iframe dimensions
+      css: {},
+
+      // Iframe tag attributes
+      attr: {
+        scrolling: "auto"
+      }
+    },
+
+    // For HTML5 video only
+    video: {
+      tpl: '<video class="fancybox-video" controls controlsList="nodownload" poster="{{poster}}">' +
+        '<source src="{{src}}" type="{{format}}" />' +
+        'Sorry, your browser doesn\'t support embedded videos, <a href="{{src}}">download</a> and watch with your favorite video player!' +
+        "</video>",
+      format: "", // custom video format
+      autoStart: true
+    },
+
+    // Default content type if cannot be detected automatically
+    defaultType: "image",
+
+    // Open/close animation type
+    // Possible values:
+    //   false            - disable
+    //   "zoom"           - zoom images from/to thumbnail
+    //   "fade"
+    //   "zoom-in-out"
+    //
+    animationEffect: "zoom",
+
+    // Duration in ms for open/close animation
+    animationDuration: 366,
+
+    // Should image change opacity while zooming
+    // If opacity is "auto", then opacity will be changed if image and thumbnail have different aspect ratios
+    zoomOpacity: "auto",
+
+    // Transition effect between slides
+    //
+    // Possible values:
+    //   false            - disable
+    //   "fade'
+    //   "slide'
+    //   "circular'
+    //   "tube'
+    //   "zoom-in-out'
+    //   "rotate'
+    //
+    transitionEffect: "fade",
+
+    // Duration in ms for transition animation
+    transitionDuration: 366,
+
+    // Custom CSS class for slide element
+    slideClass: "",
+
+    // Custom CSS class for layout
+    baseClass: "",
+
+    // Base template for layout
+    baseTpl: '<div class="fancybox-container" role="dialog" tabindex="-1">' +
+      '<div class="fancybox-bg"></div>' +
+      '<div class="fancybox-inner">' +
+      '<div class="fancybox-infobar"><span data-fancybox-index></span>&nbsp;/&nbsp;<span data-fancybox-count></span></div>' +
+      '<div class="fancybox-toolbar">{{buttons}}</div>' +
+      '<div class="fancybox-navigation">{{arrows}}</div>' +
+      '<div class="fancybox-stage"></div>' +
+      '<div class="fancybox-caption"><div class="fancybox-caption__body"></div></div>' +
+      "</div>" +
+      "</div>",
+
+    // Loading indicator template
+    spinnerTpl: '<div class="fancybox-loading"></div>',
+
+    // Error message template
+    errorTpl: '<div class="fancybox-error"><p>{{ERROR}}</p></div>',
+
+    btnTpl: {
+      download: '<a download data-fancybox-download class="fancybox-button fancybox-button--download" title="{{DOWNLOAD}}" href="javascript:;">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.62 17.09V19H5.38v-1.91zm-2.97-6.96L17 11.45l-5 4.87-5-4.87 1.36-1.32 2.68 2.64V5h1.92v7.77z"/></svg>' +
+        "</a>",
+
+      zoom: '<button data-fancybox-zoom class="fancybox-button fancybox-button--zoom" title="{{ZOOM}}">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.7 17.3l-3-3a5.9 5.9 0 0 0-.6-7.6 5.9 5.9 0 0 0-8.4 0 5.9 5.9 0 0 0 0 8.4 5.9 5.9 0 0 0 7.7.7l3 3a1 1 0 0 0 1.3 0c.4-.5.4-1 0-1.5zM8.1 13.8a4 4 0 0 1 0-5.7 4 4 0 0 1 5.7 0 4 4 0 0 1 0 5.7 4 4 0 0 1-5.7 0z"/></svg>' +
+        "</button>",
+
+      close: '<button data-fancybox-close class="fancybox-button fancybox-button--close" title="{{CLOSE}}">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 10.6L6.6 5.2 5.2 6.6l5.4 5.4-5.4 5.4 1.4 1.4 5.4-5.4 5.4 5.4 1.4-1.4-5.4-5.4 5.4-5.4-1.4-1.4-5.4 5.4z"/></svg>' +
+        "</button>",
+
+      // Arrows
+      arrowLeft: '<button data-fancybox-prev class="fancybox-button fancybox-button--arrow_left" title="{{PREV}}">' +
+        '<div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.28 15.7l-1.34 1.37L5 12l4.94-5.07 1.34 1.38-2.68 2.72H19v1.94H8.6z"/></svg></div>' +
+        "</button>",
+
+      arrowRight: '<button data-fancybox-next class="fancybox-button fancybox-button--arrow_right" title="{{NEXT}}">' +
+        '<div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.4 12.97l-2.68 2.72 1.34 1.38L19 12l-4.94-5.07-1.34 1.38 2.68 2.72H5v1.94z"/></svg></div>' +
+        "</button>",
+
+      // This small close button will be appended to your html/inline/ajax content by default,
+      // if "smallBtn" option is not set to false
+      smallBtn: '<button type="button" data-fancybox-close class="fancybox-button fancybox-close-small" title="{{CLOSE}}">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" version="1" viewBox="0 0 24 24"><path d="M13 12l5-5-1-1-5 5-5-5-1 1 5 5-5 5 1 1 5-5 5 5 1-1z"/></svg>' +
+        "</button>"
+    },
+
+    // Container is injected into this element
+    parentEl: "body",
+
+    // Hide browser vertical scrollbars; use at your own risk
+    hideScrollbar: true,
+
+    // Focus handling
+    // ==============
+
+    // Try to focus on the first focusable element after opening
+    autoFocus: true,
+
+    // Put focus back to active element after closing
+    backFocus: true,
+
+    // Do not let user to focus on element outside modal content
+    trapFocus: true,
+
+    // Module specific options
+    // =======================
+
+    fullScreen: {
+      autoStart: false
+    },
+
+    // Set `touch: false` to disable panning/swiping
+    touch: {
+      vertical: true, // Allow to drag content vertically
+      momentum: true // Continue movement after releasing mouse/touch when panning
+    },
+
+    // Hash value when initializing manually,
+    // set `false` to disable hash change
+    hash: null,
+
+    // Customize or add new media types
+    // Example:
+    /*
+      media : {
+        youtube : {
+          params : {
+            autoplay : 0
+          }
+        }
+      }
+    */
+    media: {},
+
+    slideShow: {
+      autoStart: false,
+      speed: 3000
+    },
+
+    thumbs: {
+      autoStart: false, // Display thumbnails on opening
+      hideOnClose: true, // Hide thumbnail grid when closing animation starts
+      parentEl: ".fancybox-container", // Container is injected into this element
+      axis: "y" // Vertical (y) or horizontal (x) scrolling
+    },
+
+    // Use mousewheel to navigate gallery
+    // If 'auto' - enabled for images only
+    wheel: "auto",
+
+    // Callbacks
+    //==========
+
+    // See Documentation/API/Events for more information
+    // Example:
+    /*
+      afterShow: function( instance, current ) {
+        console.info( 'Clicked element:' );
+        console.info( current.opts.$orig );
+      }
+    */
+
+    onInit: $.noop, // When instance has been initialized
+
+    beforeLoad: $.noop, // Before the content of a slide is being loaded
+    afterLoad: $.noop, // When the content of a slide is done loading
+
+    beforeShow: $.noop, // Before open animation starts
+    afterShow: $.noop, // When content is done loading and animating
+
+    beforeClose: $.noop, // Before the instance attempts to close. Return false to cancel the close.
+    afterClose: $.noop, // After instance has been closed
+
+    onActivate: $.noop, // When instance is brought to front
+    onDeactivate: $.noop, // When other instance has been activated
+
+    // Interaction
+    // ===========
+
+    // Use options below to customize taken action when user clicks or double clicks on the fancyBox area,
+    // each option can be string or method that returns value.
+    //
+    // Possible values:
+    //   "close"           - close instance
+    //   "next"            - move to next gallery item
+    //   "nextOrClose"     - move to next gallery item or close if gallery has only one item
+    //   "toggleControls"  - show/hide controls
+    //   "zoom"            - zoom image (if loaded)
+    //   false             - do nothing
+
+    // Clicked on the content
+    clickContent: function (current, event) {
+      return current.type === "image" ? "zoom" : false;
+    },
+
+    // Clicked on the slide
+    clickSlide: "close",
+
+    // Clicked on the background (backdrop) element;
+    // if you have not changed the layout, then most likely you need to use `clickSlide` option
+    clickOutside: "close",
+
+    // Same as previous two, but for double click
+    dblclickContent: false,
+    dblclickSlide: false,
+    dblclickOutside: false,
+
+    // Custom options when mobile device is detected
+    // =============================================
+
+    mobile: {
+      preventCaptionOverlap: false,
+      idleTime: false,
+      clickContent: function (current, event) {
+        return current.type === "image" ? "toggleControls" : false;
+      },
+      clickSlide: function (current, event) {
+        return current.type === "image" ? "toggleControls" : "close";
+      },
+      dblclickContent: function (current, event) {
+        return current.type === "image" ? "zoom" : false;
+      },
+      dblclickSlide: function (current, event) {
+        return current.type === "image" ? "zoom" : false;
+      }
+    },
+
+    // Internationalization
+    // ====================
+
+    lang: "en",
+    i18n: {
+      en: {
+        CLOSE: "Close",
+        NEXT: "Next",
+        PREV: "Previous",
+        ERROR: "The requested content cannot be loaded. <br/> Please try again later.",
+        PLAY_START: "Start slideshow",
+        PLAY_STOP: "Pause slideshow",
+        FULL_SCREEN: "Full screen",
+        THUMBS: "Thumbnails",
+        DOWNLOAD: "Download",
+        SHARE: "Share",
+        ZOOM: "Zoom"
+      },
+      de: {
+        CLOSE: "Schlie&szlig;en",
+        NEXT: "Weiter",
+        PREV: "Zur&uuml;ck",
+        ERROR: "Die angeforderten Daten konnten nicht geladen werden. <br/> Bitte versuchen Sie es sp&auml;ter nochmal.",
+        PLAY_START: "Diaschau starten",
+        PLAY_STOP: "Diaschau beenden",
+        FULL_SCREEN: "Vollbild",
+        THUMBS: "Vorschaubilder",
+        DOWNLOAD: "Herunterladen",
+        SHARE: "Teilen",
+        ZOOM: "Vergr&ouml;&szlig;ern"
+      }
+    }
+  };
+
+  // Few useful variables and methods
+  // ================================
+
+  var $W = $(window);
+  var $D = $(document);
+
+  var called = 0;
+
+  // Check if an object is a jQuery object and not a native JavaScript object
+  // ========================================================================
+  var isQuery = function (obj) {
+    return obj && obj.hasOwnProperty && obj instanceof $;
+  };
+
+  // Handle multiple browsers for "requestAnimationFrame" and "cancelAnimationFrame"
+  // ===============================================================================
+  var requestAFrame = (function () {
+    return (
+      window.requestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.oRequestAnimationFrame ||
+      // if all else fails, use setTimeout
+      function (callback) {
+        return window.setTimeout(callback, 1000 / 60);
+      }
+    );
+  })();
+
+  var cancelAFrame = (function () {
+    return (
+      window.cancelAnimationFrame ||
+      window.webkitCancelAnimationFrame ||
+      window.mozCancelAnimationFrame ||
+      window.oCancelAnimationFrame ||
+      function (id) {
+        window.clearTimeout(id);
+      }
+    );
+  })();
+
+  // Detect the supported transition-end event property name
+  // =======================================================
+  var transitionEnd = (function () {
+    var el = document.createElement("fakeelement"),
+      t;
+
+    var transitions = {
+      transition: "transitionend",
+      OTransition: "oTransitionEnd",
+      MozTransition: "transitionend",
+      WebkitTransition: "webkitTransitionEnd"
+    };
+
+    for (t in transitions) {
+      if (el.style[t] !== undefined) {
+        return transitions[t];
+      }
+    }
+
+    return "transitionend";
+  })();
+
+  // Force redraw on an element.
+  // This helps in cases where the browser doesn't redraw an updated element properly
+  // ================================================================================
+  var forceRedraw = function ($el) {
+    return $el && $el.length && $el[0].offsetHeight;
+  };
+
+  // Exclude array (`buttons`) options from deep merging
+  // ===================================================
+  var mergeOpts = function (opts1, opts2) {
+    var rez = $.extend(true, {}, opts1, opts2);
+
+    $.each(opts2, function (key, value) {
+      if ($.isArray(value)) {
+        rez[key] = value;
+      }
+    });
+
+    return rez;
+  };
+
+  // How much of an element is visible in viewport
+  // =============================================
+
+  var inViewport = function (elem) {
+    var elemCenter, rez;
+
+    if (!elem || elem.ownerDocument !== document) {
+      return false;
+    }
+
+    $(".fancybox-container").css("pointer-events", "none");
+
+    elemCenter = {
+      x: elem.getBoundingClientRect().left + elem.offsetWidth / 2,
+      y: elem.getBoundingClientRect().top + elem.offsetHeight / 2
+    };
+
+    rez = document.elementFromPoint(elemCenter.x, elemCenter.y) === elem;
+
+    $(".fancybox-container").css("pointer-events", "");
+
+    return rez;
+  };
+
+  // Class definition
+  // ================
+
+  var FancyBox = function (content, opts, index) {
+    var self = this;
+
+    self.opts = mergeOpts({
+      index: index
+    }, $.fancybox.defaults);
+
+    if ($.isPlainObject(opts)) {
+      self.opts = mergeOpts(self.opts, opts);
+    }
+
+    if ($.fancybox.isMobile) {
+      self.opts = mergeOpts(self.opts, self.opts.mobile);
+    }
+
+    self.id = self.opts.id || ++called;
+
+    self.currIndex = parseInt(self.opts.index, 10) || 0;
+    self.prevIndex = null;
+
+    self.prevPos = null;
+    self.currPos = 0;
+
+    self.firstRun = true;
+
+    // All group items
+    self.group = [];
+
+    // Existing slides (for current, next and previous gallery items)
+    self.slides = {};
+
+    // Create group elements
+    self.addContent(content);
+
+    if (!self.group.length) {
+      return;
+    }
+
+    self.init();
+  };
+
+  $.extend(FancyBox.prototype, {
+    // Create DOM structure
+    // ====================
+
+    init: function () {
+      var self = this,
+        firstItem = self.group[self.currIndex],
+        firstItemOpts = firstItem.opts,
+        $container,
+        buttonStr;
+
+      if (firstItemOpts.closeExisting) {
+        $.fancybox.close(true);
+      }
+
+      // Hide scrollbars
+      // ===============
+
+      $("body").addClass("fancybox-active");
+
+      if (
+        !$.fancybox.getInstance() &&
+        firstItemOpts.hideScrollbar !== false &&
+        !$.fancybox.isMobile &&
+        document.body.scrollHeight > window.innerHeight
+      ) {
+        $("head").append(
+          '<style id="fancybox-style-noscroll" type="text/css">.compensate-for-scrollbar{margin-right:' +
+          (window.innerWidth - document.documentElement.clientWidth) +
+          "px;}</style>"
+        );
+
+        $("body").addClass("compensate-for-scrollbar");
+      }
+
+      // Build html markup and set references
+      // ====================================
+
+      // Build html code for buttons and insert into main template
+      buttonStr = "";
+
+      $.each(firstItemOpts.buttons, function (index, value) {
+        buttonStr += firstItemOpts.btnTpl[value] || "";
+      });
+
+      // Create markup from base template, it will be initially hidden to
+      // avoid unnecessary work like painting while initializing is not complete
+      $container = $(
+          self.translate(
+            self,
+            firstItemOpts.baseTpl
+            .replace("{{buttons}}", buttonStr)
+            .replace("{{arrows}}", firstItemOpts.btnTpl.arrowLeft + firstItemOpts.btnTpl.arrowRight)
+          )
+        )
+        .attr("id", "fancybox-container-" + self.id)
+        .addClass(firstItemOpts.baseClass)
+        .data("FancyBox", self)
+        .appendTo(firstItemOpts.parentEl);
+
+      // Create object holding references to jQuery wrapped nodes
+      self.$refs = {
+        container: $container
+      };
+
+      ["bg", "inner", "infobar", "toolbar", "stage", "caption", "navigation"].forEach(function (item) {
+        self.$refs[item] = $container.find(".fancybox-" + item);
+      });
+
+      self.trigger("onInit");
+
+      // Enable events, deactive previous instances
+      self.activate();
+
+      // Build slides, load and reveal content
+      self.jumpTo(self.currIndex);
+    },
+
+    // Simple i18n support - replaces object keys found in template
+    // with corresponding values
+    // ============================================================
+
+    translate: function (obj, str) {
+      var arr = obj.opts.i18n[obj.opts.lang] || obj.opts.i18n.en;
+
+      return str.replace(/\{\{(\w+)\}\}/g, function (match, n) {
+        return arr[n] === undefined ? match : arr[n];
+      });
+    },
+
+    // Populate current group with fresh content
+    // Check if each object has valid type and content
+    // ===============================================
+
+    addContent: function (content) {
+      var self = this,
+        items = $.makeArray(content),
+        thumbs;
+
+      $.each(items, function (i, item) {
+        var obj = {},
+          opts = {},
+          $item,
+          type,
+          found,
+          src,
+          srcParts;
+
+        // Step 1 - Make sure we have an object
+        // ====================================
+
+        if ($.isPlainObject(item)) {
+          // We probably have manual usage here, something like
+          // $.fancybox.open( [ { src : "image.jpg", type : "image" } ] )
+
+          obj = item;
+          opts = item.opts || item;
+        } else if ($.type(item) === "object" && $(item).length) {
+          // Here we probably have jQuery collection returned by some selector
+          $item = $(item);
+
+          // Support attributes like `data-options='{"touch" : false}'` and `data-touch='false'`
+          opts = $item.data() || {};
+          opts = $.extend(true, {}, opts, opts.options);
+
+          // Here we store clicked element
+          opts.$orig = $item;
+
+          obj.src = self.opts.src || opts.src || $item.attr("href");
+
+          // Assume that simple syntax is used, for example:
+          //   `$.fancybox.open( $("#test"), {} );`
+          if (!obj.type && !obj.src) {
+            obj.type = "inline";
+            obj.src = item;
+          }
+        } else {
+          // Assume we have a simple html code, for example:
+          //   $.fancybox.open( '<div><h1>Hi!</h1></div>' );
+          obj = {
+            type: "html",
+            src: item + ""
+          };
+        }
+
+        // Each gallery object has full collection of options
+        obj.opts = $.extend(true, {}, self.opts, opts);
+
+        // Do not merge buttons array
+        if ($.isArray(opts.buttons)) {
+          obj.opts.buttons = opts.buttons;
+        }
+
+        if ($.fancybox.isMobile && obj.opts.mobile) {
+          obj.opts = mergeOpts(obj.opts, obj.opts.mobile);
+        }
+
+        // Step 2 - Make sure we have content type, if not - try to guess
+        // ==============================================================
+
+        type = obj.type || obj.opts.type;
+        src = obj.src || "";
+
+        if (!type && src) {
+          if ((found = src.match(/\.(mp4|mov|ogv|webm)((\?|#).*)?$/i))) {
+            type = "video";
+
+            if (!obj.opts.video.format) {
+              obj.opts.video.format = "video/" + (found[1] === "ogv" ? "ogg" : found[1]);
+            }
+          } else if (src.match(/(^data:image\/[a-z0-9+\/=]*,)|(\.(jp(e|g|eg)|gif|png|bmp|webp|svg|ico)((\?|#).*)?$)/i)) {
+            type = "image";
+          } else if (src.match(/\.(pdf)((\?|#).*)?$/i)) {
+            type = "iframe";
+            obj = $.extend(true, obj, {
+              contentType: "pdf",
+              opts: {
+                iframe: {
+                  preload: false
+                }
+              }
+            });
+          } else if (src.charAt(0) === "#") {
+            type = "inline";
+          }
+        }
+
+        if (type) {
+          obj.type = type;
+        } else {
+          self.trigger("objectNeedsType", obj);
+        }
+
+        if (!obj.contentType) {
+          obj.contentType = $.inArray(obj.type, ["html", "inline", "ajax"]) > -1 ? "html" : obj.type;
+        }
+
+        // Step 3 - Some adjustments
+        // =========================
+
+        obj.index = self.group.length;
+
+        if (obj.opts.smallBtn == "auto") {
+          obj.opts.smallBtn = $.inArray(obj.type, ["html", "inline", "ajax"]) > -1;
+        }
+
+        if (obj.opts.toolbar === "auto") {
+          obj.opts.toolbar = !obj.opts.smallBtn;
+        }
+
+        // Find thumbnail image, check if exists and if is in the viewport
+        obj.$thumb = obj.opts.$thumb || null;
+
+        if (obj.opts.$trigger && obj.index === self.opts.index) {
+          obj.$thumb = obj.opts.$trigger.find("img:first");
+
+          if (obj.$thumb.length) {
+            obj.opts.$orig = obj.opts.$trigger;
+          }
+        }
+
+        if (!(obj.$thumb && obj.$thumb.length) && obj.opts.$orig) {
+          obj.$thumb = obj.opts.$orig.find("img:first");
+        }
+
+        if (obj.$thumb && !obj.$thumb.length) {
+          obj.$thumb = null;
+        }
+
+        obj.thumb = obj.opts.thumb || (obj.$thumb ? obj.$thumb[0].src : null);
+
+        // "caption" is a "special" option, it can be used to customize caption per gallery item
+        if ($.type(obj.opts.caption) === "function") {
+          obj.opts.caption = obj.opts.caption.apply(item, [self, obj]);
+        }
+
+        if ($.type(self.opts.caption) === "function") {
+          obj.opts.caption = self.opts.caption.apply(item, [self, obj]);
+        }
+
+        // Make sure we have caption as a string or jQuery object
+        if (!(obj.opts.caption instanceof $)) {
+          obj.opts.caption = obj.opts.caption === undefined ? "" : obj.opts.caption + "";
+        }
+
+        // Check if url contains "filter" used to filter the content
+        // Example: "ajax.html #something"
+        if (obj.type === "ajax") {
+          srcParts = src.split(/\s+/, 2);
+
+          if (srcParts.length > 1) {
+            obj.src = srcParts.shift();
+
+            obj.opts.filter = srcParts.shift();
+          }
+        }
+
+        // Hide all buttons and disable interactivity for modal items
+        if (obj.opts.modal) {
+          obj.opts = $.extend(true, obj.opts, {
+            trapFocus: true,
+            // Remove buttons
+            infobar: 0,
+            toolbar: 0,
+
+            smallBtn: 0,
+
+            // Disable keyboard navigation
+            keyboard: 0,
+
+            // Disable some modules
+            slideShow: 0,
+            fullScreen: 0,
+            thumbs: 0,
+            touch: 0,
+
+            // Disable click event handlers
+            clickContent: false,
+            clickSlide: false,
+            clickOutside: false,
+            dblclickContent: false,
+            dblclickSlide: false,
+            dblclickOutside: false
+          });
+        }
+
+        // Step 4 - Add processed object to group
+        // ======================================
+
+        self.group.push(obj);
+      });
+
+      // Update controls if gallery is already opened
+      if (Object.keys(self.slides).length) {
+        self.updateControls();
+
+        // Update thumbnails, if needed
+        thumbs = self.Thumbs;
+
+        if (thumbs && thumbs.isActive) {
+          thumbs.create();
+
+          thumbs.focus();
+        }
+      }
+    },
+
+    // Attach an event handler functions for:
+    //   - navigation buttons
+    //   - browser scrolling, resizing;
+    //   - focusing
+    //   - keyboard
+    //   - detecting inactivity
+    // ======================================
+
+    addEvents: function () {
+      var self = this;
+
+      self.removeEvents();
+
+      // Make navigation elements clickable
+      // ==================================
+
+      self.$refs.container
+        .on("click.fb-close", "[data-fancybox-close]", function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+
+          self.close(e);
+        })
+        .on("touchstart.fb-prev click.fb-prev", "[data-fancybox-prev]", function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+
+          self.previous();
+        })
+        .on("touchstart.fb-next click.fb-next", "[data-fancybox-next]", function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+
+          self.next();
+        })
+        .on("click.fb", "[data-fancybox-zoom]", function (e) {
+          // Click handler for zoom button
+          self[self.isScaledDown() ? "scaleToActual" : "scaleToFit"]();
+        });
+
+      // Handle page scrolling and browser resizing
+      // ==========================================
+
+      $W.on("orientationchange.fb resize.fb", function (e) {
+        if (e && e.originalEvent && e.originalEvent.type === "resize") {
+          if (self.requestId) {
+            cancelAFrame(self.requestId);
+          }
+
+          self.requestId = requestAFrame(function () {
+            self.update(e);
+          });
+        } else {
+          if (self.current && self.current.type === "iframe") {
+            self.$refs.stage.hide();
+          }
+
+          setTimeout(
+            function () {
+              self.$refs.stage.show();
+
+              self.update(e);
+            },
+            $.fancybox.isMobile ? 600 : 250
+          );
+        }
+      });
+
+      $D.on("keydown.fb", function (e) {
+        var instance = $.fancybox ? $.fancybox.getInstance() : null,
+          current = instance.current,
+          keycode = e.keyCode || e.which;
+
+        // Trap keyboard focus inside of the modal
+        // =======================================
+
+        if (keycode == 9) {
+          if (current.opts.trapFocus) {
+            self.focus(e);
+          }
+
+          return;
+        }
+
+        // Enable keyboard navigation
+        // ==========================
+
+        if (!current.opts.keyboard || e.ctrlKey || e.altKey || e.shiftKey || $(e.target).is("input,textarea,video,audio,select")) {
+          return;
+        }
+
+        // Backspace and Esc keys
+        if (keycode === 8 || keycode === 27) {
+          e.preventDefault();
+
+          self.close(e);
+
+          return;
+        }
+
+        // Left arrow and Up arrow
+        if (keycode === 37 || keycode === 38) {
+          e.preventDefault();
+
+          self.previous();
+
+          return;
+        }
+
+        // Righ arrow and Down arrow
+        if (keycode === 39 || keycode === 40) {
+          e.preventDefault();
+
+          self.next();
+
+          return;
+        }
+
+        self.trigger("afterKeydown", e, keycode);
+      });
+
+      // Hide controls after some inactivity period
+      if (self.group[self.currIndex].opts.idleTime) {
+        self.idleSecondsCounter = 0;
+
+        $D.on(
+          "mousemove.fb-idle mouseleave.fb-idle mousedown.fb-idle touchstart.fb-idle touchmove.fb-idle scroll.fb-idle keydown.fb-idle",
+          function (e) {
+            self.idleSecondsCounter = 0;
+
+            if (self.isIdle) {
+              self.showControls();
+            }
+
+            self.isIdle = false;
+          }
+        );
+
+        self.idleInterval = window.setInterval(function () {
+          self.idleSecondsCounter++;
+
+          if (self.idleSecondsCounter >= self.group[self.currIndex].opts.idleTime && !self.isDragging) {
+            self.isIdle = true;
+            self.idleSecondsCounter = 0;
+
+            self.hideControls();
+          }
+        }, 1000);
+      }
+    },
+
+    // Remove events added by the core
+    // ===============================
+
+    removeEvents: function () {
+      var self = this;
+
+      $W.off("orientationchange.fb resize.fb");
+      $D.off("keydown.fb .fb-idle");
+
+      this.$refs.container.off(".fb-close .fb-prev .fb-next");
+
+      if (self.idleInterval) {
+        window.clearInterval(self.idleInterval);
+
+        self.idleInterval = null;
+      }
+    },
+
+    // Change to previous gallery item
+    // ===============================
+
+    previous: function (duration) {
+      return this.jumpTo(this.currPos - 1, duration);
+    },
+
+    // Change to next gallery item
+    // ===========================
+
+    next: function (duration) {
+      return this.jumpTo(this.currPos + 1, duration);
+    },
+
+    // Switch to selected gallery item
+    // ===============================
+
+    jumpTo: function (pos, duration) {
+      var self = this,
+        groupLen = self.group.length,
+        firstRun,
+        isMoved,
+        loop,
+        current,
+        previous,
+        slidePos,
+        stagePos,
+        prop,
+        diff;
+
+      if (self.isDragging || self.isClosing || (self.isAnimating && self.firstRun)) {
+        return;
+      }
+
+      // Should loop?
+      pos = parseInt(pos, 10);
+      loop = self.current ? self.current.opts.loop : self.opts.loop;
+
+      if (!loop && (pos < 0 || pos >= groupLen)) {
+        return false;
+      }
+
+      // Check if opening for the first time; this helps to speed things up
+      firstRun = self.firstRun = !Object.keys(self.slides).length;
+
+      // Create slides
+      previous = self.current;
+
+      self.prevIndex = self.currIndex;
+      self.prevPos = self.currPos;
+
+      current = self.createSlide(pos);
+
+      if (groupLen > 1) {
+        if (loop || current.index < groupLen - 1) {
+          self.createSlide(pos + 1);
+        }
+
+        if (loop || current.index > 0) {
+          self.createSlide(pos - 1);
+        }
+      }
+
+      self.current = current;
+      self.currIndex = current.index;
+      self.currPos = current.pos;
+
+      self.trigger("beforeShow", firstRun);
+
+      self.updateControls();
+
+      // Validate duration length
+      current.forcedDuration = undefined;
+
+      if ($.isNumeric(duration)) {
+        current.forcedDuration = duration;
+      } else {
+        duration = current.opts[firstRun ? "animationDuration" : "transitionDuration"];
+      }
+
+      duration = parseInt(duration, 10);
+
+      // Check if user has swiped the slides or if still animating
+      isMoved = self.isMoved(current);
+
+      // Make sure current slide is visible
+      current.$slide.addClass("fancybox-slide--current");
+
+      // Fresh start - reveal container, current slide and start loading content
+      if (firstRun) {
+        if (current.opts.animationEffect && duration) {
+          self.$refs.container.css("transition-duration", duration + "ms");
+        }
+
+        self.$refs.container.addClass("fancybox-is-open").trigger("focus");
+
+        // Attempt to load content into slide
+        // This will later call `afterLoad` -> `revealContent`
+        self.loadSlide(current);
+
+        self.preload("image");
+
+        return;
+      }
+
+      // Get actual slide/stage positions (before cleaning up)
+      slidePos = $.fancybox.getTranslate(previous.$slide);
+      stagePos = $.fancybox.getTranslate(self.$refs.stage);
+
+      // Clean up all slides
+      $.each(self.slides, function (index, slide) {
+        $.fancybox.stop(slide.$slide, true);
+      });
+
+      if (previous.pos !== current.pos) {
+        previous.isComplete = false;
+      }
+
+      previous.$slide.removeClass("fancybox-slide--complete fancybox-slide--current");
+
+      // If slides are out of place, then animate them to correct position
+      if (isMoved) {
+        // Calculate horizontal swipe distance
+        diff = slidePos.left - (previous.pos * slidePos.width + previous.pos * previous.opts.gutter);
+
+        $.each(self.slides, function (index, slide) {
+          slide.$slide.removeClass("fancybox-animated").removeClass(function (index, className) {
+            return (className.match(/(^|\s)fancybox-fx-\S+/g) || []).join(" ");
+          });
+
+          // Make sure that each slide is in equal distance
+          // This is mostly needed for freshly added slides, because they are not yet positioned
+          var leftPos = slide.pos * slidePos.width + slide.pos * slide.opts.gutter;
+
+          $.fancybox.setTranslate(slide.$slide, {
+            top: 0,
+            left: leftPos - stagePos.left + diff
+          });
+
+          if (slide.pos !== current.pos) {
+            slide.$slide.addClass("fancybox-slide--" + (slide.pos > current.pos ? "next" : "previous"));
+          }
+
+          // Redraw to make sure that transition will start
+          forceRedraw(slide.$slide);
+
+          // Animate the slide
+          $.fancybox.animate(
+            slide.$slide, {
+              top: 0,
+              left: (slide.pos - current.pos) * slidePos.width + (slide.pos - current.pos) * slide.opts.gutter
+            },
+            duration,
+            function () {
+              slide.$slide
+                .css({
+                  transform: "",
+                  opacity: ""
+                })
+                .removeClass("fancybox-slide--next fancybox-slide--previous");
+
+              if (slide.pos === self.currPos) {
+                self.complete();
+              }
+            }
+          );
+        });
+      } else if (duration && current.opts.transitionEffect) {
+        // Set transition effect for previously active slide
+        prop = "fancybox-animated fancybox-fx-" + current.opts.transitionEffect;
+
+        previous.$slide.addClass("fancybox-slide--" + (previous.pos > current.pos ? "next" : "previous"));
+
+        $.fancybox.animate(
+          previous.$slide,
+          prop,
+          duration,
+          function () {
+            previous.$slide.removeClass(prop).removeClass("fancybox-slide--next fancybox-slide--previous");
+          },
+          false
+        );
+      }
+
+      if (current.isLoaded) {
+        self.revealContent(current);
+      } else {
+        self.loadSlide(current);
+      }
+
+      self.preload("image");
+    },
+
+    // Create new "slide" element
+    // These are gallery items  that are actually added to DOM
+    // =======================================================
+
+    createSlide: function (pos) {
+      var self = this,
+        $slide,
+        index;
+
+      index = pos % self.group.length;
+      index = index < 0 ? self.group.length + index : index;
+
+      if (!self.slides[pos] && self.group[index]) {
+        $slide = $('<div class="fancybox-slide"></div>').appendTo(self.$refs.stage);
+
+        self.slides[pos] = $.extend(true, {}, self.group[index], {
+          pos: pos,
+          $slide: $slide,
+          isLoaded: false
+        });
+
+        self.updateSlide(self.slides[pos]);
+      }
+
+      return self.slides[pos];
+    },
+
+    // Scale image to the actual size of the image;
+    // x and y values should be relative to the slide
+    // ==============================================
+
+    scaleToActual: function (x, y, duration) {
+      var self = this,
+        current = self.current,
+        $content = current.$content,
+        canvasWidth = $.fancybox.getTranslate(current.$slide).width,
+        canvasHeight = $.fancybox.getTranslate(current.$slide).height,
+        newImgWidth = current.width,
+        newImgHeight = current.height,
+        imgPos,
+        posX,
+        posY,
+        scaleX,
+        scaleY;
+
+      if (self.isAnimating || self.isMoved() || !$content || !(current.type == "image" && current.isLoaded && !current.hasError)) {
+        return;
+      }
+
+      self.isAnimating = true;
+
+      $.fancybox.stop($content);
+
+      x = x === undefined ? canvasWidth * 0.5 : x;
+      y = y === undefined ? canvasHeight * 0.5 : y;
+
+      imgPos = $.fancybox.getTranslate($content);
+
+      imgPos.top -= $.fancybox.getTranslate(current.$slide).top;
+      imgPos.left -= $.fancybox.getTranslate(current.$slide).left;
+
+      scaleX = newImgWidth / imgPos.width;
+      scaleY = newImgHeight / imgPos.height;
+
+      // Get center position for original image
+      posX = canvasWidth * 0.5 - newImgWidth * 0.5;
+      posY = canvasHeight * 0.5 - newImgHeight * 0.5;
+
+      // Make sure image does not move away from edges
+      if (newImgWidth > canvasWidth) {
+        posX = imgPos.left * scaleX - (x * scaleX - x);
+
+        if (posX > 0) {
+          posX = 0;
+        }
+
+        if (posX < canvasWidth - newImgWidth) {
+          posX = canvasWidth - newImgWidth;
+        }
+      }
+
+      if (newImgHeight > canvasHeight) {
+        posY = imgPos.top * scaleY - (y * scaleY - y);
+
+        if (posY > 0) {
+          posY = 0;
+        }
+
+        if (posY < canvasHeight - newImgHeight) {
+          posY = canvasHeight - newImgHeight;
+        }
+      }
+
+      self.updateCursor(newImgWidth, newImgHeight);
+
+      $.fancybox.animate(
+        $content, {
+          top: posY,
+          left: posX,
+          scaleX: scaleX,
+          scaleY: scaleY
+        },
+        duration || 366,
+        function () {
+          self.isAnimating = false;
+        }
+      );
+
+      // Stop slideshow
+      if (self.SlideShow && self.SlideShow.isActive) {
+        self.SlideShow.stop();
+      }
+    },
+
+    // Scale image to fit inside parent element
+    // ========================================
+
+    scaleToFit: function (duration) {
+      var self = this,
+        current = self.current,
+        $content = current.$content,
+        end;
+
+      if (self.isAnimating || self.isMoved() || !$content || !(current.type == "image" && current.isLoaded && !current.hasError)) {
+        return;
+      }
+
+      self.isAnimating = true;
+
+      $.fancybox.stop($content);
+
+      end = self.getFitPos(current);
+
+      self.updateCursor(end.width, end.height);
+
+      $.fancybox.animate(
+        $content, {
+          top: end.top,
+          left: end.left,
+          scaleX: end.width / $content.width(),
+          scaleY: end.height / $content.height()
+        },
+        duration || 366,
+        function () {
+          self.isAnimating = false;
+        }
+      );
+    },
+
+    // Calculate image size to fit inside viewport
+    // ===========================================
+
+    getFitPos: function (slide) {
+      var self = this,
+        $content = slide.$content,
+        $slide = slide.$slide,
+        width = slide.width || slide.opts.width,
+        height = slide.height || slide.opts.height,
+        maxWidth,
+        maxHeight,
+        minRatio,
+        aspectRatio,
+        rez = {};
+
+      if (!slide.isLoaded || !$content || !$content.length) {
+        return false;
+      }
+
+      maxWidth = $.fancybox.getTranslate(self.$refs.stage).width;
+      maxHeight = $.fancybox.getTranslate(self.$refs.stage).height;
+
+      maxWidth -=
+        parseFloat($slide.css("paddingLeft")) +
+        parseFloat($slide.css("paddingRight")) +
+        parseFloat($content.css("marginLeft")) +
+        parseFloat($content.css("marginRight"));
+
+      maxHeight -=
+        parseFloat($slide.css("paddingTop")) +
+        parseFloat($slide.css("paddingBottom")) +
+        parseFloat($content.css("marginTop")) +
+        parseFloat($content.css("marginBottom"));
+
+      if (!width || !height) {
+        width = maxWidth;
+        height = maxHeight;
+      }
+
+      minRatio = Math.min(1, maxWidth / width, maxHeight / height);
+
+      width = minRatio * width;
+      height = minRatio * height;
+
+      // Adjust width/height to precisely fit into container
+      if (width > maxWidth - 0.5) {
+        width = maxWidth;
+      }
+
+      if (height > maxHeight - 0.5) {
+        height = maxHeight;
+      }
+
+      if (slide.type === "image") {
+        rez.top = Math.floor((maxHeight - height) * 0.5) + parseFloat($slide.css("paddingTop"));
+        rez.left = Math.floor((maxWidth - width) * 0.5) + parseFloat($slide.css("paddingLeft"));
+      } else if (slide.contentType === "video") {
+        // Force aspect ratio for the video
+        // "I say the whole world must learn of our peaceful ways… by force!"
+        aspectRatio = slide.opts.width && slide.opts.height ? width / height : slide.opts.ratio || 16 / 9;
+
+        if (height > width / aspectRatio) {
+          height = width / aspectRatio;
+        } else if (width > height * aspectRatio) {
+          width = height * aspectRatio;
+        }
+      }
+
+      rez.width = width;
+      rez.height = height;
+
+      return rez;
+    },
+
+    // Update content size and position for all slides
+    // ==============================================
+
+    update: function (e) {
+      var self = this;
+
+      $.each(self.slides, function (key, slide) {
+        self.updateSlide(slide, e);
+      });
+    },
+
+    // Update slide content position and size
+    // ======================================
+
+    updateSlide: function (slide, e) {
+      var self = this,
+        $content = slide && slide.$content,
+        width = slide.width || slide.opts.width,
+        height = slide.height || slide.opts.height,
+        $slide = slide.$slide;
+
+      // First, prevent caption overlap, if needed
+      self.adjustCaption(slide);
+
+      // Then resize content to fit inside the slide
+      if ($content && (width || height || slide.contentType === "video") && !slide.hasError) {
+        $.fancybox.stop($content);
+
+        $.fancybox.setTranslate($content, self.getFitPos(slide));
+
+        if (slide.pos === self.currPos) {
+          self.isAnimating = false;
+
+          self.updateCursor();
+        }
+      }
+
+      // Then some adjustments
+      self.adjustLayout(slide);
+
+      if ($slide.length) {
+        $slide.trigger("refresh");
+
+        if (slide.pos === self.currPos) {
+          self.$refs.toolbar
+            .add(self.$refs.navigation.find(".fancybox-button--arrow_right"))
+            .toggleClass("compensate-for-scrollbar", $slide.get(0).scrollHeight > $slide.get(0).clientHeight);
+        }
+      }
+
+      self.trigger("onUpdate", slide, e);
+    },
+
+    // Horizontally center slide
+    // =========================
+
+    centerSlide: function (duration) {
+      var self = this,
+        current = self.current,
+        $slide = current.$slide;
+
+      if (self.isClosing || !current) {
+        return;
+      }
+
+      $slide.siblings().css({
+        transform: "",
+        opacity: ""
+      });
+
+      $slide
+        .parent()
+        .children()
+        .removeClass("fancybox-slide--previous fancybox-slide--next");
+
+      $.fancybox.animate(
+        $slide, {
+          top: 0,
+          left: 0,
+          opacity: 1
+        },
+        duration === undefined ? 0 : duration,
+        function () {
+          // Clean up
+          $slide.css({
+            transform: "",
+            opacity: ""
+          });
+
+          if (!current.isComplete) {
+            self.complete();
+          }
+        },
+        false
+      );
+    },
+
+    // Check if current slide is moved (swiped)
+    // ========================================
+
+    isMoved: function (slide) {
+      var current = slide || this.current,
+        slidePos,
+        stagePos;
+
+      if (!current) {
+        return false;
+      }
+
+      stagePos = $.fancybox.getTranslate(this.$refs.stage);
+      slidePos = $.fancybox.getTranslate(current.$slide);
+
+      return (
+        !current.$slide.hasClass("fancybox-animated") &&
+        (Math.abs(slidePos.top - stagePos.top) > 0.5 || Math.abs(slidePos.left - stagePos.left) > 0.5)
+      );
+    },
+
+    // Update cursor style depending if content can be zoomed
+    // ======================================================
+
+    updateCursor: function (nextWidth, nextHeight) {
+      var self = this,
+        current = self.current,
+        $container = self.$refs.container,
+        canPan,
+        isZoomable;
+
+      if (!current || self.isClosing || !self.Guestures) {
+        return;
+      }
+
+      $container.removeClass("fancybox-is-zoomable fancybox-can-zoomIn fancybox-can-zoomOut fancybox-can-swipe fancybox-can-pan");
+
+      canPan = self.canPan(nextWidth, nextHeight);
+
+      isZoomable = canPan ? true : self.isZoomable();
+
+      $container.toggleClass("fancybox-is-zoomable", isZoomable);
+
+      $("[data-fancybox-zoom]").prop("disabled", !isZoomable);
+
+      if (canPan) {
+        $container.addClass("fancybox-can-pan");
+      } else if (
+        isZoomable &&
+        (current.opts.clickContent === "zoom" || ($.isFunction(current.opts.clickContent) && current.opts.clickContent(current) == "zoom"))
+      ) {
+        $container.addClass("fancybox-can-zoomIn");
+      } else if (current.opts.touch && (current.opts.touch.vertical || self.group.length > 1) && current.contentType !== "video") {
+        $container.addClass("fancybox-can-swipe");
+      }
+    },
+
+    // Check if current slide is zoomable
+    // ==================================
+
+    isZoomable: function () {
+      var self = this,
+        current = self.current,
+        fitPos;
+
+      // Assume that slide is zoomable if:
+      //   - image is still loading
+      //   - actual size of the image is smaller than available area
+      if (current && !self.isClosing && current.type === "image" && !current.hasError) {
+        if (!current.isLoaded) {
+          return true;
+        }
+
+        fitPos = self.getFitPos(current);
+
+        if (fitPos && (current.width > fitPos.width || current.height > fitPos.height)) {
+          return true;
+        }
+      }
+
+      return false;
+    },
+
+    // Check if current image dimensions are smaller than actual
+    // =========================================================
+
+    isScaledDown: function (nextWidth, nextHeight) {
+      var self = this,
+        rez = false,
+        current = self.current,
+        $content = current.$content;
+
+      if (nextWidth !== undefined && nextHeight !== undefined) {
+        rez = nextWidth < current.width && nextHeight < current.height;
+      } else if ($content) {
+        rez = $.fancybox.getTranslate($content);
+        rez = rez.width < current.width && rez.height < current.height;
+      }
+
+      return rez;
+    },
+
+    // Check if image dimensions exceed parent element
+    // ===============================================
+
+    canPan: function (nextWidth, nextHeight) {
+      var self = this,
+        current = self.current,
+        pos = null,
+        rez = false;
+
+      if (current.type === "image" && (current.isComplete || (nextWidth && nextHeight)) && !current.hasError) {
+        rez = self.getFitPos(current);
+
+        if (nextWidth !== undefined && nextHeight !== undefined) {
+          pos = {
+            width: nextWidth,
+            height: nextHeight
+          };
+        } else if (current.isComplete) {
+          pos = $.fancybox.getTranslate(current.$content);
+        }
+
+        if (pos && rez) {
+          rez = Math.abs(pos.width - rez.width) > 1.5 || Math.abs(pos.height - rez.height) > 1.5;
+        }
+      }
+
+      return rez;
+    },
+
+    // Load content into the slide
+    // ===========================
+
+    loadSlide: function (slide) {
+      var self = this,
+        type,
+        $slide,
+        ajaxLoad;
+
+      if (slide.isLoading || slide.isLoaded) {
+        return;
+      }
+
+      slide.isLoading = true;
+
+      if (self.trigger("beforeLoad", slide) === false) {
+        slide.isLoading = false;
+
+        return false;
+      }
+
+      type = slide.type;
+      $slide = slide.$slide;
+
+      $slide
+        .off("refresh")
+        .trigger("onReset")
+        .addClass(slide.opts.slideClass);
+
+      // Create content depending on the type
+      switch (type) {
+        case "image":
+          self.setImage(slide);
+
+          break;
+
+        case "iframe":
+          self.setIframe(slide);
+
+          break;
+
+        case "html":
+          self.setContent(slide, slide.src || slide.content);
+
+          break;
+
+        case "video":
+          self.setContent(
+            slide,
+            slide.opts.video.tpl
+            .replace(/\{\{src\}\}/gi, slide.src)
+            .replace("{{format}}", slide.opts.videoFormat || slide.opts.video.format || "")
+            .replace("{{poster}}", slide.thumb || "")
+          );
+
+          break;
+
+        case "inline":
+          if ($(slide.src).length) {
+            self.setContent(slide, $(slide.src));
+          } else {
+            self.setError(slide);
+          }
+
+          break;
+
+        case "ajax":
+          self.showLoading(slide);
+
+          ajaxLoad = $.ajax(
+            $.extend({}, slide.opts.ajax.settings, {
+              url: slide.src,
+              success: function (data, textStatus) {
+                if (textStatus === "success") {
+                  self.setContent(slide, data);
+                }
+              },
+              error: function (jqXHR, textStatus) {
+                if (jqXHR && textStatus !== "abort") {
+                  self.setError(slide);
+                }
+              }
+            })
+          );
+
+          $slide.one("onReset", function () {
+            ajaxLoad.abort();
+          });
+
+          break;
+
+        default:
+          self.setError(slide);
+
+          break;
+      }
+
+      return true;
+    },
+
+    // Use thumbnail image, if possible
+    // ================================
+
+    setImage: function (slide) {
+      var self = this,
+        ghost;
+
+      // Check if need to show loading icon
+      setTimeout(function () {
+        var $img = slide.$image;
+
+        if (!self.isClosing && slide.isLoading && (!$img || !$img.length || !$img[0].complete) && !slide.hasError) {
+          self.showLoading(slide);
+        }
+      }, 50);
+
+      //Check if image has srcset
+      self.checkSrcset(slide);
+
+      // This will be wrapper containing both ghost and actual image
+      slide.$content = $('<div class="fancybox-content"></div>')
+        .addClass("fancybox-is-hidden")
+        .appendTo(slide.$slide.addClass("fancybox-slide--image"));
+
+      // If we have a thumbnail, we can display it while actual image is loading
+      // Users will not stare at black screen and actual image will appear gradually
+      if (slide.opts.preload !== false && slide.opts.width && slide.opts.height && slide.thumb) {
+        slide.width = slide.opts.width;
+        slide.height = slide.opts.height;
+
+        ghost = document.createElement("img");
+
+        ghost.onerror = function () {
+          $(this).remove();
+
+          slide.$ghost = null;
+        };
+
+        ghost.onload = function () {
+          self.afterLoad(slide);
+        };
+
+        slide.$ghost = $(ghost)
+          .addClass("fancybox-image")
+          .appendTo(slide.$content)
+          .attr("src", slide.thumb);
+      }
+
+      // Start loading actual image
+      self.setBigImage(slide);
+    },
+
+    // Check if image has srcset and get the source
+    // ============================================
+    checkSrcset: function (slide) {
+      var srcset = slide.opts.srcset || slide.opts.image.srcset,
+        found,
+        temp,
+        pxRatio,
+        windowWidth;
+
+      // If we have "srcset", then we need to find first matching "src" value.
+      // This is necessary, because when you set an src attribute, the browser will preload the image
+      // before any javascript or even CSS is applied.
+      if (srcset) {
+        pxRatio = window.devicePixelRatio || 1;
+        windowWidth = window.innerWidth * pxRatio;
+
+        temp = srcset.split(",").map(function (el) {
+          var ret = {};
+
+          el.trim()
+            .split(/\s+/)
+            .forEach(function (el, i) {
+              var value = parseInt(el.substring(0, el.length - 1), 10);
+
+              if (i === 0) {
+                return (ret.url = el);
+              }
+
+              if (value) {
+                ret.value = value;
+                ret.postfix = el[el.length - 1];
+              }
+            });
+
+          return ret;
+        });
+
+        // Sort by value
+        temp.sort(function (a, b) {
+          return a.value - b.value;
+        });
+
+        // Ok, now we have an array of all srcset values
+        for (var j = 0; j < temp.length; j++) {
+          var el = temp[j];
+
+          if ((el.postfix === "w" && el.value >= windowWidth) || (el.postfix === "x" && el.value >= pxRatio)) {
+            found = el;
+            break;
+          }
+        }
+
+        // If not found, take the last one
+        if (!found && temp.length) {
+          found = temp[temp.length - 1];
+        }
+
+        if (found) {
+          slide.src = found.url;
+
+          // If we have default width/height values, we can calculate height for matching source
+          if (slide.width && slide.height && found.postfix == "w") {
+            slide.height = (slide.width / slide.height) * found.value;
+            slide.width = found.value;
+          }
+
+          slide.opts.srcset = srcset;
+        }
+      }
+    },
+
+    // Create full-size image
+    // ======================
+
+    setBigImage: function (slide) {
+      var self = this,
+        img = document.createElement("img"),
+        $img = $(img);
+
+      slide.$image = $img
+        .one("error", function () {
+          self.setError(slide);
+        })
+        .one("load", function () {
+          var sizes;
+
+          if (!slide.$ghost) {
+            self.resolveImageSlideSize(slide, this.naturalWidth, this.naturalHeight);
+
+            self.afterLoad(slide);
+          }
+
+          if (self.isClosing) {
+            return;
+          }
+
+          if (slide.opts.srcset) {
+            sizes = slide.opts.sizes;
+
+            if (!sizes || sizes === "auto") {
+              sizes =
+                (slide.width / slide.height > 1 && $W.width() / $W.height() > 1 ? "100" : Math.round((slide.width / slide.height) * 100)) +
+                "vw";
+            }
+
+            $img.attr("sizes", sizes).attr("srcset", slide.opts.srcset);
+          }
+
+          // Hide temporary image after some delay
+          if (slide.$ghost) {
+            setTimeout(function () {
+              if (slide.$ghost && !self.isClosing) {
+                slide.$ghost.hide();
+              }
+            }, Math.min(300, Math.max(1000, slide.height / 1600)));
+          }
+
+          self.hideLoading(slide);
+        })
+        .addClass("fancybox-image")
+        .attr("src", slide.src)
+        .appendTo(slide.$content);
+
+      if ((img.complete || img.readyState == "complete") && $img.naturalWidth && $img.naturalHeight) {
+        $img.trigger("load");
+      } else if (img.error) {
+        $img.trigger("error");
+      }
+    },
+
+    // Computes the slide size from image size and maxWidth/maxHeight
+    // ==============================================================
+
+    resolveImageSlideSize: function (slide, imgWidth, imgHeight) {
+      var maxWidth = parseInt(slide.opts.width, 10),
+        maxHeight = parseInt(slide.opts.height, 10);
+
+      // Sets the default values from the image
+      slide.width = imgWidth;
+      slide.height = imgHeight;
+
+      if (maxWidth > 0) {
+        slide.width = maxWidth;
+        slide.height = Math.floor((maxWidth * imgHeight) / imgWidth);
+      }
+
+      if (maxHeight > 0) {
+        slide.width = Math.floor((maxHeight * imgWidth) / imgHeight);
+        slide.height = maxHeight;
+      }
+    },
+
+    // Create iframe wrapper, iframe and bindings
+    // ==========================================
+
+    setIframe: function (slide) {
+      var self = this,
+        opts = slide.opts.iframe,
+        $slide = slide.$slide,
+        $iframe;
+
+      slide.$content = $('<div class="fancybox-content' + (opts.preload ? " fancybox-is-hidden" : "") + '"></div>')
+        .css(opts.css)
+        .appendTo($slide);
+
+      $slide.addClass("fancybox-slide--" + slide.contentType);
+
+      slide.$iframe = $iframe = $(opts.tpl.replace(/\{rnd\}/g, new Date().getTime()))
+        .attr(opts.attr)
+        .appendTo(slide.$content);
+
+      if (opts.preload) {
+        self.showLoading(slide);
+
+        // Unfortunately, it is not always possible to determine if iframe is successfully loaded
+        // (due to browser security policy)
+
+        $iframe.on("load.fb error.fb", function (e) {
+          this.isReady = 1;
+
+          slide.$slide.trigger("refresh");
+
+          self.afterLoad(slide);
+        });
+
+        // Recalculate iframe content size
+        // ===============================
+
+        $slide.on("refresh.fb", function () {
+          var $content = slide.$content,
+            frameWidth = opts.css.width,
+            frameHeight = opts.css.height,
+            $contents,
+            $body;
+
+          if ($iframe[0].isReady !== 1) {
+            return;
+          }
+
+          try {
+            $contents = $iframe.contents();
+            $body = $contents.find("body");
+          } catch (ignore) {}
+
+          // Calculate content dimensions, if it is accessible
+          if ($body && $body.length && $body.children().length) {
+            // Avoid scrolling to top (if multiple instances)
+            $slide.css("overflow", "visible");
+
+            $content.css({
+              width: "100%",
+              "max-width": "100%",
+              height: "9999px"
+            });
+
+            if (frameWidth === undefined) {
+              frameWidth = Math.ceil(Math.max($body[0].clientWidth, $body.outerWidth(true)));
+            }
+
+            $content.css("width", frameWidth ? frameWidth : "").css("max-width", "");
+
+            if (frameHeight === undefined) {
+              frameHeight = Math.ceil(Math.max($body[0].clientHeight, $body.outerHeight(true)));
+            }
+
+            $content.css("height", frameHeight ? frameHeight : "");
+
+            $slide.css("overflow", "auto");
+          }
+
+          $content.removeClass("fancybox-is-hidden");
+        });
+      } else {
+        self.afterLoad(slide);
+      }
+
+      $iframe.attr("src", slide.src);
+
+      // Remove iframe if closing or changing gallery item
+      $slide.one("onReset", function () {
+        // This helps IE not to throw errors when closing
+        try {
+          $(this)
+            .find("iframe")
+            .hide()
+            .unbind()
+            .attr("src", "//about:blank");
+        } catch (ignore) {}
+
+        $(this)
+          .off("refresh.fb")
+          .empty();
+
+        slide.isLoaded = false;
+        slide.isRevealed = false;
+      });
+    },
+
+    // Wrap and append content to the slide
+    // ======================================
+
+    setContent: function (slide, content) {
+      var self = this;
+
+      if (self.isClosing) {
+        return;
+      }
+
+      self.hideLoading(slide);
+
+      if (slide.$content) {
+        $.fancybox.stop(slide.$content);
+      }
+
+      slide.$slide.empty();
+
+      // If content is a jQuery object, then it will be moved to the slide.
+      // The placeholder is created so we will know where to put it back.
+      if (isQuery(content) && content.parent().length) {
+        // Make sure content is not already moved to fancyBox
+        if (content.hasClass("fancybox-content") || content.parent().hasClass("fancybox-content")) {
+          content.parents(".fancybox-slide").trigger("onReset");
+        }
+
+        // Create temporary element marking original place of the content
+        slide.$placeholder = $("<div>")
+          .hide()
+          .insertAfter(content);
+
+        // Make sure content is visible
+        content.css("display", "inline-block");
+      } else if (!slide.hasError) {
+        // If content is just a plain text, try to convert it to html
+        if ($.type(content) === "string") {
+          content = $("<div>")
+            .append($.trim(content))
+            .contents();
+        }
+
+        // If "filter" option is provided, then filter content
+        if (slide.opts.filter) {
+          content = $("<div>")
+            .html(content)
+            .find(slide.opts.filter);
+        }
+      }
+
+      slide.$slide.one("onReset", function () {
+        // Pause all html5 video/audio
+        $(this)
+          .find("video,audio")
+          .trigger("pause");
+
+        // Put content back
+        if (slide.$placeholder) {
+          slide.$placeholder.after(content.removeClass("fancybox-content").hide()).remove();
+
+          slide.$placeholder = null;
+        }
+
+        // Remove custom close button
+        if (slide.$smallBtn) {
+          slide.$smallBtn.remove();
+
+          slide.$smallBtn = null;
+        }
+
+        // Remove content and mark slide as not loaded
+        if (!slide.hasError) {
+          $(this).empty();
+
+          slide.isLoaded = false;
+          slide.isRevealed = false;
+        }
+      });
+
+      $(content).appendTo(slide.$slide);
+
+      if ($(content).is("video,audio")) {
+        $(content).addClass("fancybox-video");
+
+        $(content).wrap("<div></div>");
+
+        slide.contentType = "video";
+
+        slide.opts.width = slide.opts.width || $(content).attr("width");
+        slide.opts.height = slide.opts.height || $(content).attr("height");
+      }
+
+      slide.$content = slide.$slide
+        .children()
+        .filter("div,form,main,video,audio,article,.fancybox-content")
+        .first();
+
+      slide.$content.siblings().hide();
+
+      // Re-check if there is a valid content
+      // (in some cases, ajax response can contain various elements or plain text)
+      if (!slide.$content.length) {
+        slide.$content = slide.$slide
+          .wrapInner("<div></div>")
+          .children()
+          .first();
+      }
+
+      slide.$content.addClass("fancybox-content");
+
+      slide.$slide.addClass("fancybox-slide--" + slide.contentType);
+
+      self.afterLoad(slide);
+    },
+
+    // Display error message
+    // =====================
+
+    setError: function (slide) {
+      slide.hasError = true;
+
+      slide.$slide
+        .trigger("onReset")
+        .removeClass("fancybox-slide--" + slide.contentType)
+        .addClass("fancybox-slide--error");
+
+      slide.contentType = "html";
+
+      this.setContent(slide, this.translate(slide, slide.opts.errorTpl));
+
+      if (slide.pos === this.currPos) {
+        this.isAnimating = false;
+      }
+    },
+
+    // Show loading icon inside the slide
+    // ==================================
+
+    showLoading: function (slide) {
+      var self = this;
+
+      slide = slide || self.current;
+
+      if (slide && !slide.$spinner) {
+        slide.$spinner = $(self.translate(self, self.opts.spinnerTpl))
+          .appendTo(slide.$slide)
+          .hide()
+          .fadeIn("fast");
+      }
+    },
+
+    // Remove loading icon from the slide
+    // ==================================
+
+    hideLoading: function (slide) {
+      var self = this;
+
+      slide = slide || self.current;
+
+      if (slide && slide.$spinner) {
+        slide.$spinner.stop().remove();
+
+        delete slide.$spinner;
+      }
+    },
+
+    // Adjustments after slide content has been loaded
+    // ===============================================
+
+    afterLoad: function (slide) {
+      var self = this;
+
+      if (self.isClosing) {
+        return;
+      }
+
+      slide.isLoading = false;
+      slide.isLoaded = true;
+
+      self.trigger("afterLoad", slide);
+
+      self.hideLoading(slide);
+
+      // Add small close button
+      if (slide.opts.smallBtn && (!slide.$smallBtn || !slide.$smallBtn.length)) {
+        slide.$smallBtn = $(self.translate(slide, slide.opts.btnTpl.smallBtn)).appendTo(slide.$content);
+      }
+
+      // Disable right click
+      if (slide.opts.protect && slide.$content && !slide.hasError) {
+        slide.$content.on("contextmenu.fb", function (e) {
+          if (e.button == 2) {
+            e.preventDefault();
+          }
+
+          return true;
+        });
+
+        // Add fake element on top of the image
+        // This makes a bit harder for user to select image
+        if (slide.type === "image") {
+          $('<div class="fancybox-spaceball"></div>').appendTo(slide.$content);
+        }
+      }
+
+      self.adjustCaption(slide);
+
+      self.adjustLayout(slide);
+
+      if (slide.pos === self.currPos) {
+        self.updateCursor();
+      }
+
+      self.revealContent(slide);
+    },
+
+    // Prevent caption overlap,
+    // fix css inconsistency across browsers
+    // =====================================
+
+    adjustCaption: function (slide) {
+      var self = this,
+        current = slide || self.current,
+        caption = current.opts.caption,
+        preventOverlap = current.opts.preventCaptionOverlap,
+        $caption = self.$refs.caption,
+        $clone,
+        captionH = false;
+
+      $caption.toggleClass("fancybox-caption--separate", preventOverlap);
+
+      if (preventOverlap && caption && caption.length) {
+        if (current.pos !== self.currPos) {
+          $clone = $caption.clone().appendTo($caption.parent());
+
+          $clone
+            .children()
+            .eq(0)
+            .empty()
+            .html(caption);
+
+          captionH = $clone.outerHeight(true);
+
+          $clone.empty().remove();
+        } else if (self.$caption) {
+          captionH = self.$caption.outerHeight(true);
+        }
+
+        current.$slide.css("padding-bottom", captionH || "");
+      }
+    },
+
+    // Simple hack to fix inconsistency across browsers, described here (affects Edge, too):
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=748518
+    // ====================================================================================
+
+    adjustLayout: function (slide) {
+      var self = this,
+        current = slide || self.current,
+        scrollHeight,
+        marginBottom,
+        inlinePadding,
+        actualPadding;
+
+      if (current.isLoaded && current.opts.disableLayoutFix !== true) {
+        current.$content.css("margin-bottom", "");
+
+        // If we would always set margin-bottom for the content,
+        // then it would potentially break vertical align
+        if (current.$content.outerHeight() > current.$slide.height() + 0.5) {
+          inlinePadding = current.$slide[0].style["padding-bottom"];
+          actualPadding = current.$slide.css("padding-bottom");
+
+          if (parseFloat(actualPadding) > 0) {
+            scrollHeight = current.$slide[0].scrollHeight;
+
+            current.$slide.css("padding-bottom", 0);
+
+            if (Math.abs(scrollHeight - current.$slide[0].scrollHeight) < 1) {
+              marginBottom = actualPadding;
+            }
+
+            current.$slide.css("padding-bottom", inlinePadding);
+          }
+        }
+
+        current.$content.css("margin-bottom", marginBottom);
+      }
+    },
+
+    // Make content visible
+    // This method is called right after content has been loaded or
+    // user navigates gallery and transition should start
+    // ============================================================
+
+    revealContent: function (slide) {
+      var self = this,
+        $slide = slide.$slide,
+        end = false,
+        start = false,
+        isMoved = self.isMoved(slide),
+        isRevealed = slide.isRevealed,
+        effect,
+        effectClassName,
+        duration,
+        opacity;
+
+      slide.isRevealed = true;
+
+      effect = slide.opts[self.firstRun ? "animationEffect" : "transitionEffect"];
+      duration = slide.opts[self.firstRun ? "animationDuration" : "transitionDuration"];
+
+      duration = parseInt(slide.forcedDuration === undefined ? duration : slide.forcedDuration, 10);
+
+      if (isMoved || slide.pos !== self.currPos || !duration) {
+        effect = false;
+      }
+
+      // Check if can zoom
+      if (effect === "zoom") {
+        if (slide.pos === self.currPos && duration && slide.type === "image" && !slide.hasError && (start = self.getThumbPos(slide))) {
+          end = self.getFitPos(slide);
+        } else {
+          effect = "fade";
+        }
+      }
+
+      // Zoom animation
+      // ==============
+      if (effect === "zoom") {
+        self.isAnimating = true;
+
+        end.scaleX = end.width / start.width;
+        end.scaleY = end.height / start.height;
+
+        // Check if we need to animate opacity
+        opacity = slide.opts.zoomOpacity;
+
+        if (opacity == "auto") {
+          opacity = Math.abs(slide.width / slide.height - start.width / start.height) > 0.1;
+        }
+
+        if (opacity) {
+          start.opacity = 0.1;
+          end.opacity = 1;
+        }
+
+        // Draw image at start position
+        $.fancybox.setTranslate(slide.$content.removeClass("fancybox-is-hidden"), start);
+
+        forceRedraw(slide.$content);
+
+        // Start animation
+        $.fancybox.animate(slide.$content, end, duration, function () {
+          self.isAnimating = false;
+
+          self.complete();
+        });
+
+        return;
+      }
+
+      self.updateSlide(slide);
+
+      // Simply show content if no effect
+      // ================================
+      if (!effect) {
+        slide.$content.removeClass("fancybox-is-hidden");
+
+        if (!isRevealed && isMoved && slide.type === "image" && !slide.hasError) {
+          slide.$content.hide().fadeIn("fast");
+        }
+
+        if (slide.pos === self.currPos) {
+          self.complete();
+        }
+
+        return;
+      }
+
+      // Prepare for CSS transiton
+      // =========================
+      $.fancybox.stop($slide);
+
+      //effectClassName = "fancybox-animated fancybox-slide--" + (slide.pos >= self.prevPos ? "next" : "previous") + " fancybox-fx-" + effect;
+      effectClassName = "fancybox-slide--" + (slide.pos >= self.prevPos ? "next" : "previous") + " fancybox-animated fancybox-fx-" + effect;
+
+      $slide.addClass(effectClassName).removeClass("fancybox-slide--current"); //.addClass(effectClassName);
+
+      slide.$content.removeClass("fancybox-is-hidden");
+
+      // Force reflow
+      forceRedraw($slide);
+
+      if (slide.type !== "image") {
+        slide.$content.hide().show(0);
+      }
+
+      $.fancybox.animate(
+        $slide,
+        "fancybox-slide--current",
+        duration,
+        function () {
+          $slide.removeClass(effectClassName).css({
+            transform: "",
+            opacity: ""
+          });
+
+          if (slide.pos === self.currPos) {
+            self.complete();
+          }
+        },
+        true
+      );
+    },
+
+    // Check if we can and have to zoom from thumbnail
+    //================================================
+
+    getThumbPos: function (slide) {
+      var rez = false,
+        $thumb = slide.$thumb,
+        thumbPos,
+        btw,
+        brw,
+        bbw,
+        blw;
+
+      if (!$thumb || !inViewport($thumb[0])) {
+        return false;
+      }
+
+      thumbPos = $.fancybox.getTranslate($thumb);
+
+      btw = parseFloat($thumb.css("border-top-width") || 0);
+      brw = parseFloat($thumb.css("border-right-width") || 0);
+      bbw = parseFloat($thumb.css("border-bottom-width") || 0);
+      blw = parseFloat($thumb.css("border-left-width") || 0);
+
+      rez = {
+        top: thumbPos.top + btw,
+        left: thumbPos.left + blw,
+        width: thumbPos.width - brw - blw,
+        height: thumbPos.height - btw - bbw,
+        scaleX: 1,
+        scaleY: 1
+      };
+
+      return thumbPos.width > 0 && thumbPos.height > 0 ? rez : false;
+    },
+
+    // Final adjustments after current gallery item is moved to position
+    // and it`s content is loaded
+    // ==================================================================
+
+    complete: function () {
+      var self = this,
+        current = self.current,
+        slides = {},
+        $el;
+
+      if (self.isMoved() || !current.isLoaded) {
+        return;
+      }
+
+      if (!current.isComplete) {
+        current.isComplete = true;
+
+        current.$slide.siblings().trigger("onReset");
+
+        self.preload("inline");
+
+        // Trigger any CSS transiton inside the slide
+        forceRedraw(current.$slide);
+
+        current.$slide.addClass("fancybox-slide--complete");
+
+        // Remove unnecessary slides
+        $.each(self.slides, function (key, slide) {
+          if (slide.pos >= self.currPos - 1 && slide.pos <= self.currPos + 1) {
+            slides[slide.pos] = slide;
+          } else if (slide) {
+            $.fancybox.stop(slide.$slide);
+
+            slide.$slide.off().remove();
+          }
+        });
+
+        self.slides = slides;
+      }
+
+      self.isAnimating = false;
+
+      self.updateCursor();
+
+      self.trigger("afterShow");
+
+      // Autoplay first html5 video/audio
+      if (!!current.opts.video.autoStart) {
+        current.$slide
+          .find("video,audio")
+          .filter(":visible:first")
+          .trigger("play")
+          .one("ended", function () {
+            if (Document.exitFullscreen) {
+              Document.exitFullscreen();
+            } else if (this.webkitExitFullscreen) {
+              this.webkitExitFullscreen();
+            }
+
+            self.next();
+          });
+      }
+
+      // Try to focus on the first focusable element
+      if (current.opts.autoFocus && current.contentType === "html") {
+        // Look for the first input with autofocus attribute
+        $el = current.$content.find("input[autofocus]:enabled:visible:first");
+
+        if ($el.length) {
+          $el.trigger("focus");
+        } else {
+          self.focus(null, true);
+        }
+      }
+
+      // Avoid jumping
+      current.$slide.scrollTop(0).scrollLeft(0);
+    },
+
+    // Preload next and previous slides
+    // ================================
+
+    preload: function (type) {
+      var self = this,
+        prev,
+        next;
+
+      if (self.group.length < 2) {
+        return;
+      }
+
+      next = self.slides[self.currPos + 1];
+      prev = self.slides[self.currPos - 1];
+
+      if (prev && prev.type === type) {
+        self.loadSlide(prev);
+      }
+
+      if (next && next.type === type) {
+        self.loadSlide(next);
+      }
+    },
+
+    // Try to find and focus on the first focusable element
+    // ====================================================
+
+    focus: function (e, firstRun) {
+      var self = this,
+        focusableStr = [
+          "a[href]",
+          "area[href]",
+          'input:not([disabled]):not([type="hidden"]):not([aria-hidden])',
+          "select:not([disabled]):not([aria-hidden])",
+          "textarea:not([disabled]):not([aria-hidden])",
+          "button:not([disabled]):not([aria-hidden])",
+          "iframe",
+          "object",
+          "embed",
+          "video",
+          "audio",
+          "[contenteditable]",
+          '[tabindex]:not([tabindex^="-"])'
+        ].join(","),
+        focusableItems,
+        focusedItemIndex;
+
+      if (self.isClosing) {
+        return;
+      }
+
+      if (e || !self.current || !self.current.isComplete) {
+        // Focus on any element inside fancybox
+        focusableItems = self.$refs.container.find("*:visible");
+      } else {
+        // Focus inside current slide
+        focusableItems = self.current.$slide.find("*:visible" + (firstRun ? ":not(.fancybox-close-small)" : ""));
+      }
+
+      focusableItems = focusableItems.filter(focusableStr).filter(function () {
+        return $(this).css("visibility") !== "hidden" && !$(this).hasClass("disabled");
+      });
+
+      if (focusableItems.length) {
+        focusedItemIndex = focusableItems.index(document.activeElement);
+
+        if (e && e.shiftKey) {
+          // Back tab
+          if (focusedItemIndex < 0 || focusedItemIndex == 0) {
+            e.preventDefault();
+
+            focusableItems.eq(focusableItems.length - 1).trigger("focus");
+          }
+        } else {
+          // Outside or Forward tab
+          if (focusedItemIndex < 0 || focusedItemIndex == focusableItems.length - 1) {
+            if (e) {
+              e.preventDefault();
+            }
+
+            focusableItems.eq(0).trigger("focus");
+          }
+        }
+      } else {
+        self.$refs.container.trigger("focus");
+      }
+    },
+
+    // Activates current instance - brings container to the front and enables keyboard,
+    // notifies other instances about deactivating
+    // =================================================================================
+
+    activate: function () {
+      var self = this;
+
+      // Deactivate all instances
+      $(".fancybox-container").each(function () {
+        var instance = $(this).data("FancyBox");
+
+        // Skip self and closing instances
+        if (instance && instance.id !== self.id && !instance.isClosing) {
+          instance.trigger("onDeactivate");
+
+          instance.removeEvents();
+
+          instance.isVisible = false;
+        }
+      });
+
+      self.isVisible = true;
+
+      if (self.current || self.isIdle) {
+        self.update();
+
+        self.updateControls();
+      }
+
+      self.trigger("onActivate");
+
+      self.addEvents();
+    },
+
+    // Start closing procedure
+    // This will start "zoom-out" animation if needed and clean everything up afterwards
+    // =================================================================================
+
+    close: function (e, d) {
+      var self = this,
+        current = self.current,
+        effect,
+        duration,
+        $content,
+        domRect,
+        opacity,
+        start,
+        end;
+
+      var done = function () {
+        self.cleanUp(e);
+      };
+
+      if (self.isClosing) {
+        return false;
+      }
+
+      self.isClosing = true;
+
+      // If beforeClose callback prevents closing, make sure content is centered
+      if (self.trigger("beforeClose", e) === false) {
+        self.isClosing = false;
+
+        requestAFrame(function () {
+          self.update();
+        });
+
+        return false;
+      }
+
+      // Remove all events
+      // If there are multiple instances, they will be set again by "activate" method
+      self.removeEvents();
+
+      $content = current.$content;
+      effect = current.opts.animationEffect;
+      duration = $.isNumeric(d) ? d : effect ? current.opts.animationDuration : 0;
+
+      current.$slide.removeClass("fancybox-slide--complete fancybox-slide--next fancybox-slide--previous fancybox-animated");
+
+      if (e !== true) {
+        $.fancybox.stop(current.$slide);
+      } else {
+        effect = false;
+      }
+
+      // Remove other slides
+      current.$slide
+        .siblings()
+        .trigger("onReset")
+        .remove();
+
+      // Trigger animations
+      if (duration) {
+        self.$refs.container
+          .removeClass("fancybox-is-open")
+          .addClass("fancybox-is-closing")
+          .css("transition-duration", duration + "ms");
+      }
+
+      // Clean up
+      self.hideLoading(current);
+
+      self.hideControls(true);
+
+      self.updateCursor();
+
+      // Check if possible to zoom-out
+      if (
+        effect === "zoom" &&
+        !($content && duration && current.type === "image" && !self.isMoved() && !current.hasError && (end = self.getThumbPos(current)))
+      ) {
+        effect = "fade";
+      }
+
+      if (effect === "zoom") {
+        $.fancybox.stop($content);
+
+        domRect = $.fancybox.getTranslate($content);
+
+        start = {
+          top: domRect.top,
+          left: domRect.left,
+          scaleX: domRect.width / end.width,
+          scaleY: domRect.height / end.height,
+          width: end.width,
+          height: end.height
+        };
+
+        // Check if we need to animate opacity
+        opacity = current.opts.zoomOpacity;
+
+        if (opacity == "auto") {
+          opacity = Math.abs(current.width / current.height - end.width / end.height) > 0.1;
+        }
+
+        if (opacity) {
+          end.opacity = 0;
+        }
+
+        $.fancybox.setTranslate($content, start);
+
+        forceRedraw($content);
+
+        $.fancybox.animate($content, end, duration, done);
+
+        return true;
+      }
+
+      if (effect && duration) {
+        $.fancybox.animate(
+          current.$slide.addClass("fancybox-slide--previous").removeClass("fancybox-slide--current"),
+          "fancybox-animated fancybox-fx-" + effect,
+          duration,
+          done
+        );
+      } else {
+        // If skip animation
+        if (e === true) {
+          setTimeout(done, duration);
+        } else {
+          done();
+        }
+      }
+
+      return true;
+    },
+
+    // Final adjustments after removing the instance
+    // =============================================
+
+    cleanUp: function (e) {
+      var self = this,
+        instance,
+        $focus = self.current.opts.$orig,
+        x,
+        y;
+
+      self.current.$slide.trigger("onReset");
+
+      self.$refs.container.empty().remove();
+
+      self.trigger("afterClose", e);
+
+      // Place back focus
+      if (!!self.current.opts.backFocus) {
+        if (!$focus || !$focus.length || !$focus.is(":visible")) {
+          $focus = self.$trigger;
+        }
+
+        if ($focus && $focus.length) {
+          x = window.scrollX;
+          y = window.scrollY;
+
+          $focus.trigger("focus");
+
+          $("html, body")
+            .scrollTop(y)
+            .scrollLeft(x);
+        }
+      }
+
+      self.current = null;
+
+      // Check if there are other instances
+      instance = $.fancybox.getInstance();
+
+      if (instance) {
+        instance.activate();
+      } else {
+        $("body").removeClass("fancybox-active compensate-for-scrollbar");
+
+        $("#fancybox-style-noscroll").remove();
+      }
+    },
+
+    // Call callback and trigger an event
+    // ==================================
+
+    trigger: function (name, slide) {
+      var args = Array.prototype.slice.call(arguments, 1),
+        self = this,
+        obj = slide && slide.opts ? slide : self.current,
+        rez;
+
+      if (obj) {
+        args.unshift(obj);
+      } else {
+        obj = self;
+      }
+
+      args.unshift(self);
+
+      if ($.isFunction(obj.opts[name])) {
+        rez = obj.opts[name].apply(obj, args);
+      }
+
+      if (rez === false) {
+        return rez;
+      }
+
+      if (name === "afterClose" || !self.$refs) {
+        $D.trigger(name + ".fb", args);
+      } else {
+        self.$refs.container.trigger(name + ".fb", args);
+      }
+    },
+
+    // Update infobar values, navigation button states and reveal caption
+    // ==================================================================
+
+    updateControls: function () {
+      var self = this,
+        current = self.current,
+        index = current.index,
+        $container = self.$refs.container,
+        $caption = self.$refs.caption,
+        caption = current.opts.caption;
+
+      // Recalculate content dimensions
+      current.$slide.trigger("refresh");
+
+      // Set caption
+      if (caption && caption.length) {
+        self.$caption = $caption;
+
+        $caption
+          .children()
+          .eq(0)
+          .html(caption);
+      } else {
+        self.$caption = null;
+      }
+
+      if (!self.hasHiddenControls && !self.isIdle) {
+        self.showControls();
+      }
+
+      // Update info and navigation elements
+      $container.find("[data-fancybox-count]").html(self.group.length);
+      $container.find("[data-fancybox-index]").html(index + 1);
+
+      $container.find("[data-fancybox-prev]").prop("disabled", !current.opts.loop && index <= 0);
+      $container.find("[data-fancybox-next]").prop("disabled", !current.opts.loop && index >= self.group.length - 1);
+
+      if (current.type === "image") {
+        // Re-enable buttons; update download button source
+        $container
+          .find("[data-fancybox-zoom]")
+          .show()
+          .end()
+          .find("[data-fancybox-download]")
+          .attr("href", current.opts.image.src || current.src)
+          .show();
+      } else if (current.opts.toolbar) {
+        $container.find("[data-fancybox-download],[data-fancybox-zoom]").hide();
+      }
+
+      // Make sure focus is not on disabled button/element
+      if ($(document.activeElement).is(":hidden,[disabled]")) {
+        self.$refs.container.trigger("focus");
+      }
+    },
+
+    // Hide toolbar and caption
+    // ========================
+
+    hideControls: function (andCaption) {
+      var self = this,
+        arr = ["infobar", "toolbar", "nav"];
+
+      if (andCaption || !self.current.opts.preventCaptionOverlap) {
+        arr.push("caption");
+      }
+
+      this.$refs.container.removeClass(
+        arr
+        .map(function (i) {
+          return "fancybox-show-" + i;
+        })
+        .join(" ")
+      );
+
+      this.hasHiddenControls = true;
+    },
+
+    showControls: function () {
+      var self = this,
+        opts = self.current ? self.current.opts : self.opts,
+        $container = self.$refs.container;
+
+      self.hasHiddenControls = false;
+      self.idleSecondsCounter = 0;
+
+      $container
+        .toggleClass("fancybox-show-toolbar", !!(opts.toolbar && opts.buttons))
+        .toggleClass("fancybox-show-infobar", !!(opts.infobar && self.group.length > 1))
+        .toggleClass("fancybox-show-caption", !!self.$caption)
+        .toggleClass("fancybox-show-nav", !!(opts.arrows && self.group.length > 1))
+        .toggleClass("fancybox-is-modal", !!opts.modal);
+    },
+
+    // Toggle toolbar and caption
+    // ==========================
+
+    toggleControls: function () {
+      if (this.hasHiddenControls) {
+        this.showControls();
+      } else {
+        this.hideControls();
+      }
+    }
+  });
+
+  $.fancybox = {
+    version: "3.5.7",
+    defaults: defaults,
+
+    // Get current instance and execute a command.
+    //
+    // Examples of usage:
+    //
+    //   $instance = $.fancybox.getInstance();
+    //   $.fancybox.getInstance().jumpTo( 1 );
+    //   $.fancybox.getInstance( 'jumpTo', 1 );
+    //   $.fancybox.getInstance( function() {
+    //       console.info( this.currIndex );
+    //   });
+    // ======================================================
+
+    getInstance: function (command) {
+      var instance = $('.fancybox-container:not(".fancybox-is-closing"):last').data("FancyBox"),
+        args = Array.prototype.slice.call(arguments, 1);
+
+      if (instance instanceof FancyBox) {
+        if ($.type(command) === "string") {
+          instance[command].apply(instance, args);
+        } else if ($.type(command) === "function") {
+          command.apply(instance, args);
+        }
+
+        return instance;
+      }
+
+      return false;
+    },
+
+    // Create new instance
+    // ===================
+
+    open: function (items, opts, index) {
+      return new FancyBox(items, opts, index);
+    },
+
+    // Close current or all instances
+    // ==============================
+
+    close: function (all) {
+      var instance = this.getInstance();
+
+      if (instance) {
+        instance.close();
+
+        // Try to find and close next instance
+        if (all === true) {
+          this.close(all);
+        }
+      }
+    },
+
+    // Close all instances and unbind all events
+    // =========================================
+
+    destroy: function () {
+      this.close(true);
+
+      $D.add("body").off("click.fb-start", "**");
+    },
+
+    // Try to detect mobile devices
+    // ============================
+
+    isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+
+    // Detect if 'translate3d' support is available
+    // ============================================
+
+    use3d: (function () {
+      var div = document.createElement("div");
+
+      return (
+        window.getComputedStyle &&
+        window.getComputedStyle(div) &&
+        window.getComputedStyle(div).getPropertyValue("transform") &&
+        !(document.documentMode && document.documentMode < 11)
+      );
+    })(),
+
+    // Helper function to get current visual state of an element
+    // returns array[ top, left, horizontal-scale, vertical-scale, opacity ]
+    // =====================================================================
+
+    getTranslate: function ($el) {
+      var domRect;
+
+      if (!$el || !$el.length) {
+        return false;
+      }
+
+      domRect = $el[0].getBoundingClientRect();
+
+      return {
+        top: domRect.top || 0,
+        left: domRect.left || 0,
+        width: domRect.width,
+        height: domRect.height,
+        opacity: parseFloat($el.css("opacity"))
+      };
+    },
+
+    // Shortcut for setting "translate3d" properties for element
+    // Can set be used to set opacity, too
+    // ========================================================
+
+    setTranslate: function ($el, props) {
+      var str = "",
+        css = {};
+
+      if (!$el || !props) {
+        return;
+      }
+
+      if (props.left !== undefined || props.top !== undefined) {
+        str =
+          (props.left === undefined ? $el.position().left : props.left) +
+          "px, " +
+          (props.top === undefined ? $el.position().top : props.top) +
+          "px";
+
+        if (this.use3d) {
+          str = "translate3d(" + str + ", 0px)";
+        } else {
+          str = "translate(" + str + ")";
+        }
+      }
+
+      if (props.scaleX !== undefined && props.scaleY !== undefined) {
+        str += " scale(" + props.scaleX + ", " + props.scaleY + ")";
+      } else if (props.scaleX !== undefined) {
+        str += " scaleX(" + props.scaleX + ")";
+      }
+
+      if (str.length) {
+        css.transform = str;
+      }
+
+      if (props.opacity !== undefined) {
+        css.opacity = props.opacity;
+      }
+
+      if (props.width !== undefined) {
+        css.width = props.width;
+      }
+
+      if (props.height !== undefined) {
+        css.height = props.height;
+      }
+
+      return $el.css(css);
+    },
+
+    // Simple CSS transition handler
+    // =============================
+
+    animate: function ($el, to, duration, callback, leaveAnimationName) {
+      var self = this,
+        from;
+
+      if ($.isFunction(duration)) {
+        callback = duration;
+        duration = null;
+      }
+
+      self.stop($el);
+
+      from = self.getTranslate($el);
+
+      $el.on(transitionEnd, function (e) {
+        // Skip events from child elements and z-index change
+        if (e && e.originalEvent && (!$el.is(e.originalEvent.target) || e.originalEvent.propertyName == "z-index")) {
+          return;
+        }
+
+        self.stop($el);
+
+        if ($.isNumeric(duration)) {
+          $el.css("transition-duration", "");
+        }
+
+        if ($.isPlainObject(to)) {
+          if (to.scaleX !== undefined && to.scaleY !== undefined) {
+            self.setTranslate($el, {
+              top: to.top,
+              left: to.left,
+              width: from.width * to.scaleX,
+              height: from.height * to.scaleY,
+              scaleX: 1,
+              scaleY: 1
+            });
+          }
+        } else if (leaveAnimationName !== true) {
+          $el.removeClass(to);
+        }
+
+        if ($.isFunction(callback)) {
+          callback(e);
+        }
+      });
+
+      if ($.isNumeric(duration)) {
+        $el.css("transition-duration", duration + "ms");
+      }
+
+      // Start animation by changing CSS properties or class name
+      if ($.isPlainObject(to)) {
+        if (to.scaleX !== undefined && to.scaleY !== undefined) {
+          delete to.width;
+          delete to.height;
+
+          if ($el.parent().hasClass("fancybox-slide--image")) {
+            $el.parent().addClass("fancybox-is-scaling");
+          }
+        }
+
+        $.fancybox.setTranslate($el, to);
+      } else {
+        $el.addClass(to);
+      }
+
+      // Make sure that `transitionend` callback gets fired
+      $el.data(
+        "timer",
+        setTimeout(function () {
+          $el.trigger(transitionEnd);
+        }, duration + 33)
+      );
+    },
+
+    stop: function ($el, callCallback) {
+      if ($el && $el.length) {
+        clearTimeout($el.data("timer"));
+
+        if (callCallback) {
+          $el.trigger(transitionEnd);
+        }
+
+        $el.off(transitionEnd).css("transition-duration", "");
+
+        $el.parent().removeClass("fancybox-is-scaling");
+      }
+    }
+  };
+
+  // Default click handler for "fancyboxed" links
+  // ============================================
+
+  function _run(e, opts) {
+    var items = [],
+      index = 0,
+      $target,
+      value,
+      instance;
+
+    // Avoid opening multiple times
+    if (e && e.isDefaultPrevented()) {
+      return;
+    }
+
+    e.preventDefault();
+
+    opts = opts || {};
+
+    if (e && e.data) {
+      opts = mergeOpts(e.data.options, opts);
+    }
+
+    $target = opts.$target || $(e.currentTarget).trigger("blur");
+    instance = $.fancybox.getInstance();
+
+    if (instance && instance.$trigger && instance.$trigger.is($target)) {
+      return;
+    }
+
+    if (opts.selector) {
+      items = $(opts.selector);
+    } else {
+      // Get all related items and find index for clicked one
+      value = $target.attr("data-fancybox") || "";
+
+      if (value) {
+        items = e.data ? e.data.items : [];
+        items = items.length ? items.filter('[data-fancybox="' + value + '"]') : $('[data-fancybox="' + value + '"]');
+      } else {
+        items = [$target];
+      }
+    }
+
+    index = $(items).index($target);
+
+    // Sometimes current item can not be found
+    if (index < 0) {
+      index = 0;
+    }
+
+    instance = $.fancybox.open(items, opts, index);
+
+    // Save last active element
+    instance.$trigger = $target;
+  }
+
+  // Create a jQuery plugin
+  // ======================
+
+  $.fn.fancybox = function (options) {
+    var selector;
+
+    options = options || {};
+    selector = options.selector || false;
+
+    if (selector) {
+      // Use body element instead of document so it executes first
+      $("body")
+        .off("click.fb-start", selector)
+        .on("click.fb-start", selector, {
+          options: options
+        }, _run);
+    } else {
+      this.off("click.fb-start").on(
+        "click.fb-start", {
+          items: this,
+          options: options
+        },
+        _run
+      );
+    }
+
+    return this;
+  };
+
+  // Self initializing plugin for all elements having `data-fancybox` attribute
+  // ==========================================================================
+
+  $D.on("click.fb-start", "[data-fancybox]", _run);
+
+  // Enable "trigger elements"
+  // =========================
+
+  $D.on("click.fb-start", "[data-fancybox-trigger]", function (e) {
+    $('[data-fancybox="' + $(this).attr("data-fancybox-trigger") + '"]')
+      .eq($(this).attr("data-fancybox-index") || 0)
+      .trigger("click.fb-start", {
+        $trigger: $(this)
+      });
+  });
+
+  // Track focus event for better accessibility styling
+  // ==================================================
+  (function () {
+    var buttonStr = ".fancybox-button",
+      focusStr = "fancybox-focus",
+      $pressed = null;
+
+    $D.on("mousedown mouseup focus blur", buttonStr, function (e) {
+      switch (e.type) {
+        case "mousedown":
+          $pressed = $(this);
+          break;
+        case "mouseup":
+          $pressed = null;
+          break;
+        case "focusin":
+          $(buttonStr).removeClass(focusStr);
+
+          if (!$(this).is($pressed) && !$(this).is("[disabled]")) {
+            $(this).addClass(focusStr);
+          }
+          break;
+        case "focusout":
+          $(buttonStr).removeClass(focusStr);
+          break;
+      }
+    });
+  })();
+})(window, document, jQuery);
+// ==========================================================================
+//
+// Media
+// Adds additional media type support
+//
+// ==========================================================================
+(function ($) {
+  "use strict";
+
+  // Object containing properties for each media type
+  var defaults = {
+    youtube: {
+      matcher: /(youtube\.com|youtu\.be|youtube\-nocookie\.com)\/(watch\?(.*&)?v=|v\/|u\/|embed\/?)?(videoseries\?list=(.*)|[\w-]{11}|\?listType=(.*)&list=(.*))(.*)/i,
+      params: {
+        autoplay: 1,
+        autohide: 1,
+        fs: 1,
+        rel: 0,
+        hd: 1,
+        wmode: "transparent",
+        enablejsapi: 1,
+        html5: 1
+      },
+      paramPlace: 8,
+      type: "iframe",
+      url: "https://www.youtube-nocookie.com/embed/$4",
+      thumb: "https://img.youtube.com/vi/$4/hqdefault.jpg"
+    },
+
+    vimeo: {
+      matcher: /^.+vimeo.com\/(.*\/)?([\d]+)(.*)?/,
+      params: {
+        autoplay: 1,
+        hd: 1,
+        show_title: 1,
+        show_byline: 1,
+        show_portrait: 0,
+        fullscreen: 1
+      },
+      paramPlace: 3,
+      type: "iframe",
+      url: "//player.vimeo.com/video/$2"
+    },
+
+    instagram: {
+      matcher: /(instagr\.am|instagram\.com)\/p\/([a-zA-Z0-9_\-]+)\/?/i,
+      type: "image",
+      url: "//$1/p/$2/media/?size=l"
+    },
+
+    // Examples:
+    // http://maps.google.com/?ll=48.857995,2.294297&spn=0.007666,0.021136&t=m&z=16
+    // https://www.google.com/maps/@37.7852006,-122.4146355,14.65z
+    // https://www.google.com/maps/@52.2111123,2.9237542,6.61z?hl=en
+    // https://www.google.com/maps/place/Googleplex/@37.4220041,-122.0833494,17z/data=!4m5!3m4!1s0x0:0x6c296c66619367e0!8m2!3d37.4219998!4d-122.0840572
+    gmap_place: {
+      matcher: /(maps\.)?google\.([a-z]{2,3}(\.[a-z]{2})?)\/(((maps\/(place\/(.*)\/)?\@(.*),(\d+.?\d+?)z))|(\?ll=))(.*)?/i,
+      type: "iframe",
+      url: function (rez) {
+        return (
+          "//maps.google." +
+          rez[2] +
+          "/?ll=" +
+          (rez[9] ? rez[9] + "&z=" + Math.floor(rez[10]) + (rez[12] ? rez[12].replace(/^\//, "&") : "") : rez[12] + "").replace(/\?/, "&") +
+          "&output=" +
+          (rez[12] && rez[12].indexOf("layer=c") > 0 ? "svembed" : "embed")
+        );
+      }
+    },
+
+    // Examples:
+    // https://www.google.com/maps/search/Empire+State+Building/
+    // https://www.google.com/maps/search/?api=1&query=centurylink+field
+    // https://www.google.com/maps/search/?api=1&query=47.5951518,-122.3316393
+    gmap_search: {
+      matcher: /(maps\.)?google\.([a-z]{2,3}(\.[a-z]{2})?)\/(maps\/search\/)(.*)/i,
+      type: "iframe",
+      url: function (rez) {
+        return "//maps.google." + rez[2] + "/maps?q=" + rez[5].replace("query=", "q=").replace("api=1", "") + "&output=embed";
+      }
+    }
+  };
+
+  // Formats matching url to final form
+  var format = function (url, rez, params) {
+    if (!url) {
+      return;
+    }
+
+    params = params || "";
+
+    if ($.type(params) === "object") {
+      params = $.param(params, true);
+    }
+
+    $.each(rez, function (key, value) {
+      url = url.replace("$" + key, value || "");
+    });
+
+    if (params.length) {
+      url += (url.indexOf("?") > 0 ? "&" : "?") + params;
+    }
+
+    return url;
+  };
+
+  $(document).on("objectNeedsType.fb", function (e, instance, item) {
+    var url = item.src || "",
+      type = false,
+      media,
+      thumb,
+      rez,
+      params,
+      urlParams,
+      paramObj,
+      provider;
+
+    media = $.extend(true, {}, defaults, item.opts.media);
+
+    // Look for any matching media type
+    $.each(media, function (providerName, providerOpts) {
+      rez = url.match(providerOpts.matcher);
+
+      if (!rez) {
+        return;
+      }
+
+      type = providerOpts.type;
+      provider = providerName;
+      paramObj = {};
+
+      if (providerOpts.paramPlace && rez[providerOpts.paramPlace]) {
+        urlParams = rez[providerOpts.paramPlace];
+
+        if (urlParams[0] == "?") {
+          urlParams = urlParams.substring(1);
+        }
+
+        urlParams = urlParams.split("&");
+
+        for (var m = 0; m < urlParams.length; ++m) {
+          var p = urlParams[m].split("=", 2);
+
+          if (p.length == 2) {
+            paramObj[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+          }
+        }
+      }
+
+      params = $.extend(true, {}, providerOpts.params, item.opts[providerName], paramObj);
+
+      url =
+        $.type(providerOpts.url) === "function" ? providerOpts.url.call(this, rez, params, item) : format(providerOpts.url, rez, params);
+
+      thumb =
+        $.type(providerOpts.thumb) === "function" ? providerOpts.thumb.call(this, rez, params, item) : format(providerOpts.thumb, rez);
+
+      if (providerName === "youtube") {
+        url = url.replace(/&t=((\d+)m)?(\d+)s/, function (match, p1, m, s) {
+          return "&start=" + ((m ? parseInt(m, 10) * 60 : 0) + parseInt(s, 10));
+        });
+      } else if (providerName === "vimeo") {
+        url = url.replace("&%23", "#");
+      }
+
+      return false;
+    });
+
+    // If it is found, then change content type and update the url
+
+    if (type) {
+      if (!item.opts.thumb && !(item.opts.$thumb && item.opts.$thumb.length)) {
+        item.opts.thumb = thumb;
+      }
+
+      if (type === "iframe") {
+        item.opts = $.extend(true, item.opts, {
+          iframe: {
+            preload: false,
+            attr: {
+              scrolling: "no"
+            }
+          }
+        });
+      }
+
+      $.extend(item, {
+        type: type,
+        src: url,
+        origSrc: item.src,
+        contentSource: provider,
+        contentType: type === "image" ? "image" : provider == "gmap_place" || provider == "gmap_search" ? "map" : "video"
+      });
+    } else if (url) {
+      item.type = item.opts.defaultType;
+    }
+  });
+
+  // Load YouTube/Video API on request to detect when video finished playing
+  var VideoAPILoader = {
+    youtube: {
+      src: "https://www.youtube.com/iframe_api",
+      class: "YT",
+      loading: false,
+      loaded: false
+    },
+
+    vimeo: {
+      src: "https://player.vimeo.com/api/player.js",
+      class: "Vimeo",
+      loading: false,
+      loaded: false
+    },
+
+    load: function (vendor) {
+      var _this = this,
+        script;
+
+      if (this[vendor].loaded) {
+        setTimeout(function () {
+          _this.done(vendor);
+        });
+        return;
+      }
+
+      if (this[vendor].loading) {
+        return;
+      }
+
+      this[vendor].loading = true;
+
+      script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = this[vendor].src;
+
+      if (vendor === "youtube") {
+        window.onYouTubeIframeAPIReady = function () {
+          _this[vendor].loaded = true;
+          _this.done(vendor);
+        };
+      } else {
+        script.onload = function () {
+          _this[vendor].loaded = true;
+          _this.done(vendor);
+        };
+      }
+
+      document.body.appendChild(script);
+    },
+    done: function (vendor) {
+      var instance, $el, player;
+
+      if (vendor === "youtube") {
+        delete window.onYouTubeIframeAPIReady;
+      }
+
+      instance = $.fancybox.getInstance();
+
+      if (instance) {
+        $el = instance.current.$content.find("iframe");
+
+        if (vendor === "youtube" && YT !== undefined && YT) {
+          player = new YT.Player($el.attr("id"), {
+            events: {
+              onStateChange: function (e) {
+                if (e.data == 0) {
+                  instance.next();
+                }
+              }
+            }
+          });
+        } else if (vendor === "vimeo" && Vimeo !== undefined && Vimeo) {
+          player = new Vimeo.Player($el);
+
+          player.on("ended", function () {
+            instance.next();
+          });
+        }
+      }
+    }
+  };
+
+  $(document).on({
+    "afterShow.fb": function (e, instance, current) {
+      if (instance.group.length > 1 && (current.contentSource === "youtube" || current.contentSource === "vimeo")) {
+        VideoAPILoader.load(current.contentSource);
+      }
+    }
+  });
+})(jQuery);
+// ==========================================================================
+//
+// Guestures
+// Adds touch guestures, handles click and tap events
+//
+// ==========================================================================
+(function (window, document, $) {
+  "use strict";
+
+  var requestAFrame = (function () {
+    return (
+      window.requestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.oRequestAnimationFrame ||
+      // if all else fails, use setTimeout
+      function (callback) {
+        return window.setTimeout(callback, 1000 / 60);
+      }
+    );
+  })();
+
+  var cancelAFrame = (function () {
+    return (
+      window.cancelAnimationFrame ||
+      window.webkitCancelAnimationFrame ||
+      window.mozCancelAnimationFrame ||
+      window.oCancelAnimationFrame ||
+      function (id) {
+        window.clearTimeout(id);
+      }
+    );
+  })();
+
+  var getPointerXY = function (e) {
+    var result = [];
+
+    e = e.originalEvent || e || window.e;
+    e = e.touches && e.touches.length ? e.touches : e.changedTouches && e.changedTouches.length ? e.changedTouches : [e];
+
+    for (var key in e) {
+      if (e[key].pageX) {
+        result.push({
+          x: e[key].pageX,
+          y: e[key].pageY
+        });
+      } else if (e[key].clientX) {
+        result.push({
+          x: e[key].clientX,
+          y: e[key].clientY
+        });
+      }
+    }
+
+    return result;
+  };
+
+  var distance = function (point2, point1, what) {
+    if (!point1 || !point2) {
+      return 0;
+    }
+
+    if (what === "x") {
+      return point2.x - point1.x;
+    } else if (what === "y") {
+      return point2.y - point1.y;
+    }
+
+    return Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2));
+  };
+
+  var isClickable = function ($el) {
+    if (
+      $el.is('a,area,button,[role="button"],input,label,select,summary,textarea,video,audio,iframe') ||
+      $.isFunction($el.get(0).onclick) ||
+      $el.data("selectable")
+    ) {
+      return true;
+    }
+
+    // Check for attributes like data-fancybox-next or data-fancybox-close
+    for (var i = 0, atts = $el[0].attributes, n = atts.length; i < n; i++) {
+      if (atts[i].nodeName.substr(0, 14) === "data-fancybox-") {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  var hasScrollbars = function (el) {
+    var overflowY = window.getComputedStyle(el)["overflow-y"],
+      overflowX = window.getComputedStyle(el)["overflow-x"],
+      vertical = (overflowY === "scroll" || overflowY === "auto") && el.scrollHeight > el.clientHeight,
+      horizontal = (overflowX === "scroll" || overflowX === "auto") && el.scrollWidth > el.clientWidth;
+
+    return vertical || horizontal;
+  };
+
+  var isScrollable = function ($el) {
+    var rez = false;
+
+    while (true) {
+      rez = hasScrollbars($el.get(0));
+
+      if (rez) {
+        break;
+      }
+
+      $el = $el.parent();
+
+      if (!$el.length || $el.hasClass("fancybox-stage") || $el.is("body")) {
+        break;
+      }
+    }
+
+    return rez;
+  };
+
+  var Guestures = function (instance) {
+    var self = this;
+
+    self.instance = instance;
+
+    self.$bg = instance.$refs.bg;
+    self.$stage = instance.$refs.stage;
+    self.$container = instance.$refs.container;
+
+    self.destroy();
+
+    self.$container.on("touchstart.fb.touch mousedown.fb.touch", $.proxy(self, "ontouchstart"));
+  };
+
+  Guestures.prototype.destroy = function () {
+    var self = this;
+
+    self.$container.off(".fb.touch");
+
+    $(document).off(".fb.touch");
+
+    if (self.requestId) {
+      cancelAFrame(self.requestId);
+      self.requestId = null;
+    }
+
+    if (self.tapped) {
+      clearTimeout(self.tapped);
+      self.tapped = null;
+    }
+  };
+
+  Guestures.prototype.ontouchstart = function (e) {
+    var self = this,
+      $target = $(e.target),
+      instance = self.instance,
+      current = instance.current,
+      $slide = current.$slide,
+      $content = current.$content,
+      isTouchDevice = e.type == "touchstart";
+
+    // Do not respond to both (touch and mouse) events
+    if (isTouchDevice) {
+      self.$container.off("mousedown.fb.touch");
+    }
+
+    // Ignore right click
+    if (e.originalEvent && e.originalEvent.button == 2) {
+      return;
+    }
+
+    // Ignore taping on links, buttons, input elements
+    if (!$slide.length || !$target.length || isClickable($target) || isClickable($target.parent())) {
+      return;
+    }
+    // Ignore clicks on the scrollbar
+    if (!$target.is("img") && e.originalEvent.clientX > $target[0].clientWidth + $target.offset().left) {
+      return;
+    }
+
+    // Ignore clicks while zooming or closing
+    if (!current || instance.isAnimating || current.$slide.hasClass("fancybox-animated")) {
+      e.stopPropagation();
+      e.preventDefault();
+
+      return;
+    }
+
+    self.realPoints = self.startPoints = getPointerXY(e);
+
+    if (!self.startPoints.length) {
+      return;
+    }
+
+    // Allow other scripts to catch touch event if "touch" is set to false
+    if (current.touch) {
+      e.stopPropagation();
+    }
+
+    self.startEvent = e;
+
+    self.canTap = true;
+    self.$target = $target;
+    self.$content = $content;
+    self.opts = current.opts.touch;
+
+    self.isPanning = false;
+    self.isSwiping = false;
+    self.isZooming = false;
+    self.isScrolling = false;
+    self.canPan = instance.canPan();
+
+    self.startTime = new Date().getTime();
+    self.distanceX = self.distanceY = self.distance = 0;
+
+    self.canvasWidth = Math.round($slide[0].clientWidth);
+    self.canvasHeight = Math.round($slide[0].clientHeight);
+
+    self.contentLastPos = null;
+    self.contentStartPos = $.fancybox.getTranslate(self.$content) || {
+      top: 0,
+      left: 0
+    };
+    self.sliderStartPos = $.fancybox.getTranslate($slide);
+
+    // Since position will be absolute, but we need to make it relative to the stage
+    self.stagePos = $.fancybox.getTranslate(instance.$refs.stage);
+
+    self.sliderStartPos.top -= self.stagePos.top;
+    self.sliderStartPos.left -= self.stagePos.left;
+
+    self.contentStartPos.top -= self.stagePos.top;
+    self.contentStartPos.left -= self.stagePos.left;
+
+    $(document)
+      .off(".fb.touch")
+      .on(isTouchDevice ? "touchend.fb.touch touchcancel.fb.touch" : "mouseup.fb.touch mouseleave.fb.touch", $.proxy(self, "ontouchend"))
+      .on(isTouchDevice ? "touchmove.fb.touch" : "mousemove.fb.touch", $.proxy(self, "ontouchmove"));
+
+    if ($.fancybox.isMobile) {
+      document.addEventListener("scroll", self.onscroll, true);
+    }
+
+    // Skip if clicked outside the sliding area
+    if (!(self.opts || self.canPan) || !($target.is(self.$stage) || self.$stage.find($target).length)) {
+      if ($target.is(".fancybox-image")) {
+        e.preventDefault();
+      }
+
+      if (!($.fancybox.isMobile && $target.parents(".fancybox-caption").length)) {
+        return;
+      }
+    }
+
+    self.isScrollable = isScrollable($target) || isScrollable($target.parent());
+
+    // Check if element is scrollable and try to prevent default behavior (scrolling)
+    if (!($.fancybox.isMobile && self.isScrollable)) {
+      e.preventDefault();
+    }
+
+    // One finger or mouse click - swipe or pan an image
+    if (self.startPoints.length === 1 || current.hasError) {
+      if (self.canPan) {
+        $.fancybox.stop(self.$content);
+
+        self.isPanning = true;
+      } else {
+        self.isSwiping = true;
+      }
+
+      self.$container.addClass("fancybox-is-grabbing");
+    }
+
+    // Two fingers - zoom image
+    if (self.startPoints.length === 2 && current.type === "image" && (current.isLoaded || current.$ghost)) {
+      self.canTap = false;
+      self.isSwiping = false;
+      self.isPanning = false;
+
+      self.isZooming = true;
+
+      $.fancybox.stop(self.$content);
+
+      self.centerPointStartX = (self.startPoints[0].x + self.startPoints[1].x) * 0.5 - $(window).scrollLeft();
+      self.centerPointStartY = (self.startPoints[0].y + self.startPoints[1].y) * 0.5 - $(window).scrollTop();
+
+      self.percentageOfImageAtPinchPointX = (self.centerPointStartX - self.contentStartPos.left) / self.contentStartPos.width;
+      self.percentageOfImageAtPinchPointY = (self.centerPointStartY - self.contentStartPos.top) / self.contentStartPos.height;
+
+      self.startDistanceBetweenFingers = distance(self.startPoints[0], self.startPoints[1]);
+    }
+  };
+
+  Guestures.prototype.onscroll = function (e) {
+    var self = this;
+
+    self.isScrolling = true;
+
+    document.removeEventListener("scroll", self.onscroll, true);
+  };
+
+  Guestures.prototype.ontouchmove = function (e) {
+    var self = this;
+
+    // Make sure user has not released over iframe or disabled element
+    if (e.originalEvent.buttons !== undefined && e.originalEvent.buttons === 0) {
+      self.ontouchend(e);
+      return;
+    }
+
+    if (self.isScrolling) {
+      self.canTap = false;
+      return;
+    }
+
+    self.newPoints = getPointerXY(e);
+
+    if (!(self.opts || self.canPan) || !self.newPoints.length || !self.newPoints.length) {
+      return;
+    }
+
+    if (!(self.isSwiping && self.isSwiping === true)) {
+      e.preventDefault();
+    }
+
+    self.distanceX = distance(self.newPoints[0], self.startPoints[0], "x");
+    self.distanceY = distance(self.newPoints[0], self.startPoints[0], "y");
+
+    self.distance = distance(self.newPoints[0], self.startPoints[0]);
+
+    // Skip false ontouchmove events (Chrome)
+    if (self.distance > 0) {
+      if (self.isSwiping) {
+        self.onSwipe(e);
+      } else if (self.isPanning) {
+        self.onPan();
+      } else if (self.isZooming) {
+        self.onZoom();
+      }
+    }
+  };
+
+  Guestures.prototype.onSwipe = function (e) {
+    var self = this,
+      instance = self.instance,
+      swiping = self.isSwiping,
+      left = self.sliderStartPos.left || 0,
+      angle;
+
+    // If direction is not yet determined
+    if (swiping === true) {
+      // We need at least 10px distance to correctly calculate an angle
+      if (Math.abs(self.distance) > 10) {
+        self.canTap = false;
+
+        if (instance.group.length < 2 && self.opts.vertical) {
+          self.isSwiping = "y";
+        } else if (instance.isDragging || self.opts.vertical === false || (self.opts.vertical === "auto" && $(window).width() > 800)) {
+          self.isSwiping = "x";
+        } else {
+          angle = Math.abs((Math.atan2(self.distanceY, self.distanceX) * 180) / Math.PI);
+
+          self.isSwiping = angle > 45 && angle < 135 ? "y" : "x";
+        }
+
+        if (self.isSwiping === "y" && $.fancybox.isMobile && self.isScrollable) {
+          self.isScrolling = true;
+
+          return;
+        }
+
+        instance.isDragging = self.isSwiping;
+
+        // Reset points to avoid jumping, because we dropped first swipes to calculate the angle
+        self.startPoints = self.newPoints;
+
+        $.each(instance.slides, function (index, slide) {
+          var slidePos, stagePos;
+
+          $.fancybox.stop(slide.$slide);
+
+          slidePos = $.fancybox.getTranslate(slide.$slide);
+          stagePos = $.fancybox.getTranslate(instance.$refs.stage);
+
+          slide.$slide
+            .css({
+              transform: "",
+              opacity: "",
+              "transition-duration": ""
+            })
+            .removeClass("fancybox-animated")
+            .removeClass(function (index, className) {
+              return (className.match(/(^|\s)fancybox-fx-\S+/g) || []).join(" ");
+            });
+
+          if (slide.pos === instance.current.pos) {
+            self.sliderStartPos.top = slidePos.top - stagePos.top;
+            self.sliderStartPos.left = slidePos.left - stagePos.left;
+          }
+
+          $.fancybox.setTranslate(slide.$slide, {
+            top: slidePos.top - stagePos.top,
+            left: slidePos.left - stagePos.left
+          });
+        });
+
+        // Stop slideshow
+        if (instance.SlideShow && instance.SlideShow.isActive) {
+          instance.SlideShow.stop();
+        }
+      }
+
+      return;
+    }
+
+    // Sticky edges
+    if (swiping == "x") {
+      if (
+        self.distanceX > 0 &&
+        (self.instance.group.length < 2 || (self.instance.current.index === 0 && !self.instance.current.opts.loop))
+      ) {
+        left = left + Math.pow(self.distanceX, 0.8);
+      } else if (
+        self.distanceX < 0 &&
+        (self.instance.group.length < 2 ||
+          (self.instance.current.index === self.instance.group.length - 1 && !self.instance.current.opts.loop))
+      ) {
+        left = left - Math.pow(-self.distanceX, 0.8);
+      } else {
+        left = left + self.distanceX;
+      }
+    }
+
+    self.sliderLastPos = {
+      top: swiping == "x" ? 0 : self.sliderStartPos.top + self.distanceY,
+      left: left
+    };
+
+    if (self.requestId) {
+      cancelAFrame(self.requestId);
+
+      self.requestId = null;
+    }
+
+    self.requestId = requestAFrame(function () {
+      if (self.sliderLastPos) {
+        $.each(self.instance.slides, function (index, slide) {
+          var pos = slide.pos - self.instance.currPos;
+
+          $.fancybox.setTranslate(slide.$slide, {
+            top: self.sliderLastPos.top,
+            left: self.sliderLastPos.left + pos * self.canvasWidth + pos * slide.opts.gutter
+          });
+        });
+
+        self.$container.addClass("fancybox-is-sliding");
+      }
+    });
+  };
+
+  Guestures.prototype.onPan = function () {
+    var self = this;
+
+    // Prevent accidental movement (sometimes, when tapping casually, finger can move a bit)
+    if (distance(self.newPoints[0], self.realPoints[0]) < ($.fancybox.isMobile ? 10 : 5)) {
+      self.startPoints = self.newPoints;
+      return;
+    }
+
+    self.canTap = false;
+
+    self.contentLastPos = self.limitMovement();
+
+    if (self.requestId) {
+      cancelAFrame(self.requestId);
+    }
+
+    self.requestId = requestAFrame(function () {
+      $.fancybox.setTranslate(self.$content, self.contentLastPos);
+    });
+  };
+
+  // Make panning sticky to the edges
+  Guestures.prototype.limitMovement = function () {
+    var self = this;
+
+    var canvasWidth = self.canvasWidth;
+    var canvasHeight = self.canvasHeight;
+
+    var distanceX = self.distanceX;
+    var distanceY = self.distanceY;
+
+    var contentStartPos = self.contentStartPos;
+
+    var currentOffsetX = contentStartPos.left;
+    var currentOffsetY = contentStartPos.top;
+
+    var currentWidth = contentStartPos.width;
+    var currentHeight = contentStartPos.height;
+
+    var minTranslateX, minTranslateY, maxTranslateX, maxTranslateY, newOffsetX, newOffsetY;
+
+    if (currentWidth > canvasWidth) {
+      newOffsetX = currentOffsetX + distanceX;
+    } else {
+      newOffsetX = currentOffsetX;
+    }
+
+    newOffsetY = currentOffsetY + distanceY;
+
+    // Slow down proportionally to traveled distance
+    minTranslateX = Math.max(0, canvasWidth * 0.5 - currentWidth * 0.5);
+    minTranslateY = Math.max(0, canvasHeight * 0.5 - currentHeight * 0.5);
+
+    maxTranslateX = Math.min(canvasWidth - currentWidth, canvasWidth * 0.5 - currentWidth * 0.5);
+    maxTranslateY = Math.min(canvasHeight - currentHeight, canvasHeight * 0.5 - currentHeight * 0.5);
+
+    //   ->
+    if (distanceX > 0 && newOffsetX > minTranslateX) {
+      newOffsetX = minTranslateX - 1 + Math.pow(-minTranslateX + currentOffsetX + distanceX, 0.8) || 0;
+    }
+
+    //    <-
+    if (distanceX < 0 && newOffsetX < maxTranslateX) {
+      newOffsetX = maxTranslateX + 1 - Math.pow(maxTranslateX - currentOffsetX - distanceX, 0.8) || 0;
+    }
+
+    //   \/
+    if (distanceY > 0 && newOffsetY > minTranslateY) {
+      newOffsetY = minTranslateY - 1 + Math.pow(-minTranslateY + currentOffsetY + distanceY, 0.8) || 0;
+    }
+
+    //   /\
+    if (distanceY < 0 && newOffsetY < maxTranslateY) {
+      newOffsetY = maxTranslateY + 1 - Math.pow(maxTranslateY - currentOffsetY - distanceY, 0.8) || 0;
+    }
+
+    return {
+      top: newOffsetY,
+      left: newOffsetX
+    };
+  };
+
+  Guestures.prototype.limitPosition = function (newOffsetX, newOffsetY, newWidth, newHeight) {
+    var self = this;
+
+    var canvasWidth = self.canvasWidth;
+    var canvasHeight = self.canvasHeight;
+
+    if (newWidth > canvasWidth) {
+      newOffsetX = newOffsetX > 0 ? 0 : newOffsetX;
+      newOffsetX = newOffsetX < canvasWidth - newWidth ? canvasWidth - newWidth : newOffsetX;
+    } else {
+      // Center horizontally
+      newOffsetX = Math.max(0, canvasWidth / 2 - newWidth / 2);
+    }
+
+    if (newHeight > canvasHeight) {
+      newOffsetY = newOffsetY > 0 ? 0 : newOffsetY;
+      newOffsetY = newOffsetY < canvasHeight - newHeight ? canvasHeight - newHeight : newOffsetY;
+    } else {
+      // Center vertically
+      newOffsetY = Math.max(0, canvasHeight / 2 - newHeight / 2);
+    }
+
+    return {
+      top: newOffsetY,
+      left: newOffsetX
+    };
+  };
+
+  Guestures.prototype.onZoom = function () {
+    var self = this;
+
+    // Calculate current distance between points to get pinch ratio and new width and height
+    var contentStartPos = self.contentStartPos;
+
+    var currentWidth = contentStartPos.width;
+    var currentHeight = contentStartPos.height;
+
+    var currentOffsetX = contentStartPos.left;
+    var currentOffsetY = contentStartPos.top;
+
+    var endDistanceBetweenFingers = distance(self.newPoints[0], self.newPoints[1]);
+
+    var pinchRatio = endDistanceBetweenFingers / self.startDistanceBetweenFingers;
+
+    var newWidth = Math.floor(currentWidth * pinchRatio);
+    var newHeight = Math.floor(currentHeight * pinchRatio);
+
+    // This is the translation due to pinch-zooming
+    var translateFromZoomingX = (currentWidth - newWidth) * self.percentageOfImageAtPinchPointX;
+    var translateFromZoomingY = (currentHeight - newHeight) * self.percentageOfImageAtPinchPointY;
+
+    // Point between the two touches
+    var centerPointEndX = (self.newPoints[0].x + self.newPoints[1].x) / 2 - $(window).scrollLeft();
+    var centerPointEndY = (self.newPoints[0].y + self.newPoints[1].y) / 2 - $(window).scrollTop();
+
+    // And this is the translation due to translation of the centerpoint
+    // between the two fingers
+    var translateFromTranslatingX = centerPointEndX - self.centerPointStartX;
+    var translateFromTranslatingY = centerPointEndY - self.centerPointStartY;
+
+    // The new offset is the old/current one plus the total translation
+    var newOffsetX = currentOffsetX + (translateFromZoomingX + translateFromTranslatingX);
+    var newOffsetY = currentOffsetY + (translateFromZoomingY + translateFromTranslatingY);
+
+    var newPos = {
+      top: newOffsetY,
+      left: newOffsetX,
+      scaleX: pinchRatio,
+      scaleY: pinchRatio
+    };
+
+    self.canTap = false;
+
+    self.newWidth = newWidth;
+    self.newHeight = newHeight;
+
+    self.contentLastPos = newPos;
+
+    if (self.requestId) {
+      cancelAFrame(self.requestId);
+    }
+
+    self.requestId = requestAFrame(function () {
+      $.fancybox.setTranslate(self.$content, self.contentLastPos);
+    });
+  };
+
+  Guestures.prototype.ontouchend = function (e) {
+    var self = this;
+
+    var swiping = self.isSwiping;
+    var panning = self.isPanning;
+    var zooming = self.isZooming;
+    var scrolling = self.isScrolling;
+
+    self.endPoints = getPointerXY(e);
+    self.dMs = Math.max(new Date().getTime() - self.startTime, 1);
+
+    self.$container.removeClass("fancybox-is-grabbing");
+
+    $(document).off(".fb.touch");
+
+    document.removeEventListener("scroll", self.onscroll, true);
+
+    if (self.requestId) {
+      cancelAFrame(self.requestId);
+
+      self.requestId = null;
+    }
+
+    self.isSwiping = false;
+    self.isPanning = false;
+    self.isZooming = false;
+    self.isScrolling = false;
+
+    self.instance.isDragging = false;
+
+    if (self.canTap) {
+      return self.onTap(e);
+    }
+
+    self.speed = 100;
+
+    // Speed in px/ms
+    self.velocityX = (self.distanceX / self.dMs) * 0.5;
+    self.velocityY = (self.distanceY / self.dMs) * 0.5;
+
+    if (panning) {
+      self.endPanning();
+    } else if (zooming) {
+      self.endZooming();
+    } else {
+      self.endSwiping(swiping, scrolling);
+    }
+
+    return;
+  };
+
+  Guestures.prototype.endSwiping = function (swiping, scrolling) {
+    var self = this,
+      ret = false,
+      len = self.instance.group.length,
+      distanceX = Math.abs(self.distanceX),
+      canAdvance = swiping == "x" && len > 1 && ((self.dMs > 130 && distanceX > 10) || distanceX > 50),
+      speedX = 300;
+
+    self.sliderLastPos = null;
+
+    // Close if swiped vertically / navigate if horizontally
+    if (swiping == "y" && !scrolling && Math.abs(self.distanceY) > 50) {
+      // Continue vertical movement
+      $.fancybox.animate(
+        self.instance.current.$slide, {
+          top: self.sliderStartPos.top + self.distanceY + self.velocityY * 150,
+          opacity: 0
+        },
+        200
+      );
+      ret = self.instance.close(true, 250);
+    } else if (canAdvance && self.distanceX > 0) {
+      ret = self.instance.previous(speedX);
+    } else if (canAdvance && self.distanceX < 0) {
+      ret = self.instance.next(speedX);
+    }
+
+    if (ret === false && (swiping == "x" || swiping == "y")) {
+      self.instance.centerSlide(200);
+    }
+
+    self.$container.removeClass("fancybox-is-sliding");
+  };
+
+  // Limit panning from edges
+  // ========================
+  Guestures.prototype.endPanning = function () {
+    var self = this,
+      newOffsetX,
+      newOffsetY,
+      newPos;
+
+    if (!self.contentLastPos) {
+      return;
+    }
+
+    if (self.opts.momentum === false || self.dMs > 350) {
+      newOffsetX = self.contentLastPos.left;
+      newOffsetY = self.contentLastPos.top;
+    } else {
+      // Continue movement
+      newOffsetX = self.contentLastPos.left + self.velocityX * 500;
+      newOffsetY = self.contentLastPos.top + self.velocityY * 500;
+    }
+
+    newPos = self.limitPosition(newOffsetX, newOffsetY, self.contentStartPos.width, self.contentStartPos.height);
+
+    newPos.width = self.contentStartPos.width;
+    newPos.height = self.contentStartPos.height;
+
+    $.fancybox.animate(self.$content, newPos, 366);
+  };
+
+  Guestures.prototype.endZooming = function () {
+    var self = this;
+
+    var current = self.instance.current;
+
+    var newOffsetX, newOffsetY, newPos, reset;
+
+    var newWidth = self.newWidth;
+    var newHeight = self.newHeight;
+
+    if (!self.contentLastPos) {
+      return;
+    }
+
+    newOffsetX = self.contentLastPos.left;
+    newOffsetY = self.contentLastPos.top;
+
+    reset = {
+      top: newOffsetY,
+      left: newOffsetX,
+      width: newWidth,
+      height: newHeight,
+      scaleX: 1,
+      scaleY: 1
+    };
+
+    // Reset scalex/scaleY values; this helps for perfomance and does not break animation
+    $.fancybox.setTranslate(self.$content, reset);
+
+    if (newWidth < self.canvasWidth && newHeight < self.canvasHeight) {
+      self.instance.scaleToFit(150);
+    } else if (newWidth > current.width || newHeight > current.height) {
+      self.instance.scaleToActual(self.centerPointStartX, self.centerPointStartY, 150);
+    } else {
+      newPos = self.limitPosition(newOffsetX, newOffsetY, newWidth, newHeight);
+
+      $.fancybox.animate(self.$content, newPos, 150);
+    }
+  };
+
+  Guestures.prototype.onTap = function (e) {
+    var self = this;
+    var $target = $(e.target);
+
+    var instance = self.instance;
+    var current = instance.current;
+
+    var endPoints = (e && getPointerXY(e)) || self.startPoints;
+
+    var tapX = endPoints[0] ? endPoints[0].x - $(window).scrollLeft() - self.stagePos.left : 0;
+    var tapY = endPoints[0] ? endPoints[0].y - $(window).scrollTop() - self.stagePos.top : 0;
+
+    var where;
+
+    var process = function (prefix) {
+      var action = current.opts[prefix];
+
+      if ($.isFunction(action)) {
+        action = action.apply(instance, [current, e]);
+      }
+
+      if (!action) {
+        return;
+      }
+
+      switch (action) {
+        case "close":
+          instance.close(self.startEvent);
+
+          break;
+
+        case "toggleControls":
+          instance.toggleControls();
+
+          break;
+
+        case "next":
+          instance.next();
+
+          break;
+
+        case "nextOrClose":
+          if (instance.group.length > 1) {
+            instance.next();
+          } else {
+            instance.close(self.startEvent);
+          }
+
+          break;
+
+        case "zoom":
+          if (current.type == "image" && (current.isLoaded || current.$ghost)) {
+            if (instance.canPan()) {
+              instance.scaleToFit();
+            } else if (instance.isScaledDown()) {
+              instance.scaleToActual(tapX, tapY);
+            } else if (instance.group.length < 2) {
+              instance.close(self.startEvent);
+            }
+          }
+
+          break;
+      }
+    };
+
+    // Ignore right click
+    if (e.originalEvent && e.originalEvent.button == 2) {
+      return;
+    }
+
+    // Skip if clicked on the scrollbar
+    if (!$target.is("img") && tapX > $target[0].clientWidth + $target.offset().left) {
+      return;
+    }
+
+    // Check where is clicked
+    if ($target.is(".fancybox-bg,.fancybox-inner,.fancybox-outer,.fancybox-container")) {
+      where = "Outside";
+    } else if ($target.is(".fancybox-slide")) {
+      where = "Slide";
+    } else if (
+      instance.current.$content &&
+      instance.current.$content
+      .find($target)
+      .addBack()
+      .filter($target).length
+    ) {
+      where = "Content";
+    } else {
+      return;
+    }
+
+    // Check if this is a double tap
+    if (self.tapped) {
+      // Stop previously created single tap
+      clearTimeout(self.tapped);
+      self.tapped = null;
+
+      // Skip if distance between taps is too big
+      if (Math.abs(tapX - self.tapX) > 50 || Math.abs(tapY - self.tapY) > 50) {
+        return this;
+      }
+
+      // OK, now we assume that this is a double-tap
+      process("dblclick" + where);
+    } else {
+      // Single tap will be processed if user has not clicked second time within 300ms
+      // or there is no need to wait for double-tap
+      self.tapX = tapX;
+      self.tapY = tapY;
+
+      if (current.opts["dblclick" + where] && current.opts["dblclick" + where] !== current.opts["click" + where]) {
+        self.tapped = setTimeout(function () {
+          self.tapped = null;
+
+          if (!instance.isAnimating) {
+            process("click" + where);
+          }
+        }, 500);
+      } else {
+        process("click" + where);
+      }
+    }
+
+    return this;
+  };
+
+  $(document)
+    .on("onActivate.fb", function (e, instance) {
+      if (instance && !instance.Guestures) {
+        instance.Guestures = new Guestures(instance);
+      }
+    })
+    .on("beforeClose.fb", function (e, instance) {
+      if (instance && instance.Guestures) {
+        instance.Guestures.destroy();
+      }
+    });
+})(window, document, jQuery);
+// ==========================================================================
+//
+// SlideShow
+// Enables slideshow functionality
+//
+// Example of usage:
+// $.fancybox.getInstance().SlideShow.start()
+//
+// ==========================================================================
+(function (document, $) {
+  "use strict";
+
+  $.extend(true, $.fancybox.defaults, {
+    btnTpl: {
+      slideShow: '<button data-fancybox-play class="fancybox-button fancybox-button--play" title="{{PLAY_START}}">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.5 5.4v13.2l11-6.6z"/></svg>' +
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.33 5.75h2.2v12.5h-2.2V5.75zm5.15 0h2.2v12.5h-2.2V5.75z"/></svg>' +
+        "</button>"
+    },
+    slideShow: {
+      autoStart: false,
+      speed: 3000,
+      progress: true
+    }
+  });
+
+  var SlideShow = function (instance) {
+    this.instance = instance;
+    this.init();
+  };
+
+  $.extend(SlideShow.prototype, {
+    timer: null,
+    isActive: false,
+    $button: null,
+
+    init: function () {
+      var self = this,
+        instance = self.instance,
+        opts = instance.group[instance.currIndex].opts.slideShow;
+
+      self.$button = instance.$refs.toolbar.find("[data-fancybox-play]").on("click", function () {
+        self.toggle();
+      });
+
+      if (instance.group.length < 2 || !opts) {
+        self.$button.hide();
+      } else if (opts.progress) {
+        self.$progress = $('<div class="fancybox-progress"></div>').appendTo(instance.$refs.inner);
+      }
+    },
+
+    set: function (force) {
+      var self = this,
+        instance = self.instance,
+        current = instance.current;
+
+      // Check if reached last element
+      if (current && (force === true || current.opts.loop || instance.currIndex < instance.group.length - 1)) {
+        if (self.isActive && current.contentType !== "video") {
+          if (self.$progress) {
+            $.fancybox.animate(self.$progress.show(), {
+              scaleX: 1
+            }, current.opts.slideShow.speed);
+          }
+
+          self.timer = setTimeout(function () {
+            if (!instance.current.opts.loop && instance.current.index == instance.group.length - 1) {
+              instance.jumpTo(0);
+            } else {
+              instance.next();
+            }
+          }, current.opts.slideShow.speed);
+        }
+      } else {
+        self.stop();
+        instance.idleSecondsCounter = 0;
+        instance.showControls();
+      }
+    },
+
+    clear: function () {
+      var self = this;
+
+      clearTimeout(self.timer);
+
+      self.timer = null;
+
+      if (self.$progress) {
+        self.$progress.removeAttr("style").hide();
+      }
+    },
+
+    start: function () {
+      var self = this,
+        current = self.instance.current;
+
+      if (current) {
+        self.$button
+          .attr("title", (current.opts.i18n[current.opts.lang] || current.opts.i18n.en).PLAY_STOP)
+          .removeClass("fancybox-button--play")
+          .addClass("fancybox-button--pause");
+
+        self.isActive = true;
+
+        if (current.isComplete) {
+          self.set(true);
+        }
+
+        self.instance.trigger("onSlideShowChange", true);
+      }
+    },
+
+    stop: function () {
+      var self = this,
+        current = self.instance.current;
+
+      self.clear();
+
+      self.$button
+        .attr("title", (current.opts.i18n[current.opts.lang] || current.opts.i18n.en).PLAY_START)
+        .removeClass("fancybox-button--pause")
+        .addClass("fancybox-button--play");
+
+      self.isActive = false;
+
+      self.instance.trigger("onSlideShowChange", false);
+
+      if (self.$progress) {
+        self.$progress.removeAttr("style").hide();
+      }
+    },
+
+    toggle: function () {
+      var self = this;
+
+      if (self.isActive) {
+        self.stop();
+      } else {
+        self.start();
+      }
+    }
+  });
+
+  $(document).on({
+    "onInit.fb": function (e, instance) {
+      if (instance && !instance.SlideShow) {
+        instance.SlideShow = new SlideShow(instance);
+      }
+    },
+
+    "beforeShow.fb": function (e, instance, current, firstRun) {
+      var SlideShow = instance && instance.SlideShow;
+
+      if (firstRun) {
+        if (SlideShow && current.opts.slideShow.autoStart) {
+          SlideShow.start();
+        }
+      } else if (SlideShow && SlideShow.isActive) {
+        SlideShow.clear();
+      }
+    },
+
+    "afterShow.fb": function (e, instance, current) {
+      var SlideShow = instance && instance.SlideShow;
+
+      if (SlideShow && SlideShow.isActive) {
+        SlideShow.set();
+      }
+    },
+
+    "afterKeydown.fb": function (e, instance, current, keypress, keycode) {
+      var SlideShow = instance && instance.SlideShow;
+
+      // "P" or Spacebar
+      if (SlideShow && current.opts.slideShow && (keycode === 80 || keycode === 32) && !$(document.activeElement).is("button,a,input")) {
+        keypress.preventDefault();
+
+        SlideShow.toggle();
+      }
+    },
+
+    "beforeClose.fb onDeactivate.fb": function (e, instance) {
+      var SlideShow = instance && instance.SlideShow;
+
+      if (SlideShow) {
+        SlideShow.stop();
+      }
+    }
+  });
+
+  // Page Visibility API to pause slideshow when window is not active
+  $(document).on("visibilitychange", function () {
+    var instance = $.fancybox.getInstance(),
+      SlideShow = instance && instance.SlideShow;
+
+    if (SlideShow && SlideShow.isActive) {
+      if (document.hidden) {
+        SlideShow.clear();
+      } else {
+        SlideShow.set();
+      }
+    }
+  });
+})(document, jQuery);
+// ==========================================================================
+//
+// FullScreen
+// Adds fullscreen functionality
+//
+// ==========================================================================
+(function (document, $) {
+  "use strict";
+
+  // Collection of methods supported by user browser
+  var fn = (function () {
+    var fnMap = [
+      ["requestFullscreen", "exitFullscreen", "fullscreenElement", "fullscreenEnabled", "fullscreenchange", "fullscreenerror"],
+      // new WebKit
+      [
+        "webkitRequestFullscreen",
+        "webkitExitFullscreen",
+        "webkitFullscreenElement",
+        "webkitFullscreenEnabled",
+        "webkitfullscreenchange",
+        "webkitfullscreenerror"
+      ],
+      // old WebKit (Safari 5.1)
+      [
+        "webkitRequestFullScreen",
+        "webkitCancelFullScreen",
+        "webkitCurrentFullScreenElement",
+        "webkitCancelFullScreen",
+        "webkitfullscreenchange",
+        "webkitfullscreenerror"
+      ],
+      [
+        "mozRequestFullScreen",
+        "mozCancelFullScreen",
+        "mozFullScreenElement",
+        "mozFullScreenEnabled",
+        "mozfullscreenchange",
+        "mozfullscreenerror"
+      ],
+      ["msRequestFullscreen", "msExitFullscreen", "msFullscreenElement", "msFullscreenEnabled", "MSFullscreenChange", "MSFullscreenError"]
+    ];
+
+    var ret = {};
+
+    for (var i = 0; i < fnMap.length; i++) {
+      var val = fnMap[i];
+
+      if (val && val[1] in document) {
+        for (var j = 0; j < val.length; j++) {
+          ret[fnMap[0][j]] = val[j];
+        }
+
+        return ret;
+      }
+    }
+
+    return false;
+  })();
+
+  if (fn) {
+    var FullScreen = {
+      request: function (elem) {
+        elem = elem || document.documentElement;
+
+        elem[fn.requestFullscreen](elem.ALLOW_KEYBOARD_INPUT);
+      },
+      exit: function () {
+        document[fn.exitFullscreen]();
+      },
+      toggle: function (elem) {
+        elem = elem || document.documentElement;
+
+        if (this.isFullscreen()) {
+          this.exit();
+        } else {
+          this.request(elem);
+        }
+      },
+      isFullscreen: function () {
+        return Boolean(document[fn.fullscreenElement]);
+      },
+      enabled: function () {
+        return Boolean(document[fn.fullscreenEnabled]);
+      }
+    };
+
+    $.extend(true, $.fancybox.defaults, {
+      btnTpl: {
+        fullScreen: '<button data-fancybox-fullscreen class="fancybox-button fancybox-button--fsenter" title="{{FULL_SCREEN}}">' +
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>' +
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5zm3-8H5v2h5V5H8zm6 11h2v-3h3v-2h-5zm2-11V5h-2v5h5V8z"/></svg>' +
+          "</button>"
+      },
+      fullScreen: {
+        autoStart: false
+      }
+    });
+
+    $(document).on(fn.fullscreenchange, function () {
+      var isFullscreen = FullScreen.isFullscreen(),
+        instance = $.fancybox.getInstance();
+
+      if (instance) {
+        // If image is zooming, then force to stop and reposition properly
+        if (instance.current && instance.current.type === "image" && instance.isAnimating) {
+          instance.isAnimating = false;
+
+          instance.update(true, true, 0);
+
+          if (!instance.isComplete) {
+            instance.complete();
+          }
+        }
+
+        instance.trigger("onFullscreenChange", isFullscreen);
+
+        instance.$refs.container.toggleClass("fancybox-is-fullscreen", isFullscreen);
+
+        instance.$refs.toolbar
+          .find("[data-fancybox-fullscreen]")
+          .toggleClass("fancybox-button--fsenter", !isFullscreen)
+          .toggleClass("fancybox-button--fsexit", isFullscreen);
+      }
+    });
+  }
+
+  $(document).on({
+    "onInit.fb": function (e, instance) {
+      var $container;
+
+      if (!fn) {
+        instance.$refs.toolbar.find("[data-fancybox-fullscreen]").remove();
+
+        return;
+      }
+
+      if (instance && instance.group[instance.currIndex].opts.fullScreen) {
+        $container = instance.$refs.container;
+
+        $container.on("click.fb-fullscreen", "[data-fancybox-fullscreen]", function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+
+          FullScreen.toggle();
+        });
+
+        if (instance.opts.fullScreen && instance.opts.fullScreen.autoStart === true) {
+          FullScreen.request();
+        }
+
+        // Expose API
+        instance.FullScreen = FullScreen;
+      } else if (instance) {
+        instance.$refs.toolbar.find("[data-fancybox-fullscreen]").hide();
+      }
+    },
+
+    "afterKeydown.fb": function (e, instance, current, keypress, keycode) {
+      // "F"
+      if (instance && instance.FullScreen && keycode === 70) {
+        keypress.preventDefault();
+
+        instance.FullScreen.toggle();
+      }
+    },
+
+    "beforeClose.fb": function (e, instance) {
+      if (instance && instance.FullScreen && instance.$refs.container.hasClass("fancybox-is-fullscreen")) {
+        FullScreen.exit();
+      }
+    }
+  });
+})(document, jQuery);
+// ==========================================================================
+//
+// Thumbs
+// Displays thumbnails in a grid
+//
+// ==========================================================================
+(function (document, $) {
+  "use strict";
+
+  var CLASS = "fancybox-thumbs",
+    CLASS_ACTIVE = CLASS + "-active";
+
+  // Make sure there are default values
+  $.fancybox.defaults = $.extend(
+    true, {
+      btnTpl: {
+        thumbs: '<button data-fancybox-thumbs class="fancybox-button fancybox-button--thumbs" title="{{THUMBS}}">' +
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.59 14.59h3.76v3.76h-3.76v-3.76zm-4.47 0h3.76v3.76h-3.76v-3.76zm-4.47 0h3.76v3.76H5.65v-3.76zm8.94-4.47h3.76v3.76h-3.76v-3.76zm-4.47 0h3.76v3.76h-3.76v-3.76zm-4.47 0h3.76v3.76H5.65v-3.76zm8.94-4.47h3.76v3.76h-3.76V5.65zm-4.47 0h3.76v3.76h-3.76V5.65zm-4.47 0h3.76v3.76H5.65V5.65z"/></svg>' +
+          "</button>"
+      },
+      thumbs: {
+        autoStart: false, // Display thumbnails on opening
+        hideOnClose: true, // Hide thumbnail grid when closing animation starts
+        parentEl: ".fancybox-container", // Container is injected into this element
+        axis: "y" // Vertical (y) or horizontal (x) scrolling
+      }
+    },
+    $.fancybox.defaults
+  );
+
+  var FancyThumbs = function (instance) {
+    this.init(instance);
+  };
+
+  $.extend(FancyThumbs.prototype, {
+    $button: null,
+    $grid: null,
+    $list: null,
+    isVisible: false,
+    isActive: false,
+
+    init: function (instance) {
+      var self = this,
+        group = instance.group,
+        enabled = 0;
+
+      self.instance = instance;
+      self.opts = group[instance.currIndex].opts.thumbs;
+
+      instance.Thumbs = self;
+
+      self.$button = instance.$refs.toolbar.find("[data-fancybox-thumbs]");
+
+      // Enable thumbs if at least two group items have thumbnails
+      for (var i = 0, len = group.length; i < len; i++) {
+        if (group[i].thumb) {
+          enabled++;
+        }
+
+        if (enabled > 1) {
+          break;
+        }
+      }
+
+      if (enabled > 1 && !!self.opts) {
+        self.$button.removeAttr("style").on("click", function () {
+          self.toggle();
+        });
+
+        self.isActive = true;
+      } else {
+        self.$button.hide();
+      }
+    },
+
+    create: function () {
+      var self = this,
+        instance = self.instance,
+        parentEl = self.opts.parentEl,
+        list = [],
+        src;
+
+      if (!self.$grid) {
+        // Create main element
+        self.$grid = $('<div class="' + CLASS + " " + CLASS + "-" + self.opts.axis + '"></div>').appendTo(
+          instance.$refs.container
+          .find(parentEl)
+          .addBack()
+          .filter(parentEl)
+        );
+
+        // Add "click" event that performs gallery navigation
+        self.$grid.on("click", "a", function () {
+          instance.jumpTo($(this).attr("data-index"));
+        });
+      }
+
+      // Build the list
+      if (!self.$list) {
+        self.$list = $('<div class="' + CLASS + '__list">').appendTo(self.$grid);
+      }
+
+      $.each(instance.group, function (i, item) {
+        src = item.thumb;
+
+        if (!src && item.type === "image") {
+          src = item.src;
+        }
+
+        list.push(
+          '<a href="javascript:;" tabindex="0" data-index="' +
+          i +
+          '"' +
+          (src && src.length ? ' style="background-image:url(' + src + ')"' : 'class="fancybox-thumbs-missing"') +
+          "></a>"
+        );
+      });
+
+      self.$list[0].innerHTML = list.join("");
+
+      if (self.opts.axis === "x") {
+        // Set fixed width for list element to enable horizontal scrolling
+        self.$list.width(
+          parseInt(self.$grid.css("padding-right"), 10) +
+          instance.group.length *
+          self.$list
+          .children()
+          .eq(0)
+          .outerWidth(true)
+        );
+      }
+    },
+
+    focus: function (duration) {
+      var self = this,
+        $list = self.$list,
+        $grid = self.$grid,
+        thumb,
+        thumbPos;
+
+      if (!self.instance.current) {
+        return;
+      }
+
+      thumb = $list
+        .children()
+        .removeClass(CLASS_ACTIVE)
+        .filter('[data-index="' + self.instance.current.index + '"]')
+        .addClass(CLASS_ACTIVE);
+
+      thumbPos = thumb.position();
+
+      // Check if need to scroll to make current thumb visible
+      if (self.opts.axis === "y" && (thumbPos.top < 0 || thumbPos.top > $list.height() - thumb.outerHeight())) {
+        $list.stop().animate({
+            scrollTop: $list.scrollTop() + thumbPos.top
+          },
+          duration
+        );
+      } else if (
+        self.opts.axis === "x" &&
+        (thumbPos.left < $grid.scrollLeft() || thumbPos.left > $grid.scrollLeft() + ($grid.width() - thumb.outerWidth()))
+      ) {
+        $list
+          .parent()
+          .stop()
+          .animate({
+              scrollLeft: thumbPos.left
+            },
+            duration
+          );
+      }
+    },
+
+    update: function () {
+      var that = this;
+      that.instance.$refs.container.toggleClass("fancybox-show-thumbs", this.isVisible);
+
+      if (that.isVisible) {
+        if (!that.$grid) {
+          that.create();
+        }
+
+        that.instance.trigger("onThumbsShow");
+
+        that.focus(0);
+      } else if (that.$grid) {
+        that.instance.trigger("onThumbsHide");
+      }
+
+      // Update content position
+      that.instance.update();
+    },
+
+    hide: function () {
+      this.isVisible = false;
+      this.update();
+    },
+
+    show: function () {
+      this.isVisible = true;
+      this.update();
+    },
+
+    toggle: function () {
+      this.isVisible = !this.isVisible;
+      this.update();
+    }
+  });
+
+  $(document).on({
+    "onInit.fb": function (e, instance) {
+      var Thumbs;
+
+      if (instance && !instance.Thumbs) {
+        Thumbs = new FancyThumbs(instance);
+
+        if (Thumbs.isActive && Thumbs.opts.autoStart === true) {
+          Thumbs.show();
+        }
+      }
+    },
+
+    "beforeShow.fb": function (e, instance, item, firstRun) {
+      var Thumbs = instance && instance.Thumbs;
+
+      if (Thumbs && Thumbs.isVisible) {
+        Thumbs.focus(firstRun ? 0 : 250);
+      }
+    },
+
+    "afterKeydown.fb": function (e, instance, current, keypress, keycode) {
+      var Thumbs = instance && instance.Thumbs;
+
+      // "G"
+      if (Thumbs && Thumbs.isActive && keycode === 71) {
+        keypress.preventDefault();
+
+        Thumbs.toggle();
+      }
+    },
+
+    "beforeClose.fb": function (e, instance) {
+      var Thumbs = instance && instance.Thumbs;
+
+      if (Thumbs && Thumbs.isVisible && Thumbs.opts.hideOnClose !== false) {
+        Thumbs.$grid.hide();
+      }
+    }
+  });
+})(document, jQuery);
+//// ==========================================================================
+//
+// Share
+// Displays simple form for sharing current url
+//
+// ==========================================================================
+(function (document, $) {
+  "use strict";
+
+  $.extend(true, $.fancybox.defaults, {
+    btnTpl: {
+      share: '<button data-fancybox-share class="fancybox-button fancybox-button--share" title="{{SHARE}}">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2.55 19c1.4-8.4 9.1-9.8 11.9-9.8V5l7 7-7 6.3v-3.5c-2.8 0-10.5 2.1-11.9 4.2z"/></svg>' +
+        "</button>"
+    },
+    share: {
+      url: function (instance, item) {
+        return (
+          (!instance.currentHash && !(item.type === "inline" || item.type === "html") ? item.origSrc || item.src : false) || window.location
+        );
+      },
+      tpl: '<div class="fancybox-share">' +
+        "<h1>{{SHARE}}</h1>" +
+        "<p>" +
+        '<a class="fancybox-share__button fancybox-share__button--fb" href="https://www.facebook.com/sharer/sharer.php?u={{url}}">' +
+        '<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m287 456v-299c0-21 6-35 35-35h38v-63c-7-1-29-3-55-3-54 0-91 33-91 94v306m143-254h-205v72h196" /></svg>' +
+        "<span>Facebook</span>" +
+        "</a>" +
+        '<a class="fancybox-share__button fancybox-share__button--tw" href="https://twitter.com/intent/tweet?url={{url}}&text={{descr}}">' +
+        '<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m456 133c-14 7-31 11-47 13 17-10 30-27 37-46-15 10-34 16-52 20-61-62-157-7-141 75-68-3-129-35-169-85-22 37-11 86 26 109-13 0-26-4-37-9 0 39 28 72 65 80-12 3-25 4-37 2 10 33 41 57 77 57-42 30-77 38-122 34 170 111 378-32 359-208 16-11 30-25 41-42z" /></svg>' +
+        "<span>Twitter</span>" +
+        "</a>" +
+        '<a class="fancybox-share__button fancybox-share__button--pt" href="https://www.pinterest.com/pin/create/button/?url={{url}}&description={{descr}}&media={{media}}">' +
+        '<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m265 56c-109 0-164 78-164 144 0 39 15 74 47 87 5 2 10 0 12-5l4-19c2-6 1-8-3-13-9-11-15-25-15-45 0-58 43-110 113-110 62 0 96 38 96 88 0 67-30 122-73 122-24 0-42-19-36-44 6-29 20-60 20-81 0-19-10-35-31-35-25 0-44 26-44 60 0 21 7 36 7 36l-30 125c-8 37-1 83 0 87 0 3 4 4 5 2 2-3 32-39 42-75l16-64c8 16 31 29 56 29 74 0 124-67 124-157 0-69-58-132-146-132z" fill="#fff"/></svg>' +
+        "<span>Pinterest</span>" +
+        "</a>" +
+        "</p>" +
+        '<p><input class="fancybox-share__input" type="text" value="{{url_raw}}" onclick="select()" /></p>' +
+        "</div>"
+    }
+  });
+
+  function escapeHtml(string) {
+    var entityMap = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+      "/": "&#x2F;",
+      "`": "&#x60;",
+      "=": "&#x3D;"
+    };
+
+    return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+      return entityMap[s];
+    });
+  }
+
+  $(document).on("click", "[data-fancybox-share]", function () {
+    var instance = $.fancybox.getInstance(),
+      current = instance.current || null,
+      url,
+      tpl;
+
+    if (!current) {
+      return;
+    }
+
+    if ($.type(current.opts.share.url) === "function") {
+      url = current.opts.share.url.apply(current, [instance, current]);
+    }
+
+    tpl = current.opts.share.tpl
+      .replace(/\{\{media\}\}/g, current.type === "image" ? encodeURIComponent(current.src) : "")
+      .replace(/\{\{url\}\}/g, encodeURIComponent(url))
+      .replace(/\{\{url_raw\}\}/g, escapeHtml(url))
+      .replace(/\{\{descr\}\}/g, instance.$caption ? encodeURIComponent(instance.$caption.text()) : "");
+
+    $.fancybox.open({
+      src: instance.translate(instance, tpl),
+      type: "html",
+      opts: {
+        touch: false,
+        animationEffect: false,
+        afterLoad: function (shareInstance, shareCurrent) {
+          // Close self if parent instance is closing
+          instance.$refs.container.one("beforeClose.fb", function () {
+            shareInstance.close(null, 0);
+          });
+
+          // Opening links in a popup window
+          shareCurrent.$content.find(".fancybox-share__button").click(function () {
+            window.open(this.href, "Share", "width=550, height=450");
+            return false;
+          });
+        },
+        mobile: {
+          autoFocus: false
+        }
+      }
+    });
+  });
+})(document, jQuery);
+// ==========================================================================
+//
+// Hash
+// Enables linking to each modal
+//
+// ==========================================================================
+(function (window, document, $) {
+  "use strict";
+
+  // Simple $.escapeSelector polyfill (for jQuery prior v3)
+  if (!$.escapeSelector) {
+    $.escapeSelector = function (sel) {
+      var rcssescape = /([\0-\x1f\x7f]|^-?\d)|^-$|[^\x80-\uFFFF\w-]/g;
+      var fcssescape = function (ch, asCodePoint) {
+        if (asCodePoint) {
+          // U+0000 NULL becomes U+FFFD REPLACEMENT CHARACTER
+          if (ch === "\0") {
+            return "\uFFFD";
+          }
+
+          // Control characters and (dependent upon position) numbers get escaped as code points
+          return ch.slice(0, -1) + "\\" + ch.charCodeAt(ch.length - 1).toString(16) + " ";
+        }
+
+        // Other potentially-special ASCII characters get backslash-escaped
+        return "\\" + ch;
+      };
+
+      return (sel + "").replace(rcssescape, fcssescape);
+    };
+  }
+
+  // Get info about gallery name and current index from url
+  function parseUrl() {
+    var hash = window.location.hash.substr(1),
+      rez = hash.split("-"),
+      index = rez.length > 1 && /^\+?\d+$/.test(rez[rez.length - 1]) ? parseInt(rez.pop(-1), 10) || 1 : 1,
+      gallery = rez.join("-");
+
+    return {
+      hash: hash,
+      /* Index is starting from 1 */
+      index: index < 1 ? 1 : index,
+      gallery: gallery
+    };
+  }
+
+  // Trigger click evnt on links to open new fancyBox instance
+  function triggerFromUrl(url) {
+    if (url.gallery !== "") {
+      // If we can find element matching 'data-fancybox' atribute,
+      // then triggering click event should start fancyBox
+      $("[data-fancybox='" + $.escapeSelector(url.gallery) + "']")
+        .eq(url.index - 1)
+        .focus()
+        .trigger("click.fb-start");
+    }
+  }
+
+  // Get gallery name from current instance
+  function getGalleryID(instance) {
+    var opts, ret;
+
+    if (!instance) {
+      return false;
+    }
+
+    opts = instance.current ? instance.current.opts : instance.opts;
+    ret = opts.hash || (opts.$orig ? opts.$orig.data("fancybox") || opts.$orig.data("fancybox-trigger") : "");
+
+    return ret === "" ? false : ret;
+  }
+
+  // Start when DOM becomes ready
+  $(function () {
+    // Check if user has disabled this module
+    if ($.fancybox.defaults.hash === false) {
+      return;
+    }
+
+    // Update hash when opening/closing fancyBox
+    $(document).on({
+      "onInit.fb": function (e, instance) {
+        var url, gallery;
+
+        if (instance.group[instance.currIndex].opts.hash === false) {
+          return;
+        }
+
+        url = parseUrl();
+        gallery = getGalleryID(instance);
+
+        // Make sure gallery start index matches index from hash
+        if (gallery && url.gallery && gallery == url.gallery) {
+          instance.currIndex = url.index - 1;
+        }
+      },
+
+      "beforeShow.fb": function (e, instance, current, firstRun) {
+        var gallery;
+
+        if (!current || current.opts.hash === false) {
+          return;
+        }
+
+        // Check if need to update window hash
+        gallery = getGalleryID(instance);
+
+        if (!gallery) {
+          return;
+        }
+
+        // Variable containing last hash value set by fancyBox
+        // It will be used to determine if fancyBox needs to close after hash change is detected
+        instance.currentHash = gallery + (instance.group.length > 1 ? "-" + (current.index + 1) : "");
+
+        // If current hash is the same (this instance most likely is opened by hashchange), then do nothing
+        if (window.location.hash === "#" + instance.currentHash) {
+          return;
+        }
+
+        if (firstRun && !instance.origHash) {
+          instance.origHash = window.location.hash;
+        }
+
+        if (instance.hashTimer) {
+          clearTimeout(instance.hashTimer);
+        }
+
+        // Update hash
+        instance.hashTimer = setTimeout(function () {
+          if ("replaceState" in window.history) {
+            window.history[firstRun ? "pushState" : "replaceState"]({},
+              document.title,
+              window.location.pathname + window.location.search + "#" + instance.currentHash
+            );
+
+            if (firstRun) {
+              instance.hasCreatedHistory = true;
+            }
+          } else {
+            window.location.hash = instance.currentHash;
+          }
+
+          instance.hashTimer = null;
+        }, 300);
+      },
+
+      "beforeClose.fb": function (e, instance, current) {
+        if (!current || current.opts.hash === false) {
+          return;
+        }
+
+        clearTimeout(instance.hashTimer);
+
+        // Goto previous history entry
+        if (instance.currentHash && instance.hasCreatedHistory) {
+          window.history.back();
+        } else if (instance.currentHash) {
+          if ("replaceState" in window.history) {
+            window.history.replaceState({}, document.title, window.location.pathname + window.location.search + (instance.origHash || ""));
+          } else {
+            window.location.hash = instance.origHash;
+          }
+        }
+
+        instance.currentHash = null;
+      }
+    });
+
+    // Check if need to start/close after url has changed
+    $(window).on("hashchange.fb", function () {
+      var url = parseUrl(),
+        fb = null;
+
+      // Find last fancyBox instance that has "hash"
+      $.each(
+        $(".fancybox-container")
+        .get()
+        .reverse(),
+        function (index, value) {
+          var tmp = $(value).data("FancyBox");
+
+          if (tmp && tmp.currentHash) {
+            fb = tmp;
+            return false;
+          }
+        }
+      );
+
+      if (fb) {
+        // Now, compare hash values
+        if (fb.currentHash !== url.gallery + "-" + url.index && !(url.index === 1 && fb.currentHash == url.gallery)) {
+          fb.currentHash = null;
+
+          fb.close();
+        }
+      } else if (url.gallery !== "") {
+        triggerFromUrl(url);
+      }
+    });
+
+    // Check current hash and trigger click event on matching element to start fancyBox, if needed
+    setTimeout(function () {
+      if (!$.fancybox.getInstance()) {
+        triggerFromUrl(parseUrl());
+      }
+    }, 50);
+  });
+})(window, document, jQuery);
+// ==========================================================================
+//
+// Wheel
+// Basic mouse weheel support for gallery navigation
+//
+// ==========================================================================
+(function (document, $) {
+  "use strict";
+
+  var prevTime = new Date().getTime();
+
+  $(document).on({
+    "onInit.fb": function (e, instance, current) {
+      instance.$refs.stage.on("mousewheel DOMMouseScroll wheel MozMousePixelScroll", function (e) {
+        var current = instance.current,
+          currTime = new Date().getTime();
+
+        if (instance.group.length < 2 || current.opts.wheel === false || (current.opts.wheel === "auto" && current.type !== "image")) {
+          return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (current.$slide.hasClass("fancybox-animated")) {
+          return;
+        }
+
+        e = e.originalEvent || e;
+
+        if (currTime - prevTime < 250) {
+          return;
+        }
+
+        prevTime = currTime;
+
+        instance[(-e.deltaY || -e.deltaX || e.wheelDelta || -e.detail) < 0 ? "next" : "previous"]();
+      });
+    }
+  });
+})(document, jQuery);
+},{}],3:[function(require,module,exports){
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -1874,13 +7509,13 @@ return /******/ (function(modules) { // webpackBootstrap
 });
 ;
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var inject = require('./../../../cssify');
 var css = "/*!\n * Bootstrap v4.3.1 (https://getbootstrap.com/)\n * Copyright 2011-2019 The Bootstrap Authors\n * Copyright 2011-2019 Twitter, Inc.\n * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)\n */:root{--blue:#007bff;--indigo:#6610f2;--purple:#6f42c1;--pink:#e83e8c;--red:#dc3545;--orange:#fd7e14;--yellow:#ffc107;--green:#28a745;--teal:#20c997;--cyan:#17a2b8;--white:#fff;--gray:#6c757d;--gray-dark:#343a40;--primary:#007bff;--secondary:#6c757d;--success:#28a745;--info:#17a2b8;--warning:#ffc107;--danger:#dc3545;--light:#f8f9fa;--dark:#343a40;--breakpoint-xs:0;--breakpoint-sm:576px;--breakpoint-md:768px;--breakpoint-lg:992px;--breakpoint-xl:1200px;--font-family-sans-serif:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\";--font-family-monospace:SFMono-Regular,Menlo,Monaco,Consolas,\"Liberation Mono\",\"Courier New\",monospace}*,::after,::before{box-sizing:border-box}html{font-family:sans-serif;line-height:1.15;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}article,aside,figcaption,figure,footer,header,hgroup,main,nav,section{display:block}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\";font-size:1rem;font-weight:400;line-height:1.5;color:#212529;text-align:left;background-color:#fff}[tabindex=\"-1\"]:focus{outline:0!important}hr{box-sizing:content-box;height:0;overflow:visible}h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:.5rem}p{margin-top:0;margin-bottom:1rem}abbr[data-original-title],abbr[title]{text-decoration:underline;-webkit-text-decoration:underline dotted;text-decoration:underline dotted;cursor:help;border-bottom:0;-webkit-text-decoration-skip-ink:none;text-decoration-skip-ink:none}address{margin-bottom:1rem;font-style:normal;line-height:inherit}dl,ol,ul{margin-top:0;margin-bottom:1rem}ol ol,ol ul,ul ol,ul ul{margin-bottom:0}dt{font-weight:700}dd{margin-bottom:.5rem;margin-left:0}blockquote{margin:0 0 1rem}b,strong{font-weight:bolder}small{font-size:80%}sub,sup{position:relative;font-size:75%;line-height:0;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}a{color:#007bff;text-decoration:none;background-color:transparent}a:hover{color:#0056b3;text-decoration:underline}a:not([href]):not([tabindex]){color:inherit;text-decoration:none}a:not([href]):not([tabindex]):focus,a:not([href]):not([tabindex]):hover{color:inherit;text-decoration:none}a:not([href]):not([tabindex]):focus{outline:0}code,kbd,pre,samp{font-family:SFMono-Regular,Menlo,Monaco,Consolas,\"Liberation Mono\",\"Courier New\",monospace;font-size:1em}pre{margin-top:0;margin-bottom:1rem;overflow:auto}figure{margin:0 0 1rem}img{vertical-align:middle;border-style:none}svg{overflow:hidden;vertical-align:middle}table{border-collapse:collapse}caption{padding-top:.75rem;padding-bottom:.75rem;color:#6c757d;text-align:left;caption-side:bottom}th{text-align:inherit}label{display:inline-block;margin-bottom:.5rem}button{border-radius:0}button:focus{outline:1px dotted;outline:5px auto -webkit-focus-ring-color}button,input,optgroup,select,textarea{margin:0;font-family:inherit;font-size:inherit;line-height:inherit}button,input{overflow:visible}button,select{text-transform:none}select{word-wrap:normal}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]:not(:disabled),[type=reset]:not(:disabled),[type=submit]:not(:disabled),button:not(:disabled){cursor:pointer}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{padding:0;border-style:none}input[type=checkbox],input[type=radio]{box-sizing:border-box;padding:0}input[type=date],input[type=datetime-local],input[type=month],input[type=time]{-webkit-appearance:listbox}textarea{overflow:auto;resize:vertical}fieldset{min-width:0;padding:0;margin:0;border:0}legend{display:block;width:100%;max-width:100%;padding:0;margin-bottom:.5rem;font-size:1.5rem;line-height:inherit;color:inherit;white-space:normal}progress{vertical-align:baseline}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{outline-offset:-2px;-webkit-appearance:none}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{font:inherit;-webkit-appearance:button}output{display:inline-block}summary{display:list-item;cursor:pointer}template{display:none}[hidden]{display:none!important}.h1,.h2,.h3,.h4,.h5,.h6,h1,h2,h3,h4,h5,h6{margin-bottom:.5rem;font-weight:500;line-height:1.2}.h1,h1{font-size:2.5rem}.h2,h2{font-size:2rem}.h3,h3{font-size:1.75rem}.h4,h4{font-size:1.5rem}.h5,h5{font-size:1.25rem}.h6,h6{font-size:1rem}.lead{font-size:1.25rem;font-weight:300}.display-1{font-size:6rem;font-weight:300;line-height:1.2}.display-2{font-size:5.5rem;font-weight:300;line-height:1.2}.display-3{font-size:4.5rem;font-weight:300;line-height:1.2}.display-4{font-size:3.5rem;font-weight:300;line-height:1.2}hr{margin-top:1rem;margin-bottom:1rem;border:0;border-top:1px solid rgba(0,0,0,.1)}.small,small{font-size:80%;font-weight:400}.mark,mark{padding:.2em;background-color:#fcf8e3}.list-unstyled{padding-left:0;list-style:none}.list-inline{padding-left:0;list-style:none}.list-inline-item{display:inline-block}.list-inline-item:not(:last-child){margin-right:.5rem}.initialism{font-size:90%;text-transform:uppercase}.blockquote{margin-bottom:1rem;font-size:1.25rem}.blockquote-footer{display:block;font-size:80%;color:#6c757d}.blockquote-footer::before{content:\"\\2014\\00A0\"}.img-fluid{max-width:100%;height:auto}.img-thumbnail{padding:.25rem;background-color:#fff;border:1px solid #dee2e6;border-radius:.25rem;max-width:100%;height:auto}.figure{display:inline-block}.figure-img{margin-bottom:.5rem;line-height:1}.figure-caption{font-size:90%;color:#6c757d}code{font-size:87.5%;color:#e83e8c;word-break:break-word}a>code{color:inherit}kbd{padding:.2rem .4rem;font-size:87.5%;color:#fff;background-color:#212529;border-radius:.2rem}kbd kbd{padding:0;font-size:100%;font-weight:700}pre{display:block;font-size:87.5%;color:#212529}pre code{font-size:inherit;color:inherit;word-break:normal}.pre-scrollable{max-height:340px;overflow-y:scroll}.container{width:100%;padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}@media (min-width:576px){.container{max-width:540px}}@media (min-width:768px){.container{max-width:720px}}@media (min-width:992px){.container{max-width:960px}}@media (min-width:1200px){.container{max-width:1140px}}.container-fluid{width:100%;padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}.row{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-15px;margin-left:-15px}.no-gutters{margin-right:0;margin-left:0}.no-gutters>.col,.no-gutters>[class*=col-]{padding-right:0;padding-left:0}.col,.col-1,.col-10,.col-11,.col-12,.col-2,.col-3,.col-4,.col-5,.col-6,.col-7,.col-8,.col-9,.col-auto,.col-lg,.col-lg-1,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-auto,.col-md,.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-auto,.col-sm,.col-sm-1,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-auto,.col-xl,.col-xl-1,.col-xl-10,.col-xl-11,.col-xl-12,.col-xl-2,.col-xl-3,.col-xl-4,.col-xl-5,.col-xl-6,.col-xl-7,.col-xl-8,.col-xl-9,.col-xl-auto{position:relative;width:100%;padding-right:15px;padding-left:15px}.col{-ms-flex-preferred-size:0;flex-basis:0;-ms-flex-positive:1;flex-grow:1;max-width:100%}.col-auto{-ms-flex:0 0 auto;flex:0 0 auto;width:auto;max-width:100%}.col-1{-ms-flex:0 0 8.333333%;flex:0 0 8.333333%;max-width:8.333333%}.col-2{-ms-flex:0 0 16.666667%;flex:0 0 16.666667%;max-width:16.666667%}.col-3{-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}.col-4{-ms-flex:0 0 33.333333%;flex:0 0 33.333333%;max-width:33.333333%}.col-5{-ms-flex:0 0 41.666667%;flex:0 0 41.666667%;max-width:41.666667%}.col-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}.col-7{-ms-flex:0 0 58.333333%;flex:0 0 58.333333%;max-width:58.333333%}.col-8{-ms-flex:0 0 66.666667%;flex:0 0 66.666667%;max-width:66.666667%}.col-9{-ms-flex:0 0 75%;flex:0 0 75%;max-width:75%}.col-10{-ms-flex:0 0 83.333333%;flex:0 0 83.333333%;max-width:83.333333%}.col-11{-ms-flex:0 0 91.666667%;flex:0 0 91.666667%;max-width:91.666667%}.col-12{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%}.order-first{-ms-flex-order:-1;order:-1}.order-last{-ms-flex-order:13;order:13}.order-0{-ms-flex-order:0;order:0}.order-1{-ms-flex-order:1;order:1}.order-2{-ms-flex-order:2;order:2}.order-3{-ms-flex-order:3;order:3}.order-4{-ms-flex-order:4;order:4}.order-5{-ms-flex-order:5;order:5}.order-6{-ms-flex-order:6;order:6}.order-7{-ms-flex-order:7;order:7}.order-8{-ms-flex-order:8;order:8}.order-9{-ms-flex-order:9;order:9}.order-10{-ms-flex-order:10;order:10}.order-11{-ms-flex-order:11;order:11}.order-12{-ms-flex-order:12;order:12}.offset-1{margin-left:8.333333%}.offset-2{margin-left:16.666667%}.offset-3{margin-left:25%}.offset-4{margin-left:33.333333%}.offset-5{margin-left:41.666667%}.offset-6{margin-left:50%}.offset-7{margin-left:58.333333%}.offset-8{margin-left:66.666667%}.offset-9{margin-left:75%}.offset-10{margin-left:83.333333%}.offset-11{margin-left:91.666667%}@media (min-width:576px){.col-sm{-ms-flex-preferred-size:0;flex-basis:0;-ms-flex-positive:1;flex-grow:1;max-width:100%}.col-sm-auto{-ms-flex:0 0 auto;flex:0 0 auto;width:auto;max-width:100%}.col-sm-1{-ms-flex:0 0 8.333333%;flex:0 0 8.333333%;max-width:8.333333%}.col-sm-2{-ms-flex:0 0 16.666667%;flex:0 0 16.666667%;max-width:16.666667%}.col-sm-3{-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}.col-sm-4{-ms-flex:0 0 33.333333%;flex:0 0 33.333333%;max-width:33.333333%}.col-sm-5{-ms-flex:0 0 41.666667%;flex:0 0 41.666667%;max-width:41.666667%}.col-sm-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}.col-sm-7{-ms-flex:0 0 58.333333%;flex:0 0 58.333333%;max-width:58.333333%}.col-sm-8{-ms-flex:0 0 66.666667%;flex:0 0 66.666667%;max-width:66.666667%}.col-sm-9{-ms-flex:0 0 75%;flex:0 0 75%;max-width:75%}.col-sm-10{-ms-flex:0 0 83.333333%;flex:0 0 83.333333%;max-width:83.333333%}.col-sm-11{-ms-flex:0 0 91.666667%;flex:0 0 91.666667%;max-width:91.666667%}.col-sm-12{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%}.order-sm-first{-ms-flex-order:-1;order:-1}.order-sm-last{-ms-flex-order:13;order:13}.order-sm-0{-ms-flex-order:0;order:0}.order-sm-1{-ms-flex-order:1;order:1}.order-sm-2{-ms-flex-order:2;order:2}.order-sm-3{-ms-flex-order:3;order:3}.order-sm-4{-ms-flex-order:4;order:4}.order-sm-5{-ms-flex-order:5;order:5}.order-sm-6{-ms-flex-order:6;order:6}.order-sm-7{-ms-flex-order:7;order:7}.order-sm-8{-ms-flex-order:8;order:8}.order-sm-9{-ms-flex-order:9;order:9}.order-sm-10{-ms-flex-order:10;order:10}.order-sm-11{-ms-flex-order:11;order:11}.order-sm-12{-ms-flex-order:12;order:12}.offset-sm-0{margin-left:0}.offset-sm-1{margin-left:8.333333%}.offset-sm-2{margin-left:16.666667%}.offset-sm-3{margin-left:25%}.offset-sm-4{margin-left:33.333333%}.offset-sm-5{margin-left:41.666667%}.offset-sm-6{margin-left:50%}.offset-sm-7{margin-left:58.333333%}.offset-sm-8{margin-left:66.666667%}.offset-sm-9{margin-left:75%}.offset-sm-10{margin-left:83.333333%}.offset-sm-11{margin-left:91.666667%}}@media (min-width:768px){.col-md{-ms-flex-preferred-size:0;flex-basis:0;-ms-flex-positive:1;flex-grow:1;max-width:100%}.col-md-auto{-ms-flex:0 0 auto;flex:0 0 auto;width:auto;max-width:100%}.col-md-1{-ms-flex:0 0 8.333333%;flex:0 0 8.333333%;max-width:8.333333%}.col-md-2{-ms-flex:0 0 16.666667%;flex:0 0 16.666667%;max-width:16.666667%}.col-md-3{-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}.col-md-4{-ms-flex:0 0 33.333333%;flex:0 0 33.333333%;max-width:33.333333%}.col-md-5{-ms-flex:0 0 41.666667%;flex:0 0 41.666667%;max-width:41.666667%}.col-md-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}.col-md-7{-ms-flex:0 0 58.333333%;flex:0 0 58.333333%;max-width:58.333333%}.col-md-8{-ms-flex:0 0 66.666667%;flex:0 0 66.666667%;max-width:66.666667%}.col-md-9{-ms-flex:0 0 75%;flex:0 0 75%;max-width:75%}.col-md-10{-ms-flex:0 0 83.333333%;flex:0 0 83.333333%;max-width:83.333333%}.col-md-11{-ms-flex:0 0 91.666667%;flex:0 0 91.666667%;max-width:91.666667%}.col-md-12{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%}.order-md-first{-ms-flex-order:-1;order:-1}.order-md-last{-ms-flex-order:13;order:13}.order-md-0{-ms-flex-order:0;order:0}.order-md-1{-ms-flex-order:1;order:1}.order-md-2{-ms-flex-order:2;order:2}.order-md-3{-ms-flex-order:3;order:3}.order-md-4{-ms-flex-order:4;order:4}.order-md-5{-ms-flex-order:5;order:5}.order-md-6{-ms-flex-order:6;order:6}.order-md-7{-ms-flex-order:7;order:7}.order-md-8{-ms-flex-order:8;order:8}.order-md-9{-ms-flex-order:9;order:9}.order-md-10{-ms-flex-order:10;order:10}.order-md-11{-ms-flex-order:11;order:11}.order-md-12{-ms-flex-order:12;order:12}.offset-md-0{margin-left:0}.offset-md-1{margin-left:8.333333%}.offset-md-2{margin-left:16.666667%}.offset-md-3{margin-left:25%}.offset-md-4{margin-left:33.333333%}.offset-md-5{margin-left:41.666667%}.offset-md-6{margin-left:50%}.offset-md-7{margin-left:58.333333%}.offset-md-8{margin-left:66.666667%}.offset-md-9{margin-left:75%}.offset-md-10{margin-left:83.333333%}.offset-md-11{margin-left:91.666667%}}@media (min-width:992px){.col-lg{-ms-flex-preferred-size:0;flex-basis:0;-ms-flex-positive:1;flex-grow:1;max-width:100%}.col-lg-auto{-ms-flex:0 0 auto;flex:0 0 auto;width:auto;max-width:100%}.col-lg-1{-ms-flex:0 0 8.333333%;flex:0 0 8.333333%;max-width:8.333333%}.col-lg-2{-ms-flex:0 0 16.666667%;flex:0 0 16.666667%;max-width:16.666667%}.col-lg-3{-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}.col-lg-4{-ms-flex:0 0 33.333333%;flex:0 0 33.333333%;max-width:33.333333%}.col-lg-5{-ms-flex:0 0 41.666667%;flex:0 0 41.666667%;max-width:41.666667%}.col-lg-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}.col-lg-7{-ms-flex:0 0 58.333333%;flex:0 0 58.333333%;max-width:58.333333%}.col-lg-8{-ms-flex:0 0 66.666667%;flex:0 0 66.666667%;max-width:66.666667%}.col-lg-9{-ms-flex:0 0 75%;flex:0 0 75%;max-width:75%}.col-lg-10{-ms-flex:0 0 83.333333%;flex:0 0 83.333333%;max-width:83.333333%}.col-lg-11{-ms-flex:0 0 91.666667%;flex:0 0 91.666667%;max-width:91.666667%}.col-lg-12{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%}.order-lg-first{-ms-flex-order:-1;order:-1}.order-lg-last{-ms-flex-order:13;order:13}.order-lg-0{-ms-flex-order:0;order:0}.order-lg-1{-ms-flex-order:1;order:1}.order-lg-2{-ms-flex-order:2;order:2}.order-lg-3{-ms-flex-order:3;order:3}.order-lg-4{-ms-flex-order:4;order:4}.order-lg-5{-ms-flex-order:5;order:5}.order-lg-6{-ms-flex-order:6;order:6}.order-lg-7{-ms-flex-order:7;order:7}.order-lg-8{-ms-flex-order:8;order:8}.order-lg-9{-ms-flex-order:9;order:9}.order-lg-10{-ms-flex-order:10;order:10}.order-lg-11{-ms-flex-order:11;order:11}.order-lg-12{-ms-flex-order:12;order:12}.offset-lg-0{margin-left:0}.offset-lg-1{margin-left:8.333333%}.offset-lg-2{margin-left:16.666667%}.offset-lg-3{margin-left:25%}.offset-lg-4{margin-left:33.333333%}.offset-lg-5{margin-left:41.666667%}.offset-lg-6{margin-left:50%}.offset-lg-7{margin-left:58.333333%}.offset-lg-8{margin-left:66.666667%}.offset-lg-9{margin-left:75%}.offset-lg-10{margin-left:83.333333%}.offset-lg-11{margin-left:91.666667%}}@media (min-width:1200px){.col-xl{-ms-flex-preferred-size:0;flex-basis:0;-ms-flex-positive:1;flex-grow:1;max-width:100%}.col-xl-auto{-ms-flex:0 0 auto;flex:0 0 auto;width:auto;max-width:100%}.col-xl-1{-ms-flex:0 0 8.333333%;flex:0 0 8.333333%;max-width:8.333333%}.col-xl-2{-ms-flex:0 0 16.666667%;flex:0 0 16.666667%;max-width:16.666667%}.col-xl-3{-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}.col-xl-4{-ms-flex:0 0 33.333333%;flex:0 0 33.333333%;max-width:33.333333%}.col-xl-5{-ms-flex:0 0 41.666667%;flex:0 0 41.666667%;max-width:41.666667%}.col-xl-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}.col-xl-7{-ms-flex:0 0 58.333333%;flex:0 0 58.333333%;max-width:58.333333%}.col-xl-8{-ms-flex:0 0 66.666667%;flex:0 0 66.666667%;max-width:66.666667%}.col-xl-9{-ms-flex:0 0 75%;flex:0 0 75%;max-width:75%}.col-xl-10{-ms-flex:0 0 83.333333%;flex:0 0 83.333333%;max-width:83.333333%}.col-xl-11{-ms-flex:0 0 91.666667%;flex:0 0 91.666667%;max-width:91.666667%}.col-xl-12{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%}.order-xl-first{-ms-flex-order:-1;order:-1}.order-xl-last{-ms-flex-order:13;order:13}.order-xl-0{-ms-flex-order:0;order:0}.order-xl-1{-ms-flex-order:1;order:1}.order-xl-2{-ms-flex-order:2;order:2}.order-xl-3{-ms-flex-order:3;order:3}.order-xl-4{-ms-flex-order:4;order:4}.order-xl-5{-ms-flex-order:5;order:5}.order-xl-6{-ms-flex-order:6;order:6}.order-xl-7{-ms-flex-order:7;order:7}.order-xl-8{-ms-flex-order:8;order:8}.order-xl-9{-ms-flex-order:9;order:9}.order-xl-10{-ms-flex-order:10;order:10}.order-xl-11{-ms-flex-order:11;order:11}.order-xl-12{-ms-flex-order:12;order:12}.offset-xl-0{margin-left:0}.offset-xl-1{margin-left:8.333333%}.offset-xl-2{margin-left:16.666667%}.offset-xl-3{margin-left:25%}.offset-xl-4{margin-left:33.333333%}.offset-xl-5{margin-left:41.666667%}.offset-xl-6{margin-left:50%}.offset-xl-7{margin-left:58.333333%}.offset-xl-8{margin-left:66.666667%}.offset-xl-9{margin-left:75%}.offset-xl-10{margin-left:83.333333%}.offset-xl-11{margin-left:91.666667%}}.table{width:100%;margin-bottom:1rem;color:#212529}.table td,.table th{padding:.75rem;vertical-align:top;border-top:1px solid #dee2e6}.table thead th{vertical-align:bottom;border-bottom:2px solid #dee2e6}.table tbody+tbody{border-top:2px solid #dee2e6}.table-sm td,.table-sm th{padding:.3rem}.table-bordered{border:1px solid #dee2e6}.table-bordered td,.table-bordered th{border:1px solid #dee2e6}.table-bordered thead td,.table-bordered thead th{border-bottom-width:2px}.table-borderless tbody+tbody,.table-borderless td,.table-borderless th,.table-borderless thead th{border:0}.table-striped tbody tr:nth-of-type(odd){background-color:rgba(0,0,0,.05)}.table-hover tbody tr:hover{color:#212529;background-color:rgba(0,0,0,.075)}.table-primary,.table-primary>td,.table-primary>th{background-color:#b8daff}.table-primary tbody+tbody,.table-primary td,.table-primary th,.table-primary thead th{border-color:#7abaff}.table-hover .table-primary:hover{background-color:#9fcdff}.table-hover .table-primary:hover>td,.table-hover .table-primary:hover>th{background-color:#9fcdff}.table-secondary,.table-secondary>td,.table-secondary>th{background-color:#d6d8db}.table-secondary tbody+tbody,.table-secondary td,.table-secondary th,.table-secondary thead th{border-color:#b3b7bb}.table-hover .table-secondary:hover{background-color:#c8cbcf}.table-hover .table-secondary:hover>td,.table-hover .table-secondary:hover>th{background-color:#c8cbcf}.table-success,.table-success>td,.table-success>th{background-color:#c3e6cb}.table-success tbody+tbody,.table-success td,.table-success th,.table-success thead th{border-color:#8fd19e}.table-hover .table-success:hover{background-color:#b1dfbb}.table-hover .table-success:hover>td,.table-hover .table-success:hover>th{background-color:#b1dfbb}.table-info,.table-info>td,.table-info>th{background-color:#bee5eb}.table-info tbody+tbody,.table-info td,.table-info th,.table-info thead th{border-color:#86cfda}.table-hover .table-info:hover{background-color:#abdde5}.table-hover .table-info:hover>td,.table-hover .table-info:hover>th{background-color:#abdde5}.table-warning,.table-warning>td,.table-warning>th{background-color:#ffeeba}.table-warning tbody+tbody,.table-warning td,.table-warning th,.table-warning thead th{border-color:#ffdf7e}.table-hover .table-warning:hover{background-color:#ffe8a1}.table-hover .table-warning:hover>td,.table-hover .table-warning:hover>th{background-color:#ffe8a1}.table-danger,.table-danger>td,.table-danger>th{background-color:#f5c6cb}.table-danger tbody+tbody,.table-danger td,.table-danger th,.table-danger thead th{border-color:#ed969e}.table-hover .table-danger:hover{background-color:#f1b0b7}.table-hover .table-danger:hover>td,.table-hover .table-danger:hover>th{background-color:#f1b0b7}.table-light,.table-light>td,.table-light>th{background-color:#fdfdfe}.table-light tbody+tbody,.table-light td,.table-light th,.table-light thead th{border-color:#fbfcfc}.table-hover .table-light:hover{background-color:#ececf6}.table-hover .table-light:hover>td,.table-hover .table-light:hover>th{background-color:#ececf6}.table-dark,.table-dark>td,.table-dark>th{background-color:#c6c8ca}.table-dark tbody+tbody,.table-dark td,.table-dark th,.table-dark thead th{border-color:#95999c}.table-hover .table-dark:hover{background-color:#b9bbbe}.table-hover .table-dark:hover>td,.table-hover .table-dark:hover>th{background-color:#b9bbbe}.table-active,.table-active>td,.table-active>th{background-color:rgba(0,0,0,.075)}.table-hover .table-active:hover{background-color:rgba(0,0,0,.075)}.table-hover .table-active:hover>td,.table-hover .table-active:hover>th{background-color:rgba(0,0,0,.075)}.table .thead-dark th{color:#fff;background-color:#343a40;border-color:#454d55}.table .thead-light th{color:#495057;background-color:#e9ecef;border-color:#dee2e6}.table-dark{color:#fff;background-color:#343a40}.table-dark td,.table-dark th,.table-dark thead th{border-color:#454d55}.table-dark.table-bordered{border:0}.table-dark.table-striped tbody tr:nth-of-type(odd){background-color:rgba(255,255,255,.05)}.table-dark.table-hover tbody tr:hover{color:#fff;background-color:rgba(255,255,255,.075)}@media (max-width:575.98px){.table-responsive-sm{display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.table-responsive-sm>.table-bordered{border:0}}@media (max-width:767.98px){.table-responsive-md{display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.table-responsive-md>.table-bordered{border:0}}@media (max-width:991.98px){.table-responsive-lg{display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.table-responsive-lg>.table-bordered{border:0}}@media (max-width:1199.98px){.table-responsive-xl{display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.table-responsive-xl>.table-bordered{border:0}}.table-responsive{display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.table-responsive>.table-bordered{border:0}.form-control{display:block;width:100%;height:calc(1.5em + .75rem + 2px);padding:.375rem .75rem;font-size:1rem;font-weight:400;line-height:1.5;color:#495057;background-color:#fff;background-clip:padding-box;border:1px solid #ced4da;border-radius:.25rem;transition:border-color .15s ease-in-out,box-shadow .15s ease-in-out}@media (prefers-reduced-motion:reduce){.form-control{transition:none}}.form-control::-ms-expand{background-color:transparent;border:0}.form-control:focus{color:#495057;background-color:#fff;border-color:#80bdff;outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.form-control::-webkit-input-placeholder{color:#6c757d;opacity:1}.form-control::-moz-placeholder{color:#6c757d;opacity:1}.form-control:-ms-input-placeholder{color:#6c757d;opacity:1}.form-control::-ms-input-placeholder{color:#6c757d;opacity:1}.form-control::placeholder{color:#6c757d;opacity:1}.form-control:disabled,.form-control[readonly]{background-color:#e9ecef;opacity:1}select.form-control:focus::-ms-value{color:#495057;background-color:#fff}.form-control-file,.form-control-range{display:block;width:100%}.col-form-label{padding-top:calc(.375rem + 1px);padding-bottom:calc(.375rem + 1px);margin-bottom:0;font-size:inherit;line-height:1.5}.col-form-label-lg{padding-top:calc(.5rem + 1px);padding-bottom:calc(.5rem + 1px);font-size:1.25rem;line-height:1.5}.col-form-label-sm{padding-top:calc(.25rem + 1px);padding-bottom:calc(.25rem + 1px);font-size:.875rem;line-height:1.5}.form-control-plaintext{display:block;width:100%;padding-top:.375rem;padding-bottom:.375rem;margin-bottom:0;line-height:1.5;color:#212529;background-color:transparent;border:solid transparent;border-width:1px 0}.form-control-plaintext.form-control-lg,.form-control-plaintext.form-control-sm{padding-right:0;padding-left:0}.form-control-sm{height:calc(1.5em + .5rem + 2px);padding:.25rem .5rem;font-size:.875rem;line-height:1.5;border-radius:.2rem}.form-control-lg{height:calc(1.5em + 1rem + 2px);padding:.5rem 1rem;font-size:1.25rem;line-height:1.5;border-radius:.3rem}select.form-control[multiple],select.form-control[size]{height:auto}textarea.form-control{height:auto}.form-group{margin-bottom:1rem}.form-text{display:block;margin-top:.25rem}.form-row{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-5px;margin-left:-5px}.form-row>.col,.form-row>[class*=col-]{padding-right:5px;padding-left:5px}.form-check{position:relative;display:block;padding-left:1.25rem}.form-check-input{position:absolute;margin-top:.3rem;margin-left:-1.25rem}.form-check-input:disabled~.form-check-label{color:#6c757d}.form-check-label{margin-bottom:0}.form-check-inline{display:-ms-inline-flexbox;display:inline-flex;-ms-flex-align:center;align-items:center;padding-left:0;margin-right:.75rem}.form-check-inline .form-check-input{position:static;margin-top:0;margin-right:.3125rem;margin-left:0}.valid-feedback{display:none;width:100%;margin-top:.25rem;font-size:80%;color:#28a745}.valid-tooltip{position:absolute;top:100%;z-index:5;display:none;max-width:100%;padding:.25rem .5rem;margin-top:.1rem;font-size:.875rem;line-height:1.5;color:#fff;background-color:rgba(40,167,69,.9);border-radius:.25rem}.form-control.is-valid,.was-validated .form-control:valid{border-color:#28a745;padding-right:calc(1.5em + .75rem);background-image:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e\");background-repeat:no-repeat;background-position:center right calc(.375em + .1875rem);background-size:calc(.75em + .375rem) calc(.75em + .375rem)}.form-control.is-valid:focus,.was-validated .form-control:valid:focus{border-color:#28a745;box-shadow:0 0 0 .2rem rgba(40,167,69,.25)}.form-control.is-valid~.valid-feedback,.form-control.is-valid~.valid-tooltip,.was-validated .form-control:valid~.valid-feedback,.was-validated .form-control:valid~.valid-tooltip{display:block}.was-validated textarea.form-control:valid,textarea.form-control.is-valid{padding-right:calc(1.5em + .75rem);background-position:top calc(.375em + .1875rem) right calc(.375em + .1875rem)}.custom-select.is-valid,.was-validated .custom-select:valid{border-color:#28a745;padding-right:calc((1em + .75rem) * 3 / 4 + 1.75rem);background:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e\") no-repeat right .75rem center/8px 10px,url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e\") #fff no-repeat center right 1.75rem/calc(.75em + .375rem) calc(.75em + .375rem)}.custom-select.is-valid:focus,.was-validated .custom-select:valid:focus{border-color:#28a745;box-shadow:0 0 0 .2rem rgba(40,167,69,.25)}.custom-select.is-valid~.valid-feedback,.custom-select.is-valid~.valid-tooltip,.was-validated .custom-select:valid~.valid-feedback,.was-validated .custom-select:valid~.valid-tooltip{display:block}.form-control-file.is-valid~.valid-feedback,.form-control-file.is-valid~.valid-tooltip,.was-validated .form-control-file:valid~.valid-feedback,.was-validated .form-control-file:valid~.valid-tooltip{display:block}.form-check-input.is-valid~.form-check-label,.was-validated .form-check-input:valid~.form-check-label{color:#28a745}.form-check-input.is-valid~.valid-feedback,.form-check-input.is-valid~.valid-tooltip,.was-validated .form-check-input:valid~.valid-feedback,.was-validated .form-check-input:valid~.valid-tooltip{display:block}.custom-control-input.is-valid~.custom-control-label,.was-validated .custom-control-input:valid~.custom-control-label{color:#28a745}.custom-control-input.is-valid~.custom-control-label::before,.was-validated .custom-control-input:valid~.custom-control-label::before{border-color:#28a745}.custom-control-input.is-valid~.valid-feedback,.custom-control-input.is-valid~.valid-tooltip,.was-validated .custom-control-input:valid~.valid-feedback,.was-validated .custom-control-input:valid~.valid-tooltip{display:block}.custom-control-input.is-valid:checked~.custom-control-label::before,.was-validated .custom-control-input:valid:checked~.custom-control-label::before{border-color:#34ce57;background-color:#34ce57}.custom-control-input.is-valid:focus~.custom-control-label::before,.was-validated .custom-control-input:valid:focus~.custom-control-label::before{box-shadow:0 0 0 .2rem rgba(40,167,69,.25)}.custom-control-input.is-valid:focus:not(:checked)~.custom-control-label::before,.was-validated .custom-control-input:valid:focus:not(:checked)~.custom-control-label::before{border-color:#28a745}.custom-file-input.is-valid~.custom-file-label,.was-validated .custom-file-input:valid~.custom-file-label{border-color:#28a745}.custom-file-input.is-valid~.valid-feedback,.custom-file-input.is-valid~.valid-tooltip,.was-validated .custom-file-input:valid~.valid-feedback,.was-validated .custom-file-input:valid~.valid-tooltip{display:block}.custom-file-input.is-valid:focus~.custom-file-label,.was-validated .custom-file-input:valid:focus~.custom-file-label{border-color:#28a745;box-shadow:0 0 0 .2rem rgba(40,167,69,.25)}.invalid-feedback{display:none;width:100%;margin-top:.25rem;font-size:80%;color:#dc3545}.invalid-tooltip{position:absolute;top:100%;z-index:5;display:none;max-width:100%;padding:.25rem .5rem;margin-top:.1rem;font-size:.875rem;line-height:1.5;color:#fff;background-color:rgba(220,53,69,.9);border-radius:.25rem}.form-control.is-invalid,.was-validated .form-control:invalid{border-color:#dc3545;padding-right:calc(1.5em + .75rem);background-image:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23dc3545' viewBox='-2 -2 7 7'%3e%3cpath stroke='%23dc3545' d='M0 0l3 3m0-3L0 3'/%3e%3ccircle r='.5'/%3e%3ccircle cx='3' r='.5'/%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E\");background-repeat:no-repeat;background-position:center right calc(.375em + .1875rem);background-size:calc(.75em + .375rem) calc(.75em + .375rem)}.form-control.is-invalid:focus,.was-validated .form-control:invalid:focus{border-color:#dc3545;box-shadow:0 0 0 .2rem rgba(220,53,69,.25)}.form-control.is-invalid~.invalid-feedback,.form-control.is-invalid~.invalid-tooltip,.was-validated .form-control:invalid~.invalid-feedback,.was-validated .form-control:invalid~.invalid-tooltip{display:block}.was-validated textarea.form-control:invalid,textarea.form-control.is-invalid{padding-right:calc(1.5em + .75rem);background-position:top calc(.375em + .1875rem) right calc(.375em + .1875rem)}.custom-select.is-invalid,.was-validated .custom-select:invalid{border-color:#dc3545;padding-right:calc((1em + .75rem) * 3 / 4 + 1.75rem);background:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e\") no-repeat right .75rem center/8px 10px,url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23dc3545' viewBox='-2 -2 7 7'%3e%3cpath stroke='%23dc3545' d='M0 0l3 3m0-3L0 3'/%3e%3ccircle r='.5'/%3e%3ccircle cx='3' r='.5'/%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E\") #fff no-repeat center right 1.75rem/calc(.75em + .375rem) calc(.75em + .375rem)}.custom-select.is-invalid:focus,.was-validated .custom-select:invalid:focus{border-color:#dc3545;box-shadow:0 0 0 .2rem rgba(220,53,69,.25)}.custom-select.is-invalid~.invalid-feedback,.custom-select.is-invalid~.invalid-tooltip,.was-validated .custom-select:invalid~.invalid-feedback,.was-validated .custom-select:invalid~.invalid-tooltip{display:block}.form-control-file.is-invalid~.invalid-feedback,.form-control-file.is-invalid~.invalid-tooltip,.was-validated .form-control-file:invalid~.invalid-feedback,.was-validated .form-control-file:invalid~.invalid-tooltip{display:block}.form-check-input.is-invalid~.form-check-label,.was-validated .form-check-input:invalid~.form-check-label{color:#dc3545}.form-check-input.is-invalid~.invalid-feedback,.form-check-input.is-invalid~.invalid-tooltip,.was-validated .form-check-input:invalid~.invalid-feedback,.was-validated .form-check-input:invalid~.invalid-tooltip{display:block}.custom-control-input.is-invalid~.custom-control-label,.was-validated .custom-control-input:invalid~.custom-control-label{color:#dc3545}.custom-control-input.is-invalid~.custom-control-label::before,.was-validated .custom-control-input:invalid~.custom-control-label::before{border-color:#dc3545}.custom-control-input.is-invalid~.invalid-feedback,.custom-control-input.is-invalid~.invalid-tooltip,.was-validated .custom-control-input:invalid~.invalid-feedback,.was-validated .custom-control-input:invalid~.invalid-tooltip{display:block}.custom-control-input.is-invalid:checked~.custom-control-label::before,.was-validated .custom-control-input:invalid:checked~.custom-control-label::before{border-color:#e4606d;background-color:#e4606d}.custom-control-input.is-invalid:focus~.custom-control-label::before,.was-validated .custom-control-input:invalid:focus~.custom-control-label::before{box-shadow:0 0 0 .2rem rgba(220,53,69,.25)}.custom-control-input.is-invalid:focus:not(:checked)~.custom-control-label::before,.was-validated .custom-control-input:invalid:focus:not(:checked)~.custom-control-label::before{border-color:#dc3545}.custom-file-input.is-invalid~.custom-file-label,.was-validated .custom-file-input:invalid~.custom-file-label{border-color:#dc3545}.custom-file-input.is-invalid~.invalid-feedback,.custom-file-input.is-invalid~.invalid-tooltip,.was-validated .custom-file-input:invalid~.invalid-feedback,.was-validated .custom-file-input:invalid~.invalid-tooltip{display:block}.custom-file-input.is-invalid:focus~.custom-file-label,.was-validated .custom-file-input:invalid:focus~.custom-file-label{border-color:#dc3545;box-shadow:0 0 0 .2rem rgba(220,53,69,.25)}.form-inline{display:-ms-flexbox;display:flex;-ms-flex-flow:row wrap;flex-flow:row wrap;-ms-flex-align:center;align-items:center}.form-inline .form-check{width:100%}@media (min-width:576px){.form-inline label{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;margin-bottom:0}.form-inline .form-group{display:-ms-flexbox;display:flex;-ms-flex:0 0 auto;flex:0 0 auto;-ms-flex-flow:row wrap;flex-flow:row wrap;-ms-flex-align:center;align-items:center;margin-bottom:0}.form-inline .form-control{display:inline-block;width:auto;vertical-align:middle}.form-inline .form-control-plaintext{display:inline-block}.form-inline .custom-select,.form-inline .input-group{width:auto}.form-inline .form-check{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:auto;padding-left:0}.form-inline .form-check-input{position:relative;-ms-flex-negative:0;flex-shrink:0;margin-top:0;margin-right:.25rem;margin-left:0}.form-inline .custom-control{-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center}.form-inline .custom-control-label{margin-bottom:0}}.btn{display:inline-block;font-weight:400;color:#212529;text-align:center;vertical-align:middle;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-color:transparent;border:1px solid transparent;padding:.375rem .75rem;font-size:1rem;line-height:1.5;border-radius:.25rem;transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out}@media (prefers-reduced-motion:reduce){.btn{transition:none}}.btn:hover{color:#212529;text-decoration:none}.btn.focus,.btn:focus{outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.btn.disabled,.btn:disabled{opacity:.65}a.btn.disabled,fieldset:disabled a.btn{pointer-events:none}.btn-primary{color:#fff;background-color:#007bff;border-color:#007bff}.btn-primary:hover{color:#fff;background-color:#0069d9;border-color:#0062cc}.btn-primary.focus,.btn-primary:focus{box-shadow:0 0 0 .2rem rgba(38,143,255,.5)}.btn-primary.disabled,.btn-primary:disabled{color:#fff;background-color:#007bff;border-color:#007bff}.btn-primary:not(:disabled):not(.disabled).active,.btn-primary:not(:disabled):not(.disabled):active,.show>.btn-primary.dropdown-toggle{color:#fff;background-color:#0062cc;border-color:#005cbf}.btn-primary:not(:disabled):not(.disabled).active:focus,.btn-primary:not(:disabled):not(.disabled):active:focus,.show>.btn-primary.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(38,143,255,.5)}.btn-secondary{color:#fff;background-color:#6c757d;border-color:#6c757d}.btn-secondary:hover{color:#fff;background-color:#5a6268;border-color:#545b62}.btn-secondary.focus,.btn-secondary:focus{box-shadow:0 0 0 .2rem rgba(130,138,145,.5)}.btn-secondary.disabled,.btn-secondary:disabled{color:#fff;background-color:#6c757d;border-color:#6c757d}.btn-secondary:not(:disabled):not(.disabled).active,.btn-secondary:not(:disabled):not(.disabled):active,.show>.btn-secondary.dropdown-toggle{color:#fff;background-color:#545b62;border-color:#4e555b}.btn-secondary:not(:disabled):not(.disabled).active:focus,.btn-secondary:not(:disabled):not(.disabled):active:focus,.show>.btn-secondary.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(130,138,145,.5)}.btn-success{color:#fff;background-color:#28a745;border-color:#28a745}.btn-success:hover{color:#fff;background-color:#218838;border-color:#1e7e34}.btn-success.focus,.btn-success:focus{box-shadow:0 0 0 .2rem rgba(72,180,97,.5)}.btn-success.disabled,.btn-success:disabled{color:#fff;background-color:#28a745;border-color:#28a745}.btn-success:not(:disabled):not(.disabled).active,.btn-success:not(:disabled):not(.disabled):active,.show>.btn-success.dropdown-toggle{color:#fff;background-color:#1e7e34;border-color:#1c7430}.btn-success:not(:disabled):not(.disabled).active:focus,.btn-success:not(:disabled):not(.disabled):active:focus,.show>.btn-success.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(72,180,97,.5)}.btn-info{color:#fff;background-color:#17a2b8;border-color:#17a2b8}.btn-info:hover{color:#fff;background-color:#138496;border-color:#117a8b}.btn-info.focus,.btn-info:focus{box-shadow:0 0 0 .2rem rgba(58,176,195,.5)}.btn-info.disabled,.btn-info:disabled{color:#fff;background-color:#17a2b8;border-color:#17a2b8}.btn-info:not(:disabled):not(.disabled).active,.btn-info:not(:disabled):not(.disabled):active,.show>.btn-info.dropdown-toggle{color:#fff;background-color:#117a8b;border-color:#10707f}.btn-info:not(:disabled):not(.disabled).active:focus,.btn-info:not(:disabled):not(.disabled):active:focus,.show>.btn-info.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(58,176,195,.5)}.btn-warning{color:#212529;background-color:#ffc107;border-color:#ffc107}.btn-warning:hover{color:#212529;background-color:#e0a800;border-color:#d39e00}.btn-warning.focus,.btn-warning:focus{box-shadow:0 0 0 .2rem rgba(222,170,12,.5)}.btn-warning.disabled,.btn-warning:disabled{color:#212529;background-color:#ffc107;border-color:#ffc107}.btn-warning:not(:disabled):not(.disabled).active,.btn-warning:not(:disabled):not(.disabled):active,.show>.btn-warning.dropdown-toggle{color:#212529;background-color:#d39e00;border-color:#c69500}.btn-warning:not(:disabled):not(.disabled).active:focus,.btn-warning:not(:disabled):not(.disabled):active:focus,.show>.btn-warning.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(222,170,12,.5)}.btn-danger{color:#fff;background-color:#dc3545;border-color:#dc3545}.btn-danger:hover{color:#fff;background-color:#c82333;border-color:#bd2130}.btn-danger.focus,.btn-danger:focus{box-shadow:0 0 0 .2rem rgba(225,83,97,.5)}.btn-danger.disabled,.btn-danger:disabled{color:#fff;background-color:#dc3545;border-color:#dc3545}.btn-danger:not(:disabled):not(.disabled).active,.btn-danger:not(:disabled):not(.disabled):active,.show>.btn-danger.dropdown-toggle{color:#fff;background-color:#bd2130;border-color:#b21f2d}.btn-danger:not(:disabled):not(.disabled).active:focus,.btn-danger:not(:disabled):not(.disabled):active:focus,.show>.btn-danger.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(225,83,97,.5)}.btn-light{color:#212529;background-color:#f8f9fa;border-color:#f8f9fa}.btn-light:hover{color:#212529;background-color:#e2e6ea;border-color:#dae0e5}.btn-light.focus,.btn-light:focus{box-shadow:0 0 0 .2rem rgba(216,217,219,.5)}.btn-light.disabled,.btn-light:disabled{color:#212529;background-color:#f8f9fa;border-color:#f8f9fa}.btn-light:not(:disabled):not(.disabled).active,.btn-light:not(:disabled):not(.disabled):active,.show>.btn-light.dropdown-toggle{color:#212529;background-color:#dae0e5;border-color:#d3d9df}.btn-light:not(:disabled):not(.disabled).active:focus,.btn-light:not(:disabled):not(.disabled):active:focus,.show>.btn-light.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(216,217,219,.5)}.btn-dark{color:#fff;background-color:#343a40;border-color:#343a40}.btn-dark:hover{color:#fff;background-color:#23272b;border-color:#1d2124}.btn-dark.focus,.btn-dark:focus{box-shadow:0 0 0 .2rem rgba(82,88,93,.5)}.btn-dark.disabled,.btn-dark:disabled{color:#fff;background-color:#343a40;border-color:#343a40}.btn-dark:not(:disabled):not(.disabled).active,.btn-dark:not(:disabled):not(.disabled):active,.show>.btn-dark.dropdown-toggle{color:#fff;background-color:#1d2124;border-color:#171a1d}.btn-dark:not(:disabled):not(.disabled).active:focus,.btn-dark:not(:disabled):not(.disabled):active:focus,.show>.btn-dark.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(82,88,93,.5)}.btn-outline-primary{color:#007bff;border-color:#007bff}.btn-outline-primary:hover{color:#fff;background-color:#007bff;border-color:#007bff}.btn-outline-primary.focus,.btn-outline-primary:focus{box-shadow:0 0 0 .2rem rgba(0,123,255,.5)}.btn-outline-primary.disabled,.btn-outline-primary:disabled{color:#007bff;background-color:transparent}.btn-outline-primary:not(:disabled):not(.disabled).active,.btn-outline-primary:not(:disabled):not(.disabled):active,.show>.btn-outline-primary.dropdown-toggle{color:#fff;background-color:#007bff;border-color:#007bff}.btn-outline-primary:not(:disabled):not(.disabled).active:focus,.btn-outline-primary:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-primary.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(0,123,255,.5)}.btn-outline-secondary{color:#6c757d;border-color:#6c757d}.btn-outline-secondary:hover{color:#fff;background-color:#6c757d;border-color:#6c757d}.btn-outline-secondary.focus,.btn-outline-secondary:focus{box-shadow:0 0 0 .2rem rgba(108,117,125,.5)}.btn-outline-secondary.disabled,.btn-outline-secondary:disabled{color:#6c757d;background-color:transparent}.btn-outline-secondary:not(:disabled):not(.disabled).active,.btn-outline-secondary:not(:disabled):not(.disabled):active,.show>.btn-outline-secondary.dropdown-toggle{color:#fff;background-color:#6c757d;border-color:#6c757d}.btn-outline-secondary:not(:disabled):not(.disabled).active:focus,.btn-outline-secondary:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-secondary.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(108,117,125,.5)}.btn-outline-success{color:#28a745;border-color:#28a745}.btn-outline-success:hover{color:#fff;background-color:#28a745;border-color:#28a745}.btn-outline-success.focus,.btn-outline-success:focus{box-shadow:0 0 0 .2rem rgba(40,167,69,.5)}.btn-outline-success.disabled,.btn-outline-success:disabled{color:#28a745;background-color:transparent}.btn-outline-success:not(:disabled):not(.disabled).active,.btn-outline-success:not(:disabled):not(.disabled):active,.show>.btn-outline-success.dropdown-toggle{color:#fff;background-color:#28a745;border-color:#28a745}.btn-outline-success:not(:disabled):not(.disabled).active:focus,.btn-outline-success:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-success.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(40,167,69,.5)}.btn-outline-info{color:#17a2b8;border-color:#17a2b8}.btn-outline-info:hover{color:#fff;background-color:#17a2b8;border-color:#17a2b8}.btn-outline-info.focus,.btn-outline-info:focus{box-shadow:0 0 0 .2rem rgba(23,162,184,.5)}.btn-outline-info.disabled,.btn-outline-info:disabled{color:#17a2b8;background-color:transparent}.btn-outline-info:not(:disabled):not(.disabled).active,.btn-outline-info:not(:disabled):not(.disabled):active,.show>.btn-outline-info.dropdown-toggle{color:#fff;background-color:#17a2b8;border-color:#17a2b8}.btn-outline-info:not(:disabled):not(.disabled).active:focus,.btn-outline-info:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-info.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(23,162,184,.5)}.btn-outline-warning{color:#ffc107;border-color:#ffc107}.btn-outline-warning:hover{color:#212529;background-color:#ffc107;border-color:#ffc107}.btn-outline-warning.focus,.btn-outline-warning:focus{box-shadow:0 0 0 .2rem rgba(255,193,7,.5)}.btn-outline-warning.disabled,.btn-outline-warning:disabled{color:#ffc107;background-color:transparent}.btn-outline-warning:not(:disabled):not(.disabled).active,.btn-outline-warning:not(:disabled):not(.disabled):active,.show>.btn-outline-warning.dropdown-toggle{color:#212529;background-color:#ffc107;border-color:#ffc107}.btn-outline-warning:not(:disabled):not(.disabled).active:focus,.btn-outline-warning:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-warning.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(255,193,7,.5)}.btn-outline-danger{color:#dc3545;border-color:#dc3545}.btn-outline-danger:hover{color:#fff;background-color:#dc3545;border-color:#dc3545}.btn-outline-danger.focus,.btn-outline-danger:focus{box-shadow:0 0 0 .2rem rgba(220,53,69,.5)}.btn-outline-danger.disabled,.btn-outline-danger:disabled{color:#dc3545;background-color:transparent}.btn-outline-danger:not(:disabled):not(.disabled).active,.btn-outline-danger:not(:disabled):not(.disabled):active,.show>.btn-outline-danger.dropdown-toggle{color:#fff;background-color:#dc3545;border-color:#dc3545}.btn-outline-danger:not(:disabled):not(.disabled).active:focus,.btn-outline-danger:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-danger.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(220,53,69,.5)}.btn-outline-light{color:#f8f9fa;border-color:#f8f9fa}.btn-outline-light:hover{color:#212529;background-color:#f8f9fa;border-color:#f8f9fa}.btn-outline-light.focus,.btn-outline-light:focus{box-shadow:0 0 0 .2rem rgba(248,249,250,.5)}.btn-outline-light.disabled,.btn-outline-light:disabled{color:#f8f9fa;background-color:transparent}.btn-outline-light:not(:disabled):not(.disabled).active,.btn-outline-light:not(:disabled):not(.disabled):active,.show>.btn-outline-light.dropdown-toggle{color:#212529;background-color:#f8f9fa;border-color:#f8f9fa}.btn-outline-light:not(:disabled):not(.disabled).active:focus,.btn-outline-light:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-light.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(248,249,250,.5)}.btn-outline-dark{color:#343a40;border-color:#343a40}.btn-outline-dark:hover{color:#fff;background-color:#343a40;border-color:#343a40}.btn-outline-dark.focus,.btn-outline-dark:focus{box-shadow:0 0 0 .2rem rgba(52,58,64,.5)}.btn-outline-dark.disabled,.btn-outline-dark:disabled{color:#343a40;background-color:transparent}.btn-outline-dark:not(:disabled):not(.disabled).active,.btn-outline-dark:not(:disabled):not(.disabled):active,.show>.btn-outline-dark.dropdown-toggle{color:#fff;background-color:#343a40;border-color:#343a40}.btn-outline-dark:not(:disabled):not(.disabled).active:focus,.btn-outline-dark:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-dark.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(52,58,64,.5)}.btn-link{font-weight:400;color:#007bff;text-decoration:none}.btn-link:hover{color:#0056b3;text-decoration:underline}.btn-link.focus,.btn-link:focus{text-decoration:underline;box-shadow:none}.btn-link.disabled,.btn-link:disabled{color:#6c757d;pointer-events:none}.btn-group-lg>.btn,.btn-lg{padding:.5rem 1rem;font-size:1.25rem;line-height:1.5;border-radius:.3rem}.btn-group-sm>.btn,.btn-sm{padding:.25rem .5rem;font-size:.875rem;line-height:1.5;border-radius:.2rem}.btn-block{display:block;width:100%}.btn-block+.btn-block{margin-top:.5rem}input[type=button].btn-block,input[type=reset].btn-block,input[type=submit].btn-block{width:100%}.fade{transition:opacity .15s linear}@media (prefers-reduced-motion:reduce){.fade{transition:none}}.fade:not(.show){opacity:0}.collapse:not(.show){display:none}.collapsing{position:relative;height:0;overflow:hidden;transition:height .35s ease}@media (prefers-reduced-motion:reduce){.collapsing{transition:none}}.dropdown,.dropleft,.dropright,.dropup{position:relative}.dropdown-toggle{white-space:nowrap}.dropdown-toggle::after{display:inline-block;margin-left:.255em;vertical-align:.255em;content:\"\";border-top:.3em solid;border-right:.3em solid transparent;border-bottom:0;border-left:.3em solid transparent}.dropdown-toggle:empty::after{margin-left:0}.dropdown-menu{position:absolute;top:100%;left:0;z-index:1000;display:none;float:left;min-width:10rem;padding:.5rem 0;margin:.125rem 0 0;font-size:1rem;color:#212529;text-align:left;list-style:none;background-color:#fff;background-clip:padding-box;border:1px solid rgba(0,0,0,.15);border-radius:.25rem}.dropdown-menu-left{right:auto;left:0}.dropdown-menu-right{right:0;left:auto}@media (min-width:576px){.dropdown-menu-sm-left{right:auto;left:0}.dropdown-menu-sm-right{right:0;left:auto}}@media (min-width:768px){.dropdown-menu-md-left{right:auto;left:0}.dropdown-menu-md-right{right:0;left:auto}}@media (min-width:992px){.dropdown-menu-lg-left{right:auto;left:0}.dropdown-menu-lg-right{right:0;left:auto}}@media (min-width:1200px){.dropdown-menu-xl-left{right:auto;left:0}.dropdown-menu-xl-right{right:0;left:auto}}.dropup .dropdown-menu{top:auto;bottom:100%;margin-top:0;margin-bottom:.125rem}.dropup .dropdown-toggle::after{display:inline-block;margin-left:.255em;vertical-align:.255em;content:\"\";border-top:0;border-right:.3em solid transparent;border-bottom:.3em solid;border-left:.3em solid transparent}.dropup .dropdown-toggle:empty::after{margin-left:0}.dropright .dropdown-menu{top:0;right:auto;left:100%;margin-top:0;margin-left:.125rem}.dropright .dropdown-toggle::after{display:inline-block;margin-left:.255em;vertical-align:.255em;content:\"\";border-top:.3em solid transparent;border-right:0;border-bottom:.3em solid transparent;border-left:.3em solid}.dropright .dropdown-toggle:empty::after{margin-left:0}.dropright .dropdown-toggle::after{vertical-align:0}.dropleft .dropdown-menu{top:0;right:100%;left:auto;margin-top:0;margin-right:.125rem}.dropleft .dropdown-toggle::after{display:inline-block;margin-left:.255em;vertical-align:.255em;content:\"\"}.dropleft .dropdown-toggle::after{display:none}.dropleft .dropdown-toggle::before{display:inline-block;margin-right:.255em;vertical-align:.255em;content:\"\";border-top:.3em solid transparent;border-right:.3em solid;border-bottom:.3em solid transparent}.dropleft .dropdown-toggle:empty::after{margin-left:0}.dropleft .dropdown-toggle::before{vertical-align:0}.dropdown-menu[x-placement^=bottom],.dropdown-menu[x-placement^=left],.dropdown-menu[x-placement^=right],.dropdown-menu[x-placement^=top]{right:auto;bottom:auto}.dropdown-divider{height:0;margin:.5rem 0;overflow:hidden;border-top:1px solid #e9ecef}.dropdown-item{display:block;width:100%;padding:.25rem 1.5rem;clear:both;font-weight:400;color:#212529;text-align:inherit;white-space:nowrap;background-color:transparent;border:0}.dropdown-item:focus,.dropdown-item:hover{color:#16181b;text-decoration:none;background-color:#f8f9fa}.dropdown-item.active,.dropdown-item:active{color:#fff;text-decoration:none;background-color:#007bff}.dropdown-item.disabled,.dropdown-item:disabled{color:#6c757d;pointer-events:none;background-color:transparent}.dropdown-menu.show{display:block}.dropdown-header{display:block;padding:.5rem 1.5rem;margin-bottom:0;font-size:.875rem;color:#6c757d;white-space:nowrap}.dropdown-item-text{display:block;padding:.25rem 1.5rem;color:#212529}.btn-group,.btn-group-vertical{position:relative;display:-ms-inline-flexbox;display:inline-flex;vertical-align:middle}.btn-group-vertical>.btn,.btn-group>.btn{position:relative;-ms-flex:1 1 auto;flex:1 1 auto}.btn-group-vertical>.btn:hover,.btn-group>.btn:hover{z-index:1}.btn-group-vertical>.btn.active,.btn-group-vertical>.btn:active,.btn-group-vertical>.btn:focus,.btn-group>.btn.active,.btn-group>.btn:active,.btn-group>.btn:focus{z-index:1}.btn-toolbar{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;-ms-flex-pack:start;justify-content:flex-start}.btn-toolbar .input-group{width:auto}.btn-group>.btn-group:not(:first-child),.btn-group>.btn:not(:first-child){margin-left:-1px}.btn-group>.btn-group:not(:last-child)>.btn,.btn-group>.btn:not(:last-child):not(.dropdown-toggle){border-top-right-radius:0;border-bottom-right-radius:0}.btn-group>.btn-group:not(:first-child)>.btn,.btn-group>.btn:not(:first-child){border-top-left-radius:0;border-bottom-left-radius:0}.dropdown-toggle-split{padding-right:.5625rem;padding-left:.5625rem}.dropdown-toggle-split::after,.dropright .dropdown-toggle-split::after,.dropup .dropdown-toggle-split::after{margin-left:0}.dropleft .dropdown-toggle-split::before{margin-right:0}.btn-group-sm>.btn+.dropdown-toggle-split,.btn-sm+.dropdown-toggle-split{padding-right:.375rem;padding-left:.375rem}.btn-group-lg>.btn+.dropdown-toggle-split,.btn-lg+.dropdown-toggle-split{padding-right:.75rem;padding-left:.75rem}.btn-group-vertical{-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start;-ms-flex-pack:center;justify-content:center}.btn-group-vertical>.btn,.btn-group-vertical>.btn-group{width:100%}.btn-group-vertical>.btn-group:not(:first-child),.btn-group-vertical>.btn:not(:first-child){margin-top:-1px}.btn-group-vertical>.btn-group:not(:last-child)>.btn,.btn-group-vertical>.btn:not(:last-child):not(.dropdown-toggle){border-bottom-right-radius:0;border-bottom-left-radius:0}.btn-group-vertical>.btn-group:not(:first-child)>.btn,.btn-group-vertical>.btn:not(:first-child){border-top-left-radius:0;border-top-right-radius:0}.btn-group-toggle>.btn,.btn-group-toggle>.btn-group>.btn{margin-bottom:0}.btn-group-toggle>.btn input[type=checkbox],.btn-group-toggle>.btn input[type=radio],.btn-group-toggle>.btn-group>.btn input[type=checkbox],.btn-group-toggle>.btn-group>.btn input[type=radio]{position:absolute;clip:rect(0,0,0,0);pointer-events:none}.input-group{position:relative;display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;-ms-flex-align:stretch;align-items:stretch;width:100%}.input-group>.custom-file,.input-group>.custom-select,.input-group>.form-control,.input-group>.form-control-plaintext{position:relative;-ms-flex:1 1 auto;flex:1 1 auto;width:1%;margin-bottom:0}.input-group>.custom-file+.custom-file,.input-group>.custom-file+.custom-select,.input-group>.custom-file+.form-control,.input-group>.custom-select+.custom-file,.input-group>.custom-select+.custom-select,.input-group>.custom-select+.form-control,.input-group>.form-control+.custom-file,.input-group>.form-control+.custom-select,.input-group>.form-control+.form-control,.input-group>.form-control-plaintext+.custom-file,.input-group>.form-control-plaintext+.custom-select,.input-group>.form-control-plaintext+.form-control{margin-left:-1px}.input-group>.custom-file .custom-file-input:focus~.custom-file-label,.input-group>.custom-select:focus,.input-group>.form-control:focus{z-index:3}.input-group>.custom-file .custom-file-input:focus{z-index:4}.input-group>.custom-select:not(:last-child),.input-group>.form-control:not(:last-child){border-top-right-radius:0;border-bottom-right-radius:0}.input-group>.custom-select:not(:first-child),.input-group>.form-control:not(:first-child){border-top-left-radius:0;border-bottom-left-radius:0}.input-group>.custom-file{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center}.input-group>.custom-file:not(:last-child) .custom-file-label,.input-group>.custom-file:not(:last-child) .custom-file-label::after{border-top-right-radius:0;border-bottom-right-radius:0}.input-group>.custom-file:not(:first-child) .custom-file-label{border-top-left-radius:0;border-bottom-left-radius:0}.input-group-append,.input-group-prepend{display:-ms-flexbox;display:flex}.input-group-append .btn,.input-group-prepend .btn{position:relative;z-index:2}.input-group-append .btn:focus,.input-group-prepend .btn:focus{z-index:3}.input-group-append .btn+.btn,.input-group-append .btn+.input-group-text,.input-group-append .input-group-text+.btn,.input-group-append .input-group-text+.input-group-text,.input-group-prepend .btn+.btn,.input-group-prepend .btn+.input-group-text,.input-group-prepend .input-group-text+.btn,.input-group-prepend .input-group-text+.input-group-text{margin-left:-1px}.input-group-prepend{margin-right:-1px}.input-group-append{margin-left:-1px}.input-group-text{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;padding:.375rem .75rem;margin-bottom:0;font-size:1rem;font-weight:400;line-height:1.5;color:#495057;text-align:center;white-space:nowrap;background-color:#e9ecef;border:1px solid #ced4da;border-radius:.25rem}.input-group-text input[type=checkbox],.input-group-text input[type=radio]{margin-top:0}.input-group-lg>.custom-select,.input-group-lg>.form-control:not(textarea){height:calc(1.5em + 1rem + 2px)}.input-group-lg>.custom-select,.input-group-lg>.form-control,.input-group-lg>.input-group-append>.btn,.input-group-lg>.input-group-append>.input-group-text,.input-group-lg>.input-group-prepend>.btn,.input-group-lg>.input-group-prepend>.input-group-text{padding:.5rem 1rem;font-size:1.25rem;line-height:1.5;border-radius:.3rem}.input-group-sm>.custom-select,.input-group-sm>.form-control:not(textarea){height:calc(1.5em + .5rem + 2px)}.input-group-sm>.custom-select,.input-group-sm>.form-control,.input-group-sm>.input-group-append>.btn,.input-group-sm>.input-group-append>.input-group-text,.input-group-sm>.input-group-prepend>.btn,.input-group-sm>.input-group-prepend>.input-group-text{padding:.25rem .5rem;font-size:.875rem;line-height:1.5;border-radius:.2rem}.input-group-lg>.custom-select,.input-group-sm>.custom-select{padding-right:1.75rem}.input-group>.input-group-append:last-child>.btn:not(:last-child):not(.dropdown-toggle),.input-group>.input-group-append:last-child>.input-group-text:not(:last-child),.input-group>.input-group-append:not(:last-child)>.btn,.input-group>.input-group-append:not(:last-child)>.input-group-text,.input-group>.input-group-prepend>.btn,.input-group>.input-group-prepend>.input-group-text{border-top-right-radius:0;border-bottom-right-radius:0}.input-group>.input-group-append>.btn,.input-group>.input-group-append>.input-group-text,.input-group>.input-group-prepend:first-child>.btn:not(:first-child),.input-group>.input-group-prepend:first-child>.input-group-text:not(:first-child),.input-group>.input-group-prepend:not(:first-child)>.btn,.input-group>.input-group-prepend:not(:first-child)>.input-group-text{border-top-left-radius:0;border-bottom-left-radius:0}.custom-control{position:relative;display:block;min-height:1.5rem;padding-left:1.5rem}.custom-control-inline{display:-ms-inline-flexbox;display:inline-flex;margin-right:1rem}.custom-control-input{position:absolute;z-index:-1;opacity:0}.custom-control-input:checked~.custom-control-label::before{color:#fff;border-color:#007bff;background-color:#007bff}.custom-control-input:focus~.custom-control-label::before{box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.custom-control-input:focus:not(:checked)~.custom-control-label::before{border-color:#80bdff}.custom-control-input:not(:disabled):active~.custom-control-label::before{color:#fff;background-color:#b3d7ff;border-color:#b3d7ff}.custom-control-input:disabled~.custom-control-label{color:#6c757d}.custom-control-input:disabled~.custom-control-label::before{background-color:#e9ecef}.custom-control-label{position:relative;margin-bottom:0;vertical-align:top}.custom-control-label::before{position:absolute;top:.25rem;left:-1.5rem;display:block;width:1rem;height:1rem;pointer-events:none;content:\"\";background-color:#fff;border:#adb5bd solid 1px}.custom-control-label::after{position:absolute;top:.25rem;left:-1.5rem;display:block;width:1rem;height:1rem;content:\"\";background:no-repeat 50%/50% 50%}.custom-checkbox .custom-control-label::before{border-radius:.25rem}.custom-checkbox .custom-control-input:checked~.custom-control-label::after{background-image:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e\")}.custom-checkbox .custom-control-input:indeterminate~.custom-control-label::before{border-color:#007bff;background-color:#007bff}.custom-checkbox .custom-control-input:indeterminate~.custom-control-label::after{background-image:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 4'%3e%3cpath stroke='%23fff' d='M0 2h4'/%3e%3c/svg%3e\")}.custom-checkbox .custom-control-input:disabled:checked~.custom-control-label::before{background-color:rgba(0,123,255,.5)}.custom-checkbox .custom-control-input:disabled:indeterminate~.custom-control-label::before{background-color:rgba(0,123,255,.5)}.custom-radio .custom-control-label::before{border-radius:50%}.custom-radio .custom-control-input:checked~.custom-control-label::after{background-image:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e\")}.custom-radio .custom-control-input:disabled:checked~.custom-control-label::before{background-color:rgba(0,123,255,.5)}.custom-switch{padding-left:2.25rem}.custom-switch .custom-control-label::before{left:-2.25rem;width:1.75rem;pointer-events:all;border-radius:.5rem}.custom-switch .custom-control-label::after{top:calc(.25rem + 2px);left:calc(-2.25rem + 2px);width:calc(1rem - 4px);height:calc(1rem - 4px);background-color:#adb5bd;border-radius:.5rem;transition:background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-transform .15s ease-in-out;transition:transform .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;transition:transform .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-transform .15s ease-in-out}@media (prefers-reduced-motion:reduce){.custom-switch .custom-control-label::after{transition:none}}.custom-switch .custom-control-input:checked~.custom-control-label::after{background-color:#fff;-webkit-transform:translateX(.75rem);transform:translateX(.75rem)}.custom-switch .custom-control-input:disabled:checked~.custom-control-label::before{background-color:rgba(0,123,255,.5)}.custom-select{display:inline-block;width:100%;height:calc(1.5em + .75rem + 2px);padding:.375rem 1.75rem .375rem .75rem;font-size:1rem;font-weight:400;line-height:1.5;color:#495057;vertical-align:middle;background:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e\") no-repeat right .75rem center/8px 10px;background-color:#fff;border:1px solid #ced4da;border-radius:.25rem;-webkit-appearance:none;-moz-appearance:none;appearance:none}.custom-select:focus{border-color:#80bdff;outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.custom-select:focus::-ms-value{color:#495057;background-color:#fff}.custom-select[multiple],.custom-select[size]:not([size=\"1\"]){height:auto;padding-right:.75rem;background-image:none}.custom-select:disabled{color:#6c757d;background-color:#e9ecef}.custom-select::-ms-expand{display:none}.custom-select-sm{height:calc(1.5em + .5rem + 2px);padding-top:.25rem;padding-bottom:.25rem;padding-left:.5rem;font-size:.875rem}.custom-select-lg{height:calc(1.5em + 1rem + 2px);padding-top:.5rem;padding-bottom:.5rem;padding-left:1rem;font-size:1.25rem}.custom-file{position:relative;display:inline-block;width:100%;height:calc(1.5em + .75rem + 2px);margin-bottom:0}.custom-file-input{position:relative;z-index:2;width:100%;height:calc(1.5em + .75rem + 2px);margin:0;opacity:0}.custom-file-input:focus~.custom-file-label{border-color:#80bdff;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.custom-file-input:disabled~.custom-file-label{background-color:#e9ecef}.custom-file-input:lang(en)~.custom-file-label::after{content:\"Browse\"}.custom-file-input~.custom-file-label[data-browse]::after{content:attr(data-browse)}.custom-file-label{position:absolute;top:0;right:0;left:0;z-index:1;height:calc(1.5em + .75rem + 2px);padding:.375rem .75rem;font-weight:400;line-height:1.5;color:#495057;background-color:#fff;border:1px solid #ced4da;border-radius:.25rem}.custom-file-label::after{position:absolute;top:0;right:0;bottom:0;z-index:3;display:block;height:calc(1.5em + .75rem);padding:.375rem .75rem;line-height:1.5;color:#495057;content:\"Browse\";background-color:#e9ecef;border-left:inherit;border-radius:0 .25rem .25rem 0}.custom-range{width:100%;height:calc(1rem + .4rem);padding:0;background-color:transparent;-webkit-appearance:none;-moz-appearance:none;appearance:none}.custom-range:focus{outline:0}.custom-range:focus::-webkit-slider-thumb{box-shadow:0 0 0 1px #fff,0 0 0 .2rem rgba(0,123,255,.25)}.custom-range:focus::-moz-range-thumb{box-shadow:0 0 0 1px #fff,0 0 0 .2rem rgba(0,123,255,.25)}.custom-range:focus::-ms-thumb{box-shadow:0 0 0 1px #fff,0 0 0 .2rem rgba(0,123,255,.25)}.custom-range::-moz-focus-outer{border:0}.custom-range::-webkit-slider-thumb{width:1rem;height:1rem;margin-top:-.25rem;background-color:#007bff;border:0;border-radius:1rem;transition:background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;-webkit-appearance:none;appearance:none}@media (prefers-reduced-motion:reduce){.custom-range::-webkit-slider-thumb{transition:none}}.custom-range::-webkit-slider-thumb:active{background-color:#b3d7ff}.custom-range::-webkit-slider-runnable-track{width:100%;height:.5rem;color:transparent;cursor:pointer;background-color:#dee2e6;border-color:transparent;border-radius:1rem}.custom-range::-moz-range-thumb{width:1rem;height:1rem;background-color:#007bff;border:0;border-radius:1rem;transition:background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;-moz-appearance:none;appearance:none}@media (prefers-reduced-motion:reduce){.custom-range::-moz-range-thumb{transition:none}}.custom-range::-moz-range-thumb:active{background-color:#b3d7ff}.custom-range::-moz-range-track{width:100%;height:.5rem;color:transparent;cursor:pointer;background-color:#dee2e6;border-color:transparent;border-radius:1rem}.custom-range::-ms-thumb{width:1rem;height:1rem;margin-top:0;margin-right:.2rem;margin-left:.2rem;background-color:#007bff;border:0;border-radius:1rem;transition:background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;appearance:none}@media (prefers-reduced-motion:reduce){.custom-range::-ms-thumb{transition:none}}.custom-range::-ms-thumb:active{background-color:#b3d7ff}.custom-range::-ms-track{width:100%;height:.5rem;color:transparent;cursor:pointer;background-color:transparent;border-color:transparent;border-width:.5rem}.custom-range::-ms-fill-lower{background-color:#dee2e6;border-radius:1rem}.custom-range::-ms-fill-upper{margin-right:15px;background-color:#dee2e6;border-radius:1rem}.custom-range:disabled::-webkit-slider-thumb{background-color:#adb5bd}.custom-range:disabled::-webkit-slider-runnable-track{cursor:default}.custom-range:disabled::-moz-range-thumb{background-color:#adb5bd}.custom-range:disabled::-moz-range-track{cursor:default}.custom-range:disabled::-ms-thumb{background-color:#adb5bd}.custom-control-label::before,.custom-file-label,.custom-select{transition:background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out}@media (prefers-reduced-motion:reduce){.custom-control-label::before,.custom-file-label,.custom-select{transition:none}}.nav{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;padding-left:0;margin-bottom:0;list-style:none}.nav-link{display:block;padding:.5rem 1rem}.nav-link:focus,.nav-link:hover{text-decoration:none}.nav-link.disabled{color:#6c757d;pointer-events:none;cursor:default}.nav-tabs{border-bottom:1px solid #dee2e6}.nav-tabs .nav-item{margin-bottom:-1px}.nav-tabs .nav-link{border:1px solid transparent;border-top-left-radius:.25rem;border-top-right-radius:.25rem}.nav-tabs .nav-link:focus,.nav-tabs .nav-link:hover{border-color:#e9ecef #e9ecef #dee2e6}.nav-tabs .nav-link.disabled{color:#6c757d;background-color:transparent;border-color:transparent}.nav-tabs .nav-item.show .nav-link,.nav-tabs .nav-link.active{color:#495057;background-color:#fff;border-color:#dee2e6 #dee2e6 #fff}.nav-tabs .dropdown-menu{margin-top:-1px;border-top-left-radius:0;border-top-right-radius:0}.nav-pills .nav-link{border-radius:.25rem}.nav-pills .nav-link.active,.nav-pills .show>.nav-link{color:#fff;background-color:#007bff}.nav-fill .nav-item{-ms-flex:1 1 auto;flex:1 1 auto;text-align:center}.nav-justified .nav-item{-ms-flex-preferred-size:0;flex-basis:0;-ms-flex-positive:1;flex-grow:1;text-align:center}.tab-content>.tab-pane{display:none}.tab-content>.active{display:block}.navbar{position:relative;display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;padding:.5rem 1rem}.navbar>.container,.navbar>.container-fluid{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between}.navbar-brand{display:inline-block;padding-top:.3125rem;padding-bottom:.3125rem;margin-right:1rem;font-size:1.25rem;line-height:inherit;white-space:nowrap}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}.navbar-nav{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;padding-left:0;margin-bottom:0;list-style:none}.navbar-nav .nav-link{padding-right:0;padding-left:0}.navbar-nav .dropdown-menu{position:static;float:none}.navbar-text{display:inline-block;padding-top:.5rem;padding-bottom:.5rem}.navbar-collapse{-ms-flex-preferred-size:100%;flex-basis:100%;-ms-flex-positive:1;flex-grow:1;-ms-flex-align:center;align-items:center}.navbar-toggler{padding:.25rem .75rem;font-size:1.25rem;line-height:1;background-color:transparent;border:1px solid transparent;border-radius:.25rem}.navbar-toggler:focus,.navbar-toggler:hover{text-decoration:none}.navbar-toggler-icon{display:inline-block;width:1.5em;height:1.5em;vertical-align:middle;content:\"\";background:no-repeat center center;background-size:100% 100%}@media (max-width:575.98px){.navbar-expand-sm>.container,.navbar-expand-sm>.container-fluid{padding-right:0;padding-left:0}}@media (min-width:576px){.navbar-expand-sm{-ms-flex-flow:row nowrap;flex-flow:row nowrap;-ms-flex-pack:start;justify-content:flex-start}.navbar-expand-sm .navbar-nav{-ms-flex-direction:row;flex-direction:row}.navbar-expand-sm .navbar-nav .dropdown-menu{position:absolute}.navbar-expand-sm .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand-sm>.container,.navbar-expand-sm>.container-fluid{-ms-flex-wrap:nowrap;flex-wrap:nowrap}.navbar-expand-sm .navbar-collapse{display:-ms-flexbox!important;display:flex!important;-ms-flex-preferred-size:auto;flex-basis:auto}.navbar-expand-sm .navbar-toggler{display:none}}@media (max-width:767.98px){.navbar-expand-md>.container,.navbar-expand-md>.container-fluid{padding-right:0;padding-left:0}}@media (min-width:768px){.navbar-expand-md{-ms-flex-flow:row nowrap;flex-flow:row nowrap;-ms-flex-pack:start;justify-content:flex-start}.navbar-expand-md .navbar-nav{-ms-flex-direction:row;flex-direction:row}.navbar-expand-md .navbar-nav .dropdown-menu{position:absolute}.navbar-expand-md .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand-md>.container,.navbar-expand-md>.container-fluid{-ms-flex-wrap:nowrap;flex-wrap:nowrap}.navbar-expand-md .navbar-collapse{display:-ms-flexbox!important;display:flex!important;-ms-flex-preferred-size:auto;flex-basis:auto}.navbar-expand-md .navbar-toggler{display:none}}@media (max-width:991.98px){.navbar-expand-lg>.container,.navbar-expand-lg>.container-fluid{padding-right:0;padding-left:0}}@media (min-width:992px){.navbar-expand-lg{-ms-flex-flow:row nowrap;flex-flow:row nowrap;-ms-flex-pack:start;justify-content:flex-start}.navbar-expand-lg .navbar-nav{-ms-flex-direction:row;flex-direction:row}.navbar-expand-lg .navbar-nav .dropdown-menu{position:absolute}.navbar-expand-lg .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand-lg>.container,.navbar-expand-lg>.container-fluid{-ms-flex-wrap:nowrap;flex-wrap:nowrap}.navbar-expand-lg .navbar-collapse{display:-ms-flexbox!important;display:flex!important;-ms-flex-preferred-size:auto;flex-basis:auto}.navbar-expand-lg .navbar-toggler{display:none}}@media (max-width:1199.98px){.navbar-expand-xl>.container,.navbar-expand-xl>.container-fluid{padding-right:0;padding-left:0}}@media (min-width:1200px){.navbar-expand-xl{-ms-flex-flow:row nowrap;flex-flow:row nowrap;-ms-flex-pack:start;justify-content:flex-start}.navbar-expand-xl .navbar-nav{-ms-flex-direction:row;flex-direction:row}.navbar-expand-xl .navbar-nav .dropdown-menu{position:absolute}.navbar-expand-xl .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand-xl>.container,.navbar-expand-xl>.container-fluid{-ms-flex-wrap:nowrap;flex-wrap:nowrap}.navbar-expand-xl .navbar-collapse{display:-ms-flexbox!important;display:flex!important;-ms-flex-preferred-size:auto;flex-basis:auto}.navbar-expand-xl .navbar-toggler{display:none}}.navbar-expand{-ms-flex-flow:row nowrap;flex-flow:row nowrap;-ms-flex-pack:start;justify-content:flex-start}.navbar-expand>.container,.navbar-expand>.container-fluid{padding-right:0;padding-left:0}.navbar-expand .navbar-nav{-ms-flex-direction:row;flex-direction:row}.navbar-expand .navbar-nav .dropdown-menu{position:absolute}.navbar-expand .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand>.container,.navbar-expand>.container-fluid{-ms-flex-wrap:nowrap;flex-wrap:nowrap}.navbar-expand .navbar-collapse{display:-ms-flexbox!important;display:flex!important;-ms-flex-preferred-size:auto;flex-basis:auto}.navbar-expand .navbar-toggler{display:none}.navbar-light .navbar-brand{color:rgba(0,0,0,.9)}.navbar-light .navbar-brand:focus,.navbar-light .navbar-brand:hover{color:rgba(0,0,0,.9)}.navbar-light .navbar-nav .nav-link{color:rgba(0,0,0,.5)}.navbar-light .navbar-nav .nav-link:focus,.navbar-light .navbar-nav .nav-link:hover{color:rgba(0,0,0,.7)}.navbar-light .navbar-nav .nav-link.disabled{color:rgba(0,0,0,.3)}.navbar-light .navbar-nav .active>.nav-link,.navbar-light .navbar-nav .nav-link.active,.navbar-light .navbar-nav .nav-link.show,.navbar-light .navbar-nav .show>.nav-link{color:rgba(0,0,0,.9)}.navbar-light .navbar-toggler{color:rgba(0,0,0,.5);border-color:rgba(0,0,0,.1)}.navbar-light .navbar-toggler-icon{background-image:url(\"data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e\")}.navbar-light .navbar-text{color:rgba(0,0,0,.5)}.navbar-light .navbar-text a{color:rgba(0,0,0,.9)}.navbar-light .navbar-text a:focus,.navbar-light .navbar-text a:hover{color:rgba(0,0,0,.9)}.navbar-dark .navbar-brand{color:#fff}.navbar-dark .navbar-brand:focus,.navbar-dark .navbar-brand:hover{color:#fff}.navbar-dark .navbar-nav .nav-link{color:rgba(255,255,255,.5)}.navbar-dark .navbar-nav .nav-link:focus,.navbar-dark .navbar-nav .nav-link:hover{color:rgba(255,255,255,.75)}.navbar-dark .navbar-nav .nav-link.disabled{color:rgba(255,255,255,.25)}.navbar-dark .navbar-nav .active>.nav-link,.navbar-dark .navbar-nav .nav-link.active,.navbar-dark .navbar-nav .nav-link.show,.navbar-dark .navbar-nav .show>.nav-link{color:#fff}.navbar-dark .navbar-toggler{color:rgba(255,255,255,.5);border-color:rgba(255,255,255,.1)}.navbar-dark .navbar-toggler-icon{background-image:url(\"data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e\")}.navbar-dark .navbar-text{color:rgba(255,255,255,.5)}.navbar-dark .navbar-text a{color:#fff}.navbar-dark .navbar-text a:focus,.navbar-dark .navbar-text a:hover{color:#fff}.card{position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;min-width:0;word-wrap:break-word;background-color:#fff;background-clip:border-box;border:1px solid rgba(0,0,0,.125);border-radius:.25rem}.card>hr{margin-right:0;margin-left:0}.card>.list-group:first-child .list-group-item:first-child{border-top-left-radius:.25rem;border-top-right-radius:.25rem}.card>.list-group:last-child .list-group-item:last-child{border-bottom-right-radius:.25rem;border-bottom-left-radius:.25rem}.card-body{-ms-flex:1 1 auto;flex:1 1 auto;padding:1.25rem}.card-title{margin-bottom:.75rem}.card-subtitle{margin-top:-.375rem;margin-bottom:0}.card-text:last-child{margin-bottom:0}.card-link:hover{text-decoration:none}.card-link+.card-link{margin-left:1.25rem}.card-header{padding:.75rem 1.25rem;margin-bottom:0;background-color:rgba(0,0,0,.03);border-bottom:1px solid rgba(0,0,0,.125)}.card-header:first-child{border-radius:calc(.25rem - 1px) calc(.25rem - 1px) 0 0}.card-header+.list-group .list-group-item:first-child{border-top:0}.card-footer{padding:.75rem 1.25rem;background-color:rgba(0,0,0,.03);border-top:1px solid rgba(0,0,0,.125)}.card-footer:last-child{border-radius:0 0 calc(.25rem - 1px) calc(.25rem - 1px)}.card-header-tabs{margin-right:-.625rem;margin-bottom:-.75rem;margin-left:-.625rem;border-bottom:0}.card-header-pills{margin-right:-.625rem;margin-left:-.625rem}.card-img-overlay{position:absolute;top:0;right:0;bottom:0;left:0;padding:1.25rem}.card-img{width:100%;border-radius:calc(.25rem - 1px)}.card-img-top{width:100%;border-top-left-radius:calc(.25rem - 1px);border-top-right-radius:calc(.25rem - 1px)}.card-img-bottom{width:100%;border-bottom-right-radius:calc(.25rem - 1px);border-bottom-left-radius:calc(.25rem - 1px)}.card-deck{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column}.card-deck .card{margin-bottom:15px}@media (min-width:576px){.card-deck{-ms-flex-flow:row wrap;flex-flow:row wrap;margin-right:-15px;margin-left:-15px}.card-deck .card{display:-ms-flexbox;display:flex;-ms-flex:1 0 0%;flex:1 0 0%;-ms-flex-direction:column;flex-direction:column;margin-right:15px;margin-bottom:0;margin-left:15px}}.card-group{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column}.card-group>.card{margin-bottom:15px}@media (min-width:576px){.card-group{-ms-flex-flow:row wrap;flex-flow:row wrap}.card-group>.card{-ms-flex:1 0 0%;flex:1 0 0%;margin-bottom:0}.card-group>.card+.card{margin-left:0;border-left:0}.card-group>.card:not(:last-child){border-top-right-radius:0;border-bottom-right-radius:0}.card-group>.card:not(:last-child) .card-header,.card-group>.card:not(:last-child) .card-img-top{border-top-right-radius:0}.card-group>.card:not(:last-child) .card-footer,.card-group>.card:not(:last-child) .card-img-bottom{border-bottom-right-radius:0}.card-group>.card:not(:first-child){border-top-left-radius:0;border-bottom-left-radius:0}.card-group>.card:not(:first-child) .card-header,.card-group>.card:not(:first-child) .card-img-top{border-top-left-radius:0}.card-group>.card:not(:first-child) .card-footer,.card-group>.card:not(:first-child) .card-img-bottom{border-bottom-left-radius:0}}.card-columns .card{margin-bottom:.75rem}@media (min-width:576px){.card-columns{-webkit-column-count:3;-moz-column-count:3;column-count:3;-webkit-column-gap:1.25rem;-moz-column-gap:1.25rem;column-gap:1.25rem;orphans:1;widows:1}.card-columns .card{display:inline-block;width:100%}}.accordion>.card{overflow:hidden}.accordion>.card:not(:first-of-type) .card-header:first-child{border-radius:0}.accordion>.card:not(:first-of-type):not(:last-of-type){border-bottom:0;border-radius:0}.accordion>.card:first-of-type{border-bottom:0;border-bottom-right-radius:0;border-bottom-left-radius:0}.accordion>.card:last-of-type{border-top-left-radius:0;border-top-right-radius:0}.accordion>.card .card-header{margin-bottom:-1px}.breadcrumb{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;padding:.75rem 1rem;margin-bottom:1rem;list-style:none;background-color:#e9ecef;border-radius:.25rem}.breadcrumb-item+.breadcrumb-item{padding-left:.5rem}.breadcrumb-item+.breadcrumb-item::before{display:inline-block;padding-right:.5rem;color:#6c757d;content:\"/\"}.breadcrumb-item+.breadcrumb-item:hover::before{text-decoration:underline}.breadcrumb-item+.breadcrumb-item:hover::before{text-decoration:none}.breadcrumb-item.active{color:#6c757d}.pagination{display:-ms-flexbox;display:flex;padding-left:0;list-style:none;border-radius:.25rem}.page-link{position:relative;display:block;padding:.5rem .75rem;margin-left:-1px;line-height:1.25;color:#007bff;background-color:#fff;border:1px solid #dee2e6}.page-link:hover{z-index:2;color:#0056b3;text-decoration:none;background-color:#e9ecef;border-color:#dee2e6}.page-link:focus{z-index:2;outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.page-item:first-child .page-link{margin-left:0;border-top-left-radius:.25rem;border-bottom-left-radius:.25rem}.page-item:last-child .page-link{border-top-right-radius:.25rem;border-bottom-right-radius:.25rem}.page-item.active .page-link{z-index:1;color:#fff;background-color:#007bff;border-color:#007bff}.page-item.disabled .page-link{color:#6c757d;pointer-events:none;cursor:auto;background-color:#fff;border-color:#dee2e6}.pagination-lg .page-link{padding:.75rem 1.5rem;font-size:1.25rem;line-height:1.5}.pagination-lg .page-item:first-child .page-link{border-top-left-radius:.3rem;border-bottom-left-radius:.3rem}.pagination-lg .page-item:last-child .page-link{border-top-right-radius:.3rem;border-bottom-right-radius:.3rem}.pagination-sm .page-link{padding:.25rem .5rem;font-size:.875rem;line-height:1.5}.pagination-sm .page-item:first-child .page-link{border-top-left-radius:.2rem;border-bottom-left-radius:.2rem}.pagination-sm .page-item:last-child .page-link{border-top-right-radius:.2rem;border-bottom-right-radius:.2rem}.badge{display:inline-block;padding:.25em .4em;font-size:75%;font-weight:700;line-height:1;text-align:center;white-space:nowrap;vertical-align:baseline;border-radius:.25rem;transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out}@media (prefers-reduced-motion:reduce){.badge{transition:none}}a.badge:focus,a.badge:hover{text-decoration:none}.badge:empty{display:none}.btn .badge{position:relative;top:-1px}.badge-pill{padding-right:.6em;padding-left:.6em;border-radius:10rem}.badge-primary{color:#fff;background-color:#007bff}a.badge-primary:focus,a.badge-primary:hover{color:#fff;background-color:#0062cc}a.badge-primary.focus,a.badge-primary:focus{outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.5)}.badge-secondary{color:#fff;background-color:#6c757d}a.badge-secondary:focus,a.badge-secondary:hover{color:#fff;background-color:#545b62}a.badge-secondary.focus,a.badge-secondary:focus{outline:0;box-shadow:0 0 0 .2rem rgba(108,117,125,.5)}.badge-success{color:#fff;background-color:#28a745}a.badge-success:focus,a.badge-success:hover{color:#fff;background-color:#1e7e34}a.badge-success.focus,a.badge-success:focus{outline:0;box-shadow:0 0 0 .2rem rgba(40,167,69,.5)}.badge-info{color:#fff;background-color:#17a2b8}a.badge-info:focus,a.badge-info:hover{color:#fff;background-color:#117a8b}a.badge-info.focus,a.badge-info:focus{outline:0;box-shadow:0 0 0 .2rem rgba(23,162,184,.5)}.badge-warning{color:#212529;background-color:#ffc107}a.badge-warning:focus,a.badge-warning:hover{color:#212529;background-color:#d39e00}a.badge-warning.focus,a.badge-warning:focus{outline:0;box-shadow:0 0 0 .2rem rgba(255,193,7,.5)}.badge-danger{color:#fff;background-color:#dc3545}a.badge-danger:focus,a.badge-danger:hover{color:#fff;background-color:#bd2130}a.badge-danger.focus,a.badge-danger:focus{outline:0;box-shadow:0 0 0 .2rem rgba(220,53,69,.5)}.badge-light{color:#212529;background-color:#f8f9fa}a.badge-light:focus,a.badge-light:hover{color:#212529;background-color:#dae0e5}a.badge-light.focus,a.badge-light:focus{outline:0;box-shadow:0 0 0 .2rem rgba(248,249,250,.5)}.badge-dark{color:#fff;background-color:#343a40}a.badge-dark:focus,a.badge-dark:hover{color:#fff;background-color:#1d2124}a.badge-dark.focus,a.badge-dark:focus{outline:0;box-shadow:0 0 0 .2rem rgba(52,58,64,.5)}.jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}@media (min-width:576px){.jumbotron{padding:4rem 2rem}}.jumbotron-fluid{padding-right:0;padding-left:0;border-radius:0}.alert{position:relative;padding:.75rem 1.25rem;margin-bottom:1rem;border:1px solid transparent;border-radius:.25rem}.alert-heading{color:inherit}.alert-link{font-weight:700}.alert-dismissible{padding-right:4rem}.alert-dismissible .close{position:absolute;top:0;right:0;padding:.75rem 1.25rem;color:inherit}.alert-primary{color:#004085;background-color:#cce5ff;border-color:#b8daff}.alert-primary hr{border-top-color:#9fcdff}.alert-primary .alert-link{color:#002752}.alert-secondary{color:#383d41;background-color:#e2e3e5;border-color:#d6d8db}.alert-secondary hr{border-top-color:#c8cbcf}.alert-secondary .alert-link{color:#202326}.alert-success{color:#155724;background-color:#d4edda;border-color:#c3e6cb}.alert-success hr{border-top-color:#b1dfbb}.alert-success .alert-link{color:#0b2e13}.alert-info{color:#0c5460;background-color:#d1ecf1;border-color:#bee5eb}.alert-info hr{border-top-color:#abdde5}.alert-info .alert-link{color:#062c33}.alert-warning{color:#856404;background-color:#fff3cd;border-color:#ffeeba}.alert-warning hr{border-top-color:#ffe8a1}.alert-warning .alert-link{color:#533f03}.alert-danger{color:#721c24;background-color:#f8d7da;border-color:#f5c6cb}.alert-danger hr{border-top-color:#f1b0b7}.alert-danger .alert-link{color:#491217}.alert-light{color:#818182;background-color:#fefefe;border-color:#fdfdfe}.alert-light hr{border-top-color:#ececf6}.alert-light .alert-link{color:#686868}.alert-dark{color:#1b1e21;background-color:#d6d8d9;border-color:#c6c8ca}.alert-dark hr{border-top-color:#b9bbbe}.alert-dark .alert-link{color:#040505}@-webkit-keyframes progress-bar-stripes{from{background-position:1rem 0}to{background-position:0 0}}@keyframes progress-bar-stripes{from{background-position:1rem 0}to{background-position:0 0}}.progress{display:-ms-flexbox;display:flex;height:1rem;overflow:hidden;font-size:.75rem;background-color:#e9ecef;border-radius:.25rem}.progress-bar{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-pack:center;justify-content:center;color:#fff;text-align:center;white-space:nowrap;background-color:#007bff;transition:width .6s ease}@media (prefers-reduced-motion:reduce){.progress-bar{transition:none}}.progress-bar-striped{background-image:linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);background-size:1rem 1rem}.progress-bar-animated{-webkit-animation:progress-bar-stripes 1s linear infinite;animation:progress-bar-stripes 1s linear infinite}@media (prefers-reduced-motion:reduce){.progress-bar-animated{-webkit-animation:none;animation:none}}.media{display:-ms-flexbox;display:flex;-ms-flex-align:start;align-items:flex-start}.media-body{-ms-flex:1;flex:1}.list-group{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;padding-left:0;margin-bottom:0}.list-group-item-action{width:100%;color:#495057;text-align:inherit}.list-group-item-action:focus,.list-group-item-action:hover{z-index:1;color:#495057;text-decoration:none;background-color:#f8f9fa}.list-group-item-action:active{color:#212529;background-color:#e9ecef}.list-group-item{position:relative;display:block;padding:.75rem 1.25rem;margin-bottom:-1px;background-color:#fff;border:1px solid rgba(0,0,0,.125)}.list-group-item:first-child{border-top-left-radius:.25rem;border-top-right-radius:.25rem}.list-group-item:last-child{margin-bottom:0;border-bottom-right-radius:.25rem;border-bottom-left-radius:.25rem}.list-group-item.disabled,.list-group-item:disabled{color:#6c757d;pointer-events:none;background-color:#fff}.list-group-item.active{z-index:2;color:#fff;background-color:#007bff;border-color:#007bff}.list-group-horizontal{-ms-flex-direction:row;flex-direction:row}.list-group-horizontal .list-group-item{margin-right:-1px;margin-bottom:0}.list-group-horizontal .list-group-item:first-child{border-top-left-radius:.25rem;border-bottom-left-radius:.25rem;border-top-right-radius:0}.list-group-horizontal .list-group-item:last-child{margin-right:0;border-top-right-radius:.25rem;border-bottom-right-radius:.25rem;border-bottom-left-radius:0}@media (min-width:576px){.list-group-horizontal-sm{-ms-flex-direction:row;flex-direction:row}.list-group-horizontal-sm .list-group-item{margin-right:-1px;margin-bottom:0}.list-group-horizontal-sm .list-group-item:first-child{border-top-left-radius:.25rem;border-bottom-left-radius:.25rem;border-top-right-radius:0}.list-group-horizontal-sm .list-group-item:last-child{margin-right:0;border-top-right-radius:.25rem;border-bottom-right-radius:.25rem;border-bottom-left-radius:0}}@media (min-width:768px){.list-group-horizontal-md{-ms-flex-direction:row;flex-direction:row}.list-group-horizontal-md .list-group-item{margin-right:-1px;margin-bottom:0}.list-group-horizontal-md .list-group-item:first-child{border-top-left-radius:.25rem;border-bottom-left-radius:.25rem;border-top-right-radius:0}.list-group-horizontal-md .list-group-item:last-child{margin-right:0;border-top-right-radius:.25rem;border-bottom-right-radius:.25rem;border-bottom-left-radius:0}}@media (min-width:992px){.list-group-horizontal-lg{-ms-flex-direction:row;flex-direction:row}.list-group-horizontal-lg .list-group-item{margin-right:-1px;margin-bottom:0}.list-group-horizontal-lg .list-group-item:first-child{border-top-left-radius:.25rem;border-bottom-left-radius:.25rem;border-top-right-radius:0}.list-group-horizontal-lg .list-group-item:last-child{margin-right:0;border-top-right-radius:.25rem;border-bottom-right-radius:.25rem;border-bottom-left-radius:0}}@media (min-width:1200px){.list-group-horizontal-xl{-ms-flex-direction:row;flex-direction:row}.list-group-horizontal-xl .list-group-item{margin-right:-1px;margin-bottom:0}.list-group-horizontal-xl .list-group-item:first-child{border-top-left-radius:.25rem;border-bottom-left-radius:.25rem;border-top-right-radius:0}.list-group-horizontal-xl .list-group-item:last-child{margin-right:0;border-top-right-radius:.25rem;border-bottom-right-radius:.25rem;border-bottom-left-radius:0}}.list-group-flush .list-group-item{border-right:0;border-left:0;border-radius:0}.list-group-flush .list-group-item:last-child{margin-bottom:-1px}.list-group-flush:first-child .list-group-item:first-child{border-top:0}.list-group-flush:last-child .list-group-item:last-child{margin-bottom:0;border-bottom:0}.list-group-item-primary{color:#004085;background-color:#b8daff}.list-group-item-primary.list-group-item-action:focus,.list-group-item-primary.list-group-item-action:hover{color:#004085;background-color:#9fcdff}.list-group-item-primary.list-group-item-action.active{color:#fff;background-color:#004085;border-color:#004085}.list-group-item-secondary{color:#383d41;background-color:#d6d8db}.list-group-item-secondary.list-group-item-action:focus,.list-group-item-secondary.list-group-item-action:hover{color:#383d41;background-color:#c8cbcf}.list-group-item-secondary.list-group-item-action.active{color:#fff;background-color:#383d41;border-color:#383d41}.list-group-item-success{color:#155724;background-color:#c3e6cb}.list-group-item-success.list-group-item-action:focus,.list-group-item-success.list-group-item-action:hover{color:#155724;background-color:#b1dfbb}.list-group-item-success.list-group-item-action.active{color:#fff;background-color:#155724;border-color:#155724}.list-group-item-info{color:#0c5460;background-color:#bee5eb}.list-group-item-info.list-group-item-action:focus,.list-group-item-info.list-group-item-action:hover{color:#0c5460;background-color:#abdde5}.list-group-item-info.list-group-item-action.active{color:#fff;background-color:#0c5460;border-color:#0c5460}.list-group-item-warning{color:#856404;background-color:#ffeeba}.list-group-item-warning.list-group-item-action:focus,.list-group-item-warning.list-group-item-action:hover{color:#856404;background-color:#ffe8a1}.list-group-item-warning.list-group-item-action.active{color:#fff;background-color:#856404;border-color:#856404}.list-group-item-danger{color:#721c24;background-color:#f5c6cb}.list-group-item-danger.list-group-item-action:focus,.list-group-item-danger.list-group-item-action:hover{color:#721c24;background-color:#f1b0b7}.list-group-item-danger.list-group-item-action.active{color:#fff;background-color:#721c24;border-color:#721c24}.list-group-item-light{color:#818182;background-color:#fdfdfe}.list-group-item-light.list-group-item-action:focus,.list-group-item-light.list-group-item-action:hover{color:#818182;background-color:#ececf6}.list-group-item-light.list-group-item-action.active{color:#fff;background-color:#818182;border-color:#818182}.list-group-item-dark{color:#1b1e21;background-color:#c6c8ca}.list-group-item-dark.list-group-item-action:focus,.list-group-item-dark.list-group-item-action:hover{color:#1b1e21;background-color:#b9bbbe}.list-group-item-dark.list-group-item-action.active{color:#fff;background-color:#1b1e21;border-color:#1b1e21}.close{float:right;font-size:1.5rem;font-weight:700;line-height:1;color:#000;text-shadow:0 1px 0 #fff;opacity:.5}.close:hover{color:#000;text-decoration:none}.close:not(:disabled):not(.disabled):focus,.close:not(:disabled):not(.disabled):hover{opacity:.75}button.close{padding:0;background-color:transparent;border:0;-webkit-appearance:none;-moz-appearance:none;appearance:none}a.close.disabled{pointer-events:none}.toast{max-width:350px;overflow:hidden;font-size:.875rem;background-color:rgba(255,255,255,.85);background-clip:padding-box;border:1px solid rgba(0,0,0,.1);box-shadow:0 .25rem .75rem rgba(0,0,0,.1);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;border-radius:.25rem}.toast:not(:last-child){margin-bottom:.75rem}.toast.showing{opacity:1}.toast.show{display:block;opacity:1}.toast.hide{display:none}.toast-header{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;padding:.25rem .75rem;color:#6c757d;background-color:rgba(255,255,255,.85);background-clip:padding-box;border-bottom:1px solid rgba(0,0,0,.05)}.toast-body{padding:.75rem}.modal-open{overflow:hidden}.modal-open .modal{overflow-x:hidden;overflow-y:auto}.modal{position:fixed;top:0;left:0;z-index:1050;display:none;width:100%;height:100%;overflow:hidden;outline:0}.modal-dialog{position:relative;width:auto;margin:.5rem;pointer-events:none}.modal.fade .modal-dialog{transition:-webkit-transform .3s ease-out;transition:transform .3s ease-out;transition:transform .3s ease-out,-webkit-transform .3s ease-out;-webkit-transform:translate(0,-50px);transform:translate(0,-50px)}@media (prefers-reduced-motion:reduce){.modal.fade .modal-dialog{transition:none}}.modal.show .modal-dialog{-webkit-transform:none;transform:none}.modal-dialog-scrollable{display:-ms-flexbox;display:flex;max-height:calc(100% - 1rem)}.modal-dialog-scrollable .modal-content{max-height:calc(100vh - 1rem);overflow:hidden}.modal-dialog-scrollable .modal-footer,.modal-dialog-scrollable .modal-header{-ms-flex-negative:0;flex-shrink:0}.modal-dialog-scrollable .modal-body{overflow-y:auto}.modal-dialog-centered{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;min-height:calc(100% - 1rem)}.modal-dialog-centered::before{display:block;height:calc(100vh - 1rem);content:\"\"}.modal-dialog-centered.modal-dialog-scrollable{-ms-flex-direction:column;flex-direction:column;-ms-flex-pack:center;justify-content:center;height:100%}.modal-dialog-centered.modal-dialog-scrollable .modal-content{max-height:none}.modal-dialog-centered.modal-dialog-scrollable::before{content:none}.modal-content{position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%;pointer-events:auto;background-color:#fff;background-clip:padding-box;border:1px solid rgba(0,0,0,.2);border-radius:.3rem;outline:0}.modal-backdrop{position:fixed;top:0;left:0;z-index:1040;width:100vw;height:100vh;background-color:#000}.modal-backdrop.fade{opacity:0}.modal-backdrop.show{opacity:.5}.modal-header{display:-ms-flexbox;display:flex;-ms-flex-align:start;align-items:flex-start;-ms-flex-pack:justify;justify-content:space-between;padding:1rem 1rem;border-bottom:1px solid #dee2e6;border-top-left-radius:.3rem;border-top-right-radius:.3rem}.modal-header .close{padding:1rem 1rem;margin:-1rem -1rem -1rem auto}.modal-title{margin-bottom:0;line-height:1.5}.modal-body{position:relative;-ms-flex:1 1 auto;flex:1 1 auto;padding:1rem}.modal-footer{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:end;justify-content:flex-end;padding:1rem;border-top:1px solid #dee2e6;border-bottom-right-radius:.3rem;border-bottom-left-radius:.3rem}.modal-footer>:not(:first-child){margin-left:.25rem}.modal-footer>:not(:last-child){margin-right:.25rem}.modal-scrollbar-measure{position:absolute;top:-9999px;width:50px;height:50px;overflow:scroll}@media (min-width:576px){.modal-dialog{max-width:500px;margin:1.75rem auto}.modal-dialog-scrollable{max-height:calc(100% - 3.5rem)}.modal-dialog-scrollable .modal-content{max-height:calc(100vh - 3.5rem)}.modal-dialog-centered{min-height:calc(100% - 3.5rem)}.modal-dialog-centered::before{height:calc(100vh - 3.5rem)}.modal-sm{max-width:300px}}@media (min-width:992px){.modal-lg,.modal-xl{max-width:800px}}@media (min-width:1200px){.modal-xl{max-width:1140px}}.tooltip{position:absolute;z-index:1070;display:block;margin:0;font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\";font-style:normal;font-weight:400;line-height:1.5;text-align:left;text-align:start;text-decoration:none;text-shadow:none;text-transform:none;letter-spacing:normal;word-break:normal;word-spacing:normal;white-space:normal;line-break:auto;font-size:.875rem;word-wrap:break-word;opacity:0}.tooltip.show{opacity:.9}.tooltip .arrow{position:absolute;display:block;width:.8rem;height:.4rem}.tooltip .arrow::before{position:absolute;content:\"\";border-color:transparent;border-style:solid}.bs-tooltip-auto[x-placement^=top],.bs-tooltip-top{padding:.4rem 0}.bs-tooltip-auto[x-placement^=top] .arrow,.bs-tooltip-top .arrow{bottom:0}.bs-tooltip-auto[x-placement^=top] .arrow::before,.bs-tooltip-top .arrow::before{top:0;border-width:.4rem .4rem 0;border-top-color:#000}.bs-tooltip-auto[x-placement^=right],.bs-tooltip-right{padding:0 .4rem}.bs-tooltip-auto[x-placement^=right] .arrow,.bs-tooltip-right .arrow{left:0;width:.4rem;height:.8rem}.bs-tooltip-auto[x-placement^=right] .arrow::before,.bs-tooltip-right .arrow::before{right:0;border-width:.4rem .4rem .4rem 0;border-right-color:#000}.bs-tooltip-auto[x-placement^=bottom],.bs-tooltip-bottom{padding:.4rem 0}.bs-tooltip-auto[x-placement^=bottom] .arrow,.bs-tooltip-bottom .arrow{top:0}.bs-tooltip-auto[x-placement^=bottom] .arrow::before,.bs-tooltip-bottom .arrow::before{bottom:0;border-width:0 .4rem .4rem;border-bottom-color:#000}.bs-tooltip-auto[x-placement^=left],.bs-tooltip-left{padding:0 .4rem}.bs-tooltip-auto[x-placement^=left] .arrow,.bs-tooltip-left .arrow{right:0;width:.4rem;height:.8rem}.bs-tooltip-auto[x-placement^=left] .arrow::before,.bs-tooltip-left .arrow::before{left:0;border-width:.4rem 0 .4rem .4rem;border-left-color:#000}.tooltip-inner{max-width:200px;padding:.25rem .5rem;color:#fff;text-align:center;background-color:#000;border-radius:.25rem}.popover{position:absolute;top:0;left:0;z-index:1060;display:block;max-width:276px;font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\";font-style:normal;font-weight:400;line-height:1.5;text-align:left;text-align:start;text-decoration:none;text-shadow:none;text-transform:none;letter-spacing:normal;word-break:normal;word-spacing:normal;white-space:normal;line-break:auto;font-size:.875rem;word-wrap:break-word;background-color:#fff;background-clip:padding-box;border:1px solid rgba(0,0,0,.2);border-radius:.3rem}.popover .arrow{position:absolute;display:block;width:1rem;height:.5rem;margin:0 .3rem}.popover .arrow::after,.popover .arrow::before{position:absolute;display:block;content:\"\";border-color:transparent;border-style:solid}.bs-popover-auto[x-placement^=top],.bs-popover-top{margin-bottom:.5rem}.bs-popover-auto[x-placement^=top]>.arrow,.bs-popover-top>.arrow{bottom:calc((.5rem + 1px) * -1)}.bs-popover-auto[x-placement^=top]>.arrow::before,.bs-popover-top>.arrow::before{bottom:0;border-width:.5rem .5rem 0;border-top-color:rgba(0,0,0,.25)}.bs-popover-auto[x-placement^=top]>.arrow::after,.bs-popover-top>.arrow::after{bottom:1px;border-width:.5rem .5rem 0;border-top-color:#fff}.bs-popover-auto[x-placement^=right],.bs-popover-right{margin-left:.5rem}.bs-popover-auto[x-placement^=right]>.arrow,.bs-popover-right>.arrow{left:calc((.5rem + 1px) * -1);width:.5rem;height:1rem;margin:.3rem 0}.bs-popover-auto[x-placement^=right]>.arrow::before,.bs-popover-right>.arrow::before{left:0;border-width:.5rem .5rem .5rem 0;border-right-color:rgba(0,0,0,.25)}.bs-popover-auto[x-placement^=right]>.arrow::after,.bs-popover-right>.arrow::after{left:1px;border-width:.5rem .5rem .5rem 0;border-right-color:#fff}.bs-popover-auto[x-placement^=bottom],.bs-popover-bottom{margin-top:.5rem}.bs-popover-auto[x-placement^=bottom]>.arrow,.bs-popover-bottom>.arrow{top:calc((.5rem + 1px) * -1)}.bs-popover-auto[x-placement^=bottom]>.arrow::before,.bs-popover-bottom>.arrow::before{top:0;border-width:0 .5rem .5rem .5rem;border-bottom-color:rgba(0,0,0,.25)}.bs-popover-auto[x-placement^=bottom]>.arrow::after,.bs-popover-bottom>.arrow::after{top:1px;border-width:0 .5rem .5rem .5rem;border-bottom-color:#fff}.bs-popover-auto[x-placement^=bottom] .popover-header::before,.bs-popover-bottom .popover-header::before{position:absolute;top:0;left:50%;display:block;width:1rem;margin-left:-.5rem;content:\"\";border-bottom:1px solid #f7f7f7}.bs-popover-auto[x-placement^=left],.bs-popover-left{margin-right:.5rem}.bs-popover-auto[x-placement^=left]>.arrow,.bs-popover-left>.arrow{right:calc((.5rem + 1px) * -1);width:.5rem;height:1rem;margin:.3rem 0}.bs-popover-auto[x-placement^=left]>.arrow::before,.bs-popover-left>.arrow::before{right:0;border-width:.5rem 0 .5rem .5rem;border-left-color:rgba(0,0,0,.25)}.bs-popover-auto[x-placement^=left]>.arrow::after,.bs-popover-left>.arrow::after{right:1px;border-width:.5rem 0 .5rem .5rem;border-left-color:#fff}.popover-header{padding:.5rem .75rem;margin-bottom:0;font-size:1rem;background-color:#f7f7f7;border-bottom:1px solid #ebebeb;border-top-left-radius:calc(.3rem - 1px);border-top-right-radius:calc(.3rem - 1px)}.popover-header:empty{display:none}.popover-body{padding:.5rem .75rem;color:#212529}.carousel{position:relative}.carousel.pointer-event{-ms-touch-action:pan-y;touch-action:pan-y}.carousel-inner{position:relative;width:100%;overflow:hidden}.carousel-inner::after{display:block;clear:both;content:\"\"}.carousel-item{position:relative;display:none;float:left;width:100%;margin-right:-100%;-webkit-backface-visibility:hidden;backface-visibility:hidden;transition:-webkit-transform .6s ease-in-out;transition:transform .6s ease-in-out;transition:transform .6s ease-in-out,-webkit-transform .6s ease-in-out}@media (prefers-reduced-motion:reduce){.carousel-item{transition:none}}.carousel-item-next,.carousel-item-prev,.carousel-item.active{display:block}.active.carousel-item-right,.carousel-item-next:not(.carousel-item-left){-webkit-transform:translateX(100%);transform:translateX(100%)}.active.carousel-item-left,.carousel-item-prev:not(.carousel-item-right){-webkit-transform:translateX(-100%);transform:translateX(-100%)}.carousel-fade .carousel-item{opacity:0;transition-property:opacity;-webkit-transform:none;transform:none}.carousel-fade .carousel-item-next.carousel-item-left,.carousel-fade .carousel-item-prev.carousel-item-right,.carousel-fade .carousel-item.active{z-index:1;opacity:1}.carousel-fade .active.carousel-item-left,.carousel-fade .active.carousel-item-right{z-index:0;opacity:0;transition:0s .6s opacity}@media (prefers-reduced-motion:reduce){.carousel-fade .active.carousel-item-left,.carousel-fade .active.carousel-item-right{transition:none}}.carousel-control-next,.carousel-control-prev{position:absolute;top:0;bottom:0;z-index:1;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:15%;color:#fff;text-align:center;opacity:.5;transition:opacity .15s ease}@media (prefers-reduced-motion:reduce){.carousel-control-next,.carousel-control-prev{transition:none}}.carousel-control-next:focus,.carousel-control-next:hover,.carousel-control-prev:focus,.carousel-control-prev:hover{color:#fff;text-decoration:none;outline:0;opacity:.9}.carousel-control-prev{left:0}.carousel-control-next{right:0}.carousel-control-next-icon,.carousel-control-prev-icon{display:inline-block;width:20px;height:20px;background:no-repeat 50%/100% 100%}.carousel-control-prev-icon{background-image:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3e%3c/svg%3e\")}.carousel-control-next-icon{background-image:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3e%3c/svg%3e\")}.carousel-indicators{position:absolute;right:0;bottom:0;left:0;z-index:15;display:-ms-flexbox;display:flex;-ms-flex-pack:center;justify-content:center;padding-left:0;margin-right:15%;margin-left:15%;list-style:none}.carousel-indicators li{box-sizing:content-box;-ms-flex:0 1 auto;flex:0 1 auto;width:30px;height:3px;margin-right:3px;margin-left:3px;text-indent:-999px;cursor:pointer;background-color:#fff;background-clip:padding-box;border-top:10px solid transparent;border-bottom:10px solid transparent;opacity:.5;transition:opacity .6s ease}@media (prefers-reduced-motion:reduce){.carousel-indicators li{transition:none}}.carousel-indicators .active{opacity:1}.carousel-caption{position:absolute;right:15%;bottom:20px;left:15%;z-index:10;padding-top:20px;padding-bottom:20px;color:#fff;text-align:center}@-webkit-keyframes spinner-border{to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes spinner-border{to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}.spinner-border{display:inline-block;width:2rem;height:2rem;vertical-align:text-bottom;border:.25em solid currentColor;border-right-color:transparent;border-radius:50%;-webkit-animation:spinner-border .75s linear infinite;animation:spinner-border .75s linear infinite}.spinner-border-sm{width:1rem;height:1rem;border-width:.2em}@-webkit-keyframes spinner-grow{0%{-webkit-transform:scale(0);transform:scale(0)}50%{opacity:1}}@keyframes spinner-grow{0%{-webkit-transform:scale(0);transform:scale(0)}50%{opacity:1}}.spinner-grow{display:inline-block;width:2rem;height:2rem;vertical-align:text-bottom;background-color:currentColor;border-radius:50%;opacity:0;-webkit-animation:spinner-grow .75s linear infinite;animation:spinner-grow .75s linear infinite}.spinner-grow-sm{width:1rem;height:1rem}.align-baseline{vertical-align:baseline!important}.align-top{vertical-align:top!important}.align-middle{vertical-align:middle!important}.align-bottom{vertical-align:bottom!important}.align-text-bottom{vertical-align:text-bottom!important}.align-text-top{vertical-align:text-top!important}.bg-primary{background-color:#007bff!important}a.bg-primary:focus,a.bg-primary:hover,button.bg-primary:focus,button.bg-primary:hover{background-color:#0062cc!important}.bg-secondary{background-color:#6c757d!important}a.bg-secondary:focus,a.bg-secondary:hover,button.bg-secondary:focus,button.bg-secondary:hover{background-color:#545b62!important}.bg-success{background-color:#28a745!important}a.bg-success:focus,a.bg-success:hover,button.bg-success:focus,button.bg-success:hover{background-color:#1e7e34!important}.bg-info{background-color:#17a2b8!important}a.bg-info:focus,a.bg-info:hover,button.bg-info:focus,button.bg-info:hover{background-color:#117a8b!important}.bg-warning{background-color:#ffc107!important}a.bg-warning:focus,a.bg-warning:hover,button.bg-warning:focus,button.bg-warning:hover{background-color:#d39e00!important}.bg-danger{background-color:#dc3545!important}a.bg-danger:focus,a.bg-danger:hover,button.bg-danger:focus,button.bg-danger:hover{background-color:#bd2130!important}.bg-light{background-color:#f8f9fa!important}a.bg-light:focus,a.bg-light:hover,button.bg-light:focus,button.bg-light:hover{background-color:#dae0e5!important}.bg-dark{background-color:#343a40!important}a.bg-dark:focus,a.bg-dark:hover,button.bg-dark:focus,button.bg-dark:hover{background-color:#1d2124!important}.bg-white{background-color:#fff!important}.bg-transparent{background-color:transparent!important}.border{border:1px solid #dee2e6!important}.border-top{border-top:1px solid #dee2e6!important}.border-right{border-right:1px solid #dee2e6!important}.border-bottom{border-bottom:1px solid #dee2e6!important}.border-left{border-left:1px solid #dee2e6!important}.border-0{border:0!important}.border-top-0{border-top:0!important}.border-right-0{border-right:0!important}.border-bottom-0{border-bottom:0!important}.border-left-0{border-left:0!important}.border-primary{border-color:#007bff!important}.border-secondary{border-color:#6c757d!important}.border-success{border-color:#28a745!important}.border-info{border-color:#17a2b8!important}.border-warning{border-color:#ffc107!important}.border-danger{border-color:#dc3545!important}.border-light{border-color:#f8f9fa!important}.border-dark{border-color:#343a40!important}.border-white{border-color:#fff!important}.rounded-sm{border-radius:.2rem!important}.rounded{border-radius:.25rem!important}.rounded-top{border-top-left-radius:.25rem!important;border-top-right-radius:.25rem!important}.rounded-right{border-top-right-radius:.25rem!important;border-bottom-right-radius:.25rem!important}.rounded-bottom{border-bottom-right-radius:.25rem!important;border-bottom-left-radius:.25rem!important}.rounded-left{border-top-left-radius:.25rem!important;border-bottom-left-radius:.25rem!important}.rounded-lg{border-radius:.3rem!important}.rounded-circle{border-radius:50%!important}.rounded-pill{border-radius:50rem!important}.rounded-0{border-radius:0!important}.clearfix::after{display:block;clear:both;content:\"\"}.d-none{display:none!important}.d-inline{display:inline!important}.d-inline-block{display:inline-block!important}.d-block{display:block!important}.d-table{display:table!important}.d-table-row{display:table-row!important}.d-table-cell{display:table-cell!important}.d-flex{display:-ms-flexbox!important;display:flex!important}.d-inline-flex{display:-ms-inline-flexbox!important;display:inline-flex!important}@media (min-width:576px){.d-sm-none{display:none!important}.d-sm-inline{display:inline!important}.d-sm-inline-block{display:inline-block!important}.d-sm-block{display:block!important}.d-sm-table{display:table!important}.d-sm-table-row{display:table-row!important}.d-sm-table-cell{display:table-cell!important}.d-sm-flex{display:-ms-flexbox!important;display:flex!important}.d-sm-inline-flex{display:-ms-inline-flexbox!important;display:inline-flex!important}}@media (min-width:768px){.d-md-none{display:none!important}.d-md-inline{display:inline!important}.d-md-inline-block{display:inline-block!important}.d-md-block{display:block!important}.d-md-table{display:table!important}.d-md-table-row{display:table-row!important}.d-md-table-cell{display:table-cell!important}.d-md-flex{display:-ms-flexbox!important;display:flex!important}.d-md-inline-flex{display:-ms-inline-flexbox!important;display:inline-flex!important}}@media (min-width:992px){.d-lg-none{display:none!important}.d-lg-inline{display:inline!important}.d-lg-inline-block{display:inline-block!important}.d-lg-block{display:block!important}.d-lg-table{display:table!important}.d-lg-table-row{display:table-row!important}.d-lg-table-cell{display:table-cell!important}.d-lg-flex{display:-ms-flexbox!important;display:flex!important}.d-lg-inline-flex{display:-ms-inline-flexbox!important;display:inline-flex!important}}@media (min-width:1200px){.d-xl-none{display:none!important}.d-xl-inline{display:inline!important}.d-xl-inline-block{display:inline-block!important}.d-xl-block{display:block!important}.d-xl-table{display:table!important}.d-xl-table-row{display:table-row!important}.d-xl-table-cell{display:table-cell!important}.d-xl-flex{display:-ms-flexbox!important;display:flex!important}.d-xl-inline-flex{display:-ms-inline-flexbox!important;display:inline-flex!important}}@media print{.d-print-none{display:none!important}.d-print-inline{display:inline!important}.d-print-inline-block{display:inline-block!important}.d-print-block{display:block!important}.d-print-table{display:table!important}.d-print-table-row{display:table-row!important}.d-print-table-cell{display:table-cell!important}.d-print-flex{display:-ms-flexbox!important;display:flex!important}.d-print-inline-flex{display:-ms-inline-flexbox!important;display:inline-flex!important}}.embed-responsive{position:relative;display:block;width:100%;padding:0;overflow:hidden}.embed-responsive::before{display:block;content:\"\"}.embed-responsive .embed-responsive-item,.embed-responsive embed,.embed-responsive iframe,.embed-responsive object,.embed-responsive video{position:absolute;top:0;bottom:0;left:0;width:100%;height:100%;border:0}.embed-responsive-21by9::before{padding-top:42.857143%}.embed-responsive-16by9::before{padding-top:56.25%}.embed-responsive-4by3::before{padding-top:75%}.embed-responsive-1by1::before{padding-top:100%}.flex-row{-ms-flex-direction:row!important;flex-direction:row!important}.flex-column{-ms-flex-direction:column!important;flex-direction:column!important}.flex-row-reverse{-ms-flex-direction:row-reverse!important;flex-direction:row-reverse!important}.flex-column-reverse{-ms-flex-direction:column-reverse!important;flex-direction:column-reverse!important}.flex-wrap{-ms-flex-wrap:wrap!important;flex-wrap:wrap!important}.flex-nowrap{-ms-flex-wrap:nowrap!important;flex-wrap:nowrap!important}.flex-wrap-reverse{-ms-flex-wrap:wrap-reverse!important;flex-wrap:wrap-reverse!important}.flex-fill{-ms-flex:1 1 auto!important;flex:1 1 auto!important}.flex-grow-0{-ms-flex-positive:0!important;flex-grow:0!important}.flex-grow-1{-ms-flex-positive:1!important;flex-grow:1!important}.flex-shrink-0{-ms-flex-negative:0!important;flex-shrink:0!important}.flex-shrink-1{-ms-flex-negative:1!important;flex-shrink:1!important}.justify-content-start{-ms-flex-pack:start!important;justify-content:flex-start!important}.justify-content-end{-ms-flex-pack:end!important;justify-content:flex-end!important}.justify-content-center{-ms-flex-pack:center!important;justify-content:center!important}.justify-content-between{-ms-flex-pack:justify!important;justify-content:space-between!important}.justify-content-around{-ms-flex-pack:distribute!important;justify-content:space-around!important}.align-items-start{-ms-flex-align:start!important;align-items:flex-start!important}.align-items-end{-ms-flex-align:end!important;align-items:flex-end!important}.align-items-center{-ms-flex-align:center!important;align-items:center!important}.align-items-baseline{-ms-flex-align:baseline!important;align-items:baseline!important}.align-items-stretch{-ms-flex-align:stretch!important;align-items:stretch!important}.align-content-start{-ms-flex-line-pack:start!important;align-content:flex-start!important}.align-content-end{-ms-flex-line-pack:end!important;align-content:flex-end!important}.align-content-center{-ms-flex-line-pack:center!important;align-content:center!important}.align-content-between{-ms-flex-line-pack:justify!important;align-content:space-between!important}.align-content-around{-ms-flex-line-pack:distribute!important;align-content:space-around!important}.align-content-stretch{-ms-flex-line-pack:stretch!important;align-content:stretch!important}.align-self-auto{-ms-flex-item-align:auto!important;align-self:auto!important}.align-self-start{-ms-flex-item-align:start!important;align-self:flex-start!important}.align-self-end{-ms-flex-item-align:end!important;align-self:flex-end!important}.align-self-center{-ms-flex-item-align:center!important;align-self:center!important}.align-self-baseline{-ms-flex-item-align:baseline!important;align-self:baseline!important}.align-self-stretch{-ms-flex-item-align:stretch!important;align-self:stretch!important}@media (min-width:576px){.flex-sm-row{-ms-flex-direction:row!important;flex-direction:row!important}.flex-sm-column{-ms-flex-direction:column!important;flex-direction:column!important}.flex-sm-row-reverse{-ms-flex-direction:row-reverse!important;flex-direction:row-reverse!important}.flex-sm-column-reverse{-ms-flex-direction:column-reverse!important;flex-direction:column-reverse!important}.flex-sm-wrap{-ms-flex-wrap:wrap!important;flex-wrap:wrap!important}.flex-sm-nowrap{-ms-flex-wrap:nowrap!important;flex-wrap:nowrap!important}.flex-sm-wrap-reverse{-ms-flex-wrap:wrap-reverse!important;flex-wrap:wrap-reverse!important}.flex-sm-fill{-ms-flex:1 1 auto!important;flex:1 1 auto!important}.flex-sm-grow-0{-ms-flex-positive:0!important;flex-grow:0!important}.flex-sm-grow-1{-ms-flex-positive:1!important;flex-grow:1!important}.flex-sm-shrink-0{-ms-flex-negative:0!important;flex-shrink:0!important}.flex-sm-shrink-1{-ms-flex-negative:1!important;flex-shrink:1!important}.justify-content-sm-start{-ms-flex-pack:start!important;justify-content:flex-start!important}.justify-content-sm-end{-ms-flex-pack:end!important;justify-content:flex-end!important}.justify-content-sm-center{-ms-flex-pack:center!important;justify-content:center!important}.justify-content-sm-between{-ms-flex-pack:justify!important;justify-content:space-between!important}.justify-content-sm-around{-ms-flex-pack:distribute!important;justify-content:space-around!important}.align-items-sm-start{-ms-flex-align:start!important;align-items:flex-start!important}.align-items-sm-end{-ms-flex-align:end!important;align-items:flex-end!important}.align-items-sm-center{-ms-flex-align:center!important;align-items:center!important}.align-items-sm-baseline{-ms-flex-align:baseline!important;align-items:baseline!important}.align-items-sm-stretch{-ms-flex-align:stretch!important;align-items:stretch!important}.align-content-sm-start{-ms-flex-line-pack:start!important;align-content:flex-start!important}.align-content-sm-end{-ms-flex-line-pack:end!important;align-content:flex-end!important}.align-content-sm-center{-ms-flex-line-pack:center!important;align-content:center!important}.align-content-sm-between{-ms-flex-line-pack:justify!important;align-content:space-between!important}.align-content-sm-around{-ms-flex-line-pack:distribute!important;align-content:space-around!important}.align-content-sm-stretch{-ms-flex-line-pack:stretch!important;align-content:stretch!important}.align-self-sm-auto{-ms-flex-item-align:auto!important;align-self:auto!important}.align-self-sm-start{-ms-flex-item-align:start!important;align-self:flex-start!important}.align-self-sm-end{-ms-flex-item-align:end!important;align-self:flex-end!important}.align-self-sm-center{-ms-flex-item-align:center!important;align-self:center!important}.align-self-sm-baseline{-ms-flex-item-align:baseline!important;align-self:baseline!important}.align-self-sm-stretch{-ms-flex-item-align:stretch!important;align-self:stretch!important}}@media (min-width:768px){.flex-md-row{-ms-flex-direction:row!important;flex-direction:row!important}.flex-md-column{-ms-flex-direction:column!important;flex-direction:column!important}.flex-md-row-reverse{-ms-flex-direction:row-reverse!important;flex-direction:row-reverse!important}.flex-md-column-reverse{-ms-flex-direction:column-reverse!important;flex-direction:column-reverse!important}.flex-md-wrap{-ms-flex-wrap:wrap!important;flex-wrap:wrap!important}.flex-md-nowrap{-ms-flex-wrap:nowrap!important;flex-wrap:nowrap!important}.flex-md-wrap-reverse{-ms-flex-wrap:wrap-reverse!important;flex-wrap:wrap-reverse!important}.flex-md-fill{-ms-flex:1 1 auto!important;flex:1 1 auto!important}.flex-md-grow-0{-ms-flex-positive:0!important;flex-grow:0!important}.flex-md-grow-1{-ms-flex-positive:1!important;flex-grow:1!important}.flex-md-shrink-0{-ms-flex-negative:0!important;flex-shrink:0!important}.flex-md-shrink-1{-ms-flex-negative:1!important;flex-shrink:1!important}.justify-content-md-start{-ms-flex-pack:start!important;justify-content:flex-start!important}.justify-content-md-end{-ms-flex-pack:end!important;justify-content:flex-end!important}.justify-content-md-center{-ms-flex-pack:center!important;justify-content:center!important}.justify-content-md-between{-ms-flex-pack:justify!important;justify-content:space-between!important}.justify-content-md-around{-ms-flex-pack:distribute!important;justify-content:space-around!important}.align-items-md-start{-ms-flex-align:start!important;align-items:flex-start!important}.align-items-md-end{-ms-flex-align:end!important;align-items:flex-end!important}.align-items-md-center{-ms-flex-align:center!important;align-items:center!important}.align-items-md-baseline{-ms-flex-align:baseline!important;align-items:baseline!important}.align-items-md-stretch{-ms-flex-align:stretch!important;align-items:stretch!important}.align-content-md-start{-ms-flex-line-pack:start!important;align-content:flex-start!important}.align-content-md-end{-ms-flex-line-pack:end!important;align-content:flex-end!important}.align-content-md-center{-ms-flex-line-pack:center!important;align-content:center!important}.align-content-md-between{-ms-flex-line-pack:justify!important;align-content:space-between!important}.align-content-md-around{-ms-flex-line-pack:distribute!important;align-content:space-around!important}.align-content-md-stretch{-ms-flex-line-pack:stretch!important;align-content:stretch!important}.align-self-md-auto{-ms-flex-item-align:auto!important;align-self:auto!important}.align-self-md-start{-ms-flex-item-align:start!important;align-self:flex-start!important}.align-self-md-end{-ms-flex-item-align:end!important;align-self:flex-end!important}.align-self-md-center{-ms-flex-item-align:center!important;align-self:center!important}.align-self-md-baseline{-ms-flex-item-align:baseline!important;align-self:baseline!important}.align-self-md-stretch{-ms-flex-item-align:stretch!important;align-self:stretch!important}}@media (min-width:992px){.flex-lg-row{-ms-flex-direction:row!important;flex-direction:row!important}.flex-lg-column{-ms-flex-direction:column!important;flex-direction:column!important}.flex-lg-row-reverse{-ms-flex-direction:row-reverse!important;flex-direction:row-reverse!important}.flex-lg-column-reverse{-ms-flex-direction:column-reverse!important;flex-direction:column-reverse!important}.flex-lg-wrap{-ms-flex-wrap:wrap!important;flex-wrap:wrap!important}.flex-lg-nowrap{-ms-flex-wrap:nowrap!important;flex-wrap:nowrap!important}.flex-lg-wrap-reverse{-ms-flex-wrap:wrap-reverse!important;flex-wrap:wrap-reverse!important}.flex-lg-fill{-ms-flex:1 1 auto!important;flex:1 1 auto!important}.flex-lg-grow-0{-ms-flex-positive:0!important;flex-grow:0!important}.flex-lg-grow-1{-ms-flex-positive:1!important;flex-grow:1!important}.flex-lg-shrink-0{-ms-flex-negative:0!important;flex-shrink:0!important}.flex-lg-shrink-1{-ms-flex-negative:1!important;flex-shrink:1!important}.justify-content-lg-start{-ms-flex-pack:start!important;justify-content:flex-start!important}.justify-content-lg-end{-ms-flex-pack:end!important;justify-content:flex-end!important}.justify-content-lg-center{-ms-flex-pack:center!important;justify-content:center!important}.justify-content-lg-between{-ms-flex-pack:justify!important;justify-content:space-between!important}.justify-content-lg-around{-ms-flex-pack:distribute!important;justify-content:space-around!important}.align-items-lg-start{-ms-flex-align:start!important;align-items:flex-start!important}.align-items-lg-end{-ms-flex-align:end!important;align-items:flex-end!important}.align-items-lg-center{-ms-flex-align:center!important;align-items:center!important}.align-items-lg-baseline{-ms-flex-align:baseline!important;align-items:baseline!important}.align-items-lg-stretch{-ms-flex-align:stretch!important;align-items:stretch!important}.align-content-lg-start{-ms-flex-line-pack:start!important;align-content:flex-start!important}.align-content-lg-end{-ms-flex-line-pack:end!important;align-content:flex-end!important}.align-content-lg-center{-ms-flex-line-pack:center!important;align-content:center!important}.align-content-lg-between{-ms-flex-line-pack:justify!important;align-content:space-between!important}.align-content-lg-around{-ms-flex-line-pack:distribute!important;align-content:space-around!important}.align-content-lg-stretch{-ms-flex-line-pack:stretch!important;align-content:stretch!important}.align-self-lg-auto{-ms-flex-item-align:auto!important;align-self:auto!important}.align-self-lg-start{-ms-flex-item-align:start!important;align-self:flex-start!important}.align-self-lg-end{-ms-flex-item-align:end!important;align-self:flex-end!important}.align-self-lg-center{-ms-flex-item-align:center!important;align-self:center!important}.align-self-lg-baseline{-ms-flex-item-align:baseline!important;align-self:baseline!important}.align-self-lg-stretch{-ms-flex-item-align:stretch!important;align-self:stretch!important}}@media (min-width:1200px){.flex-xl-row{-ms-flex-direction:row!important;flex-direction:row!important}.flex-xl-column{-ms-flex-direction:column!important;flex-direction:column!important}.flex-xl-row-reverse{-ms-flex-direction:row-reverse!important;flex-direction:row-reverse!important}.flex-xl-column-reverse{-ms-flex-direction:column-reverse!important;flex-direction:column-reverse!important}.flex-xl-wrap{-ms-flex-wrap:wrap!important;flex-wrap:wrap!important}.flex-xl-nowrap{-ms-flex-wrap:nowrap!important;flex-wrap:nowrap!important}.flex-xl-wrap-reverse{-ms-flex-wrap:wrap-reverse!important;flex-wrap:wrap-reverse!important}.flex-xl-fill{-ms-flex:1 1 auto!important;flex:1 1 auto!important}.flex-xl-grow-0{-ms-flex-positive:0!important;flex-grow:0!important}.flex-xl-grow-1{-ms-flex-positive:1!important;flex-grow:1!important}.flex-xl-shrink-0{-ms-flex-negative:0!important;flex-shrink:0!important}.flex-xl-shrink-1{-ms-flex-negative:1!important;flex-shrink:1!important}.justify-content-xl-start{-ms-flex-pack:start!important;justify-content:flex-start!important}.justify-content-xl-end{-ms-flex-pack:end!important;justify-content:flex-end!important}.justify-content-xl-center{-ms-flex-pack:center!important;justify-content:center!important}.justify-content-xl-between{-ms-flex-pack:justify!important;justify-content:space-between!important}.justify-content-xl-around{-ms-flex-pack:distribute!important;justify-content:space-around!important}.align-items-xl-start{-ms-flex-align:start!important;align-items:flex-start!important}.align-items-xl-end{-ms-flex-align:end!important;align-items:flex-end!important}.align-items-xl-center{-ms-flex-align:center!important;align-items:center!important}.align-items-xl-baseline{-ms-flex-align:baseline!important;align-items:baseline!important}.align-items-xl-stretch{-ms-flex-align:stretch!important;align-items:stretch!important}.align-content-xl-start{-ms-flex-line-pack:start!important;align-content:flex-start!important}.align-content-xl-end{-ms-flex-line-pack:end!important;align-content:flex-end!important}.align-content-xl-center{-ms-flex-line-pack:center!important;align-content:center!important}.align-content-xl-between{-ms-flex-line-pack:justify!important;align-content:space-between!important}.align-content-xl-around{-ms-flex-line-pack:distribute!important;align-content:space-around!important}.align-content-xl-stretch{-ms-flex-line-pack:stretch!important;align-content:stretch!important}.align-self-xl-auto{-ms-flex-item-align:auto!important;align-self:auto!important}.align-self-xl-start{-ms-flex-item-align:start!important;align-self:flex-start!important}.align-self-xl-end{-ms-flex-item-align:end!important;align-self:flex-end!important}.align-self-xl-center{-ms-flex-item-align:center!important;align-self:center!important}.align-self-xl-baseline{-ms-flex-item-align:baseline!important;align-self:baseline!important}.align-self-xl-stretch{-ms-flex-item-align:stretch!important;align-self:stretch!important}}.float-left{float:left!important}.float-right{float:right!important}.float-none{float:none!important}@media (min-width:576px){.float-sm-left{float:left!important}.float-sm-right{float:right!important}.float-sm-none{float:none!important}}@media (min-width:768px){.float-md-left{float:left!important}.float-md-right{float:right!important}.float-md-none{float:none!important}}@media (min-width:992px){.float-lg-left{float:left!important}.float-lg-right{float:right!important}.float-lg-none{float:none!important}}@media (min-width:1200px){.float-xl-left{float:left!important}.float-xl-right{float:right!important}.float-xl-none{float:none!important}}.overflow-auto{overflow:auto!important}.overflow-hidden{overflow:hidden!important}.position-static{position:static!important}.position-relative{position:relative!important}.position-absolute{position:absolute!important}.position-fixed{position:fixed!important}.position-sticky{position:-webkit-sticky!important;position:sticky!important}.fixed-top{position:fixed;top:0;right:0;left:0;z-index:1030}.fixed-bottom{position:fixed;right:0;bottom:0;left:0;z-index:1030}@supports ((position:-webkit-sticky) or (position:sticky)){.sticky-top{position:-webkit-sticky;position:sticky;top:0;z-index:1020}}.sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.sr-only-focusable:active,.sr-only-focusable:focus{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal}.shadow-sm{box-shadow:0 .125rem .25rem rgba(0,0,0,.075)!important}.shadow{box-shadow:0 .5rem 1rem rgba(0,0,0,.15)!important}.shadow-lg{box-shadow:0 1rem 3rem rgba(0,0,0,.175)!important}.shadow-none{box-shadow:none!important}.w-25{width:25%!important}.w-50{width:50%!important}.w-75{width:75%!important}.w-100{width:100%!important}.w-auto{width:auto!important}.h-25{height:25%!important}.h-50{height:50%!important}.h-75{height:75%!important}.h-100{height:100%!important}.h-auto{height:auto!important}.mw-100{max-width:100%!important}.mh-100{max-height:100%!important}.min-vw-100{min-width:100vw!important}.min-vh-100{min-height:100vh!important}.vw-100{width:100vw!important}.vh-100{height:100vh!important}.stretched-link::after{position:absolute;top:0;right:0;bottom:0;left:0;z-index:1;pointer-events:auto;content:\"\";background-color:rgba(0,0,0,0)}.m-0{margin:0!important}.mt-0,.my-0{margin-top:0!important}.mr-0,.mx-0{margin-right:0!important}.mb-0,.my-0{margin-bottom:0!important}.ml-0,.mx-0{margin-left:0!important}.m-1{margin:.25rem!important}.mt-1,.my-1{margin-top:.25rem!important}.mr-1,.mx-1{margin-right:.25rem!important}.mb-1,.my-1{margin-bottom:.25rem!important}.ml-1,.mx-1{margin-left:.25rem!important}.m-2{margin:.5rem!important}.mt-2,.my-2{margin-top:.5rem!important}.mr-2,.mx-2{margin-right:.5rem!important}.mb-2,.my-2{margin-bottom:.5rem!important}.ml-2,.mx-2{margin-left:.5rem!important}.m-3{margin:1rem!important}.mt-3,.my-3{margin-top:1rem!important}.mr-3,.mx-3{margin-right:1rem!important}.mb-3,.my-3{margin-bottom:1rem!important}.ml-3,.mx-3{margin-left:1rem!important}.m-4{margin:1.5rem!important}.mt-4,.my-4{margin-top:1.5rem!important}.mr-4,.mx-4{margin-right:1.5rem!important}.mb-4,.my-4{margin-bottom:1.5rem!important}.ml-4,.mx-4{margin-left:1.5rem!important}.m-5{margin:3rem!important}.mt-5,.my-5{margin-top:3rem!important}.mr-5,.mx-5{margin-right:3rem!important}.mb-5,.my-5{margin-bottom:3rem!important}.ml-5,.mx-5{margin-left:3rem!important}.p-0{padding:0!important}.pt-0,.py-0{padding-top:0!important}.pr-0,.px-0{padding-right:0!important}.pb-0,.py-0{padding-bottom:0!important}.pl-0,.px-0{padding-left:0!important}.p-1{padding:.25rem!important}.pt-1,.py-1{padding-top:.25rem!important}.pr-1,.px-1{padding-right:.25rem!important}.pb-1,.py-1{padding-bottom:.25rem!important}.pl-1,.px-1{padding-left:.25rem!important}.p-2{padding:.5rem!important}.pt-2,.py-2{padding-top:.5rem!important}.pr-2,.px-2{padding-right:.5rem!important}.pb-2,.py-2{padding-bottom:.5rem!important}.pl-2,.px-2{padding-left:.5rem!important}.p-3{padding:1rem!important}.pt-3,.py-3{padding-top:1rem!important}.pr-3,.px-3{padding-right:1rem!important}.pb-3,.py-3{padding-bottom:1rem!important}.pl-3,.px-3{padding-left:1rem!important}.p-4{padding:1.5rem!important}.pt-4,.py-4{padding-top:1.5rem!important}.pr-4,.px-4{padding-right:1.5rem!important}.pb-4,.py-4{padding-bottom:1.5rem!important}.pl-4,.px-4{padding-left:1.5rem!important}.p-5{padding:3rem!important}.pt-5,.py-5{padding-top:3rem!important}.pr-5,.px-5{padding-right:3rem!important}.pb-5,.py-5{padding-bottom:3rem!important}.pl-5,.px-5{padding-left:3rem!important}.m-n1{margin:-.25rem!important}.mt-n1,.my-n1{margin-top:-.25rem!important}.mr-n1,.mx-n1{margin-right:-.25rem!important}.mb-n1,.my-n1{margin-bottom:-.25rem!important}.ml-n1,.mx-n1{margin-left:-.25rem!important}.m-n2{margin:-.5rem!important}.mt-n2,.my-n2{margin-top:-.5rem!important}.mr-n2,.mx-n2{margin-right:-.5rem!important}.mb-n2,.my-n2{margin-bottom:-.5rem!important}.ml-n2,.mx-n2{margin-left:-.5rem!important}.m-n3{margin:-1rem!important}.mt-n3,.my-n3{margin-top:-1rem!important}.mr-n3,.mx-n3{margin-right:-1rem!important}.mb-n3,.my-n3{margin-bottom:-1rem!important}.ml-n3,.mx-n3{margin-left:-1rem!important}.m-n4{margin:-1.5rem!important}.mt-n4,.my-n4{margin-top:-1.5rem!important}.mr-n4,.mx-n4{margin-right:-1.5rem!important}.mb-n4,.my-n4{margin-bottom:-1.5rem!important}.ml-n4,.mx-n4{margin-left:-1.5rem!important}.m-n5{margin:-3rem!important}.mt-n5,.my-n5{margin-top:-3rem!important}.mr-n5,.mx-n5{margin-right:-3rem!important}.mb-n5,.my-n5{margin-bottom:-3rem!important}.ml-n5,.mx-n5{margin-left:-3rem!important}.m-auto{margin:auto!important}.mt-auto,.my-auto{margin-top:auto!important}.mr-auto,.mx-auto{margin-right:auto!important}.mb-auto,.my-auto{margin-bottom:auto!important}.ml-auto,.mx-auto{margin-left:auto!important}@media (min-width:576px){.m-sm-0{margin:0!important}.mt-sm-0,.my-sm-0{margin-top:0!important}.mr-sm-0,.mx-sm-0{margin-right:0!important}.mb-sm-0,.my-sm-0{margin-bottom:0!important}.ml-sm-0,.mx-sm-0{margin-left:0!important}.m-sm-1{margin:.25rem!important}.mt-sm-1,.my-sm-1{margin-top:.25rem!important}.mr-sm-1,.mx-sm-1{margin-right:.25rem!important}.mb-sm-1,.my-sm-1{margin-bottom:.25rem!important}.ml-sm-1,.mx-sm-1{margin-left:.25rem!important}.m-sm-2{margin:.5rem!important}.mt-sm-2,.my-sm-2{margin-top:.5rem!important}.mr-sm-2,.mx-sm-2{margin-right:.5rem!important}.mb-sm-2,.my-sm-2{margin-bottom:.5rem!important}.ml-sm-2,.mx-sm-2{margin-left:.5rem!important}.m-sm-3{margin:1rem!important}.mt-sm-3,.my-sm-3{margin-top:1rem!important}.mr-sm-3,.mx-sm-3{margin-right:1rem!important}.mb-sm-3,.my-sm-3{margin-bottom:1rem!important}.ml-sm-3,.mx-sm-3{margin-left:1rem!important}.m-sm-4{margin:1.5rem!important}.mt-sm-4,.my-sm-4{margin-top:1.5rem!important}.mr-sm-4,.mx-sm-4{margin-right:1.5rem!important}.mb-sm-4,.my-sm-4{margin-bottom:1.5rem!important}.ml-sm-4,.mx-sm-4{margin-left:1.5rem!important}.m-sm-5{margin:3rem!important}.mt-sm-5,.my-sm-5{margin-top:3rem!important}.mr-sm-5,.mx-sm-5{margin-right:3rem!important}.mb-sm-5,.my-sm-5{margin-bottom:3rem!important}.ml-sm-5,.mx-sm-5{margin-left:3rem!important}.p-sm-0{padding:0!important}.pt-sm-0,.py-sm-0{padding-top:0!important}.pr-sm-0,.px-sm-0{padding-right:0!important}.pb-sm-0,.py-sm-0{padding-bottom:0!important}.pl-sm-0,.px-sm-0{padding-left:0!important}.p-sm-1{padding:.25rem!important}.pt-sm-1,.py-sm-1{padding-top:.25rem!important}.pr-sm-1,.px-sm-1{padding-right:.25rem!important}.pb-sm-1,.py-sm-1{padding-bottom:.25rem!important}.pl-sm-1,.px-sm-1{padding-left:.25rem!important}.p-sm-2{padding:.5rem!important}.pt-sm-2,.py-sm-2{padding-top:.5rem!important}.pr-sm-2,.px-sm-2{padding-right:.5rem!important}.pb-sm-2,.py-sm-2{padding-bottom:.5rem!important}.pl-sm-2,.px-sm-2{padding-left:.5rem!important}.p-sm-3{padding:1rem!important}.pt-sm-3,.py-sm-3{padding-top:1rem!important}.pr-sm-3,.px-sm-3{padding-right:1rem!important}.pb-sm-3,.py-sm-3{padding-bottom:1rem!important}.pl-sm-3,.px-sm-3{padding-left:1rem!important}.p-sm-4{padding:1.5rem!important}.pt-sm-4,.py-sm-4{padding-top:1.5rem!important}.pr-sm-4,.px-sm-4{padding-right:1.5rem!important}.pb-sm-4,.py-sm-4{padding-bottom:1.5rem!important}.pl-sm-4,.px-sm-4{padding-left:1.5rem!important}.p-sm-5{padding:3rem!important}.pt-sm-5,.py-sm-5{padding-top:3rem!important}.pr-sm-5,.px-sm-5{padding-right:3rem!important}.pb-sm-5,.py-sm-5{padding-bottom:3rem!important}.pl-sm-5,.px-sm-5{padding-left:3rem!important}.m-sm-n1{margin:-.25rem!important}.mt-sm-n1,.my-sm-n1{margin-top:-.25rem!important}.mr-sm-n1,.mx-sm-n1{margin-right:-.25rem!important}.mb-sm-n1,.my-sm-n1{margin-bottom:-.25rem!important}.ml-sm-n1,.mx-sm-n1{margin-left:-.25rem!important}.m-sm-n2{margin:-.5rem!important}.mt-sm-n2,.my-sm-n2{margin-top:-.5rem!important}.mr-sm-n2,.mx-sm-n2{margin-right:-.5rem!important}.mb-sm-n2,.my-sm-n2{margin-bottom:-.5rem!important}.ml-sm-n2,.mx-sm-n2{margin-left:-.5rem!important}.m-sm-n3{margin:-1rem!important}.mt-sm-n3,.my-sm-n3{margin-top:-1rem!important}.mr-sm-n3,.mx-sm-n3{margin-right:-1rem!important}.mb-sm-n3,.my-sm-n3{margin-bottom:-1rem!important}.ml-sm-n3,.mx-sm-n3{margin-left:-1rem!important}.m-sm-n4{margin:-1.5rem!important}.mt-sm-n4,.my-sm-n4{margin-top:-1.5rem!important}.mr-sm-n4,.mx-sm-n4{margin-right:-1.5rem!important}.mb-sm-n4,.my-sm-n4{margin-bottom:-1.5rem!important}.ml-sm-n4,.mx-sm-n4{margin-left:-1.5rem!important}.m-sm-n5{margin:-3rem!important}.mt-sm-n5,.my-sm-n5{margin-top:-3rem!important}.mr-sm-n5,.mx-sm-n5{margin-right:-3rem!important}.mb-sm-n5,.my-sm-n5{margin-bottom:-3rem!important}.ml-sm-n5,.mx-sm-n5{margin-left:-3rem!important}.m-sm-auto{margin:auto!important}.mt-sm-auto,.my-sm-auto{margin-top:auto!important}.mr-sm-auto,.mx-sm-auto{margin-right:auto!important}.mb-sm-auto,.my-sm-auto{margin-bottom:auto!important}.ml-sm-auto,.mx-sm-auto{margin-left:auto!important}}@media (min-width:768px){.m-md-0{margin:0!important}.mt-md-0,.my-md-0{margin-top:0!important}.mr-md-0,.mx-md-0{margin-right:0!important}.mb-md-0,.my-md-0{margin-bottom:0!important}.ml-md-0,.mx-md-0{margin-left:0!important}.m-md-1{margin:.25rem!important}.mt-md-1,.my-md-1{margin-top:.25rem!important}.mr-md-1,.mx-md-1{margin-right:.25rem!important}.mb-md-1,.my-md-1{margin-bottom:.25rem!important}.ml-md-1,.mx-md-1{margin-left:.25rem!important}.m-md-2{margin:.5rem!important}.mt-md-2,.my-md-2{margin-top:.5rem!important}.mr-md-2,.mx-md-2{margin-right:.5rem!important}.mb-md-2,.my-md-2{margin-bottom:.5rem!important}.ml-md-2,.mx-md-2{margin-left:.5rem!important}.m-md-3{margin:1rem!important}.mt-md-3,.my-md-3{margin-top:1rem!important}.mr-md-3,.mx-md-3{margin-right:1rem!important}.mb-md-3,.my-md-3{margin-bottom:1rem!important}.ml-md-3,.mx-md-3{margin-left:1rem!important}.m-md-4{margin:1.5rem!important}.mt-md-4,.my-md-4{margin-top:1.5rem!important}.mr-md-4,.mx-md-4{margin-right:1.5rem!important}.mb-md-4,.my-md-4{margin-bottom:1.5rem!important}.ml-md-4,.mx-md-4{margin-left:1.5rem!important}.m-md-5{margin:3rem!important}.mt-md-5,.my-md-5{margin-top:3rem!important}.mr-md-5,.mx-md-5{margin-right:3rem!important}.mb-md-5,.my-md-5{margin-bottom:3rem!important}.ml-md-5,.mx-md-5{margin-left:3rem!important}.p-md-0{padding:0!important}.pt-md-0,.py-md-0{padding-top:0!important}.pr-md-0,.px-md-0{padding-right:0!important}.pb-md-0,.py-md-0{padding-bottom:0!important}.pl-md-0,.px-md-0{padding-left:0!important}.p-md-1{padding:.25rem!important}.pt-md-1,.py-md-1{padding-top:.25rem!important}.pr-md-1,.px-md-1{padding-right:.25rem!important}.pb-md-1,.py-md-1{padding-bottom:.25rem!important}.pl-md-1,.px-md-1{padding-left:.25rem!important}.p-md-2{padding:.5rem!important}.pt-md-2,.py-md-2{padding-top:.5rem!important}.pr-md-2,.px-md-2{padding-right:.5rem!important}.pb-md-2,.py-md-2{padding-bottom:.5rem!important}.pl-md-2,.px-md-2{padding-left:.5rem!important}.p-md-3{padding:1rem!important}.pt-md-3,.py-md-3{padding-top:1rem!important}.pr-md-3,.px-md-3{padding-right:1rem!important}.pb-md-3,.py-md-3{padding-bottom:1rem!important}.pl-md-3,.px-md-3{padding-left:1rem!important}.p-md-4{padding:1.5rem!important}.pt-md-4,.py-md-4{padding-top:1.5rem!important}.pr-md-4,.px-md-4{padding-right:1.5rem!important}.pb-md-4,.py-md-4{padding-bottom:1.5rem!important}.pl-md-4,.px-md-4{padding-left:1.5rem!important}.p-md-5{padding:3rem!important}.pt-md-5,.py-md-5{padding-top:3rem!important}.pr-md-5,.px-md-5{padding-right:3rem!important}.pb-md-5,.py-md-5{padding-bottom:3rem!important}.pl-md-5,.px-md-5{padding-left:3rem!important}.m-md-n1{margin:-.25rem!important}.mt-md-n1,.my-md-n1{margin-top:-.25rem!important}.mr-md-n1,.mx-md-n1{margin-right:-.25rem!important}.mb-md-n1,.my-md-n1{margin-bottom:-.25rem!important}.ml-md-n1,.mx-md-n1{margin-left:-.25rem!important}.m-md-n2{margin:-.5rem!important}.mt-md-n2,.my-md-n2{margin-top:-.5rem!important}.mr-md-n2,.mx-md-n2{margin-right:-.5rem!important}.mb-md-n2,.my-md-n2{margin-bottom:-.5rem!important}.ml-md-n2,.mx-md-n2{margin-left:-.5rem!important}.m-md-n3{margin:-1rem!important}.mt-md-n3,.my-md-n3{margin-top:-1rem!important}.mr-md-n3,.mx-md-n3{margin-right:-1rem!important}.mb-md-n3,.my-md-n3{margin-bottom:-1rem!important}.ml-md-n3,.mx-md-n3{margin-left:-1rem!important}.m-md-n4{margin:-1.5rem!important}.mt-md-n4,.my-md-n4{margin-top:-1.5rem!important}.mr-md-n4,.mx-md-n4{margin-right:-1.5rem!important}.mb-md-n4,.my-md-n4{margin-bottom:-1.5rem!important}.ml-md-n4,.mx-md-n4{margin-left:-1.5rem!important}.m-md-n5{margin:-3rem!important}.mt-md-n5,.my-md-n5{margin-top:-3rem!important}.mr-md-n5,.mx-md-n5{margin-right:-3rem!important}.mb-md-n5,.my-md-n5{margin-bottom:-3rem!important}.ml-md-n5,.mx-md-n5{margin-left:-3rem!important}.m-md-auto{margin:auto!important}.mt-md-auto,.my-md-auto{margin-top:auto!important}.mr-md-auto,.mx-md-auto{margin-right:auto!important}.mb-md-auto,.my-md-auto{margin-bottom:auto!important}.ml-md-auto,.mx-md-auto{margin-left:auto!important}}@media (min-width:992px){.m-lg-0{margin:0!important}.mt-lg-0,.my-lg-0{margin-top:0!important}.mr-lg-0,.mx-lg-0{margin-right:0!important}.mb-lg-0,.my-lg-0{margin-bottom:0!important}.ml-lg-0,.mx-lg-0{margin-left:0!important}.m-lg-1{margin:.25rem!important}.mt-lg-1,.my-lg-1{margin-top:.25rem!important}.mr-lg-1,.mx-lg-1{margin-right:.25rem!important}.mb-lg-1,.my-lg-1{margin-bottom:.25rem!important}.ml-lg-1,.mx-lg-1{margin-left:.25rem!important}.m-lg-2{margin:.5rem!important}.mt-lg-2,.my-lg-2{margin-top:.5rem!important}.mr-lg-2,.mx-lg-2{margin-right:.5rem!important}.mb-lg-2,.my-lg-2{margin-bottom:.5rem!important}.ml-lg-2,.mx-lg-2{margin-left:.5rem!important}.m-lg-3{margin:1rem!important}.mt-lg-3,.my-lg-3{margin-top:1rem!important}.mr-lg-3,.mx-lg-3{margin-right:1rem!important}.mb-lg-3,.my-lg-3{margin-bottom:1rem!important}.ml-lg-3,.mx-lg-3{margin-left:1rem!important}.m-lg-4{margin:1.5rem!important}.mt-lg-4,.my-lg-4{margin-top:1.5rem!important}.mr-lg-4,.mx-lg-4{margin-right:1.5rem!important}.mb-lg-4,.my-lg-4{margin-bottom:1.5rem!important}.ml-lg-4,.mx-lg-4{margin-left:1.5rem!important}.m-lg-5{margin:3rem!important}.mt-lg-5,.my-lg-5{margin-top:3rem!important}.mr-lg-5,.mx-lg-5{margin-right:3rem!important}.mb-lg-5,.my-lg-5{margin-bottom:3rem!important}.ml-lg-5,.mx-lg-5{margin-left:3rem!important}.p-lg-0{padding:0!important}.pt-lg-0,.py-lg-0{padding-top:0!important}.pr-lg-0,.px-lg-0{padding-right:0!important}.pb-lg-0,.py-lg-0{padding-bottom:0!important}.pl-lg-0,.px-lg-0{padding-left:0!important}.p-lg-1{padding:.25rem!important}.pt-lg-1,.py-lg-1{padding-top:.25rem!important}.pr-lg-1,.px-lg-1{padding-right:.25rem!important}.pb-lg-1,.py-lg-1{padding-bottom:.25rem!important}.pl-lg-1,.px-lg-1{padding-left:.25rem!important}.p-lg-2{padding:.5rem!important}.pt-lg-2,.py-lg-2{padding-top:.5rem!important}.pr-lg-2,.px-lg-2{padding-right:.5rem!important}.pb-lg-2,.py-lg-2{padding-bottom:.5rem!important}.pl-lg-2,.px-lg-2{padding-left:.5rem!important}.p-lg-3{padding:1rem!important}.pt-lg-3,.py-lg-3{padding-top:1rem!important}.pr-lg-3,.px-lg-3{padding-right:1rem!important}.pb-lg-3,.py-lg-3{padding-bottom:1rem!important}.pl-lg-3,.px-lg-3{padding-left:1rem!important}.p-lg-4{padding:1.5rem!important}.pt-lg-4,.py-lg-4{padding-top:1.5rem!important}.pr-lg-4,.px-lg-4{padding-right:1.5rem!important}.pb-lg-4,.py-lg-4{padding-bottom:1.5rem!important}.pl-lg-4,.px-lg-4{padding-left:1.5rem!important}.p-lg-5{padding:3rem!important}.pt-lg-5,.py-lg-5{padding-top:3rem!important}.pr-lg-5,.px-lg-5{padding-right:3rem!important}.pb-lg-5,.py-lg-5{padding-bottom:3rem!important}.pl-lg-5,.px-lg-5{padding-left:3rem!important}.m-lg-n1{margin:-.25rem!important}.mt-lg-n1,.my-lg-n1{margin-top:-.25rem!important}.mr-lg-n1,.mx-lg-n1{margin-right:-.25rem!important}.mb-lg-n1,.my-lg-n1{margin-bottom:-.25rem!important}.ml-lg-n1,.mx-lg-n1{margin-left:-.25rem!important}.m-lg-n2{margin:-.5rem!important}.mt-lg-n2,.my-lg-n2{margin-top:-.5rem!important}.mr-lg-n2,.mx-lg-n2{margin-right:-.5rem!important}.mb-lg-n2,.my-lg-n2{margin-bottom:-.5rem!important}.ml-lg-n2,.mx-lg-n2{margin-left:-.5rem!important}.m-lg-n3{margin:-1rem!important}.mt-lg-n3,.my-lg-n3{margin-top:-1rem!important}.mr-lg-n3,.mx-lg-n3{margin-right:-1rem!important}.mb-lg-n3,.my-lg-n3{margin-bottom:-1rem!important}.ml-lg-n3,.mx-lg-n3{margin-left:-1rem!important}.m-lg-n4{margin:-1.5rem!important}.mt-lg-n4,.my-lg-n4{margin-top:-1.5rem!important}.mr-lg-n4,.mx-lg-n4{margin-right:-1.5rem!important}.mb-lg-n4,.my-lg-n4{margin-bottom:-1.5rem!important}.ml-lg-n4,.mx-lg-n4{margin-left:-1.5rem!important}.m-lg-n5{margin:-3rem!important}.mt-lg-n5,.my-lg-n5{margin-top:-3rem!important}.mr-lg-n5,.mx-lg-n5{margin-right:-3rem!important}.mb-lg-n5,.my-lg-n5{margin-bottom:-3rem!important}.ml-lg-n5,.mx-lg-n5{margin-left:-3rem!important}.m-lg-auto{margin:auto!important}.mt-lg-auto,.my-lg-auto{margin-top:auto!important}.mr-lg-auto,.mx-lg-auto{margin-right:auto!important}.mb-lg-auto,.my-lg-auto{margin-bottom:auto!important}.ml-lg-auto,.mx-lg-auto{margin-left:auto!important}}@media (min-width:1200px){.m-xl-0{margin:0!important}.mt-xl-0,.my-xl-0{margin-top:0!important}.mr-xl-0,.mx-xl-0{margin-right:0!important}.mb-xl-0,.my-xl-0{margin-bottom:0!important}.ml-xl-0,.mx-xl-0{margin-left:0!important}.m-xl-1{margin:.25rem!important}.mt-xl-1,.my-xl-1{margin-top:.25rem!important}.mr-xl-1,.mx-xl-1{margin-right:.25rem!important}.mb-xl-1,.my-xl-1{margin-bottom:.25rem!important}.ml-xl-1,.mx-xl-1{margin-left:.25rem!important}.m-xl-2{margin:.5rem!important}.mt-xl-2,.my-xl-2{margin-top:.5rem!important}.mr-xl-2,.mx-xl-2{margin-right:.5rem!important}.mb-xl-2,.my-xl-2{margin-bottom:.5rem!important}.ml-xl-2,.mx-xl-2{margin-left:.5rem!important}.m-xl-3{margin:1rem!important}.mt-xl-3,.my-xl-3{margin-top:1rem!important}.mr-xl-3,.mx-xl-3{margin-right:1rem!important}.mb-xl-3,.my-xl-3{margin-bottom:1rem!important}.ml-xl-3,.mx-xl-3{margin-left:1rem!important}.m-xl-4{margin:1.5rem!important}.mt-xl-4,.my-xl-4{margin-top:1.5rem!important}.mr-xl-4,.mx-xl-4{margin-right:1.5rem!important}.mb-xl-4,.my-xl-4{margin-bottom:1.5rem!important}.ml-xl-4,.mx-xl-4{margin-left:1.5rem!important}.m-xl-5{margin:3rem!important}.mt-xl-5,.my-xl-5{margin-top:3rem!important}.mr-xl-5,.mx-xl-5{margin-right:3rem!important}.mb-xl-5,.my-xl-5{margin-bottom:3rem!important}.ml-xl-5,.mx-xl-5{margin-left:3rem!important}.p-xl-0{padding:0!important}.pt-xl-0,.py-xl-0{padding-top:0!important}.pr-xl-0,.px-xl-0{padding-right:0!important}.pb-xl-0,.py-xl-0{padding-bottom:0!important}.pl-xl-0,.px-xl-0{padding-left:0!important}.p-xl-1{padding:.25rem!important}.pt-xl-1,.py-xl-1{padding-top:.25rem!important}.pr-xl-1,.px-xl-1{padding-right:.25rem!important}.pb-xl-1,.py-xl-1{padding-bottom:.25rem!important}.pl-xl-1,.px-xl-1{padding-left:.25rem!important}.p-xl-2{padding:.5rem!important}.pt-xl-2,.py-xl-2{padding-top:.5rem!important}.pr-xl-2,.px-xl-2{padding-right:.5rem!important}.pb-xl-2,.py-xl-2{padding-bottom:.5rem!important}.pl-xl-2,.px-xl-2{padding-left:.5rem!important}.p-xl-3{padding:1rem!important}.pt-xl-3,.py-xl-3{padding-top:1rem!important}.pr-xl-3,.px-xl-3{padding-right:1rem!important}.pb-xl-3,.py-xl-3{padding-bottom:1rem!important}.pl-xl-3,.px-xl-3{padding-left:1rem!important}.p-xl-4{padding:1.5rem!important}.pt-xl-4,.py-xl-4{padding-top:1.5rem!important}.pr-xl-4,.px-xl-4{padding-right:1.5rem!important}.pb-xl-4,.py-xl-4{padding-bottom:1.5rem!important}.pl-xl-4,.px-xl-4{padding-left:1.5rem!important}.p-xl-5{padding:3rem!important}.pt-xl-5,.py-xl-5{padding-top:3rem!important}.pr-xl-5,.px-xl-5{padding-right:3rem!important}.pb-xl-5,.py-xl-5{padding-bottom:3rem!important}.pl-xl-5,.px-xl-5{padding-left:3rem!important}.m-xl-n1{margin:-.25rem!important}.mt-xl-n1,.my-xl-n1{margin-top:-.25rem!important}.mr-xl-n1,.mx-xl-n1{margin-right:-.25rem!important}.mb-xl-n1,.my-xl-n1{margin-bottom:-.25rem!important}.ml-xl-n1,.mx-xl-n1{margin-left:-.25rem!important}.m-xl-n2{margin:-.5rem!important}.mt-xl-n2,.my-xl-n2{margin-top:-.5rem!important}.mr-xl-n2,.mx-xl-n2{margin-right:-.5rem!important}.mb-xl-n2,.my-xl-n2{margin-bottom:-.5rem!important}.ml-xl-n2,.mx-xl-n2{margin-left:-.5rem!important}.m-xl-n3{margin:-1rem!important}.mt-xl-n3,.my-xl-n3{margin-top:-1rem!important}.mr-xl-n3,.mx-xl-n3{margin-right:-1rem!important}.mb-xl-n3,.my-xl-n3{margin-bottom:-1rem!important}.ml-xl-n3,.mx-xl-n3{margin-left:-1rem!important}.m-xl-n4{margin:-1.5rem!important}.mt-xl-n4,.my-xl-n4{margin-top:-1.5rem!important}.mr-xl-n4,.mx-xl-n4{margin-right:-1.5rem!important}.mb-xl-n4,.my-xl-n4{margin-bottom:-1.5rem!important}.ml-xl-n4,.mx-xl-n4{margin-left:-1.5rem!important}.m-xl-n5{margin:-3rem!important}.mt-xl-n5,.my-xl-n5{margin-top:-3rem!important}.mr-xl-n5,.mx-xl-n5{margin-right:-3rem!important}.mb-xl-n5,.my-xl-n5{margin-bottom:-3rem!important}.ml-xl-n5,.mx-xl-n5{margin-left:-3rem!important}.m-xl-auto{margin:auto!important}.mt-xl-auto,.my-xl-auto{margin-top:auto!important}.mr-xl-auto,.mx-xl-auto{margin-right:auto!important}.mb-xl-auto,.my-xl-auto{margin-bottom:auto!important}.ml-xl-auto,.mx-xl-auto{margin-left:auto!important}}.text-monospace{font-family:SFMono-Regular,Menlo,Monaco,Consolas,\"Liberation Mono\",\"Courier New\",monospace!important}.text-justify{text-align:justify!important}.text-wrap{white-space:normal!important}.text-nowrap{white-space:nowrap!important}.text-truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.text-left{text-align:left!important}.text-right{text-align:right!important}.text-center{text-align:center!important}@media (min-width:576px){.text-sm-left{text-align:left!important}.text-sm-right{text-align:right!important}.text-sm-center{text-align:center!important}}@media (min-width:768px){.text-md-left{text-align:left!important}.text-md-right{text-align:right!important}.text-md-center{text-align:center!important}}@media (min-width:992px){.text-lg-left{text-align:left!important}.text-lg-right{text-align:right!important}.text-lg-center{text-align:center!important}}@media (min-width:1200px){.text-xl-left{text-align:left!important}.text-xl-right{text-align:right!important}.text-xl-center{text-align:center!important}}.text-lowercase{text-transform:lowercase!important}.text-uppercase{text-transform:uppercase!important}.text-capitalize{text-transform:capitalize!important}.font-weight-light{font-weight:300!important}.font-weight-lighter{font-weight:lighter!important}.font-weight-normal{font-weight:400!important}.font-weight-bold{font-weight:700!important}.font-weight-bolder{font-weight:bolder!important}.font-italic{font-style:italic!important}.text-white{color:#fff!important}.text-primary{color:#007bff!important}a.text-primary:focus,a.text-primary:hover{color:#0056b3!important}.text-secondary{color:#6c757d!important}a.text-secondary:focus,a.text-secondary:hover{color:#494f54!important}.text-success{color:#28a745!important}a.text-success:focus,a.text-success:hover{color:#19692c!important}.text-info{color:#17a2b8!important}a.text-info:focus,a.text-info:hover{color:#0f6674!important}.text-warning{color:#ffc107!important}a.text-warning:focus,a.text-warning:hover{color:#ba8b00!important}.text-danger{color:#dc3545!important}a.text-danger:focus,a.text-danger:hover{color:#a71d2a!important}.text-light{color:#f8f9fa!important}a.text-light:focus,a.text-light:hover{color:#cbd3da!important}.text-dark{color:#343a40!important}a.text-dark:focus,a.text-dark:hover{color:#121416!important}.text-body{color:#212529!important}.text-muted{color:#6c757d!important}.text-black-50{color:rgba(0,0,0,.5)!important}.text-white-50{color:rgba(255,255,255,.5)!important}.text-hide{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0}.text-decoration-none{text-decoration:none!important}.text-break{word-break:break-word!important;overflow-wrap:break-word!important}.text-reset{color:inherit!important}.visible{visibility:visible!important}.invisible{visibility:hidden!important}@media print{*,::after,::before{text-shadow:none!important;box-shadow:none!important}a:not(.btn){text-decoration:underline}abbr[title]::after{content:\" (\" attr(title) \")\"}pre{white-space:pre-wrap!important}blockquote,pre{border:1px solid #adb5bd;page-break-inside:avoid}thead{display:table-header-group}img,tr{page-break-inside:avoid}h2,h3,p{orphans:3;widows:3}h2,h3{page-break-after:avoid}@page{size:a3}body{min-width:992px!important}.container{min-width:992px!important}.navbar{display:none}.badge{border:1px solid #000}.table{border-collapse:collapse!important}.table td,.table th{background-color:#fff!important}.table-bordered td,.table-bordered th{border:1px solid #dee2e6!important}.table-dark{color:inherit}.table-dark tbody+tbody,.table-dark td,.table-dark th,.table-dark thead th{border-color:#dee2e6}.table .thead-dark th{color:inherit;border-color:#dee2e6}}\n/*# sourceMappingURL=bootstrap.min.css.map */";
-inject(css, undefined, '_1nlz9h5');
+inject(css, undefined, '_1yq0bj8');
 module.exports = css;
 
-},{"./../../../cssify":5}],4:[function(require,module,exports){
+},{"./../../../cssify":6}],5:[function(require,module,exports){
 /*!
   * Bootstrap v4.3.1 (https://getbootstrap.com/)
   * Copyright 2011-2019 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -6317,7 +11952,7 @@ module.exports = css;
 }));
 
 
-},{"jquery":6,"popper.js":8}],5:[function(require,module,exports){
+},{"jquery":7,"popper.js":9}],6:[function(require,module,exports){
 'use strict'
 
 function injectStyleTag (document, fileName, cb) {
@@ -6372,7 +12007,7 @@ module.exports.byUrl = function (url) {
   }
 }
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v3.3.1
  * https://jquery.com/
@@ -16738,7 +22373,7 @@ if ( !noGlobal ) {
 return jQuery;
 } );
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -28751,7 +34386,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function (global){
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
@@ -31344,13 +36979,13 @@ return Popper;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var inject = require('./../../node_modules/cssify');
-var css = "*,\n*:after,\n*::before {\n\tmargin: 0;\n\tpadding: 0;\n\t-moz-box-sizing: border-box;\n\tbox-sizing: border-box;\n}\n\nhtml,\nbody,\n.popup,\n.pusher,\n.inner {\n\theight: 100%;\n\twidth: 100%;\n\toverflow: hidden;\n}\n\n.inner {\n\toverflow-x: hidden;\n\toverflow-y: scroll;\n\t-webkit-overflow-scrolling: touch;\n}\n\n.inner-content {\n\theight: 100%;\n}\n\nbody {\n\tbackground-color: #BF0222;\n\tcolor: #fff;\n\tfont-family: 'IBM Plex Sans', 'Work Sans', 'Karla', 'Lato', sans-serif;\n}\n\n.condensed {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n}\n\n.block-revealer__element {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbackground: #000;\n\tpointer-events: none;\n\topacity: 0;\n}\n\n.splash {\n\twidth: 100%;\n\theight: 100%;\n}\n\n.container {\n\twidth: 100%;\n\theight: 100%;\n}\n\n.main-header {\n\tfont-size: 4.74rem;\n\tfont-weight: 700;\n\tfont-family: 'IBM Plex Sans', sans-serif;\n\ttext-transform: uppercase;\n\tposition: relative;\n\ttop: 50%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n\ttext-align: center;\n}\n\n.main-header .thin {\n\tfont-weight: 200;\n}\n\nh2,\nh3,\nh4 {\n\ttext-transform: uppercase;\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-weight: 700;\n}\n\nh5,\nh6 {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-style: italic;\n}\n\na.dark-link {\n\tbackground: linear-gradient(to bottom, #BF0222 0%, #BF0222 100%);\n\tbackground-position: 0 100%;\n\tbackground-repeat: repeat-x;\n\tbackground-size: 3px 3px;\n\tfont-weight: 600;\n\tcolor: #000;\n\ttext-decoration: none;\n\t-webkit-transition: all 0.3s ease-in-out;\n\ttransition: all 0.3s ease-in-out;\n}\n\na:hover.dark-link {\n\tcolor: #000;\n\tbackground-image: url(\"data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23bf0222' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E\");\n\tbackground-position: 0 100%;\n\tbackground-size: auto 6px;\n\tbackground-repeat: repeat-x;\n\ttext-decoration: none;\n}\n\na:visited.dark-link {\n\tbackground: linear-gradient(to bottom, #4d0099 0%, #4d0099 100%);\n\tbackground-position: 0 100%;\n\tbackground-repeat: repeat-x;\n\tbackground-size: 3px 3px;\n\tfont-weight: 600;\n\tcolor: #000;\n\ttext-decoration: none;\n\ttransition: all ease-in-out 0.5s;\n}\n\na:visited:hover.dark-link {\n\tcolor: #000;\n\tbackground-image: url(\"data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%234d0099' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E\");\n\tbackground-position: 0 100%;\n\tbackground-size: auto 6px;\n\tbackground-repeat: repeat-x;\n\ttext-decoration: none;\n}\n\n@media(min-width: 1350px) {\n\t.main-header {\n\t\tfont-size: 5rem;\n\t}\n}\n\n.no-select {\n\t-webkit-touch-callout: none;\n\t-webkit-user-select: none;\n\t-moz-user-select: none;\n\t-ms-user-select: none;\n\tuser-select: none;\n}\n\n.overlay {\n\tdisplay: block;\n\topacity: 0.5;\n}\n\n.inner-nav {\n\tbackground: #BF0222;\n}\n\n.inner {\n\tbackground: #044BDA;\n}\n\n.inner-what-is-tsa {\n\tbackground: #07A9DF;\n}\n\n.inner-our-members {\n\tbackground: #E20069;\n}\n\n.inner-stem {\n\tbackground: #F5B800;\n}\n\n.inner-gallery {\n\tbackground: #000;\n}\n\n.inner-about {\n\tbackground: #fff;\n\tcolor: #000;\n}\n\n.pusher {\n\tposition: relative;\n\tleft: 0;\n\tz-index: 3;\n\theight: 100%;\n\twidth: 100%;\n\t-webkit-transition: -webkit-transform 0.5s;\n\ttransition: transform 0.5s;\n\t-webkit-box-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n\t-moz-box-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n\tbox-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n}\n\n.pusher::after {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n\twidth: 0;\n\theight: 0;\n\tbackground: rgba(0, 0, 0, 0.2);\n\tcontent: '';\n\topacity: 0;\n\t-webkit-transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n\ttransition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n}\n\n.menu-open .pusher::after {\n\twidth: 100%;\n\theight: 100%;\n\topacity: 1;\n\t-webkit-transition: opacity 0.5s;\n\ttransition: opacity 0.5s;\n}\n\n.menu ul {\n\tlist-style-type: none;\n}\n\n.menu {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-weight: 700;\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tz-index: 4;\n\tvisibility: hidden;\n\theight: 100%;\n\tbackground: #BF0222;\n\t-webkit-transition: all 0.5s;\n\ttransition: all 0.5s;\n}\n\n.menu::after {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbackground: rgba(0, 0, 0, 0.2);\n\tcontent: '';\n\topacity: 1;\n\t-webkit-transition: opacity 0.5s;\n\ttransition: opacity 0.5s;\n}\n\n.menu-open .menu::after {\n\twidth: 0;\n\theight: 0;\n\topacity: 0;\n\t-webkit-transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n\ttransition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n}\n\n.menu ul li a {\n\tdisplay: block;\n\tpadding: 1em 1em 1em 1.2em;\n\toutline: none;\n\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0.2);\n\tcolor: #f3efe0;\n\ttext-transform: uppercase;\n\ttext-decoration: none;\n\ttext-shadow: 0 0 1px rgba(255, 255, 255, 0.1);\n\tfont-weight: 700;\n\t-webkit-transition: all 0.3s;\n\ttransition: all 0.3s;\n}\n\n/* .menu ul li:first-child a {\n\tbox-shadow: inset 0 -1px rgba(0,0,0,0.2), inset 0 1px rgba(0,0,0,0.2);\n} */\n\n.menu ul li a:hover {\n\tbackground: rgba(0, 0, 0, 0.2);\n\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0);\n\tcolor: #fff;\n}\n\n.scale-rotate.popup {\n\t-webkit-perspective: 1500px;\n\tperspective: 1500px;\n}\n\n.scale-rotate.menu {\n\topacity: 1;\n\t-webkit-transform: translate3d(-100%, 0, 0);\n\ttransform: translate3d(-100%, 0, 0);\n}\n\n.scale-rotate.menu-open .scale-rotate.menu {\n\tvisibility: visible;\n\t-webkit-transition: -webkit-transform 0.5s;\n\ttransition: transform 0.5s;\n\t-webkit-transform: translate3d(0, 0, 0);\n\ttransform: translate3d(0, 0, 0);\n}\n\n.scale-rotate.menu::after {\n\tdisplay: none;\n}\n\n@media (max-width: 630px) {\n\t.menu {\n\t\twidth: 300px;\n\t\tpadding-top: 95px;\n\t}\n\n\t.col-12 ul {\n\t\tcolumns: 2;\n\t\t-webkit-columns: 2;\n\t\t-moz-columns: 2;\n\t}\n\n}\n\n@media (min-width: 630px) {\n\t.main-header {\n\t\twhite-space: nowrap;\n\t}\n\n\t.scale-rotate .pusher {\n\t\t-webkit-transform-style: preserve-3d;\n\t\ttransform-style: preserve-3d;\n\t}\n\n\t.scale-rotate.menu-open .pusher {\n\t\t-webkit-transform: translate3d(250px, 0, -500px) rotateY(-50deg);\n\t\ttransform: translate3d(250px, 0, -500px) rotateY(-50deg);\n\t}\n\n\t.menu {\n\t\tfont-size: 2rem;\n\t\tpadding-left: 9%;\n\t\ttransform: translate(-50%, -50%);\n\t\tmin-height: 100%;\n\t\t/* Fallback for browsers do NOT support vh unit */\n\t\tmin-height: 100vh;\n\t\t/* These two lines are counted as one :-)       */\n\t\tdisplay: flex;\n\t\talign-items: center;\n\t}\n\n\t.menu ul li a {\n\t\tbox-shadow: none;\n\t\tpadding: 0.25em 0.25em 0.25em 0.36em;\n\t}\n\n\t.menu ul:hover li:hover a:hover {\n\t\tbox-shadow: none;\n\t\t-moz-text-fill-color: transparent;\n\t\t-webkit-text-fill-color: transparent;\n\t\t-moz-text-stroke-color: #fff;\n\t\t-webkit-text-stroke-color: #fff;\n\t\t-moz-text-stroke-width: 1px;\n\t\t-webkit-text-stroke-width: 1px;\n\t}\n\n\t.menu ul li a:hover {\n\t\tbackground: rgba(0, 0, 0, 0);\n\t\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0);\n\t\tcolor: #fff;\n\t}\n\n\t.col-12 ul {\n\t\tcolumns: 3;\n\t\t-webkit-columns: 3;\n\t\t-moz-columns: 3;\n\t}\n}\n\n/* Fallback example for browsers that don't support 3D transforms (and no JS fallback) */\n.no-csstransforms3d .pusher,\n.no-js .pusher {\n\tpadding-left: 300px;\n}\n\n#nav-icon {\n\twidth: 60px;\n\theight: 45px;\n\tposition: absolute;\n\tmargin: 25px;\n\tz-index: 5;\n\t-webkit-transition: .5s ease-in-out;\n\t-moz-transition: .5s ease-in-out;\n\t-o-transition: .5s ease-in-out;\n\ttransition: .5s ease-in-out;\n\tcursor: pointer;\n}\n\n#nav-icon span {\n\tdisplay: block;\n\tposition: absolute;\n\theight: 5px;\n\twidth: 100%;\n\tbackground: #fff;\n\topacity: 1;\n\tleft: 0;\n\t-webkit-transition: .25s ease-in-out;\n\t-moz-transition: .25s ease-in-out;\n\t-o-transition: .25s ease-in-out;\n\ttransition: .25s ease-in-out;\n}\n\n#nav-icon.nav-icon-about span {\n\tbackground: #000;\n}\n\n#nav-icon span:nth-child(1) {\n\ttop: 0px;\n}\n\n#nav-icon span:nth-child(2) {\n\ttop: 15px;\n}\n\n#nav-icon span:nth-child(3) {\n\ttop: 30px;\n}\n\n#nav-icon.open span:nth-child(1) {\n\ttop: 18px;\n\t-webkit-transform: rotate(135deg);\n\t-moz-transform: rotate(135deg);\n\t-o-transform: rotate(135deg);\n\ttransform: rotate(135deg);\n}\n\n#nav-icon.open span:nth-child(2) {\n\topacity: 0;\n\tleft: -60px;\n}\n\n#nav-icon.open span:nth-child(3) {\n\ttop: 18px;\n\t-webkit-transform: rotate(-135deg);\n\t-moz-transform: rotate(-135deg);\n\t-o-transform: rotate(-135deg);\n\ttransform: rotate(-135deg);\n}\n\n.color-block {\n\twidth: 100%;\n\theight: 2rem;\n\toverflow: hidden;\n}\n\nblockquote {\n\tdisplay: block;\n\tmargin: 0 auto;\n\tfont-size: 2rem;\n\tfont-weight: 400;\n\tfont-style: oblique;\n}";
+var css = "*,\n*:after,\n*::before {\n\tmargin: 0;\n\tpadding: 0;\n\t-moz-box-sizing: border-box;\n\tbox-sizing: border-box;\n}\n\nhtml,\nbody,\n.popup,\n.pusher,\n.inner {\n\theight: 100%;\n\twidth: 100%;\n\toverflow: hidden;\n}\n\n.inner {\n\toverflow-x: hidden;\n\toverflow-y: scroll;\n\t-webkit-overflow-scrolling: touch;\n}\n\n.inner-content {\n\theight: 100%;\n}\n\nbody {\n\tbackground-color: #BF0222;\n\tcolor: #fff;\n\tfont-family: 'IBM Plex Sans', 'Work Sans', 'Karla', 'Lato', sans-serif;\n}\n\n.condensed {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n}\n\n.block-revealer__element {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbackground: #000;\n\tpointer-events: none;\n\topacity: 0;\n}\n\n.splash {\n\twidth: 100%;\n\theight: 100%;\n}\n\n.container {\n\twidth: 100%;\n\theight: 100%;\n}\n\n.main-header {\n\tfont-size: 4.74rem;\n\tfont-weight: 700;\n\tfont-family: 'IBM Plex Sans', sans-serif;\n\ttext-transform: uppercase;\n\tposition: relative;\n\ttop: 50%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n\ttext-align: center;\n}\n\n.main-header .thin {\n\tfont-weight: 200;\n}\n\nh2,\nh3,\nh4 {\n\ttext-transform: uppercase;\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-weight: 700;\n}\n\nh5,\nh6 {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-style: italic;\n}\n\na.dark-link {\n\tbackground: linear-gradient(to bottom, #BF0222 0%, #BF0222 100%);\n\tbackground-position: 0 100%;\n\tbackground-repeat: repeat-x;\n\tbackground-size: 3px 3px;\n\tfont-weight: 600;\n\tcolor: #000;\n\ttext-decoration: none;\n\t-webkit-transition: all 0.3s ease-in-out;\n\ttransition: all 0.3s ease-in-out;\n}\n\na:hover.dark-link {\n\tcolor: #000;\n\tbackground-image: url(\"data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23bf0222' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E\");\n\tbackground-position: 0 100%;\n\tbackground-size: auto 6px;\n\tbackground-repeat: repeat-x;\n\ttext-decoration: none;\n}\n\na:visited.dark-link {\n\tbackground: linear-gradient(to bottom, #4d0099 0%, #4d0099 100%);\n\tbackground-position: 0 100%;\n\tbackground-repeat: repeat-x;\n\tbackground-size: 3px 3px;\n\tfont-weight: 600;\n\tcolor: #000;\n\ttext-decoration: none;\n\ttransition: all ease-in-out 0.5s;\n}\n\na:visited:hover.dark-link {\n\tcolor: #000;\n\tbackground-image: url(\"data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%234d0099' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E\");\n\tbackground-position: 0 100%;\n\tbackground-size: auto 6px;\n\tbackground-repeat: repeat-x;\n\ttext-decoration: none;\n}\n\n@media(min-width: 1350px) {\n\t.main-header {\n\t\tfont-size: 5rem;\n\t}\n}\n\n.no-select {\n\t-webkit-touch-callout: none;\n\t-webkit-user-select: none;\n\t-moz-user-select: none;\n\t-ms-user-select: none;\n\tuser-select: none;\n}\n\n.overlay {\n\tdisplay: block;\n\topacity: 0.5;\n}\n\n.inner-nav {\n\tbackground: #BF0222;\n}\n\n.inner {\n\tbackground: #044BDA;\n}\n\n.inner-what-is-tsa {\n\tbackground: #07A9DF;\n}\n\n.inner-our-members {\n\tbackground: #E20069;\n}\n\n.inner-stem {\n\tbackground: #F5B800;\n}\n\n.inner-gallery {\n\tbackground: #000;\n}\n\n.inner-about {\n\tbackground: #fff;\n\tcolor: #000;\n}\n\n.pusher {\n\tposition: relative;\n\tleft: 0;\n\tz-index: 3;\n\theight: 100%;\n\twidth: 100%;\n\t-webkit-transition: -webkit-transform 0.5s;\n\ttransition: transform 0.5s;\n\t-webkit-box-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n\t-moz-box-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n\tbox-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n}\n\n.pusher::after {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n\twidth: 0;\n\theight: 0;\n\tbackground: rgba(0, 0, 0, 0.2);\n\tcontent: '';\n\topacity: 0;\n\t-webkit-transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n\ttransition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n}\n\n.menu-open .pusher::after {\n\twidth: 100%;\n\theight: 100%;\n\topacity: 1;\n\t-webkit-transition: opacity 0.5s;\n\ttransition: opacity 0.5s;\n}\n\n.menu ul {\n\tlist-style-type: none;\n}\n\n.menu {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-weight: 700;\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tz-index: 4;\n\tvisibility: hidden;\n\theight: 100%;\n\tbackground: #BF0222;\n\t-webkit-transition: all 0.5s;\n\ttransition: all 0.5s;\n}\n\n.menu::after {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbackground: rgba(0, 0, 0, 0.2);\n\tcontent: '';\n\topacity: 1;\n\t-webkit-transition: opacity 0.5s;\n\ttransition: opacity 0.5s;\n}\n\n.menu-open .menu::after {\n\twidth: 0;\n\theight: 0;\n\topacity: 0;\n\t-webkit-transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n\ttransition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n}\n\n.menu ul li a {\n\tdisplay: block;\n\tpadding: 1em 1em 1em 1.2em;\n\toutline: none;\n\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0.2);\n\tcolor: #f3efe0;\n\ttext-transform: uppercase;\n\ttext-decoration: none;\n\ttext-shadow: 0 0 1px rgba(255, 255, 255, 0.1);\n\tfont-weight: 700;\n\t-webkit-transition: all 0.3s;\n\ttransition: all 0.3s;\n}\n\n/* .menu ul li:first-child a {\n\tbox-shadow: inset 0 -1px rgba(0,0,0,0.2), inset 0 1px rgba(0,0,0,0.2);\n} */\n\n.menu ul li a:hover {\n\tbackground: rgba(0, 0, 0, 0.2);\n\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0);\n\tcolor: #fff;\n}\n\n.scale-rotate.popup {\n\t-webkit-perspective: 1500px;\n\tperspective: 1500px;\n}\n\n.scale-rotate.menu {\n\topacity: 1;\n\t-webkit-transform: translate3d(-100%, 0, 0);\n\ttransform: translate3d(-100%, 0, 0);\n}\n\n.scale-rotate.menu-open .scale-rotate.menu {\n\tvisibility: visible;\n\t-webkit-transition: -webkit-transform 0.5s;\n\ttransition: transform 0.5s;\n\t-webkit-transform: translate3d(0, 0, 0);\n\ttransform: translate3d(0, 0, 0);\n}\n\n.scale-rotate.menu::after {\n\tdisplay: none;\n}\n\n@media (max-width: 630px) {\n\t.menu {\n\t\twidth: 300px;\n\t\tpadding-top: 95px;\n\t}\n\n\t.col-12 ul {\n\t\tcolumns: 2;\n\t\t-webkit-columns: 2;\n\t\t-moz-columns: 2;\n\t}\n\n\t.main-header {\n\t\tfont-size: 4.5rem;\n\t}\n}\n\n@media (min-width: 630px) {\n\t.main-header {\n\t\twhite-space: nowrap;\n\t}\n\n\t.scale-rotate .pusher {\n\t\t-webkit-transform-style: preserve-3d;\n\t\ttransform-style: preserve-3d;\n\t}\n\n\t.scale-rotate.menu-open .pusher {\n\t\t-webkit-transform: translate3d(250px, 0, -500px) rotateY(-50deg);\n\t\ttransform: translate3d(250px, 0, -500px) rotateY(-50deg);\n\t}\n\n\t.menu {\n\t\tfont-size: 2rem;\n\t\tpadding-left: 9%;\n\t\ttransform: translate(-50%, -50%);\n\t\tmin-height: 100%;\n\t\t/* Fallback for browsers do NOT support vh unit */\n\t\tmin-height: 100vh;\n\t\t/* These two lines are counted as one :-)       */\n\t\tdisplay: flex;\n\t\talign-items: center;\n\t}\n\n\t.menu ul li a {\n\t\tbox-shadow: none;\n\t\tpadding: 0.25em 0.25em 0.25em 0.36em;\n\t}\n\n\t.menu ul:hover li:hover a:hover {\n\t\tbox-shadow: none;\n\t\t-moz-text-fill-color: transparent;\n\t\t-webkit-text-fill-color: transparent;\n\t\t-moz-text-stroke-color: #fff;\n\t\t-webkit-text-stroke-color: #fff;\n\t\t-moz-text-stroke-width: 1px;\n\t\t-webkit-text-stroke-width: 1px;\n\t}\n\n\t.menu ul li a:hover {\n\t\tbackground: rgba(0, 0, 0, 0);\n\t\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0);\n\t\tcolor: #fff;\n\t}\n\n\t.col-12 ul {\n\t\tcolumns: 3;\n\t\t-webkit-columns: 3;\n\t\t-moz-columns: 3;\n\t}\n}\n\n/* Fallback example for browsers that don't support 3D transforms (and no JS fallback) */\n.no-csstransforms3d .pusher,\n.no-js .pusher {\n\tpadding-left: 300px;\n}\n\n#nav-icon {\n\twidth: 60px;\n\theight: 45px;\n\tposition: absolute;\n\tmargin: 25px;\n\tz-index: 5;\n\t-webkit-transition: .5s ease-in-out;\n\t-moz-transition: .5s ease-in-out;\n\t-o-transition: .5s ease-in-out;\n\ttransition: .5s ease-in-out;\n\tcursor: pointer;\n}\n\n#nav-icon span {\n\tdisplay: block;\n\tposition: absolute;\n\theight: 5px;\n\twidth: 100%;\n\tbackground: #fff;\n\topacity: 1;\n\tleft: 0;\n\t-webkit-transition: .25s ease-in-out;\n\t-moz-transition: .25s ease-in-out;\n\t-o-transition: .25s ease-in-out;\n\ttransition: .25s ease-in-out;\n}\n\n#nav-icon.nav-icon-about span {\n\tbackground: #000;\n}\n\n#nav-icon span:nth-child(1) {\n\ttop: 0px;\n}\n\n#nav-icon span:nth-child(2) {\n\ttop: 15px;\n}\n\n#nav-icon span:nth-child(3) {\n\ttop: 30px;\n}\n\n#nav-icon.open span:nth-child(1) {\n\ttop: 18px;\n\t-webkit-transform: rotate(135deg);\n\t-moz-transform: rotate(135deg);\n\t-o-transform: rotate(135deg);\n\ttransform: rotate(135deg);\n}\n\n#nav-icon.open span:nth-child(2) {\n\topacity: 0;\n\tleft: -60px;\n}\n\n#nav-icon.open span:nth-child(3) {\n\ttop: 18px;\n\t-webkit-transform: rotate(-135deg);\n\t-moz-transform: rotate(-135deg);\n\t-o-transform: rotate(-135deg);\n\ttransform: rotate(-135deg);\n}\n\n.color-block {\n\twidth: 100%;\n\theight: 2rem;\n\toverflow: hidden;\n}\n\nblockquote {\n\tdisplay: block;\n\tmargin: 0 auto;\n\tfont-size: 2rem;\n\tfont-weight: 400;\n\tfont-style: oblique;\n}\n\n@media (max-width: 360px)\n{\n\t.main-header{\n\t\tfont-size: 3.5rem;\n\t}\n}";
 inject(css, undefined, '_xhba26');
 module.exports = css;
 
-},{"./../../node_modules/cssify":5}],10:[function(require,module,exports){
+},{"./../../node_modules/cssify":6}],11:[function(require,module,exports){
 /**
  * main.js
  * http://www.codrops.com
@@ -31567,7 +37202,7 @@ module.exports = css;
 	window.RevealFx = RevealFx;
 
 })(window);
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 /**
  * Navigation
  */
@@ -31587,4 +37222,4 @@ $('.menu-link').click(function () {
 	$('#nav-icon').toggleClass('open');
 })
 
-},{"jquery":6}]},{},[1]);
+},{"jquery":7}]},{},[1]);

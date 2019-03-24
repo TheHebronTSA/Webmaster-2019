@@ -1,15 +1,16 @@
-var bootstrap_style = require('./node_modules/bootstrap/dist/css/bootstrap.min.css')
-var css = require('./resources/css/main.css')
 var $ = require('jquery');
+var bootstrap_style = require('./node_modules/bootstrap/dist/css/bootstrap.min.css')
 var bootstrap = require('bootstrap');
+var css = require('./resources/css/main.css')
 
 // var animation = require('./resources/js/animation.js');
-
 $(document).ready(function () {
   var mojs = require('mo-js');
   var Barba = require('barba.js');
   var navigation = require('./resources/js/navigation');
   var blockReveal = require('./resources/js/blockReveal');
+
+  var fancybox = require('@fancyapps/fancybox')
 
   /** DEFINE MOJS BURSTS */
 
