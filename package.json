@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/eeshaan/Webmaster-2019#readme",
   "dependencies": {
+    "@fancyapps/fancybox": "^3.5.7",
     "animejs": "^3.0.1",
     "barba.js": "^1.0.0",
     "bootstrap": "^4.3.1",
