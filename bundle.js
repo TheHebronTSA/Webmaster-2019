@@ -15,8 +15,14 @@ $(document).ready(function () {
   var fancybox = require('@fancyapps/fancybox');
 
   $('[data-fancybox="images"]').fancybox({
-    animationEffect: "tube",
-    parentEl: '.gallery-container'
+    animationEffect: "zoom-in-out",
+    parentEl: '.gallery-container',
+    padding: 0,
+    helpers: {
+      overlay: {
+        locked: false
+      }
+    }
   });
 
   /** DEFINE MOJS BURSTS */
