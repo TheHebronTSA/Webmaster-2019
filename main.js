@@ -12,6 +12,11 @@ $(document).ready(function () {
   var blockReveal = require('./resources/js/blockReveal');
   var fancybox = require('@fancyapps/fancybox');
 
+  $('[data-fancybox="images"]').fancybox({
+    animationEffect: "tube",
+    parentEl: '.gallery-container'
+  });
+
   /** DEFINE MOJS BURSTS */
 
   const COLORS = {
