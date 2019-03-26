@@ -1,7 +1,8 @@
-var $ = require('jquery');
-var bootstrap_style = require('./node_modules/bootstrap/dist/css/bootstrap.min.css')
+var $ = global.jQuery = require('jquery');
+var bootstrap_style = require('./node_modules/bootstrap/dist/css/bootstrap.min.css');
+var fancybox_style = require('./node_modules/@fancyapps/fancybox/dist/jquery.fancybox.css');
 var bootstrap = require('bootstrap');
-var css = require('./resources/css/main.css')
+var css = require('./resources/css/main.css');
 
 // var animation = require('./resources/js/animation.js');
 $(document).ready(function () {
@@ -9,8 +10,7 @@ $(document).ready(function () {
   var Barba = require('barba.js');
   var navigation = require('./resources/js/navigation');
   var blockReveal = require('./resources/js/blockReveal');
-
-  var fancybox = require('@fancyapps/fancybox')
+  var fancybox = require('@fancyapps/fancybox');
 
   /** DEFINE MOJS BURSTS */
 
