@@ -111,5 +111,5 @@ var cursor = {
 	}
 }
 
-if (!md.mobile() || !md.tablet())
+if (!md.mobile() && !md.tablet())
 	cursor.init();

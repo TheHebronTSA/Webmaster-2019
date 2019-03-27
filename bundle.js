@@ -38358,7 +38358,7 @@ var cursor = {
 	}
 }
 
-if (!md.mobile() || !md.tablet())
+if (!md.mobile() && !md.tablet())
 	cursor.init();
 },{"jquery":8,"mobile-detect":10}],16:[function(require,module,exports){
 /**
