@@ -385,7 +385,6 @@ a:visited:hover.dark-link {
 	-moz-transition: .5s ease-in-out;
 	-o-transition: .5s ease-in-out;
 	transition: .5s ease-in-out;
-	cursor: pointer;
 }
 
 #nav-icon span {

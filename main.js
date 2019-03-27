@@ -3,6 +3,7 @@ var bootstrap_style = require('./node_modules/bootstrap/dist/css/bootstrap.min.c
 var fancybox_style = require('./node_modules/@fancyapps/fancybox/dist/jquery.fancybox.css');
 var bootstrap = require('bootstrap');
 var css = require('./resources/css/main.css');
+var cursorcss = require('./resources/css/cursor.css');
 
 // var animation = require('./resources/js/animation.js');
 $(document).ready(function () {
@@ -11,6 +12,7 @@ $(document).ready(function () {
   var navigation = require('./resources/js/navigation');
   var blockReveal = require('./resources/js/blockReveal');
   var fancybox = require('@fancyapps/fancybox');
+  var cursorjs = require('./resources/js/cursor');
 
   $('[data-fancybox="images"]').fancybox({
     animationEffect: "zoom-in-out",
