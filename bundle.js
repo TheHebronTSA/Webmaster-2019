@@ -173,6 +173,18 @@ $(document).ready(function () {
 
   Barba.Pjax.start();
   Barba.Prefetch.init();
+
+  var Aboutpage = Barba.BaseView.extend({
+    namespace: 'about',
+    onEnter: function() {
+      $('#nav-icon').addClass('nav-icon-about');
+    },
+    onLeave: function() {
+      $('#nav-icon').removeClass('nav-icon-about');
+    }
+  });
+
+  Aboutpage.init();
 });
 
 //alert('Welcome to Hebron TSA');
