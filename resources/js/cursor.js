@@ -1,6 +1,6 @@
 var $ = require('jquery');
 var MobileDetect = require('mobile-detect'),
-	md = new MobileDetect();
+	md = new MobileDetect(window.navigator.userAgent);
 
 var cursor = {
 	delay: 8,
