@@ -88,7 +88,7 @@ h6 {
 	font-style: italic;
 }
 
-a {
+a.dark-link {
 	background: linear-gradient(to bottom, #BF0222 0%, #BF0222 100%);
 	background-position: 0 100%;
 	background-repeat: repeat-x;
@@ -100,7 +100,7 @@ a {
 	transition: all 0.3s ease-in-out;
 }
 
-a:hover {
+a:hover.dark-link {
 	color: #000;
 	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23bf0222' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E");
 	background-position: 0 100%;
@@ -109,7 +109,7 @@ a:hover {
 	text-decoration: none;
 }
 
-a:visited {
+a:visited.dark-link {
 	background: linear-gradient(to bottom, #4d0099 0%, #4d0099 100%);
 	background-position: 0 100%;
 	background-repeat: repeat-x;
@@ -120,7 +120,7 @@ a:visited {
 	transition: all ease-in-out 0.5s;
 }
 
-a:visited:hover {
+a:visited:hover.dark-link {
 	color: #000;
 	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%234d0099' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E");
 	background-position: 0 100%;
@@ -141,6 +141,11 @@ a:visited:hover {
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+}
+
+.overlay {
+	display: block;
+	opacity: 0.5;
 }
 
 .inner-nav {
@@ -304,6 +309,9 @@ a:visited:hover {
 		-moz-columns: 2;
 	}
 
+	.main-header {
+		font-size: 4.5rem;
+	}
 }
 
 @media (min-width: 630px) {
@@ -377,7 +385,6 @@ a:visited:hover {
 	-moz-transition: .5s ease-in-out;
 	-o-transition: .5s ease-in-out;
 	transition: .5s ease-in-out;
-	cursor: pointer;
 }
 
 #nav-icon span {
@@ -434,6 +441,7 @@ a:visited:hover {
 .color-block {
 	width: 100%;
 	height: 2rem;
+	overflow: hidden;
 }
 
 blockquote {
@@ -442,4 +450,11 @@ blockquote {
 	font-size: 2rem;
 	font-weight: 400;
 	font-style: oblique;
+}
+
+@media (max-width: 360px)
+{
+	.main-header{
+		font-size: 3.5rem;
+	}
 }

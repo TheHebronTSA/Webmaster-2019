@@ -1,16 +1,31 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-var bootstrap_style = require('./node_modules/bootstrap/dist/css/bootstrap.min.css')
-var css = require('./resources/css/main.css')
-var $ = require('jquery');
+(function (global){
+var $ = global.jQuery = require('jquery');
+var bootstrap_style = require('./node_modules/bootstrap/dist/css/bootstrap.min.css');
+var fancybox_style = require('./node_modules/@fancyapps/fancybox/dist/jquery.fancybox.css');
 var bootstrap = require('bootstrap');
+var css = require('./resources/css/main.css');
+var cursorcss = require('./resources/css/cursor.css');
 
 // var animation = require('./resources/js/animation.js');
-
 $(document).ready(function () {
   var mojs = require('mo-js');
   var Barba = require('barba.js');
   var navigation = require('./resources/js/navigation');
   var blockReveal = require('./resources/js/blockReveal');
+  var fancybox = require('@fancyapps/fancybox');
+  var cursorjs = require('./resources/js/cursor');
+
+  $('[data-fancybox="images"]').fancybox({
+    animationEffect: "zoom-in-out",
+    parentEl: '.gallery-container',
+    padding: 0,
+    helpers: {
+      overlay: {
+        locked: false
+      }
+    }
+  });
 
   /** DEFINE MOJS BURSTS */
 
@@ -160,10 +175,5662 @@ $(document).ready(function () {
 
   Barba.Pjax.start();
   Barba.Prefetch.init();
+
+  var Aboutpage = Barba.BaseView.extend({
+    namespace: 'about',
+    onEnter: function() {
+      $('#nav-icon').addClass('nav-icon-about');
+    },
+    onLeave: function() {
+      $('#nav-icon').removeClass('nav-icon-about');
+    }
+  });
+
+  Aboutpage.init();
 });
 
 //alert('Welcome to Hebron TSA');
-},{"./node_modules/bootstrap/dist/css/bootstrap.min.css":3,"./resources/css/main.css":9,"./resources/js/blockReveal":10,"./resources/js/navigation":11,"barba.js":2,"bootstrap":4,"jquery":6,"mo-js":7}],2:[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./node_modules/@fancyapps/fancybox/dist/jquery.fancybox.css":2,"./node_modules/bootstrap/dist/css/bootstrap.min.css":5,"./resources/css/cursor.css":12,"./resources/css/main.css":13,"./resources/js/blockReveal":14,"./resources/js/cursor":15,"./resources/js/navigation":16,"@fancyapps/fancybox":3,"barba.js":4,"bootstrap":6,"jquery":8,"mo-js":9}],2:[function(require,module,exports){
+var inject = require('./../../../cssify');
+var css = "body.compensate-for-scrollbar {\r\n    overflow: hidden;\r\n}\r\n\r\n.fancybox-active {\r\n    height: auto;\r\n}\r\n\r\n.fancybox-is-hidden {\r\n    left: -9999px;\r\n    margin: 0;\r\n    position: absolute !important;\r\n    top: -9999px;\r\n    visibility: hidden;\r\n}\r\n\r\n.fancybox-container {\r\n    -webkit-backface-visibility: hidden;\r\n    height: 100%;\r\n    left: 0;\r\n    outline: none;\r\n    position: fixed;\r\n    -webkit-tap-highlight-color: transparent;\r\n    top: 0;\r\n    -ms-touch-action: manipulation;\r\n    touch-action: manipulation;\r\n    transform: translateZ(0);\r\n    width: 100%;\r\n    z-index: 99992;\r\n}\r\n\r\n.fancybox-container * {\r\n    box-sizing: border-box;\r\n}\r\n\r\n.fancybox-outer,\r\n.fancybox-inner,\r\n.fancybox-bg,\r\n.fancybox-stage {\r\n    bottom: 0;\r\n    left: 0;\r\n    position: absolute;\r\n    right: 0;\r\n    top: 0;\r\n}\r\n\r\n.fancybox-outer {\r\n    -webkit-overflow-scrolling: touch;\r\n    overflow-y: auto;\r\n}\r\n\r\n.fancybox-bg {\r\n    background: rgb(30, 30, 30);\r\n    opacity: 0;\r\n    transition-duration: inherit;\r\n    transition-property: opacity;\r\n    transition-timing-function: cubic-bezier(.47, 0, .74, .71);\r\n}\r\n\r\n.fancybox-is-open .fancybox-bg {\r\n    opacity: .9;\r\n    transition-timing-function: cubic-bezier(.22, .61, .36, 1);\r\n}\r\n\r\n.fancybox-infobar,\r\n.fancybox-toolbar,\r\n.fancybox-caption,\r\n.fancybox-navigation .fancybox-button {\r\n    direction: ltr;\r\n    opacity: 0;\r\n    position: absolute;\r\n    transition: opacity .25s ease, visibility 0s ease .25s;\r\n    visibility: hidden;\r\n    z-index: 99997;\r\n}\r\n\r\n.fancybox-show-infobar .fancybox-infobar,\r\n.fancybox-show-toolbar .fancybox-toolbar,\r\n.fancybox-show-caption .fancybox-caption,\r\n.fancybox-show-nav .fancybox-navigation .fancybox-button {\r\n    opacity: 1;\r\n    transition: opacity .25s ease 0s, visibility 0s ease 0s;\r\n    visibility: visible;\r\n}\r\n\r\n.fancybox-infobar {\r\n    color: #ccc;\r\n    font-size: 13px;\r\n    -webkit-font-smoothing: subpixel-antialiased;\r\n    height: 44px;\r\n    left: 0;\r\n    line-height: 44px;\r\n    min-width: 44px;\r\n    mix-blend-mode: difference;\r\n    padding: 0 10px;\r\n    pointer-events: none;\r\n    top: 0;\r\n    -webkit-touch-callout: none;\r\n    -webkit-user-select: none;\r\n    -moz-user-select: none;\r\n    -ms-user-select: none;\r\n    user-select: none;\r\n}\r\n\r\n.fancybox-toolbar {\r\n    right: 0;\r\n    top: 0;\r\n}\r\n\r\n.fancybox-stage {\r\n    direction: ltr;\r\n    overflow: visible;\r\n    transform: translateZ(0);\r\n    z-index: 99994;\r\n}\r\n\r\n.fancybox-is-open .fancybox-stage {\r\n    overflow: hidden;\r\n}\r\n\r\n.fancybox-slide {\r\n    -webkit-backface-visibility: hidden;\r\n    /* Using without prefix would break IE11 */\r\n    display: none;\r\n    height: 100%;\r\n    left: 0;\r\n    outline: none;\r\n    overflow: auto;\r\n    -webkit-overflow-scrolling: touch;\r\n    padding: 44px;\r\n    position: absolute;\r\n    text-align: center;\r\n    top: 0;\r\n    transition-property: transform, opacity;\r\n    white-space: normal;\r\n    width: 100%;\r\n    z-index: 99994;\r\n}\r\n\r\n.fancybox-slide::before {\r\n    content: '';\r\n    display: inline-block;\r\n    font-size: 0;\r\n    height: 100%;\r\n    vertical-align: middle;\r\n    width: 0;\r\n}\r\n\r\n.fancybox-is-sliding .fancybox-slide,\r\n.fancybox-slide--previous,\r\n.fancybox-slide--current,\r\n.fancybox-slide--next {\r\n    display: block;\r\n}\r\n\r\n.fancybox-slide--image {\r\n    overflow: hidden;\r\n    padding: 44px 0;\r\n}\r\n\r\n.fancybox-slide--image::before {\r\n    display: none;\r\n}\r\n\r\n.fancybox-slide--html {\r\n    padding: 6px;\r\n}\r\n\r\n.fancybox-content {\r\n    background: #fff;\r\n    display: inline-block;\r\n    margin: 0;\r\n    max-width: 100%;\r\n    overflow: auto;\r\n    -webkit-overflow-scrolling: touch;\r\n    padding: 44px;\r\n    position: relative;\r\n    text-align: left;\r\n    vertical-align: middle;\r\n}\r\n\r\n.fancybox-slide--image .fancybox-content {\r\n    animation-timing-function: cubic-bezier(.5, 0, .14, 1);\r\n    -webkit-backface-visibility: hidden;\r\n    background: transparent;\r\n    background-repeat: no-repeat;\r\n    background-size: 100% 100%;\r\n    left: 0;\r\n    max-width: none;\r\n    overflow: visible;\r\n    padding: 0;\r\n    position: absolute;\r\n    top: 0;\r\n    -ms-transform-origin: top left;\r\n    transform-origin: top left;\r\n    transition-property: transform, opacity;\r\n    -webkit-user-select: none;\r\n    -moz-user-select: none;\r\n    -ms-user-select: none;\r\n    user-select: none;\r\n    z-index: 99995;\r\n}\r\n\r\n.fancybox-can-zoomOut .fancybox-content {\r\n    cursor: zoom-out;\r\n}\r\n\r\n.fancybox-can-zoomIn .fancybox-content {\r\n    cursor: zoom-in;\r\n}\r\n\r\n.fancybox-can-swipe .fancybox-content,\r\n.fancybox-can-pan .fancybox-content {\r\n    cursor: -webkit-grab;\r\n    cursor: grab;\r\n}\r\n\r\n.fancybox-is-grabbing .fancybox-content {\r\n    cursor: -webkit-grabbing;\r\n    cursor: grabbing;\r\n}\r\n\r\n.fancybox-container [data-selectable='true'] {\r\n    cursor: text;\r\n}\r\n\r\n.fancybox-image,\r\n.fancybox-spaceball {\r\n    background: transparent;\r\n    border: 0;\r\n    height: 100%;\r\n    left: 0;\r\n    margin: 0;\r\n    max-height: none;\r\n    max-width: none;\r\n    padding: 0;\r\n    position: absolute;\r\n    top: 0;\r\n    -webkit-user-select: none;\r\n    -moz-user-select: none;\r\n    -ms-user-select: none;\r\n    user-select: none;\r\n    width: 100%;\r\n}\r\n\r\n.fancybox-spaceball {\r\n    z-index: 1;\r\n}\r\n\r\n.fancybox-slide--video .fancybox-content,\r\n.fancybox-slide--map .fancybox-content,\r\n.fancybox-slide--pdf .fancybox-content,\r\n.fancybox-slide--iframe .fancybox-content {\r\n    height: 100%;\r\n    overflow: visible;\r\n    padding: 0;\r\n    width: 100%;\r\n}\r\n\r\n.fancybox-slide--video .fancybox-content {\r\n    background: #000;\r\n}\r\n\r\n.fancybox-slide--map .fancybox-content {\r\n    background: #e5e3df;\r\n}\r\n\r\n.fancybox-slide--iframe .fancybox-content {\r\n    background: #fff;\r\n}\r\n\r\n.fancybox-video,\r\n.fancybox-iframe {\r\n    background: transparent;\r\n    border: 0;\r\n    display: block;\r\n    height: 100%;\r\n    margin: 0;\r\n    overflow: hidden;\r\n    padding: 0;\r\n    width: 100%;\r\n}\r\n\r\n/* Fix iOS */\r\n.fancybox-iframe {\r\n    left: 0;\r\n    position: absolute;\r\n    top: 0;\r\n}\r\n\r\n.fancybox-error {\r\n    background: #fff;\r\n    cursor: default;\r\n    max-width: 400px;\r\n    padding: 40px;\r\n    width: 100%;\r\n}\r\n\r\n.fancybox-error p {\r\n    color: #444;\r\n    font-size: 16px;\r\n    line-height: 20px;\r\n    margin: 0;\r\n    padding: 0;\r\n}\r\n\r\n/* Buttons */\r\n\r\n.fancybox-button {\r\n    background: rgba(30, 30, 30, .6);\r\n    border: 0;\r\n    border-radius: 0;\r\n    box-shadow: none;\r\n    cursor: pointer;\r\n    display: inline-block;\r\n    height: 44px;\r\n    margin: 0;\r\n    padding: 10px;\r\n    position: relative;\r\n    transition: color .2s;\r\n    vertical-align: top;\r\n    visibility: inherit;\r\n    width: 44px;\r\n}\r\n\r\n.fancybox-button,\r\n.fancybox-button:visited,\r\n.fancybox-button:link {\r\n    color: #ccc;\r\n}\r\n\r\n.fancybox-button:hover {\r\n    color: #fff;\r\n}\r\n\r\n.fancybox-button:focus {\r\n    outline: none;\r\n}\r\n\r\n.fancybox-button.fancybox-focus {\r\n    outline: 1px dotted;\r\n}\r\n\r\n.fancybox-button[disabled],\r\n.fancybox-button[disabled]:hover {\r\n    color: #888;\r\n    cursor: default;\r\n    outline: none;\r\n}\r\n\r\n/* Fix IE11 */\r\n.fancybox-button div {\r\n    height: 100%;\r\n}\r\n\r\n.fancybox-button svg {\r\n    display: block;\r\n    height: 100%;\r\n    overflow: visible;\r\n    position: relative;\r\n    width: 100%;\r\n}\r\n\r\n.fancybox-button svg path {\r\n    fill: currentColor;\r\n    stroke-width: 0;\r\n}\r\n\r\n.fancybox-button--play svg:nth-child(2),\r\n.fancybox-button--fsenter svg:nth-child(2) {\r\n    display: none;\r\n}\r\n\r\n.fancybox-button--pause svg:nth-child(1),\r\n.fancybox-button--fsexit svg:nth-child(1) {\r\n    display: none;\r\n}\r\n\r\n.fancybox-progress {\r\n    background: #ff5268;\r\n    height: 2px;\r\n    left: 0;\r\n    position: absolute;\r\n    right: 0;\r\n    top: 0;\r\n    -ms-transform: scaleX(0);\r\n    transform: scaleX(0);\r\n    -ms-transform-origin: 0;\r\n    transform-origin: 0;\r\n    transition-property: transform;\r\n    transition-timing-function: linear;\r\n    z-index: 99998;\r\n}\r\n\r\n/* Close button on the top right corner of html content */\r\n\r\n.fancybox-close-small {\r\n    background: transparent;\r\n    border: 0;\r\n    border-radius: 0;\r\n    color: #ccc;\r\n    cursor: pointer;\r\n    opacity: .8;\r\n    padding: 8px;\r\n    position: absolute;\r\n    right: -12px;\r\n    top: -44px;\r\n    z-index: 401;\r\n}\r\n\r\n.fancybox-close-small:hover {\r\n    color: #fff;\r\n    opacity: 1;\r\n}\r\n\r\n.fancybox-slide--html .fancybox-close-small {\r\n    color: currentColor;\r\n    padding: 10px;\r\n    right: 0;\r\n    top: 0;\r\n}\r\n\r\n.fancybox-slide--image.fancybox-is-scaling .fancybox-content {\r\n    overflow: hidden;\r\n}\r\n\r\n.fancybox-is-scaling .fancybox-close-small,\r\n.fancybox-is-zoomable.fancybox-can-pan .fancybox-close-small {\r\n    display: none;\r\n}\r\n\r\n/* Navigation arrows */\r\n\r\n.fancybox-navigation .fancybox-button {\r\n    background-clip: content-box;\r\n    height: 100px;\r\n    opacity: 0;\r\n    position: absolute;\r\n    top: calc(50% - 50px);\r\n    width: 70px;\r\n}\r\n\r\n.fancybox-navigation .fancybox-button div {\r\n    padding: 7px;\r\n}\r\n\r\n.fancybox-navigation .fancybox-button--arrow_left {\r\n    left: 0;\r\n    left: env(safe-area-inset-left);\r\n    padding: 31px 26px 31px 6px;\r\n}\r\n\r\n.fancybox-navigation .fancybox-button--arrow_right {\r\n    padding: 31px 6px 31px 26px;\r\n    right: 0;\r\n    right: env(safe-area-inset-right);\r\n}\r\n\r\n/* Caption */\r\n\r\n.fancybox-caption {\r\n    background: linear-gradient(to top,\r\n        rgba(0, 0, 0, .85) 0%,\r\n        rgba(0, 0, 0, .3) 50%,\r\n        rgba(0, 0, 0, .15) 65%,\r\n        rgba(0, 0, 0, .075) 75.5%,\r\n        rgba(0, 0, 0, .037) 82.85%,\r\n        rgba(0, 0, 0, .019) 88%,\r\n        rgba(0, 0, 0, 0) 100%);\r\n    bottom: 0;\r\n    color: #eee;\r\n    font-size: 14px;\r\n    font-weight: 400;\r\n    left: 0;\r\n    line-height: 1.5;\r\n    padding: 75px 44px 25px 44px;\r\n    pointer-events: none;\r\n    right: 0;\r\n    text-align: center;\r\n    z-index: 99996;\r\n}\r\n\r\n@supports (padding: max(0px)) {\r\n    .fancybox-caption {\r\n        padding: 75px max(44px, env(safe-area-inset-right)) max(25px, env(safe-area-inset-bottom)) max(44px, env(safe-area-inset-left));\r\n    }\r\n}\r\n\r\n.fancybox-caption--separate {\r\n    margin-top: -50px;\r\n}\r\n\r\n.fancybox-caption__body {\r\n    max-height: 50vh;\r\n    overflow: auto;\r\n    pointer-events: all;\r\n}\r\n\r\n.fancybox-caption a,\r\n.fancybox-caption a:link,\r\n.fancybox-caption a:visited {\r\n    color: #ccc;\r\n    text-decoration: none;\r\n}\r\n\r\n.fancybox-caption a:hover {\r\n    color: #fff;\r\n    text-decoration: underline;\r\n}\r\n\r\n/* Loading indicator */\r\n\r\n.fancybox-loading {\r\n    animation: fancybox-rotate 1s linear infinite;\r\n    background: transparent;\r\n    border: 4px solid #888;\r\n    border-bottom-color: #fff;\r\n    border-radius: 50%;\r\n    height: 50px;\r\n    left: 50%;\r\n    margin: -25px 0 0 -25px;\r\n    opacity: .7;\r\n    padding: 0;\r\n    position: absolute;\r\n    top: 50%;\r\n    width: 50px;\r\n    z-index: 99999;\r\n}\r\n\r\n@keyframes fancybox-rotate {\r\n    100% {\r\n        transform: rotate(360deg);\r\n    }\r\n}\r\n\r\n/* Transition effects */\r\n\r\n.fancybox-animated {\r\n    transition-timing-function: cubic-bezier(0, 0, .25, 1);\r\n}\r\n\r\n/* transitionEffect: slide */\r\n\r\n.fancybox-fx-slide.fancybox-slide--previous {\r\n    opacity: 0;\r\n    transform: translate3d(-100%, 0, 0);\r\n}\r\n\r\n.fancybox-fx-slide.fancybox-slide--next {\r\n    opacity: 0;\r\n    transform: translate3d(100%, 0, 0);\r\n}\r\n\r\n.fancybox-fx-slide.fancybox-slide--current {\r\n    opacity: 1;\r\n    transform: translate3d(0, 0, 0);\r\n}\r\n\r\n/* transitionEffect: fade */\r\n\r\n.fancybox-fx-fade.fancybox-slide--previous,\r\n.fancybox-fx-fade.fancybox-slide--next {\r\n    opacity: 0;\r\n    transition-timing-function: cubic-bezier(.19, 1, .22, 1);\r\n}\r\n\r\n.fancybox-fx-fade.fancybox-slide--current {\r\n    opacity: 1;\r\n}\r\n\r\n/* transitionEffect: zoom-in-out */\r\n\r\n.fancybox-fx-zoom-in-out.fancybox-slide--previous {\r\n    opacity: 0;\r\n    transform: scale3d(1.5, 1.5, 1.5);\r\n}\r\n\r\n.fancybox-fx-zoom-in-out.fancybox-slide--next {\r\n    opacity: 0;\r\n    transform: scale3d(.5, .5, .5);\r\n}\r\n\r\n.fancybox-fx-zoom-in-out.fancybox-slide--current {\r\n    opacity: 1;\r\n    transform: scale3d(1, 1, 1);\r\n}\r\n\r\n/* transitionEffect: rotate */\r\n\r\n.fancybox-fx-rotate.fancybox-slide--previous {\r\n    opacity: 0;\r\n    -ms-transform: rotate(-360deg);\r\n    transform: rotate(-360deg);\r\n}\r\n\r\n.fancybox-fx-rotate.fancybox-slide--next {\r\n    opacity: 0;\r\n    -ms-transform: rotate(360deg);\r\n    transform: rotate(360deg);\r\n}\r\n\r\n.fancybox-fx-rotate.fancybox-slide--current {\r\n    opacity: 1;\r\n    -ms-transform: rotate(0deg);\r\n    transform: rotate(0deg);\r\n}\r\n\r\n/* transitionEffect: circular */\r\n\r\n.fancybox-fx-circular.fancybox-slide--previous {\r\n    opacity: 0;\r\n    transform: scale3d(0, 0, 0) translate3d(-100%, 0, 0);\r\n}\r\n\r\n.fancybox-fx-circular.fancybox-slide--next {\r\n    opacity: 0;\r\n    transform: scale3d(0, 0, 0) translate3d(100%, 0, 0);\r\n}\r\n\r\n.fancybox-fx-circular.fancybox-slide--current {\r\n    opacity: 1;\r\n    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);\r\n}\r\n\r\n/* transitionEffect: tube */\r\n\r\n.fancybox-fx-tube.fancybox-slide--previous {\r\n    transform: translate3d(-100%, 0, 0) scale(.1) skew(-10deg);\r\n}\r\n\r\n.fancybox-fx-tube.fancybox-slide--next {\r\n    transform: translate3d(100%, 0, 0) scale(.1) skew(10deg);\r\n}\r\n\r\n.fancybox-fx-tube.fancybox-slide--current {\r\n    transform: translate3d(0, 0, 0) scale(1);\r\n}\r\n\r\n/* Styling for Small-Screen Devices */\r\n@media all and (max-height: 576px) {\r\n    .fancybox-slide {\r\n        padding-left: 6px;\r\n        padding-right: 6px;\r\n    }\r\n\r\n    .fancybox-slide--image {\r\n        padding: 6px 0;\r\n    }\r\n\r\n    .fancybox-close-small {\r\n        right: -6px;\r\n    }\r\n\r\n    .fancybox-slide--image .fancybox-close-small {\r\n        background: #4e4e4e;\r\n        color: #f2f4f6;\r\n        height: 36px;\r\n        opacity: 1;\r\n        padding: 6px;\r\n        right: 0;\r\n        top: 0;\r\n        width: 36px;\r\n    }\r\n\r\n    .fancybox-caption {\r\n        padding-left: 12px;\r\n        padding-right: 12px;\r\n    }\r\n\r\n    @supports (padding: max(0px)) {\r\n        .fancybox-caption {\r\n            padding-left: max(12px, env(safe-area-inset-left));\r\n            padding-right: max(12px, env(safe-area-inset-right));\r\n        }\r\n    }\r\n}\n/* Share */\r\n\r\n.fancybox-share {\r\n    background: #f4f4f4;\r\n    border-radius: 3px;\r\n    max-width: 90%;\r\n    padding: 30px;\r\n    text-align: center;\r\n}\r\n\r\n.fancybox-share h1 {\r\n    color: #222;\r\n    font-size: 35px;\r\n    font-weight: 700;\r\n    margin: 0 0 20px 0;\r\n}\r\n\r\n.fancybox-share p {\r\n    margin: 0;\r\n    padding: 0;\r\n}\r\n\r\n.fancybox-share__button {\r\n    border: 0;\r\n    border-radius: 3px;\r\n    display: inline-block;\r\n    font-size: 14px;\r\n    font-weight: 700;\r\n    line-height: 40px;\r\n    margin: 0 5px 10px 5px;\r\n    min-width: 130px;\r\n    padding: 0 15px;\r\n    text-decoration: none;\r\n    transition: all .2s;\r\n    -webkit-user-select: none;\r\n    -moz-user-select: none;\r\n    -ms-user-select: none;\r\n    user-select: none;\r\n    white-space: nowrap;\r\n}\r\n\r\n.fancybox-share__button:visited,\r\n.fancybox-share__button:link {\r\n    color: #fff;\r\n}\r\n\r\n.fancybox-share__button:hover {\r\n    text-decoration: none;\r\n}\r\n\r\n.fancybox-share__button--fb {\r\n    background: #3b5998;\r\n}\r\n\r\n.fancybox-share__button--fb:hover {\r\n    background: #344e86;\r\n}\r\n\r\n.fancybox-share__button--pt {\r\n    background: #bd081d;\r\n}\r\n\r\n.fancybox-share__button--pt:hover {\r\n    background: #aa0719;\r\n}\r\n\r\n.fancybox-share__button--tw {\r\n    background: #1da1f2;\r\n}\r\n\r\n.fancybox-share__button--tw:hover {\r\n    background: #0d95e8;\r\n}\r\n\r\n.fancybox-share__button svg {\r\n    height: 25px;\r\n    margin-right: 7px;\r\n    position: relative;\r\n    top: -1px;\r\n    vertical-align: middle;\r\n    width: 25px;\r\n}\r\n\r\n.fancybox-share__button svg path {\r\n    fill: #fff;\r\n}\r\n\r\n.fancybox-share__input {\r\n    background: transparent;\r\n    border: 0;\r\n    border-bottom: 1px solid #d7d7d7;\r\n    border-radius: 0;\r\n    color: #5d5b5b;\r\n    font-size: 14px;\r\n    margin: 10px 0 0 0;\r\n    outline: none;\r\n    padding: 10px 15px;\r\n    width: 100%;\r\n}\n/* Thumbs */\r\n\r\n.fancybox-thumbs {\r\n    background: #ddd;\r\n    bottom: 0;\r\n    display: none;\r\n    margin: 0;\r\n    -webkit-overflow-scrolling: touch;\r\n    -ms-overflow-style: -ms-autohiding-scrollbar;\r\n    padding: 2px 2px 4px 2px;\r\n    position: absolute;\r\n    right: 0;\r\n    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\r\n    top: 0;\r\n    width: 212px;\r\n    z-index: 99995;\r\n}\r\n\r\n.fancybox-thumbs-x {\r\n    overflow-x: auto;\r\n    overflow-y: hidden;\r\n}\r\n\r\n.fancybox-show-thumbs .fancybox-thumbs {\r\n    display: block;\r\n}\r\n\r\n.fancybox-show-thumbs .fancybox-inner {\r\n    right: 212px;\r\n}\r\n\r\n.fancybox-thumbs__list {\r\n    font-size: 0;\r\n    height: 100%;\r\n    list-style: none;\r\n    margin: 0;\r\n    overflow-x: hidden;\r\n    overflow-y: auto;\r\n    padding: 0;\r\n    position: absolute;\r\n    position: relative;\r\n    white-space: nowrap;\r\n    width: 100%;\r\n}\r\n\r\n.fancybox-thumbs-x .fancybox-thumbs__list {\r\n    overflow: hidden;\r\n}\r\n\r\n.fancybox-thumbs-y .fancybox-thumbs__list::-webkit-scrollbar {\r\n    width: 7px;\r\n}\r\n\r\n.fancybox-thumbs-y .fancybox-thumbs__list::-webkit-scrollbar-track {\r\n    background: #fff;\r\n    border-radius: 10px;\r\n    box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);\r\n}\r\n\r\n.fancybox-thumbs-y .fancybox-thumbs__list::-webkit-scrollbar-thumb {\r\n    background: #2a2a2a;\r\n    border-radius: 10px;\r\n}\r\n\r\n.fancybox-thumbs__list a {\r\n    -webkit-backface-visibility: hidden;\r\n    backface-visibility: hidden;\r\n    background-color: rgba(0, 0, 0, .1);\r\n    background-position: center center;\r\n    background-repeat: no-repeat;\r\n    background-size: cover;\r\n    cursor: pointer;\r\n    float: left;\r\n    height: 75px;\r\n    margin: 2px;\r\n    max-height: calc(100% - 8px);\r\n    max-width: calc(50% - 4px);\r\n    outline: none;\r\n    overflow: hidden;\r\n    padding: 0;\r\n    position: relative;\r\n    -webkit-tap-highlight-color: transparent;\r\n    width: 100px;\r\n}\r\n\r\n.fancybox-thumbs__list a::before {\r\n    border: 6px solid #ff5268;\r\n    bottom: 0;\r\n    content: '';\r\n    left: 0;\r\n    opacity: 0;\r\n    position: absolute;\r\n    right: 0;\r\n    top: 0;\r\n    transition: all .2s cubic-bezier(.25, .46, .45, .94);\r\n    z-index: 99991;\r\n}\r\n\r\n.fancybox-thumbs__list a:focus::before {\r\n    opacity: .5;\r\n}\r\n\r\n.fancybox-thumbs__list a.fancybox-thumbs-active::before {\r\n    opacity: 1;\r\n}\r\n\r\n/* Styling for Small-Screen Devices */\r\n@media all and (max-width: 576px) {\r\n    .fancybox-thumbs {\r\n        width: 110px;\r\n    }\r\n\r\n    .fancybox-show-thumbs .fancybox-inner {\r\n        right: 110px;\r\n    }\r\n\r\n    .fancybox-thumbs__list a {\r\n        max-width: calc(100% - 10px);\r\n    }\r\n}";
+inject(css, undefined, '_t6b4ek');
+module.exports = css;
+
+},{"./../../../cssify":7}],3:[function(require,module,exports){
+// ==================================================
+// fancyBox v3.5.7
+//
+// Licensed GPLv3 for open source use
+// or fancyBox Commercial License for commercial use
+//
+// http://fancyapps.com/fancybox/
+// Copyright 2019 fancyApps
+//
+// ==================================================
+(function (window, document, $, undefined) {
+  "use strict";
+
+  window.console = window.console || {
+    info: function (stuff) {}
+  };
+
+  // If there's no jQuery, fancyBox can't work
+  // =========================================
+
+  if (!$) {
+    return;
+  }
+
+  // Check if fancyBox is already initialized
+  // ========================================
+
+  if ($.fn.fancybox) {
+    console.info("fancyBox already initialized");
+
+    return;
+  }
+
+  // Private default settings
+  // ========================
+
+  var defaults = {
+    // Close existing modals
+    // Set this to false if you do not need to stack multiple instances
+    closeExisting: false,
+
+    // Enable infinite gallery navigation
+    loop: false,
+
+    // Horizontal space between slides
+    gutter: 50,
+
+    // Enable keyboard navigation
+    keyboard: true,
+
+    // Should allow caption to overlap the content
+    preventCaptionOverlap: true,
+
+    // Should display navigation arrows at the screen edges
+    arrows: true,
+
+    // Should display counter at the top left corner
+    infobar: true,
+
+    // Should display close button (using `btnTpl.smallBtn` template) over the content
+    // Can be true, false, "auto"
+    // If "auto" - will be automatically enabled for "html", "inline" or "ajax" items
+    smallBtn: "auto",
+
+    // Should display toolbar (buttons at the top)
+    // Can be true, false, "auto"
+    // If "auto" - will be automatically hidden if "smallBtn" is enabled
+    toolbar: "auto",
+
+    // What buttons should appear in the top right corner.
+    // Buttons will be created using templates from `btnTpl` option
+    // and they will be placed into toolbar (class="fancybox-toolbar"` element)
+    buttons: [
+      "zoom",
+      //"share",
+      "slideShow",
+      //"fullScreen",
+      //"download",
+      "thumbs",
+      "close"
+    ],
+
+    // Detect "idle" time in seconds
+    idleTime: 3,
+
+    // Disable right-click and use simple image protection for images
+    protect: false,
+
+    // Shortcut to make content "modal" - disable keyboard navigtion, hide buttons, etc
+    modal: false,
+
+    image: {
+      // Wait for images to load before displaying
+      //   true  - wait for image to load and then display;
+      //   false - display thumbnail and load the full-sized image over top,
+      //           requires predefined image dimensions (`data-width` and `data-height` attributes)
+      preload: false
+    },
+
+    ajax: {
+      // Object containing settings for ajax request
+      settings: {
+        // This helps to indicate that request comes from the modal
+        // Feel free to change naming
+        data: {
+          fancybox: true
+        }
+      }
+    },
+
+    iframe: {
+      // Iframe template
+      tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" allowfullscreen="allowfullscreen" allow="autoplay; fullscreen" src=""></iframe>',
+
+      // Preload iframe before displaying it
+      // This allows to calculate iframe content width and height
+      // (note: Due to "Same Origin Policy", you can't get cross domain data).
+      preload: true,
+
+      // Custom CSS styling for iframe wrapping element
+      // You can use this to set custom iframe dimensions
+      css: {},
+
+      // Iframe tag attributes
+      attr: {
+        scrolling: "auto"
+      }
+    },
+
+    // For HTML5 video only
+    video: {
+      tpl: '<video class="fancybox-video" controls controlsList="nodownload" poster="{{poster}}">' +
+        '<source src="{{src}}" type="{{format}}" />' +
+        'Sorry, your browser doesn\'t support embedded videos, <a href="{{src}}">download</a> and watch with your favorite video player!' +
+        "</video>",
+      format: "", // custom video format
+      autoStart: true
+    },
+
+    // Default content type if cannot be detected automatically
+    defaultType: "image",
+
+    // Open/close animation type
+    // Possible values:
+    //   false            - disable
+    //   "zoom"           - zoom images from/to thumbnail
+    //   "fade"
+    //   "zoom-in-out"
+    //
+    animationEffect: "zoom",
+
+    // Duration in ms for open/close animation
+    animationDuration: 366,
+
+    // Should image change opacity while zooming
+    // If opacity is "auto", then opacity will be changed if image and thumbnail have different aspect ratios
+    zoomOpacity: "auto",
+
+    // Transition effect between slides
+    //
+    // Possible values:
+    //   false            - disable
+    //   "fade'
+    //   "slide'
+    //   "circular'
+    //   "tube'
+    //   "zoom-in-out'
+    //   "rotate'
+    //
+    transitionEffect: "fade",
+
+    // Duration in ms for transition animation
+    transitionDuration: 366,
+
+    // Custom CSS class for slide element
+    slideClass: "",
+
+    // Custom CSS class for layout
+    baseClass: "",
+
+    // Base template for layout
+    baseTpl: '<div class="fancybox-container" role="dialog" tabindex="-1">' +
+      '<div class="fancybox-bg"></div>' +
+      '<div class="fancybox-inner">' +
+      '<div class="fancybox-infobar"><span data-fancybox-index></span>&nbsp;/&nbsp;<span data-fancybox-count></span></div>' +
+      '<div class="fancybox-toolbar">{{buttons}}</div>' +
+      '<div class="fancybox-navigation">{{arrows}}</div>' +
+      '<div class="fancybox-stage"></div>' +
+      '<div class="fancybox-caption"><div class="fancybox-caption__body"></div></div>' +
+      "</div>" +
+      "</div>",
+
+    // Loading indicator template
+    spinnerTpl: '<div class="fancybox-loading"></div>',
+
+    // Error message template
+    errorTpl: '<div class="fancybox-error"><p>{{ERROR}}</p></div>',
+
+    btnTpl: {
+      download: '<a download data-fancybox-download class="fancybox-button fancybox-button--download" title="{{DOWNLOAD}}" href="javascript:;">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.62 17.09V19H5.38v-1.91zm-2.97-6.96L17 11.45l-5 4.87-5-4.87 1.36-1.32 2.68 2.64V5h1.92v7.77z"/></svg>' +
+        "</a>",
+
+      zoom: '<button data-fancybox-zoom class="fancybox-button fancybox-button--zoom" title="{{ZOOM}}">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.7 17.3l-3-3a5.9 5.9 0 0 0-.6-7.6 5.9 5.9 0 0 0-8.4 0 5.9 5.9 0 0 0 0 8.4 5.9 5.9 0 0 0 7.7.7l3 3a1 1 0 0 0 1.3 0c.4-.5.4-1 0-1.5zM8.1 13.8a4 4 0 0 1 0-5.7 4 4 0 0 1 5.7 0 4 4 0 0 1 0 5.7 4 4 0 0 1-5.7 0z"/></svg>' +
+        "</button>",
+
+      close: '<button data-fancybox-close class="fancybox-button fancybox-button--close" title="{{CLOSE}}">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 10.6L6.6 5.2 5.2 6.6l5.4 5.4-5.4 5.4 1.4 1.4 5.4-5.4 5.4 5.4 1.4-1.4-5.4-5.4 5.4-5.4-1.4-1.4-5.4 5.4z"/></svg>' +
+        "</button>",
+
+      // Arrows
+      arrowLeft: '<button data-fancybox-prev class="fancybox-button fancybox-button--arrow_left" title="{{PREV}}">' +
+        '<div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.28 15.7l-1.34 1.37L5 12l4.94-5.07 1.34 1.38-2.68 2.72H19v1.94H8.6z"/></svg></div>' +
+        "</button>",
+
+      arrowRight: '<button data-fancybox-next class="fancybox-button fancybox-button--arrow_right" title="{{NEXT}}">' +
+        '<div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.4 12.97l-2.68 2.72 1.34 1.38L19 12l-4.94-5.07-1.34 1.38 2.68 2.72H5v1.94z"/></svg></div>' +
+        "</button>",
+
+      // This small close button will be appended to your html/inline/ajax content by default,
+      // if "smallBtn" option is not set to false
+      smallBtn: '<button type="button" data-fancybox-close class="fancybox-button fancybox-close-small" title="{{CLOSE}}">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" version="1" viewBox="0 0 24 24"><path d="M13 12l5-5-1-1-5 5-5-5-1 1 5 5-5 5 1 1 5-5 5 5 1-1z"/></svg>' +
+        "</button>"
+    },
+
+    // Container is injected into this element
+    parentEl: "body",
+
+    // Hide browser vertical scrollbars; use at your own risk
+    hideScrollbar: true,
+
+    // Focus handling
+    // ==============
+
+    // Try to focus on the first focusable element after opening
+    autoFocus: true,
+
+    // Put focus back to active element after closing
+    backFocus: true,
+
+    // Do not let user to focus on element outside modal content
+    trapFocus: true,
+
+    // Module specific options
+    // =======================
+
+    fullScreen: {
+      autoStart: false
+    },
+
+    // Set `touch: false` to disable panning/swiping
+    touch: {
+      vertical: true, // Allow to drag content vertically
+      momentum: true // Continue movement after releasing mouse/touch when panning
+    },
+
+    // Hash value when initializing manually,
+    // set `false` to disable hash change
+    hash: null,
+
+    // Customize or add new media types
+    // Example:
+    /*
+      media : {
+        youtube : {
+          params : {
+            autoplay : 0
+          }
+        }
+      }
+    */
+    media: {},
+
+    slideShow: {
+      autoStart: false,
+      speed: 3000
+    },
+
+    thumbs: {
+      autoStart: false, // Display thumbnails on opening
+      hideOnClose: true, // Hide thumbnail grid when closing animation starts
+      parentEl: ".fancybox-container", // Container is injected into this element
+      axis: "y" // Vertical (y) or horizontal (x) scrolling
+    },
+
+    // Use mousewheel to navigate gallery
+    // If 'auto' - enabled for images only
+    wheel: "auto",
+
+    // Callbacks
+    //==========
+
+    // See Documentation/API/Events for more information
+    // Example:
+    /*
+      afterShow: function( instance, current ) {
+        console.info( 'Clicked element:' );
+        console.info( current.opts.$orig );
+      }
+    */
+
+    onInit: $.noop, // When instance has been initialized
+
+    beforeLoad: $.noop, // Before the content of a slide is being loaded
+    afterLoad: $.noop, // When the content of a slide is done loading
+
+    beforeShow: $.noop, // Before open animation starts
+    afterShow: $.noop, // When content is done loading and animating
+
+    beforeClose: $.noop, // Before the instance attempts to close. Return false to cancel the close.
+    afterClose: $.noop, // After instance has been closed
+
+    onActivate: $.noop, // When instance is brought to front
+    onDeactivate: $.noop, // When other instance has been activated
+
+    // Interaction
+    // ===========
+
+    // Use options below to customize taken action when user clicks or double clicks on the fancyBox area,
+    // each option can be string or method that returns value.
+    //
+    // Possible values:
+    //   "close"           - close instance
+    //   "next"            - move to next gallery item
+    //   "nextOrClose"     - move to next gallery item or close if gallery has only one item
+    //   "toggleControls"  - show/hide controls
+    //   "zoom"            - zoom image (if loaded)
+    //   false             - do nothing
+
+    // Clicked on the content
+    clickContent: function (current, event) {
+      return current.type === "image" ? "zoom" : false;
+    },
+
+    // Clicked on the slide
+    clickSlide: "close",
+
+    // Clicked on the background (backdrop) element;
+    // if you have not changed the layout, then most likely you need to use `clickSlide` option
+    clickOutside: "close",
+
+    // Same as previous two, but for double click
+    dblclickContent: false,
+    dblclickSlide: false,
+    dblclickOutside: false,
+
+    // Custom options when mobile device is detected
+    // =============================================
+
+    mobile: {
+      preventCaptionOverlap: false,
+      idleTime: false,
+      clickContent: function (current, event) {
+        return current.type === "image" ? "toggleControls" : false;
+      },
+      clickSlide: function (current, event) {
+        return current.type === "image" ? "toggleControls" : "close";
+      },
+      dblclickContent: function (current, event) {
+        return current.type === "image" ? "zoom" : false;
+      },
+      dblclickSlide: function (current, event) {
+        return current.type === "image" ? "zoom" : false;
+      }
+    },
+
+    // Internationalization
+    // ====================
+
+    lang: "en",
+    i18n: {
+      en: {
+        CLOSE: "Close",
+        NEXT: "Next",
+        PREV: "Previous",
+        ERROR: "The requested content cannot be loaded. <br/> Please try again later.",
+        PLAY_START: "Start slideshow",
+        PLAY_STOP: "Pause slideshow",
+        FULL_SCREEN: "Full screen",
+        THUMBS: "Thumbnails",
+        DOWNLOAD: "Download",
+        SHARE: "Share",
+        ZOOM: "Zoom"
+      },
+      de: {
+        CLOSE: "Schlie&szlig;en",
+        NEXT: "Weiter",
+        PREV: "Zur&uuml;ck",
+        ERROR: "Die angeforderten Daten konnten nicht geladen werden. <br/> Bitte versuchen Sie es sp&auml;ter nochmal.",
+        PLAY_START: "Diaschau starten",
+        PLAY_STOP: "Diaschau beenden",
+        FULL_SCREEN: "Vollbild",
+        THUMBS: "Vorschaubilder",
+        DOWNLOAD: "Herunterladen",
+        SHARE: "Teilen",
+        ZOOM: "Vergr&ouml;&szlig;ern"
+      }
+    }
+  };
+
+  // Few useful variables and methods
+  // ================================
+
+  var $W = $(window);
+  var $D = $(document);
+
+  var called = 0;
+
+  // Check if an object is a jQuery object and not a native JavaScript object
+  // ========================================================================
+  var isQuery = function (obj) {
+    return obj && obj.hasOwnProperty && obj instanceof $;
+  };
+
+  // Handle multiple browsers for "requestAnimationFrame" and "cancelAnimationFrame"
+  // ===============================================================================
+  var requestAFrame = (function () {
+    return (
+      window.requestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.oRequestAnimationFrame ||
+      // if all else fails, use setTimeout
+      function (callback) {
+        return window.setTimeout(callback, 1000 / 60);
+      }
+    );
+  })();
+
+  var cancelAFrame = (function () {
+    return (
+      window.cancelAnimationFrame ||
+      window.webkitCancelAnimationFrame ||
+      window.mozCancelAnimationFrame ||
+      window.oCancelAnimationFrame ||
+      function (id) {
+        window.clearTimeout(id);
+      }
+    );
+  })();
+
+  // Detect the supported transition-end event property name
+  // =======================================================
+  var transitionEnd = (function () {
+    var el = document.createElement("fakeelement"),
+      t;
+
+    var transitions = {
+      transition: "transitionend",
+      OTransition: "oTransitionEnd",
+      MozTransition: "transitionend",
+      WebkitTransition: "webkitTransitionEnd"
+    };
+
+    for (t in transitions) {
+      if (el.style[t] !== undefined) {
+        return transitions[t];
+      }
+    }
+
+    return "transitionend";
+  })();
+
+  // Force redraw on an element.
+  // This helps in cases where the browser doesn't redraw an updated element properly
+  // ================================================================================
+  var forceRedraw = function ($el) {
+    return $el && $el.length && $el[0].offsetHeight;
+  };
+
+  // Exclude array (`buttons`) options from deep merging
+  // ===================================================
+  var mergeOpts = function (opts1, opts2) {
+    var rez = $.extend(true, {}, opts1, opts2);
+
+    $.each(opts2, function (key, value) {
+      if ($.isArray(value)) {
+        rez[key] = value;
+      }
+    });
+
+    return rez;
+  };
+
+  // How much of an element is visible in viewport
+  // =============================================
+
+  var inViewport = function (elem) {
+    var elemCenter, rez;
+
+    if (!elem || elem.ownerDocument !== document) {
+      return false;
+    }
+
+    $(".fancybox-container").css("pointer-events", "none");
+
+    elemCenter = {
+      x: elem.getBoundingClientRect().left + elem.offsetWidth / 2,
+      y: elem.getBoundingClientRect().top + elem.offsetHeight / 2
+    };
+
+    rez = document.elementFromPoint(elemCenter.x, elemCenter.y) === elem;
+
+    $(".fancybox-container").css("pointer-events", "");
+
+    return rez;
+  };
+
+  // Class definition
+  // ================
+
+  var FancyBox = function (content, opts, index) {
+    var self = this;
+
+    self.opts = mergeOpts({
+      index: index
+    }, $.fancybox.defaults);
+
+    if ($.isPlainObject(opts)) {
+      self.opts = mergeOpts(self.opts, opts);
+    }
+
+    if ($.fancybox.isMobile) {
+      self.opts = mergeOpts(self.opts, self.opts.mobile);
+    }
+
+    self.id = self.opts.id || ++called;
+
+    self.currIndex = parseInt(self.opts.index, 10) || 0;
+    self.prevIndex = null;
+
+    self.prevPos = null;
+    self.currPos = 0;
+
+    self.firstRun = true;
+
+    // All group items
+    self.group = [];
+
+    // Existing slides (for current, next and previous gallery items)
+    self.slides = {};
+
+    // Create group elements
+    self.addContent(content);
+
+    if (!self.group.length) {
+      return;
+    }
+
+    self.init();
+  };
+
+  $.extend(FancyBox.prototype, {
+    // Create DOM structure
+    // ====================
+
+    init: function () {
+      var self = this,
+        firstItem = self.group[self.currIndex],
+        firstItemOpts = firstItem.opts,
+        $container,
+        buttonStr;
+
+      if (firstItemOpts.closeExisting) {
+        $.fancybox.close(true);
+      }
+
+      // Hide scrollbars
+      // ===============
+
+      $("body").addClass("fancybox-active");
+
+      if (
+        !$.fancybox.getInstance() &&
+        firstItemOpts.hideScrollbar !== false &&
+        !$.fancybox.isMobile &&
+        document.body.scrollHeight > window.innerHeight
+      ) {
+        $("head").append(
+          '<style id="fancybox-style-noscroll" type="text/css">.compensate-for-scrollbar{margin-right:' +
+          (window.innerWidth - document.documentElement.clientWidth) +
+          "px;}</style>"
+        );
+
+        $("body").addClass("compensate-for-scrollbar");
+      }
+
+      // Build html markup and set references
+      // ====================================
+
+      // Build html code for buttons and insert into main template
+      buttonStr = "";
+
+      $.each(firstItemOpts.buttons, function (index, value) {
+        buttonStr += firstItemOpts.btnTpl[value] || "";
+      });
+
+      // Create markup from base template, it will be initially hidden to
+      // avoid unnecessary work like painting while initializing is not complete
+      $container = $(
+          self.translate(
+            self,
+            firstItemOpts.baseTpl
+            .replace("{{buttons}}", buttonStr)
+            .replace("{{arrows}}", firstItemOpts.btnTpl.arrowLeft + firstItemOpts.btnTpl.arrowRight)
+          )
+        )
+        .attr("id", "fancybox-container-" + self.id)
+        .addClass(firstItemOpts.baseClass)
+        .data("FancyBox", self)
+        .appendTo(firstItemOpts.parentEl);
+
+      // Create object holding references to jQuery wrapped nodes
+      self.$refs = {
+        container: $container
+      };
+
+      ["bg", "inner", "infobar", "toolbar", "stage", "caption", "navigation"].forEach(function (item) {
+        self.$refs[item] = $container.find(".fancybox-" + item);
+      });
+
+      self.trigger("onInit");
+
+      // Enable events, deactive previous instances
+      self.activate();
+
+      // Build slides, load and reveal content
+      self.jumpTo(self.currIndex);
+    },
+
+    // Simple i18n support - replaces object keys found in template
+    // with corresponding values
+    // ============================================================
+
+    translate: function (obj, str) {
+      var arr = obj.opts.i18n[obj.opts.lang] || obj.opts.i18n.en;
+
+      return str.replace(/\{\{(\w+)\}\}/g, function (match, n) {
+        return arr[n] === undefined ? match : arr[n];
+      });
+    },
+
+    // Populate current group with fresh content
+    // Check if each object has valid type and content
+    // ===============================================
+
+    addContent: function (content) {
+      var self = this,
+        items = $.makeArray(content),
+        thumbs;
+
+      $.each(items, function (i, item) {
+        var obj = {},
+          opts = {},
+          $item,
+          type,
+          found,
+          src,
+          srcParts;
+
+        // Step 1 - Make sure we have an object
+        // ====================================
+
+        if ($.isPlainObject(item)) {
+          // We probably have manual usage here, something like
+          // $.fancybox.open( [ { src : "image.jpg", type : "image" } ] )
+
+          obj = item;
+          opts = item.opts || item;
+        } else if ($.type(item) === "object" && $(item).length) {
+          // Here we probably have jQuery collection returned by some selector
+          $item = $(item);
+
+          // Support attributes like `data-options='{"touch" : false}'` and `data-touch='false'`
+          opts = $item.data() || {};
+          opts = $.extend(true, {}, opts, opts.options);
+
+          // Here we store clicked element
+          opts.$orig = $item;
+
+          obj.src = self.opts.src || opts.src || $item.attr("href");
+
+          // Assume that simple syntax is used, for example:
+          //   `$.fancybox.open( $("#test"), {} );`
+          if (!obj.type && !obj.src) {
+            obj.type = "inline";
+            obj.src = item;
+          }
+        } else {
+          // Assume we have a simple html code, for example:
+          //   $.fancybox.open( '<div><h1>Hi!</h1></div>' );
+          obj = {
+            type: "html",
+            src: item + ""
+          };
+        }
+
+        // Each gallery object has full collection of options
+        obj.opts = $.extend(true, {}, self.opts, opts);
+
+        // Do not merge buttons array
+        if ($.isArray(opts.buttons)) {
+          obj.opts.buttons = opts.buttons;
+        }
+
+        if ($.fancybox.isMobile && obj.opts.mobile) {
+          obj.opts = mergeOpts(obj.opts, obj.opts.mobile);
+        }
+
+        // Step 2 - Make sure we have content type, if not - try to guess
+        // ==============================================================
+
+        type = obj.type || obj.opts.type;
+        src = obj.src || "";
+
+        if (!type && src) {
+          if ((found = src.match(/\.(mp4|mov|ogv|webm)((\?|#).*)?$/i))) {
+            type = "video";
+
+            if (!obj.opts.video.format) {
+              obj.opts.video.format = "video/" + (found[1] === "ogv" ? "ogg" : found[1]);
+            }
+          } else if (src.match(/(^data:image\/[a-z0-9+\/=]*,)|(\.(jp(e|g|eg)|gif|png|bmp|webp|svg|ico)((\?|#).*)?$)/i)) {
+            type = "image";
+          } else if (src.match(/\.(pdf)((\?|#).*)?$/i)) {
+            type = "iframe";
+            obj = $.extend(true, obj, {
+              contentType: "pdf",
+              opts: {
+                iframe: {
+                  preload: false
+                }
+              }
+            });
+          } else if (src.charAt(0) === "#") {
+            type = "inline";
+          }
+        }
+
+        if (type) {
+          obj.type = type;
+        } else {
+          self.trigger("objectNeedsType", obj);
+        }
+
+        if (!obj.contentType) {
+          obj.contentType = $.inArray(obj.type, ["html", "inline", "ajax"]) > -1 ? "html" : obj.type;
+        }
+
+        // Step 3 - Some adjustments
+        // =========================
+
+        obj.index = self.group.length;
+
+        if (obj.opts.smallBtn == "auto") {
+          obj.opts.smallBtn = $.inArray(obj.type, ["html", "inline", "ajax"]) > -1;
+        }
+
+        if (obj.opts.toolbar === "auto") {
+          obj.opts.toolbar = !obj.opts.smallBtn;
+        }
+
+        // Find thumbnail image, check if exists and if is in the viewport
+        obj.$thumb = obj.opts.$thumb || null;
+
+        if (obj.opts.$trigger && obj.index === self.opts.index) {
+          obj.$thumb = obj.opts.$trigger.find("img:first");
+
+          if (obj.$thumb.length) {
+            obj.opts.$orig = obj.opts.$trigger;
+          }
+        }
+
+        if (!(obj.$thumb && obj.$thumb.length) && obj.opts.$orig) {
+          obj.$thumb = obj.opts.$orig.find("img:first");
+        }
+
+        if (obj.$thumb && !obj.$thumb.length) {
+          obj.$thumb = null;
+        }
+
+        obj.thumb = obj.opts.thumb || (obj.$thumb ? obj.$thumb[0].src : null);
+
+        // "caption" is a "special" option, it can be used to customize caption per gallery item
+        if ($.type(obj.opts.caption) === "function") {
+          obj.opts.caption = obj.opts.caption.apply(item, [self, obj]);
+        }
+
+        if ($.type(self.opts.caption) === "function") {
+          obj.opts.caption = self.opts.caption.apply(item, [self, obj]);
+        }
+
+        // Make sure we have caption as a string or jQuery object
+        if (!(obj.opts.caption instanceof $)) {
+          obj.opts.caption = obj.opts.caption === undefined ? "" : obj.opts.caption + "";
+        }
+
+        // Check if url contains "filter" used to filter the content
+        // Example: "ajax.html #something"
+        if (obj.type === "ajax") {
+          srcParts = src.split(/\s+/, 2);
+
+          if (srcParts.length > 1) {
+            obj.src = srcParts.shift();
+
+            obj.opts.filter = srcParts.shift();
+          }
+        }
+
+        // Hide all buttons and disable interactivity for modal items
+        if (obj.opts.modal) {
+          obj.opts = $.extend(true, obj.opts, {
+            trapFocus: true,
+            // Remove buttons
+            infobar: 0,
+            toolbar: 0,
+
+            smallBtn: 0,
+
+            // Disable keyboard navigation
+            keyboard: 0,
+
+            // Disable some modules
+            slideShow: 0,
+            fullScreen: 0,
+            thumbs: 0,
+            touch: 0,
+
+            // Disable click event handlers
+            clickContent: false,
+            clickSlide: false,
+            clickOutside: false,
+            dblclickContent: false,
+            dblclickSlide: false,
+            dblclickOutside: false
+          });
+        }
+
+        // Step 4 - Add processed object to group
+        // ======================================
+
+        self.group.push(obj);
+      });
+
+      // Update controls if gallery is already opened
+      if (Object.keys(self.slides).length) {
+        self.updateControls();
+
+        // Update thumbnails, if needed
+        thumbs = self.Thumbs;
+
+        if (thumbs && thumbs.isActive) {
+          thumbs.create();
+
+          thumbs.focus();
+        }
+      }
+    },
+
+    // Attach an event handler functions for:
+    //   - navigation buttons
+    //   - browser scrolling, resizing;
+    //   - focusing
+    //   - keyboard
+    //   - detecting inactivity
+    // ======================================
+
+    addEvents: function () {
+      var self = this;
+
+      self.removeEvents();
+
+      // Make navigation elements clickable
+      // ==================================
+
+      self.$refs.container
+        .on("click.fb-close", "[data-fancybox-close]", function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+
+          self.close(e);
+        })
+        .on("touchstart.fb-prev click.fb-prev", "[data-fancybox-prev]", function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+
+          self.previous();
+        })
+        .on("touchstart.fb-next click.fb-next", "[data-fancybox-next]", function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+
+          self.next();
+        })
+        .on("click.fb", "[data-fancybox-zoom]", function (e) {
+          // Click handler for zoom button
+          self[self.isScaledDown() ? "scaleToActual" : "scaleToFit"]();
+        });
+
+      // Handle page scrolling and browser resizing
+      // ==========================================
+
+      $W.on("orientationchange.fb resize.fb", function (e) {
+        if (e && e.originalEvent && e.originalEvent.type === "resize") {
+          if (self.requestId) {
+            cancelAFrame(self.requestId);
+          }
+
+          self.requestId = requestAFrame(function () {
+            self.update(e);
+          });
+        } else {
+          if (self.current && self.current.type === "iframe") {
+            self.$refs.stage.hide();
+          }
+
+          setTimeout(
+            function () {
+              self.$refs.stage.show();
+
+              self.update(e);
+            },
+            $.fancybox.isMobile ? 600 : 250
+          );
+        }
+      });
+
+      $D.on("keydown.fb", function (e) {
+        var instance = $.fancybox ? $.fancybox.getInstance() : null,
+          current = instance.current,
+          keycode = e.keyCode || e.which;
+
+        // Trap keyboard focus inside of the modal
+        // =======================================
+
+        if (keycode == 9) {
+          if (current.opts.trapFocus) {
+            self.focus(e);
+          }
+
+          return;
+        }
+
+        // Enable keyboard navigation
+        // ==========================
+
+        if (!current.opts.keyboard || e.ctrlKey || e.altKey || e.shiftKey || $(e.target).is("input,textarea,video,audio,select")) {
+          return;
+        }
+
+        // Backspace and Esc keys
+        if (keycode === 8 || keycode === 27) {
+          e.preventDefault();
+
+          self.close(e);
+
+          return;
+        }
+
+        // Left arrow and Up arrow
+        if (keycode === 37 || keycode === 38) {
+          e.preventDefault();
+
+          self.previous();
+
+          return;
+        }
+
+        // Righ arrow and Down arrow
+        if (keycode === 39 || keycode === 40) {
+          e.preventDefault();
+
+          self.next();
+
+          return;
+        }
+
+        self.trigger("afterKeydown", e, keycode);
+      });
+
+      // Hide controls after some inactivity period
+      if (self.group[self.currIndex].opts.idleTime) {
+        self.idleSecondsCounter = 0;
+
+        $D.on(
+          "mousemove.fb-idle mouseleave.fb-idle mousedown.fb-idle touchstart.fb-idle touchmove.fb-idle scroll.fb-idle keydown.fb-idle",
+          function (e) {
+            self.idleSecondsCounter = 0;
+
+            if (self.isIdle) {
+              self.showControls();
+            }
+
+            self.isIdle = false;
+          }
+        );
+
+        self.idleInterval = window.setInterval(function () {
+          self.idleSecondsCounter++;
+
+          if (self.idleSecondsCounter >= self.group[self.currIndex].opts.idleTime && !self.isDragging) {
+            self.isIdle = true;
+            self.idleSecondsCounter = 0;
+
+            self.hideControls();
+          }
+        }, 1000);
+      }
+    },
+
+    // Remove events added by the core
+    // ===============================
+
+    removeEvents: function () {
+      var self = this;
+
+      $W.off("orientationchange.fb resize.fb");
+      $D.off("keydown.fb .fb-idle");
+
+      this.$refs.container.off(".fb-close .fb-prev .fb-next");
+
+      if (self.idleInterval) {
+        window.clearInterval(self.idleInterval);
+
+        self.idleInterval = null;
+      }
+    },
+
+    // Change to previous gallery item
+    // ===============================
+
+    previous: function (duration) {
+      return this.jumpTo(this.currPos - 1, duration);
+    },
+
+    // Change to next gallery item
+    // ===========================
+
+    next: function (duration) {
+      return this.jumpTo(this.currPos + 1, duration);
+    },
+
+    // Switch to selected gallery item
+    // ===============================
+
+    jumpTo: function (pos, duration) {
+      var self = this,
+        groupLen = self.group.length,
+        firstRun,
+        isMoved,
+        loop,
+        current,
+        previous,
+        slidePos,
+        stagePos,
+        prop,
+        diff;
+
+      if (self.isDragging || self.isClosing || (self.isAnimating && self.firstRun)) {
+        return;
+      }
+
+      // Should loop?
+      pos = parseInt(pos, 10);
+      loop = self.current ? self.current.opts.loop : self.opts.loop;
+
+      if (!loop && (pos < 0 || pos >= groupLen)) {
+        return false;
+      }
+
+      // Check if opening for the first time; this helps to speed things up
+      firstRun = self.firstRun = !Object.keys(self.slides).length;
+
+      // Create slides
+      previous = self.current;
+
+      self.prevIndex = self.currIndex;
+      self.prevPos = self.currPos;
+
+      current = self.createSlide(pos);
+
+      if (groupLen > 1) {
+        if (loop || current.index < groupLen - 1) {
+          self.createSlide(pos + 1);
+        }
+
+        if (loop || current.index > 0) {
+          self.createSlide(pos - 1);
+        }
+      }
+
+      self.current = current;
+      self.currIndex = current.index;
+      self.currPos = current.pos;
+
+      self.trigger("beforeShow", firstRun);
+
+      self.updateControls();
+
+      // Validate duration length
+      current.forcedDuration = undefined;
+
+      if ($.isNumeric(duration)) {
+        current.forcedDuration = duration;
+      } else {
+        duration = current.opts[firstRun ? "animationDuration" : "transitionDuration"];
+      }
+
+      duration = parseInt(duration, 10);
+
+      // Check if user has swiped the slides or if still animating
+      isMoved = self.isMoved(current);
+
+      // Make sure current slide is visible
+      current.$slide.addClass("fancybox-slide--current");
+
+      // Fresh start - reveal container, current slide and start loading content
+      if (firstRun) {
+        if (current.opts.animationEffect && duration) {
+          self.$refs.container.css("transition-duration", duration + "ms");
+        }
+
+        self.$refs.container.addClass("fancybox-is-open").trigger("focus");
+
+        // Attempt to load content into slide
+        // This will later call `afterLoad` -> `revealContent`
+        self.loadSlide(current);
+
+        self.preload("image");
+
+        return;
+      }
+
+      // Get actual slide/stage positions (before cleaning up)
+      slidePos = $.fancybox.getTranslate(previous.$slide);
+      stagePos = $.fancybox.getTranslate(self.$refs.stage);
+
+      // Clean up all slides
+      $.each(self.slides, function (index, slide) {
+        $.fancybox.stop(slide.$slide, true);
+      });
+
+      if (previous.pos !== current.pos) {
+        previous.isComplete = false;
+      }
+
+      previous.$slide.removeClass("fancybox-slide--complete fancybox-slide--current");
+
+      // If slides are out of place, then animate them to correct position
+      if (isMoved) {
+        // Calculate horizontal swipe distance
+        diff = slidePos.left - (previous.pos * slidePos.width + previous.pos * previous.opts.gutter);
+
+        $.each(self.slides, function (index, slide) {
+          slide.$slide.removeClass("fancybox-animated").removeClass(function (index, className) {
+            return (className.match(/(^|\s)fancybox-fx-\S+/g) || []).join(" ");
+          });
+
+          // Make sure that each slide is in equal distance
+          // This is mostly needed for freshly added slides, because they are not yet positioned
+          var leftPos = slide.pos * slidePos.width + slide.pos * slide.opts.gutter;
+
+          $.fancybox.setTranslate(slide.$slide, {
+            top: 0,
+            left: leftPos - stagePos.left + diff
+          });
+
+          if (slide.pos !== current.pos) {
+            slide.$slide.addClass("fancybox-slide--" + (slide.pos > current.pos ? "next" : "previous"));
+          }
+
+          // Redraw to make sure that transition will start
+          forceRedraw(slide.$slide);
+
+          // Animate the slide
+          $.fancybox.animate(
+            slide.$slide, {
+              top: 0,
+              left: (slide.pos - current.pos) * slidePos.width + (slide.pos - current.pos) * slide.opts.gutter
+            },
+            duration,
+            function () {
+              slide.$slide
+                .css({
+                  transform: "",
+                  opacity: ""
+                })
+                .removeClass("fancybox-slide--next fancybox-slide--previous");
+
+              if (slide.pos === self.currPos) {
+                self.complete();
+              }
+            }
+          );
+        });
+      } else if (duration && current.opts.transitionEffect) {
+        // Set transition effect for previously active slide
+        prop = "fancybox-animated fancybox-fx-" + current.opts.transitionEffect;
+
+        previous.$slide.addClass("fancybox-slide--" + (previous.pos > current.pos ? "next" : "previous"));
+
+        $.fancybox.animate(
+          previous.$slide,
+          prop,
+          duration,
+          function () {
+            previous.$slide.removeClass(prop).removeClass("fancybox-slide--next fancybox-slide--previous");
+          },
+          false
+        );
+      }
+
+      if (current.isLoaded) {
+        self.revealContent(current);
+      } else {
+        self.loadSlide(current);
+      }
+
+      self.preload("image");
+    },
+
+    // Create new "slide" element
+    // These are gallery items  that are actually added to DOM
+    // =======================================================
+
+    createSlide: function (pos) {
+      var self = this,
+        $slide,
+        index;
+
+      index = pos % self.group.length;
+      index = index < 0 ? self.group.length + index : index;
+
+      if (!self.slides[pos] && self.group[index]) {
+        $slide = $('<div class="fancybox-slide"></div>').appendTo(self.$refs.stage);
+
+        self.slides[pos] = $.extend(true, {}, self.group[index], {
+          pos: pos,
+          $slide: $slide,
+          isLoaded: false
+        });
+
+        self.updateSlide(self.slides[pos]);
+      }
+
+      return self.slides[pos];
+    },
+
+    // Scale image to the actual size of the image;
+    // x and y values should be relative to the slide
+    // ==============================================
+
+    scaleToActual: function (x, y, duration) {
+      var self = this,
+        current = self.current,
+        $content = current.$content,
+        canvasWidth = $.fancybox.getTranslate(current.$slide).width,
+        canvasHeight = $.fancybox.getTranslate(current.$slide).height,
+        newImgWidth = current.width,
+        newImgHeight = current.height,
+        imgPos,
+        posX,
+        posY,
+        scaleX,
+        scaleY;
+
+      if (self.isAnimating || self.isMoved() || !$content || !(current.type == "image" && current.isLoaded && !current.hasError)) {
+        return;
+      }
+
+      self.isAnimating = true;
+
+      $.fancybox.stop($content);
+
+      x = x === undefined ? canvasWidth * 0.5 : x;
+      y = y === undefined ? canvasHeight * 0.5 : y;
+
+      imgPos = $.fancybox.getTranslate($content);
+
+      imgPos.top -= $.fancybox.getTranslate(current.$slide).top;
+      imgPos.left -= $.fancybox.getTranslate(current.$slide).left;
+
+      scaleX = newImgWidth / imgPos.width;
+      scaleY = newImgHeight / imgPos.height;
+
+      // Get center position for original image
+      posX = canvasWidth * 0.5 - newImgWidth * 0.5;
+      posY = canvasHeight * 0.5 - newImgHeight * 0.5;
+
+      // Make sure image does not move away from edges
+      if (newImgWidth > canvasWidth) {
+        posX = imgPos.left * scaleX - (x * scaleX - x);
+
+        if (posX > 0) {
+          posX = 0;
+        }
+
+        if (posX < canvasWidth - newImgWidth) {
+          posX = canvasWidth - newImgWidth;
+        }
+      }
+
+      if (newImgHeight > canvasHeight) {
+        posY = imgPos.top * scaleY - (y * scaleY - y);
+
+        if (posY > 0) {
+          posY = 0;
+        }
+
+        if (posY < canvasHeight - newImgHeight) {
+          posY = canvasHeight - newImgHeight;
+        }
+      }
+
+      self.updateCursor(newImgWidth, newImgHeight);
+
+      $.fancybox.animate(
+        $content, {
+          top: posY,
+          left: posX,
+          scaleX: scaleX,
+          scaleY: scaleY
+        },
+        duration || 366,
+        function () {
+          self.isAnimating = false;
+        }
+      );
+
+      // Stop slideshow
+      if (self.SlideShow && self.SlideShow.isActive) {
+        self.SlideShow.stop();
+      }
+    },
+
+    // Scale image to fit inside parent element
+    // ========================================
+
+    scaleToFit: function (duration) {
+      var self = this,
+        current = self.current,
+        $content = current.$content,
+        end;
+
+      if (self.isAnimating || self.isMoved() || !$content || !(current.type == "image" && current.isLoaded && !current.hasError)) {
+        return;
+      }
+
+      self.isAnimating = true;
+
+      $.fancybox.stop($content);
+
+      end = self.getFitPos(current);
+
+      self.updateCursor(end.width, end.height);
+
+      $.fancybox.animate(
+        $content, {
+          top: end.top,
+          left: end.left,
+          scaleX: end.width / $content.width(),
+          scaleY: end.height / $content.height()
+        },
+        duration || 366,
+        function () {
+          self.isAnimating = false;
+        }
+      );
+    },
+
+    // Calculate image size to fit inside viewport
+    // ===========================================
+
+    getFitPos: function (slide) {
+      var self = this,
+        $content = slide.$content,
+        $slide = slide.$slide,
+        width = slide.width || slide.opts.width,
+        height = slide.height || slide.opts.height,
+        maxWidth,
+        maxHeight,
+        minRatio,
+        aspectRatio,
+        rez = {};
+
+      if (!slide.isLoaded || !$content || !$content.length) {
+        return false;
+      }
+
+      maxWidth = $.fancybox.getTranslate(self.$refs.stage).width;
+      maxHeight = $.fancybox.getTranslate(self.$refs.stage).height;
+
+      maxWidth -=
+        parseFloat($slide.css("paddingLeft")) +
+        parseFloat($slide.css("paddingRight")) +
+        parseFloat($content.css("marginLeft")) +
+        parseFloat($content.css("marginRight"));
+
+      maxHeight -=
+        parseFloat($slide.css("paddingTop")) +
+        parseFloat($slide.css("paddingBottom")) +
+        parseFloat($content.css("marginTop")) +
+        parseFloat($content.css("marginBottom"));
+
+      if (!width || !height) {
+        width = maxWidth;
+        height = maxHeight;
+      }
+
+      minRatio = Math.min(1, maxWidth / width, maxHeight / height);
+
+      width = minRatio * width;
+      height = minRatio * height;
+
+      // Adjust width/height to precisely fit into container
+      if (width > maxWidth - 0.5) {
+        width = maxWidth;
+      }
+
+      if (height > maxHeight - 0.5) {
+        height = maxHeight;
+      }
+
+      if (slide.type === "image") {
+        rez.top = Math.floor((maxHeight - height) * 0.5) + parseFloat($slide.css("paddingTop"));
+        rez.left = Math.floor((maxWidth - width) * 0.5) + parseFloat($slide.css("paddingLeft"));
+      } else if (slide.contentType === "video") {
+        // Force aspect ratio for the video
+        // "I say the whole world must learn of our peaceful ways… by force!"
+        aspectRatio = slide.opts.width && slide.opts.height ? width / height : slide.opts.ratio || 16 / 9;
+
+        if (height > width / aspectRatio) {
+          height = width / aspectRatio;
+        } else if (width > height * aspectRatio) {
+          width = height * aspectRatio;
+        }
+      }
+
+      rez.width = width;
+      rez.height = height;
+
+      return rez;
+    },
+
+    // Update content size and position for all slides
+    // ==============================================
+
+    update: function (e) {
+      var self = this;
+
+      $.each(self.slides, function (key, slide) {
+        self.updateSlide(slide, e);
+      });
+    },
+
+    // Update slide content position and size
+    // ======================================
+
+    updateSlide: function (slide, e) {
+      var self = this,
+        $content = slide && slide.$content,
+        width = slide.width || slide.opts.width,
+        height = slide.height || slide.opts.height,
+        $slide = slide.$slide;
+
+      // First, prevent caption overlap, if needed
+      self.adjustCaption(slide);
+
+      // Then resize content to fit inside the slide
+      if ($content && (width || height || slide.contentType === "video") && !slide.hasError) {
+        $.fancybox.stop($content);
+
+        $.fancybox.setTranslate($content, self.getFitPos(slide));
+
+        if (slide.pos === self.currPos) {
+          self.isAnimating = false;
+
+          self.updateCursor();
+        }
+      }
+
+      // Then some adjustments
+      self.adjustLayout(slide);
+
+      if ($slide.length) {
+        $slide.trigger("refresh");
+
+        if (slide.pos === self.currPos) {
+          self.$refs.toolbar
+            .add(self.$refs.navigation.find(".fancybox-button--arrow_right"))
+            .toggleClass("compensate-for-scrollbar", $slide.get(0).scrollHeight > $slide.get(0).clientHeight);
+        }
+      }
+
+      self.trigger("onUpdate", slide, e);
+    },
+
+    // Horizontally center slide
+    // =========================
+
+    centerSlide: function (duration) {
+      var self = this,
+        current = self.current,
+        $slide = current.$slide;
+
+      if (self.isClosing || !current) {
+        return;
+      }
+
+      $slide.siblings().css({
+        transform: "",
+        opacity: ""
+      });
+
+      $slide
+        .parent()
+        .children()
+        .removeClass("fancybox-slide--previous fancybox-slide--next");
+
+      $.fancybox.animate(
+        $slide, {
+          top: 0,
+          left: 0,
+          opacity: 1
+        },
+        duration === undefined ? 0 : duration,
+        function () {
+          // Clean up
+          $slide.css({
+            transform: "",
+            opacity: ""
+          });
+
+          if (!current.isComplete) {
+            self.complete();
+          }
+        },
+        false
+      );
+    },
+
+    // Check if current slide is moved (swiped)
+    // ========================================
+
+    isMoved: function (slide) {
+      var current = slide || this.current,
+        slidePos,
+        stagePos;
+
+      if (!current) {
+        return false;
+      }
+
+      stagePos = $.fancybox.getTranslate(this.$refs.stage);
+      slidePos = $.fancybox.getTranslate(current.$slide);
+
+      return (
+        !current.$slide.hasClass("fancybox-animated") &&
+        (Math.abs(slidePos.top - stagePos.top) > 0.5 || Math.abs(slidePos.left - stagePos.left) > 0.5)
+      );
+    },
+
+    // Update cursor style depending if content can be zoomed
+    // ======================================================
+
+    updateCursor: function (nextWidth, nextHeight) {
+      var self = this,
+        current = self.current,
+        $container = self.$refs.container,
+        canPan,
+        isZoomable;
+
+      if (!current || self.isClosing || !self.Guestures) {
+        return;
+      }
+
+      $container.removeClass("fancybox-is-zoomable fancybox-can-zoomIn fancybox-can-zoomOut fancybox-can-swipe fancybox-can-pan");
+
+      canPan = self.canPan(nextWidth, nextHeight);
+
+      isZoomable = canPan ? true : self.isZoomable();
+
+      $container.toggleClass("fancybox-is-zoomable", isZoomable);
+
+      $("[data-fancybox-zoom]").prop("disabled", !isZoomable);
+
+      if (canPan) {
+        $container.addClass("fancybox-can-pan");
+      } else if (
+        isZoomable &&
+        (current.opts.clickContent === "zoom" || ($.isFunction(current.opts.clickContent) && current.opts.clickContent(current) == "zoom"))
+      ) {
+        $container.addClass("fancybox-can-zoomIn");
+      } else if (current.opts.touch && (current.opts.touch.vertical || self.group.length > 1) && current.contentType !== "video") {
+        $container.addClass("fancybox-can-swipe");
+      }
+    },
+
+    // Check if current slide is zoomable
+    // ==================================
+
+    isZoomable: function () {
+      var self = this,
+        current = self.current,
+        fitPos;
+
+      // Assume that slide is zoomable if:
+      //   - image is still loading
+      //   - actual size of the image is smaller than available area
+      if (current && !self.isClosing && current.type === "image" && !current.hasError) {
+        if (!current.isLoaded) {
+          return true;
+        }
+
+        fitPos = self.getFitPos(current);
+
+        if (fitPos && (current.width > fitPos.width || current.height > fitPos.height)) {
+          return true;
+        }
+      }
+
+      return false;
+    },
+
+    // Check if current image dimensions are smaller than actual
+    // =========================================================
+
+    isScaledDown: function (nextWidth, nextHeight) {
+      var self = this,
+        rez = false,
+        current = self.current,
+        $content = current.$content;
+
+      if (nextWidth !== undefined && nextHeight !== undefined) {
+        rez = nextWidth < current.width && nextHeight < current.height;
+      } else if ($content) {
+        rez = $.fancybox.getTranslate($content);
+        rez = rez.width < current.width && rez.height < current.height;
+      }
+
+      return rez;
+    },
+
+    // Check if image dimensions exceed parent element
+    // ===============================================
+
+    canPan: function (nextWidth, nextHeight) {
+      var self = this,
+        current = self.current,
+        pos = null,
+        rez = false;
+
+      if (current.type === "image" && (current.isComplete || (nextWidth && nextHeight)) && !current.hasError) {
+        rez = self.getFitPos(current);
+
+        if (nextWidth !== undefined && nextHeight !== undefined) {
+          pos = {
+            width: nextWidth,
+            height: nextHeight
+          };
+        } else if (current.isComplete) {
+          pos = $.fancybox.getTranslate(current.$content);
+        }
+
+        if (pos && rez) {
+          rez = Math.abs(pos.width - rez.width) > 1.5 || Math.abs(pos.height - rez.height) > 1.5;
+        }
+      }
+
+      return rez;
+    },
+
+    // Load content into the slide
+    // ===========================
+
+    loadSlide: function (slide) {
+      var self = this,
+        type,
+        $slide,
+        ajaxLoad;
+
+      if (slide.isLoading || slide.isLoaded) {
+        return;
+      }
+
+      slide.isLoading = true;
+
+      if (self.trigger("beforeLoad", slide) === false) {
+        slide.isLoading = false;
+
+        return false;
+      }
+
+      type = slide.type;
+      $slide = slide.$slide;
+
+      $slide
+        .off("refresh")
+        .trigger("onReset")
+        .addClass(slide.opts.slideClass);
+
+      // Create content depending on the type
+      switch (type) {
+        case "image":
+          self.setImage(slide);
+
+          break;
+
+        case "iframe":
+          self.setIframe(slide);
+
+          break;
+
+        case "html":
+          self.setContent(slide, slide.src || slide.content);
+
+          break;
+
+        case "video":
+          self.setContent(
+            slide,
+            slide.opts.video.tpl
+            .replace(/\{\{src\}\}/gi, slide.src)
+            .replace("{{format}}", slide.opts.videoFormat || slide.opts.video.format || "")
+            .replace("{{poster}}", slide.thumb || "")
+          );
+
+          break;
+
+        case "inline":
+          if ($(slide.src).length) {
+            self.setContent(slide, $(slide.src));
+          } else {
+            self.setError(slide);
+          }
+
+          break;
+
+        case "ajax":
+          self.showLoading(slide);
+
+          ajaxLoad = $.ajax(
+            $.extend({}, slide.opts.ajax.settings, {
+              url: slide.src,
+              success: function (data, textStatus) {
+                if (textStatus === "success") {
+                  self.setContent(slide, data);
+                }
+              },
+              error: function (jqXHR, textStatus) {
+                if (jqXHR && textStatus !== "abort") {
+                  self.setError(slide);
+                }
+              }
+            })
+          );
+
+          $slide.one("onReset", function () {
+            ajaxLoad.abort();
+          });
+
+          break;
+
+        default:
+          self.setError(slide);
+
+          break;
+      }
+
+      return true;
+    },
+
+    // Use thumbnail image, if possible
+    // ================================
+
+    setImage: function (slide) {
+      var self = this,
+        ghost;
+
+      // Check if need to show loading icon
+      setTimeout(function () {
+        var $img = slide.$image;
+
+        if (!self.isClosing && slide.isLoading && (!$img || !$img.length || !$img[0].complete) && !slide.hasError) {
+          self.showLoading(slide);
+        }
+      }, 50);
+
+      //Check if image has srcset
+      self.checkSrcset(slide);
+
+      // This will be wrapper containing both ghost and actual image
+      slide.$content = $('<div class="fancybox-content"></div>')
+        .addClass("fancybox-is-hidden")
+        .appendTo(slide.$slide.addClass("fancybox-slide--image"));
+
+      // If we have a thumbnail, we can display it while actual image is loading
+      // Users will not stare at black screen and actual image will appear gradually
+      if (slide.opts.preload !== false && slide.opts.width && slide.opts.height && slide.thumb) {
+        slide.width = slide.opts.width;
+        slide.height = slide.opts.height;
+
+        ghost = document.createElement("img");
+
+        ghost.onerror = function () {
+          $(this).remove();
+
+          slide.$ghost = null;
+        };
+
+        ghost.onload = function () {
+          self.afterLoad(slide);
+        };
+
+        slide.$ghost = $(ghost)
+          .addClass("fancybox-image")
+          .appendTo(slide.$content)
+          .attr("src", slide.thumb);
+      }
+
+      // Start loading actual image
+      self.setBigImage(slide);
+    },
+
+    // Check if image has srcset and get the source
+    // ============================================
+    checkSrcset: function (slide) {
+      var srcset = slide.opts.srcset || slide.opts.image.srcset,
+        found,
+        temp,
+        pxRatio,
+        windowWidth;
+
+      // If we have "srcset", then we need to find first matching "src" value.
+      // This is necessary, because when you set an src attribute, the browser will preload the image
+      // before any javascript or even CSS is applied.
+      if (srcset) {
+        pxRatio = window.devicePixelRatio || 1;
+        windowWidth = window.innerWidth * pxRatio;
+
+        temp = srcset.split(",").map(function (el) {
+          var ret = {};
+
+          el.trim()
+            .split(/\s+/)
+            .forEach(function (el, i) {
+              var value = parseInt(el.substring(0, el.length - 1), 10);
+
+              if (i === 0) {
+                return (ret.url = el);
+              }
+
+              if (value) {
+                ret.value = value;
+                ret.postfix = el[el.length - 1];
+              }
+            });
+
+          return ret;
+        });
+
+        // Sort by value
+        temp.sort(function (a, b) {
+          return a.value - b.value;
+        });
+
+        // Ok, now we have an array of all srcset values
+        for (var j = 0; j < temp.length; j++) {
+          var el = temp[j];
+
+          if ((el.postfix === "w" && el.value >= windowWidth) || (el.postfix === "x" && el.value >= pxRatio)) {
+            found = el;
+            break;
+          }
+        }
+
+        // If not found, take the last one
+        if (!found && temp.length) {
+          found = temp[temp.length - 1];
+        }
+
+        if (found) {
+          slide.src = found.url;
+
+          // If we have default width/height values, we can calculate height for matching source
+          if (slide.width && slide.height && found.postfix == "w") {
+            slide.height = (slide.width / slide.height) * found.value;
+            slide.width = found.value;
+          }
+
+          slide.opts.srcset = srcset;
+        }
+      }
+    },
+
+    // Create full-size image
+    // ======================
+
+    setBigImage: function (slide) {
+      var self = this,
+        img = document.createElement("img"),
+        $img = $(img);
+
+      slide.$image = $img
+        .one("error", function () {
+          self.setError(slide);
+        })
+        .one("load", function () {
+          var sizes;
+
+          if (!slide.$ghost) {
+            self.resolveImageSlideSize(slide, this.naturalWidth, this.naturalHeight);
+
+            self.afterLoad(slide);
+          }
+
+          if (self.isClosing) {
+            return;
+          }
+
+          if (slide.opts.srcset) {
+            sizes = slide.opts.sizes;
+
+            if (!sizes || sizes === "auto") {
+              sizes =
+                (slide.width / slide.height > 1 && $W.width() / $W.height() > 1 ? "100" : Math.round((slide.width / slide.height) * 100)) +
+                "vw";
+            }
+
+            $img.attr("sizes", sizes).attr("srcset", slide.opts.srcset);
+          }
+
+          // Hide temporary image after some delay
+          if (slide.$ghost) {
+            setTimeout(function () {
+              if (slide.$ghost && !self.isClosing) {
+                slide.$ghost.hide();
+              }
+            }, Math.min(300, Math.max(1000, slide.height / 1600)));
+          }
+
+          self.hideLoading(slide);
+        })
+        .addClass("fancybox-image")
+        .attr("src", slide.src)
+        .appendTo(slide.$content);
+
+      if ((img.complete || img.readyState == "complete") && $img.naturalWidth && $img.naturalHeight) {
+        $img.trigger("load");
+      } else if (img.error) {
+        $img.trigger("error");
+      }
+    },
+
+    // Computes the slide size from image size and maxWidth/maxHeight
+    // ==============================================================
+
+    resolveImageSlideSize: function (slide, imgWidth, imgHeight) {
+      var maxWidth = parseInt(slide.opts.width, 10),
+        maxHeight = parseInt(slide.opts.height, 10);
+
+      // Sets the default values from the image
+      slide.width = imgWidth;
+      slide.height = imgHeight;
+
+      if (maxWidth > 0) {
+        slide.width = maxWidth;
+        slide.height = Math.floor((maxWidth * imgHeight) / imgWidth);
+      }
+
+      if (maxHeight > 0) {
+        slide.width = Math.floor((maxHeight * imgWidth) / imgHeight);
+        slide.height = maxHeight;
+      }
+    },
+
+    // Create iframe wrapper, iframe and bindings
+    // ==========================================
+
+    setIframe: function (slide) {
+      var self = this,
+        opts = slide.opts.iframe,
+        $slide = slide.$slide,
+        $iframe;
+
+      slide.$content = $('<div class="fancybox-content' + (opts.preload ? " fancybox-is-hidden" : "") + '"></div>')
+        .css(opts.css)
+        .appendTo($slide);
+
+      $slide.addClass("fancybox-slide--" + slide.contentType);
+
+      slide.$iframe = $iframe = $(opts.tpl.replace(/\{rnd\}/g, new Date().getTime()))
+        .attr(opts.attr)
+        .appendTo(slide.$content);
+
+      if (opts.preload) {
+        self.showLoading(slide);
+
+        // Unfortunately, it is not always possible to determine if iframe is successfully loaded
+        // (due to browser security policy)
+
+        $iframe.on("load.fb error.fb", function (e) {
+          this.isReady = 1;
+
+          slide.$slide.trigger("refresh");
+
+          self.afterLoad(slide);
+        });
+
+        // Recalculate iframe content size
+        // ===============================
+
+        $slide.on("refresh.fb", function () {
+          var $content = slide.$content,
+            frameWidth = opts.css.width,
+            frameHeight = opts.css.height,
+            $contents,
+            $body;
+
+          if ($iframe[0].isReady !== 1) {
+            return;
+          }
+
+          try {
+            $contents = $iframe.contents();
+            $body = $contents.find("body");
+          } catch (ignore) {}
+
+          // Calculate content dimensions, if it is accessible
+          if ($body && $body.length && $body.children().length) {
+            // Avoid scrolling to top (if multiple instances)
+            $slide.css("overflow", "visible");
+
+            $content.css({
+              width: "100%",
+              "max-width": "100%",
+              height: "9999px"
+            });
+
+            if (frameWidth === undefined) {
+              frameWidth = Math.ceil(Math.max($body[0].clientWidth, $body.outerWidth(true)));
+            }
+
+            $content.css("width", frameWidth ? frameWidth : "").css("max-width", "");
+
+            if (frameHeight === undefined) {
+              frameHeight = Math.ceil(Math.max($body[0].clientHeight, $body.outerHeight(true)));
+            }
+
+            $content.css("height", frameHeight ? frameHeight : "");
+
+            $slide.css("overflow", "auto");
+          }
+
+          $content.removeClass("fancybox-is-hidden");
+        });
+      } else {
+        self.afterLoad(slide);
+      }
+
+      $iframe.attr("src", slide.src);
+
+      // Remove iframe if closing or changing gallery item
+      $slide.one("onReset", function () {
+        // This helps IE not to throw errors when closing
+        try {
+          $(this)
+            .find("iframe")
+            .hide()
+            .unbind()
+            .attr("src", "//about:blank");
+        } catch (ignore) {}
+
+        $(this)
+          .off("refresh.fb")
+          .empty();
+
+        slide.isLoaded = false;
+        slide.isRevealed = false;
+      });
+    },
+
+    // Wrap and append content to the slide
+    // ======================================
+
+    setContent: function (slide, content) {
+      var self = this;
+
+      if (self.isClosing) {
+        return;
+      }
+
+      self.hideLoading(slide);
+
+      if (slide.$content) {
+        $.fancybox.stop(slide.$content);
+      }
+
+      slide.$slide.empty();
+
+      // If content is a jQuery object, then it will be moved to the slide.
+      // The placeholder is created so we will know where to put it back.
+      if (isQuery(content) && content.parent().length) {
+        // Make sure content is not already moved to fancyBox
+        if (content.hasClass("fancybox-content") || content.parent().hasClass("fancybox-content")) {
+          content.parents(".fancybox-slide").trigger("onReset");
+        }
+
+        // Create temporary element marking original place of the content
+        slide.$placeholder = $("<div>")
+          .hide()
+          .insertAfter(content);
+
+        // Make sure content is visible
+        content.css("display", "inline-block");
+      } else if (!slide.hasError) {
+        // If content is just a plain text, try to convert it to html
+        if ($.type(content) === "string") {
+          content = $("<div>")
+            .append($.trim(content))
+            .contents();
+        }
+
+        // If "filter" option is provided, then filter content
+        if (slide.opts.filter) {
+          content = $("<div>")
+            .html(content)
+            .find(slide.opts.filter);
+        }
+      }
+
+      slide.$slide.one("onReset", function () {
+        // Pause all html5 video/audio
+        $(this)
+          .find("video,audio")
+          .trigger("pause");
+
+        // Put content back
+        if (slide.$placeholder) {
+          slide.$placeholder.after(content.removeClass("fancybox-content").hide()).remove();
+
+          slide.$placeholder = null;
+        }
+
+        // Remove custom close button
+        if (slide.$smallBtn) {
+          slide.$smallBtn.remove();
+
+          slide.$smallBtn = null;
+        }
+
+        // Remove content and mark slide as not loaded
+        if (!slide.hasError) {
+          $(this).empty();
+
+          slide.isLoaded = false;
+          slide.isRevealed = false;
+        }
+      });
+
+      $(content).appendTo(slide.$slide);
+
+      if ($(content).is("video,audio")) {
+        $(content).addClass("fancybox-video");
+
+        $(content).wrap("<div></div>");
+
+        slide.contentType = "video";
+
+        slide.opts.width = slide.opts.width || $(content).attr("width");
+        slide.opts.height = slide.opts.height || $(content).attr("height");
+      }
+
+      slide.$content = slide.$slide
+        .children()
+        .filter("div,form,main,video,audio,article,.fancybox-content")
+        .first();
+
+      slide.$content.siblings().hide();
+
+      // Re-check if there is a valid content
+      // (in some cases, ajax response can contain various elements or plain text)
+      if (!slide.$content.length) {
+        slide.$content = slide.$slide
+          .wrapInner("<div></div>")
+          .children()
+          .first();
+      }
+
+      slide.$content.addClass("fancybox-content");
+
+      slide.$slide.addClass("fancybox-slide--" + slide.contentType);
+
+      self.afterLoad(slide);
+    },
+
+    // Display error message
+    // =====================
+
+    setError: function (slide) {
+      slide.hasError = true;
+
+      slide.$slide
+        .trigger("onReset")
+        .removeClass("fancybox-slide--" + slide.contentType)
+        .addClass("fancybox-slide--error");
+
+      slide.contentType = "html";
+
+      this.setContent(slide, this.translate(slide, slide.opts.errorTpl));
+
+      if (slide.pos === this.currPos) {
+        this.isAnimating = false;
+      }
+    },
+
+    // Show loading icon inside the slide
+    // ==================================
+
+    showLoading: function (slide) {
+      var self = this;
+
+      slide = slide || self.current;
+
+      if (slide && !slide.$spinner) {
+        slide.$spinner = $(self.translate(self, self.opts.spinnerTpl))
+          .appendTo(slide.$slide)
+          .hide()
+          .fadeIn("fast");
+      }
+    },
+
+    // Remove loading icon from the slide
+    // ==================================
+
+    hideLoading: function (slide) {
+      var self = this;
+
+      slide = slide || self.current;
+
+      if (slide && slide.$spinner) {
+        slide.$spinner.stop().remove();
+
+        delete slide.$spinner;
+      }
+    },
+
+    // Adjustments after slide content has been loaded
+    // ===============================================
+
+    afterLoad: function (slide) {
+      var self = this;
+
+      if (self.isClosing) {
+        return;
+      }
+
+      slide.isLoading = false;
+      slide.isLoaded = true;
+
+      self.trigger("afterLoad", slide);
+
+      self.hideLoading(slide);
+
+      // Add small close button
+      if (slide.opts.smallBtn && (!slide.$smallBtn || !slide.$smallBtn.length)) {
+        slide.$smallBtn = $(self.translate(slide, slide.opts.btnTpl.smallBtn)).appendTo(slide.$content);
+      }
+
+      // Disable right click
+      if (slide.opts.protect && slide.$content && !slide.hasError) {
+        slide.$content.on("contextmenu.fb", function (e) {
+          if (e.button == 2) {
+            e.preventDefault();
+          }
+
+          return true;
+        });
+
+        // Add fake element on top of the image
+        // This makes a bit harder for user to select image
+        if (slide.type === "image") {
+          $('<div class="fancybox-spaceball"></div>').appendTo(slide.$content);
+        }
+      }
+
+      self.adjustCaption(slide);
+
+      self.adjustLayout(slide);
+
+      if (slide.pos === self.currPos) {
+        self.updateCursor();
+      }
+
+      self.revealContent(slide);
+    },
+
+    // Prevent caption overlap,
+    // fix css inconsistency across browsers
+    // =====================================
+
+    adjustCaption: function (slide) {
+      var self = this,
+        current = slide || self.current,
+        caption = current.opts.caption,
+        preventOverlap = current.opts.preventCaptionOverlap,
+        $caption = self.$refs.caption,
+        $clone,
+        captionH = false;
+
+      $caption.toggleClass("fancybox-caption--separate", preventOverlap);
+
+      if (preventOverlap && caption && caption.length) {
+        if (current.pos !== self.currPos) {
+          $clone = $caption.clone().appendTo($caption.parent());
+
+          $clone
+            .children()
+            .eq(0)
+            .empty()
+            .html(caption);
+
+          captionH = $clone.outerHeight(true);
+
+          $clone.empty().remove();
+        } else if (self.$caption) {
+          captionH = self.$caption.outerHeight(true);
+        }
+
+        current.$slide.css("padding-bottom", captionH || "");
+      }
+    },
+
+    // Simple hack to fix inconsistency across browsers, described here (affects Edge, too):
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=748518
+    // ====================================================================================
+
+    adjustLayout: function (slide) {
+      var self = this,
+        current = slide || self.current,
+        scrollHeight,
+        marginBottom,
+        inlinePadding,
+        actualPadding;
+
+      if (current.isLoaded && current.opts.disableLayoutFix !== true) {
+        current.$content.css("margin-bottom", "");
+
+        // If we would always set margin-bottom for the content,
+        // then it would potentially break vertical align
+        if (current.$content.outerHeight() > current.$slide.height() + 0.5) {
+          inlinePadding = current.$slide[0].style["padding-bottom"];
+          actualPadding = current.$slide.css("padding-bottom");
+
+          if (parseFloat(actualPadding) > 0) {
+            scrollHeight = current.$slide[0].scrollHeight;
+
+            current.$slide.css("padding-bottom", 0);
+
+            if (Math.abs(scrollHeight - current.$slide[0].scrollHeight) < 1) {
+              marginBottom = actualPadding;
+            }
+
+            current.$slide.css("padding-bottom", inlinePadding);
+          }
+        }
+
+        current.$content.css("margin-bottom", marginBottom);
+      }
+    },
+
+    // Make content visible
+    // This method is called right after content has been loaded or
+    // user navigates gallery and transition should start
+    // ============================================================
+
+    revealContent: function (slide) {
+      var self = this,
+        $slide = slide.$slide,
+        end = false,
+        start = false,
+        isMoved = self.isMoved(slide),
+        isRevealed = slide.isRevealed,
+        effect,
+        effectClassName,
+        duration,
+        opacity;
+
+      slide.isRevealed = true;
+
+      effect = slide.opts[self.firstRun ? "animationEffect" : "transitionEffect"];
+      duration = slide.opts[self.firstRun ? "animationDuration" : "transitionDuration"];
+
+      duration = parseInt(slide.forcedDuration === undefined ? duration : slide.forcedDuration, 10);
+
+      if (isMoved || slide.pos !== self.currPos || !duration) {
+        effect = false;
+      }
+
+      // Check if can zoom
+      if (effect === "zoom") {
+        if (slide.pos === self.currPos && duration && slide.type === "image" && !slide.hasError && (start = self.getThumbPos(slide))) {
+          end = self.getFitPos(slide);
+        } else {
+          effect = "fade";
+        }
+      }
+
+      // Zoom animation
+      // ==============
+      if (effect === "zoom") {
+        self.isAnimating = true;
+
+        end.scaleX = end.width / start.width;
+        end.scaleY = end.height / start.height;
+
+        // Check if we need to animate opacity
+        opacity = slide.opts.zoomOpacity;
+
+        if (opacity == "auto") {
+          opacity = Math.abs(slide.width / slide.height - start.width / start.height) > 0.1;
+        }
+
+        if (opacity) {
+          start.opacity = 0.1;
+          end.opacity = 1;
+        }
+
+        // Draw image at start position
+        $.fancybox.setTranslate(slide.$content.removeClass("fancybox-is-hidden"), start);
+
+        forceRedraw(slide.$content);
+
+        // Start animation
+        $.fancybox.animate(slide.$content, end, duration, function () {
+          self.isAnimating = false;
+
+          self.complete();
+        });
+
+        return;
+      }
+
+      self.updateSlide(slide);
+
+      // Simply show content if no effect
+      // ================================
+      if (!effect) {
+        slide.$content.removeClass("fancybox-is-hidden");
+
+        if (!isRevealed && isMoved && slide.type === "image" && !slide.hasError) {
+          slide.$content.hide().fadeIn("fast");
+        }
+
+        if (slide.pos === self.currPos) {
+          self.complete();
+        }
+
+        return;
+      }
+
+      // Prepare for CSS transiton
+      // =========================
+      $.fancybox.stop($slide);
+
+      //effectClassName = "fancybox-animated fancybox-slide--" + (slide.pos >= self.prevPos ? "next" : "previous") + " fancybox-fx-" + effect;
+      effectClassName = "fancybox-slide--" + (slide.pos >= self.prevPos ? "next" : "previous") + " fancybox-animated fancybox-fx-" + effect;
+
+      $slide.addClass(effectClassName).removeClass("fancybox-slide--current"); //.addClass(effectClassName);
+
+      slide.$content.removeClass("fancybox-is-hidden");
+
+      // Force reflow
+      forceRedraw($slide);
+
+      if (slide.type !== "image") {
+        slide.$content.hide().show(0);
+      }
+
+      $.fancybox.animate(
+        $slide,
+        "fancybox-slide--current",
+        duration,
+        function () {
+          $slide.removeClass(effectClassName).css({
+            transform: "",
+            opacity: ""
+          });
+
+          if (slide.pos === self.currPos) {
+            self.complete();
+          }
+        },
+        true
+      );
+    },
+
+    // Check if we can and have to zoom from thumbnail
+    //================================================
+
+    getThumbPos: function (slide) {
+      var rez = false,
+        $thumb = slide.$thumb,
+        thumbPos,
+        btw,
+        brw,
+        bbw,
+        blw;
+
+      if (!$thumb || !inViewport($thumb[0])) {
+        return false;
+      }
+
+      thumbPos = $.fancybox.getTranslate($thumb);
+
+      btw = parseFloat($thumb.css("border-top-width") || 0);
+      brw = parseFloat($thumb.css("border-right-width") || 0);
+      bbw = parseFloat($thumb.css("border-bottom-width") || 0);
+      blw = parseFloat($thumb.css("border-left-width") || 0);
+
+      rez = {
+        top: thumbPos.top + btw,
+        left: thumbPos.left + blw,
+        width: thumbPos.width - brw - blw,
+        height: thumbPos.height - btw - bbw,
+        scaleX: 1,
+        scaleY: 1
+      };
+
+      return thumbPos.width > 0 && thumbPos.height > 0 ? rez : false;
+    },
+
+    // Final adjustments after current gallery item is moved to position
+    // and it`s content is loaded
+    // ==================================================================
+
+    complete: function () {
+      var self = this,
+        current = self.current,
+        slides = {},
+        $el;
+
+      if (self.isMoved() || !current.isLoaded) {
+        return;
+      }
+
+      if (!current.isComplete) {
+        current.isComplete = true;
+
+        current.$slide.siblings().trigger("onReset");
+
+        self.preload("inline");
+
+        // Trigger any CSS transiton inside the slide
+        forceRedraw(current.$slide);
+
+        current.$slide.addClass("fancybox-slide--complete");
+
+        // Remove unnecessary slides
+        $.each(self.slides, function (key, slide) {
+          if (slide.pos >= self.currPos - 1 && slide.pos <= self.currPos + 1) {
+            slides[slide.pos] = slide;
+          } else if (slide) {
+            $.fancybox.stop(slide.$slide);
+
+            slide.$slide.off().remove();
+          }
+        });
+
+        self.slides = slides;
+      }
+
+      self.isAnimating = false;
+
+      self.updateCursor();
+
+      self.trigger("afterShow");
+
+      // Autoplay first html5 video/audio
+      if (!!current.opts.video.autoStart) {
+        current.$slide
+          .find("video,audio")
+          .filter(":visible:first")
+          .trigger("play")
+          .one("ended", function () {
+            if (Document.exitFullscreen) {
+              Document.exitFullscreen();
+            } else if (this.webkitExitFullscreen) {
+              this.webkitExitFullscreen();
+            }
+
+            self.next();
+          });
+      }
+
+      // Try to focus on the first focusable element
+      if (current.opts.autoFocus && current.contentType === "html") {
+        // Look for the first input with autofocus attribute
+        $el = current.$content.find("input[autofocus]:enabled:visible:first");
+
+        if ($el.length) {
+          $el.trigger("focus");
+        } else {
+          self.focus(null, true);
+        }
+      }
+
+      // Avoid jumping
+      current.$slide.scrollTop(0).scrollLeft(0);
+    },
+
+    // Preload next and previous slides
+    // ================================
+
+    preload: function (type) {
+      var self = this,
+        prev,
+        next;
+
+      if (self.group.length < 2) {
+        return;
+      }
+
+      next = self.slides[self.currPos + 1];
+      prev = self.slides[self.currPos - 1];
+
+      if (prev && prev.type === type) {
+        self.loadSlide(prev);
+      }
+
+      if (next && next.type === type) {
+        self.loadSlide(next);
+      }
+    },
+
+    // Try to find and focus on the first focusable element
+    // ====================================================
+
+    focus: function (e, firstRun) {
+      var self = this,
+        focusableStr = [
+          "a[href]",
+          "area[href]",
+          'input:not([disabled]):not([type="hidden"]):not([aria-hidden])',
+          "select:not([disabled]):not([aria-hidden])",
+          "textarea:not([disabled]):not([aria-hidden])",
+          "button:not([disabled]):not([aria-hidden])",
+          "iframe",
+          "object",
+          "embed",
+          "video",
+          "audio",
+          "[contenteditable]",
+          '[tabindex]:not([tabindex^="-"])'
+        ].join(","),
+        focusableItems,
+        focusedItemIndex;
+
+      if (self.isClosing) {
+        return;
+      }
+
+      if (e || !self.current || !self.current.isComplete) {
+        // Focus on any element inside fancybox
+        focusableItems = self.$refs.container.find("*:visible");
+      } else {
+        // Focus inside current slide
+        focusableItems = self.current.$slide.find("*:visible" + (firstRun ? ":not(.fancybox-close-small)" : ""));
+      }
+
+      focusableItems = focusableItems.filter(focusableStr).filter(function () {
+        return $(this).css("visibility") !== "hidden" && !$(this).hasClass("disabled");
+      });
+
+      if (focusableItems.length) {
+        focusedItemIndex = focusableItems.index(document.activeElement);
+
+        if (e && e.shiftKey) {
+          // Back tab
+          if (focusedItemIndex < 0 || focusedItemIndex == 0) {
+            e.preventDefault();
+
+            focusableItems.eq(focusableItems.length - 1).trigger("focus");
+          }
+        } else {
+          // Outside or Forward tab
+          if (focusedItemIndex < 0 || focusedItemIndex == focusableItems.length - 1) {
+            if (e) {
+              e.preventDefault();
+            }
+
+            focusableItems.eq(0).trigger("focus");
+          }
+        }
+      } else {
+        self.$refs.container.trigger("focus");
+      }
+    },
+
+    // Activates current instance - brings container to the front and enables keyboard,
+    // notifies other instances about deactivating
+    // =================================================================================
+
+    activate: function () {
+      var self = this;
+
+      // Deactivate all instances
+      $(".fancybox-container").each(function () {
+        var instance = $(this).data("FancyBox");
+
+        // Skip self and closing instances
+        if (instance && instance.id !== self.id && !instance.isClosing) {
+          instance.trigger("onDeactivate");
+
+          instance.removeEvents();
+
+          instance.isVisible = false;
+        }
+      });
+
+      self.isVisible = true;
+
+      if (self.current || self.isIdle) {
+        self.update();
+
+        self.updateControls();
+      }
+
+      self.trigger("onActivate");
+
+      self.addEvents();
+    },
+
+    // Start closing procedure
+    // This will start "zoom-out" animation if needed and clean everything up afterwards
+    // =================================================================================
+
+    close: function (e, d) {
+      var self = this,
+        current = self.current,
+        effect,
+        duration,
+        $content,
+        domRect,
+        opacity,
+        start,
+        end;
+
+      var done = function () {
+        self.cleanUp(e);
+      };
+
+      if (self.isClosing) {
+        return false;
+      }
+
+      self.isClosing = true;
+
+      // If beforeClose callback prevents closing, make sure content is centered
+      if (self.trigger("beforeClose", e) === false) {
+        self.isClosing = false;
+
+        requestAFrame(function () {
+          self.update();
+        });
+
+        return false;
+      }
+
+      // Remove all events
+      // If there are multiple instances, they will be set again by "activate" method
+      self.removeEvents();
+
+      $content = current.$content;
+      effect = current.opts.animationEffect;
+      duration = $.isNumeric(d) ? d : effect ? current.opts.animationDuration : 0;
+
+      current.$slide.removeClass("fancybox-slide--complete fancybox-slide--next fancybox-slide--previous fancybox-animated");
+
+      if (e !== true) {
+        $.fancybox.stop(current.$slide);
+      } else {
+        effect = false;
+      }
+
+      // Remove other slides
+      current.$slide
+        .siblings()
+        .trigger("onReset")
+        .remove();
+
+      // Trigger animations
+      if (duration) {
+        self.$refs.container
+          .removeClass("fancybox-is-open")
+          .addClass("fancybox-is-closing")
+          .css("transition-duration", duration + "ms");
+      }
+
+      // Clean up
+      self.hideLoading(current);
+
+      self.hideControls(true);
+
+      self.updateCursor();
+
+      // Check if possible to zoom-out
+      if (
+        effect === "zoom" &&
+        !($content && duration && current.type === "image" && !self.isMoved() && !current.hasError && (end = self.getThumbPos(current)))
+      ) {
+        effect = "fade";
+      }
+
+      if (effect === "zoom") {
+        $.fancybox.stop($content);
+
+        domRect = $.fancybox.getTranslate($content);
+
+        start = {
+          top: domRect.top,
+          left: domRect.left,
+          scaleX: domRect.width / end.width,
+          scaleY: domRect.height / end.height,
+          width: end.width,
+          height: end.height
+        };
+
+        // Check if we need to animate opacity
+        opacity = current.opts.zoomOpacity;
+
+        if (opacity == "auto") {
+          opacity = Math.abs(current.width / current.height - end.width / end.height) > 0.1;
+        }
+
+        if (opacity) {
+          end.opacity = 0;
+        }
+
+        $.fancybox.setTranslate($content, start);
+
+        forceRedraw($content);
+
+        $.fancybox.animate($content, end, duration, done);
+
+        return true;
+      }
+
+      if (effect && duration) {
+        $.fancybox.animate(
+          current.$slide.addClass("fancybox-slide--previous").removeClass("fancybox-slide--current"),
+          "fancybox-animated fancybox-fx-" + effect,
+          duration,
+          done
+        );
+      } else {
+        // If skip animation
+        if (e === true) {
+          setTimeout(done, duration);
+        } else {
+          done();
+        }
+      }
+
+      return true;
+    },
+
+    // Final adjustments after removing the instance
+    // =============================================
+
+    cleanUp: function (e) {
+      var self = this,
+        instance,
+        $focus = self.current.opts.$orig,
+        x,
+        y;
+
+      self.current.$slide.trigger("onReset");
+
+      self.$refs.container.empty().remove();
+
+      self.trigger("afterClose", e);
+
+      // Place back focus
+      if (!!self.current.opts.backFocus) {
+        if (!$focus || !$focus.length || !$focus.is(":visible")) {
+          $focus = self.$trigger;
+        }
+
+        if ($focus && $focus.length) {
+          x = window.scrollX;
+          y = window.scrollY;
+
+          $focus.trigger("focus");
+
+          $("html, body")
+            .scrollTop(y)
+            .scrollLeft(x);
+        }
+      }
+
+      self.current = null;
+
+      // Check if there are other instances
+      instance = $.fancybox.getInstance();
+
+      if (instance) {
+        instance.activate();
+      } else {
+        $("body").removeClass("fancybox-active compensate-for-scrollbar");
+
+        $("#fancybox-style-noscroll").remove();
+      }
+    },
+
+    // Call callback and trigger an event
+    // ==================================
+
+    trigger: function (name, slide) {
+      var args = Array.prototype.slice.call(arguments, 1),
+        self = this,
+        obj = slide && slide.opts ? slide : self.current,
+        rez;
+
+      if (obj) {
+        args.unshift(obj);
+      } else {
+        obj = self;
+      }
+
+      args.unshift(self);
+
+      if ($.isFunction(obj.opts[name])) {
+        rez = obj.opts[name].apply(obj, args);
+      }
+
+      if (rez === false) {
+        return rez;
+      }
+
+      if (name === "afterClose" || !self.$refs) {
+        $D.trigger(name + ".fb", args);
+      } else {
+        self.$refs.container.trigger(name + ".fb", args);
+      }
+    },
+
+    // Update infobar values, navigation button states and reveal caption
+    // ==================================================================
+
+    updateControls: function () {
+      var self = this,
+        current = self.current,
+        index = current.index,
+        $container = self.$refs.container,
+        $caption = self.$refs.caption,
+        caption = current.opts.caption;
+
+      // Recalculate content dimensions
+      current.$slide.trigger("refresh");
+
+      // Set caption
+      if (caption && caption.length) {
+        self.$caption = $caption;
+
+        $caption
+          .children()
+          .eq(0)
+          .html(caption);
+      } else {
+        self.$caption = null;
+      }
+
+      if (!self.hasHiddenControls && !self.isIdle) {
+        self.showControls();
+      }
+
+      // Update info and navigation elements
+      $container.find("[data-fancybox-count]").html(self.group.length);
+      $container.find("[data-fancybox-index]").html(index + 1);
+
+      $container.find("[data-fancybox-prev]").prop("disabled", !current.opts.loop && index <= 0);
+      $container.find("[data-fancybox-next]").prop("disabled", !current.opts.loop && index >= self.group.length - 1);
+
+      if (current.type === "image") {
+        // Re-enable buttons; update download button source
+        $container
+          .find("[data-fancybox-zoom]")
+          .show()
+          .end()
+          .find("[data-fancybox-download]")
+          .attr("href", current.opts.image.src || current.src)
+          .show();
+      } else if (current.opts.toolbar) {
+        $container.find("[data-fancybox-download],[data-fancybox-zoom]").hide();
+      }
+
+      // Make sure focus is not on disabled button/element
+      if ($(document.activeElement).is(":hidden,[disabled]")) {
+        self.$refs.container.trigger("focus");
+      }
+    },
+
+    // Hide toolbar and caption
+    // ========================
+
+    hideControls: function (andCaption) {
+      var self = this,
+        arr = ["infobar", "toolbar", "nav"];
+
+      if (andCaption || !self.current.opts.preventCaptionOverlap) {
+        arr.push("caption");
+      }
+
+      this.$refs.container.removeClass(
+        arr
+        .map(function (i) {
+          return "fancybox-show-" + i;
+        })
+        .join(" ")
+      );
+
+      this.hasHiddenControls = true;
+    },
+
+    showControls: function () {
+      var self = this,
+        opts = self.current ? self.current.opts : self.opts,
+        $container = self.$refs.container;
+
+      self.hasHiddenControls = false;
+      self.idleSecondsCounter = 0;
+
+      $container
+        .toggleClass("fancybox-show-toolbar", !!(opts.toolbar && opts.buttons))
+        .toggleClass("fancybox-show-infobar", !!(opts.infobar && self.group.length > 1))
+        .toggleClass("fancybox-show-caption", !!self.$caption)
+        .toggleClass("fancybox-show-nav", !!(opts.arrows && self.group.length > 1))
+        .toggleClass("fancybox-is-modal", !!opts.modal);
+    },
+
+    // Toggle toolbar and caption
+    // ==========================
+
+    toggleControls: function () {
+      if (this.hasHiddenControls) {
+        this.showControls();
+      } else {
+        this.hideControls();
+      }
+    }
+  });
+
+  $.fancybox = {
+    version: "3.5.7",
+    defaults: defaults,
+
+    // Get current instance and execute a command.
+    //
+    // Examples of usage:
+    //
+    //   $instance = $.fancybox.getInstance();
+    //   $.fancybox.getInstance().jumpTo( 1 );
+    //   $.fancybox.getInstance( 'jumpTo', 1 );
+    //   $.fancybox.getInstance( function() {
+    //       console.info( this.currIndex );
+    //   });
+    // ======================================================
+
+    getInstance: function (command) {
+      var instance = $('.fancybox-container:not(".fancybox-is-closing"):last').data("FancyBox"),
+        args = Array.prototype.slice.call(arguments, 1);
+
+      if (instance instanceof FancyBox) {
+        if ($.type(command) === "string") {
+          instance[command].apply(instance, args);
+        } else if ($.type(command) === "function") {
+          command.apply(instance, args);
+        }
+
+        return instance;
+      }
+
+      return false;
+    },
+
+    // Create new instance
+    // ===================
+
+    open: function (items, opts, index) {
+      return new FancyBox(items, opts, index);
+    },
+
+    // Close current or all instances
+    // ==============================
+
+    close: function (all) {
+      var instance = this.getInstance();
+
+      if (instance) {
+        instance.close();
+
+        // Try to find and close next instance
+        if (all === true) {
+          this.close(all);
+        }
+      }
+    },
+
+    // Close all instances and unbind all events
+    // =========================================
+
+    destroy: function () {
+      this.close(true);
+
+      $D.add("body").off("click.fb-start", "**");
+    },
+
+    // Try to detect mobile devices
+    // ============================
+
+    isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+
+    // Detect if 'translate3d' support is available
+    // ============================================
+
+    use3d: (function () {
+      var div = document.createElement("div");
+
+      return (
+        window.getComputedStyle &&
+        window.getComputedStyle(div) &&
+        window.getComputedStyle(div).getPropertyValue("transform") &&
+        !(document.documentMode && document.documentMode < 11)
+      );
+    })(),
+
+    // Helper function to get current visual state of an element
+    // returns array[ top, left, horizontal-scale, vertical-scale, opacity ]
+    // =====================================================================
+
+    getTranslate: function ($el) {
+      var domRect;
+
+      if (!$el || !$el.length) {
+        return false;
+      }
+
+      domRect = $el[0].getBoundingClientRect();
+
+      return {
+        top: domRect.top || 0,
+        left: domRect.left || 0,
+        width: domRect.width,
+        height: domRect.height,
+        opacity: parseFloat($el.css("opacity"))
+      };
+    },
+
+    // Shortcut for setting "translate3d" properties for element
+    // Can set be used to set opacity, too
+    // ========================================================
+
+    setTranslate: function ($el, props) {
+      var str = "",
+        css = {};
+
+      if (!$el || !props) {
+        return;
+      }
+
+      if (props.left !== undefined || props.top !== undefined) {
+        str =
+          (props.left === undefined ? $el.position().left : props.left) +
+          "px, " +
+          (props.top === undefined ? $el.position().top : props.top) +
+          "px";
+
+        if (this.use3d) {
+          str = "translate3d(" + str + ", 0px)";
+        } else {
+          str = "translate(" + str + ")";
+        }
+      }
+
+      if (props.scaleX !== undefined && props.scaleY !== undefined) {
+        str += " scale(" + props.scaleX + ", " + props.scaleY + ")";
+      } else if (props.scaleX !== undefined) {
+        str += " scaleX(" + props.scaleX + ")";
+      }
+
+      if (str.length) {
+        css.transform = str;
+      }
+
+      if (props.opacity !== undefined) {
+        css.opacity = props.opacity;
+      }
+
+      if (props.width !== undefined) {
+        css.width = props.width;
+      }
+
+      if (props.height !== undefined) {
+        css.height = props.height;
+      }
+
+      return $el.css(css);
+    },
+
+    // Simple CSS transition handler
+    // =============================
+
+    animate: function ($el, to, duration, callback, leaveAnimationName) {
+      var self = this,
+        from;
+
+      if ($.isFunction(duration)) {
+        callback = duration;
+        duration = null;
+      }
+
+      self.stop($el);
+
+      from = self.getTranslate($el);
+
+      $el.on(transitionEnd, function (e) {
+        // Skip events from child elements and z-index change
+        if (e && e.originalEvent && (!$el.is(e.originalEvent.target) || e.originalEvent.propertyName == "z-index")) {
+          return;
+        }
+
+        self.stop($el);
+
+        if ($.isNumeric(duration)) {
+          $el.css("transition-duration", "");
+        }
+
+        if ($.isPlainObject(to)) {
+          if (to.scaleX !== undefined && to.scaleY !== undefined) {
+            self.setTranslate($el, {
+              top: to.top,
+              left: to.left,
+              width: from.width * to.scaleX,
+              height: from.height * to.scaleY,
+              scaleX: 1,
+              scaleY: 1
+            });
+          }
+        } else if (leaveAnimationName !== true) {
+          $el.removeClass(to);
+        }
+
+        if ($.isFunction(callback)) {
+          callback(e);
+        }
+      });
+
+      if ($.isNumeric(duration)) {
+        $el.css("transition-duration", duration + "ms");
+      }
+
+      // Start animation by changing CSS properties or class name
+      if ($.isPlainObject(to)) {
+        if (to.scaleX !== undefined && to.scaleY !== undefined) {
+          delete to.width;
+          delete to.height;
+
+          if ($el.parent().hasClass("fancybox-slide--image")) {
+            $el.parent().addClass("fancybox-is-scaling");
+          }
+        }
+
+        $.fancybox.setTranslate($el, to);
+      } else {
+        $el.addClass(to);
+      }
+
+      // Make sure that `transitionend` callback gets fired
+      $el.data(
+        "timer",
+        setTimeout(function () {
+          $el.trigger(transitionEnd);
+        }, duration + 33)
+      );
+    },
+
+    stop: function ($el, callCallback) {
+      if ($el && $el.length) {
+        clearTimeout($el.data("timer"));
+
+        if (callCallback) {
+          $el.trigger(transitionEnd);
+        }
+
+        $el.off(transitionEnd).css("transition-duration", "");
+
+        $el.parent().removeClass("fancybox-is-scaling");
+      }
+    }
+  };
+
+  // Default click handler for "fancyboxed" links
+  // ============================================
+
+  function _run(e, opts) {
+    var items = [],
+      index = 0,
+      $target,
+      value,
+      instance;
+
+    // Avoid opening multiple times
+    if (e && e.isDefaultPrevented()) {
+      return;
+    }
+
+    e.preventDefault();
+
+    opts = opts || {};
+
+    if (e && e.data) {
+      opts = mergeOpts(e.data.options, opts);
+    }
+
+    $target = opts.$target || $(e.currentTarget).trigger("blur");
+    instance = $.fancybox.getInstance();
+
+    if (instance && instance.$trigger && instance.$trigger.is($target)) {
+      return;
+    }
+
+    if (opts.selector) {
+      items = $(opts.selector);
+    } else {
+      // Get all related items and find index for clicked one
+      value = $target.attr("data-fancybox") || "";
+
+      if (value) {
+        items = e.data ? e.data.items : [];
+        items = items.length ? items.filter('[data-fancybox="' + value + '"]') : $('[data-fancybox="' + value + '"]');
+      } else {
+        items = [$target];
+      }
+    }
+
+    index = $(items).index($target);
+
+    // Sometimes current item can not be found
+    if (index < 0) {
+      index = 0;
+    }
+
+    instance = $.fancybox.open(items, opts, index);
+
+    // Save last active element
+    instance.$trigger = $target;
+  }
+
+  // Create a jQuery plugin
+  // ======================
+
+  $.fn.fancybox = function (options) {
+    var selector;
+
+    options = options || {};
+    selector = options.selector || false;
+
+    if (selector) {
+      // Use body element instead of document so it executes first
+      $("body")
+        .off("click.fb-start", selector)
+        .on("click.fb-start", selector, {
+          options: options
+        }, _run);
+    } else {
+      this.off("click.fb-start").on(
+        "click.fb-start", {
+          items: this,
+          options: options
+        },
+        _run
+      );
+    }
+
+    return this;
+  };
+
+  // Self initializing plugin for all elements having `data-fancybox` attribute
+  // ==========================================================================
+
+  $D.on("click.fb-start", "[data-fancybox]", _run);
+
+  // Enable "trigger elements"
+  // =========================
+
+  $D.on("click.fb-start", "[data-fancybox-trigger]", function (e) {
+    $('[data-fancybox="' + $(this).attr("data-fancybox-trigger") + '"]')
+      .eq($(this).attr("data-fancybox-index") || 0)
+      .trigger("click.fb-start", {
+        $trigger: $(this)
+      });
+  });
+
+  // Track focus event for better accessibility styling
+  // ==================================================
+  (function () {
+    var buttonStr = ".fancybox-button",
+      focusStr = "fancybox-focus",
+      $pressed = null;
+
+    $D.on("mousedown mouseup focus blur", buttonStr, function (e) {
+      switch (e.type) {
+        case "mousedown":
+          $pressed = $(this);
+          break;
+        case "mouseup":
+          $pressed = null;
+          break;
+        case "focusin":
+          $(buttonStr).removeClass(focusStr);
+
+          if (!$(this).is($pressed) && !$(this).is("[disabled]")) {
+            $(this).addClass(focusStr);
+          }
+          break;
+        case "focusout":
+          $(buttonStr).removeClass(focusStr);
+          break;
+      }
+    });
+  })();
+})(window, document, jQuery);
+// ==========================================================================
+//
+// Media
+// Adds additional media type support
+//
+// ==========================================================================
+(function ($) {
+  "use strict";
+
+  // Object containing properties for each media type
+  var defaults = {
+    youtube: {
+      matcher: /(youtube\.com|youtu\.be|youtube\-nocookie\.com)\/(watch\?(.*&)?v=|v\/|u\/|embed\/?)?(videoseries\?list=(.*)|[\w-]{11}|\?listType=(.*)&list=(.*))(.*)/i,
+      params: {
+        autoplay: 1,
+        autohide: 1,
+        fs: 1,
+        rel: 0,
+        hd: 1,
+        wmode: "transparent",
+        enablejsapi: 1,
+        html5: 1
+      },
+      paramPlace: 8,
+      type: "iframe",
+      url: "https://www.youtube-nocookie.com/embed/$4",
+      thumb: "https://img.youtube.com/vi/$4/hqdefault.jpg"
+    },
+
+    vimeo: {
+      matcher: /^.+vimeo.com\/(.*\/)?([\d]+)(.*)?/,
+      params: {
+        autoplay: 1,
+        hd: 1,
+        show_title: 1,
+        show_byline: 1,
+        show_portrait: 0,
+        fullscreen: 1
+      },
+      paramPlace: 3,
+      type: "iframe",
+      url: "//player.vimeo.com/video/$2"
+    },
+
+    instagram: {
+      matcher: /(instagr\.am|instagram\.com)\/p\/([a-zA-Z0-9_\-]+)\/?/i,
+      type: "image",
+      url: "//$1/p/$2/media/?size=l"
+    },
+
+    // Examples:
+    // http://maps.google.com/?ll=48.857995,2.294297&spn=0.007666,0.021136&t=m&z=16
+    // https://www.google.com/maps/@37.7852006,-122.4146355,14.65z
+    // https://www.google.com/maps/@52.2111123,2.9237542,6.61z?hl=en
+    // https://www.google.com/maps/place/Googleplex/@37.4220041,-122.0833494,17z/data=!4m5!3m4!1s0x0:0x6c296c66619367e0!8m2!3d37.4219998!4d-122.0840572
+    gmap_place: {
+      matcher: /(maps\.)?google\.([a-z]{2,3}(\.[a-z]{2})?)\/(((maps\/(place\/(.*)\/)?\@(.*),(\d+.?\d+?)z))|(\?ll=))(.*)?/i,
+      type: "iframe",
+      url: function (rez) {
+        return (
+          "//maps.google." +
+          rez[2] +
+          "/?ll=" +
+          (rez[9] ? rez[9] + "&z=" + Math.floor(rez[10]) + (rez[12] ? rez[12].replace(/^\//, "&") : "") : rez[12] + "").replace(/\?/, "&") +
+          "&output=" +
+          (rez[12] && rez[12].indexOf("layer=c") > 0 ? "svembed" : "embed")
+        );
+      }
+    },
+
+    // Examples:
+    // https://www.google.com/maps/search/Empire+State+Building/
+    // https://www.google.com/maps/search/?api=1&query=centurylink+field
+    // https://www.google.com/maps/search/?api=1&query=47.5951518,-122.3316393
+    gmap_search: {
+      matcher: /(maps\.)?google\.([a-z]{2,3}(\.[a-z]{2})?)\/(maps\/search\/)(.*)/i,
+      type: "iframe",
+      url: function (rez) {
+        return "//maps.google." + rez[2] + "/maps?q=" + rez[5].replace("query=", "q=").replace("api=1", "") + "&output=embed";
+      }
+    }
+  };
+
+  // Formats matching url to final form
+  var format = function (url, rez, params) {
+    if (!url) {
+      return;
+    }
+
+    params = params || "";
+
+    if ($.type(params) === "object") {
+      params = $.param(params, true);
+    }
+
+    $.each(rez, function (key, value) {
+      url = url.replace("$" + key, value || "");
+    });
+
+    if (params.length) {
+      url += (url.indexOf("?") > 0 ? "&" : "?") + params;
+    }
+
+    return url;
+  };
+
+  $(document).on("objectNeedsType.fb", function (e, instance, item) {
+    var url = item.src || "",
+      type = false,
+      media,
+      thumb,
+      rez,
+      params,
+      urlParams,
+      paramObj,
+      provider;
+
+    media = $.extend(true, {}, defaults, item.opts.media);
+
+    // Look for any matching media type
+    $.each(media, function (providerName, providerOpts) {
+      rez = url.match(providerOpts.matcher);
+
+      if (!rez) {
+        return;
+      }
+
+      type = providerOpts.type;
+      provider = providerName;
+      paramObj = {};
+
+      if (providerOpts.paramPlace && rez[providerOpts.paramPlace]) {
+        urlParams = rez[providerOpts.paramPlace];
+
+        if (urlParams[0] == "?") {
+          urlParams = urlParams.substring(1);
+        }
+
+        urlParams = urlParams.split("&");
+
+        for (var m = 0; m < urlParams.length; ++m) {
+          var p = urlParams[m].split("=", 2);
+
+          if (p.length == 2) {
+            paramObj[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+          }
+        }
+      }
+
+      params = $.extend(true, {}, providerOpts.params, item.opts[providerName], paramObj);
+
+      url =
+        $.type(providerOpts.url) === "function" ? providerOpts.url.call(this, rez, params, item) : format(providerOpts.url, rez, params);
+
+      thumb =
+        $.type(providerOpts.thumb) === "function" ? providerOpts.thumb.call(this, rez, params, item) : format(providerOpts.thumb, rez);
+
+      if (providerName === "youtube") {
+        url = url.replace(/&t=((\d+)m)?(\d+)s/, function (match, p1, m, s) {
+          return "&start=" + ((m ? parseInt(m, 10) * 60 : 0) + parseInt(s, 10));
+        });
+      } else if (providerName === "vimeo") {
+        url = url.replace("&%23", "#");
+      }
+
+      return false;
+    });
+
+    // If it is found, then change content type and update the url
+
+    if (type) {
+      if (!item.opts.thumb && !(item.opts.$thumb && item.opts.$thumb.length)) {
+        item.opts.thumb = thumb;
+      }
+
+      if (type === "iframe") {
+        item.opts = $.extend(true, item.opts, {
+          iframe: {
+            preload: false,
+            attr: {
+              scrolling: "no"
+            }
+          }
+        });
+      }
+
+      $.extend(item, {
+        type: type,
+        src: url,
+        origSrc: item.src,
+        contentSource: provider,
+        contentType: type === "image" ? "image" : provider == "gmap_place" || provider == "gmap_search" ? "map" : "video"
+      });
+    } else if (url) {
+      item.type = item.opts.defaultType;
+    }
+  });
+
+  // Load YouTube/Video API on request to detect when video finished playing
+  var VideoAPILoader = {
+    youtube: {
+      src: "https://www.youtube.com/iframe_api",
+      class: "YT",
+      loading: false,
+      loaded: false
+    },
+
+    vimeo: {
+      src: "https://player.vimeo.com/api/player.js",
+      class: "Vimeo",
+      loading: false,
+      loaded: false
+    },
+
+    load: function (vendor) {
+      var _this = this,
+        script;
+
+      if (this[vendor].loaded) {
+        setTimeout(function () {
+          _this.done(vendor);
+        });
+        return;
+      }
+
+      if (this[vendor].loading) {
+        return;
+      }
+
+      this[vendor].loading = true;
+
+      script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = this[vendor].src;
+
+      if (vendor === "youtube") {
+        window.onYouTubeIframeAPIReady = function () {
+          _this[vendor].loaded = true;
+          _this.done(vendor);
+        };
+      } else {
+        script.onload = function () {
+          _this[vendor].loaded = true;
+          _this.done(vendor);
+        };
+      }
+
+      document.body.appendChild(script);
+    },
+    done: function (vendor) {
+      var instance, $el, player;
+
+      if (vendor === "youtube") {
+        delete window.onYouTubeIframeAPIReady;
+      }
+
+      instance = $.fancybox.getInstance();
+
+      if (instance) {
+        $el = instance.current.$content.find("iframe");
+
+        if (vendor === "youtube" && YT !== undefined && YT) {
+          player = new YT.Player($el.attr("id"), {
+            events: {
+              onStateChange: function (e) {
+                if (e.data == 0) {
+                  instance.next();
+                }
+              }
+            }
+          });
+        } else if (vendor === "vimeo" && Vimeo !== undefined && Vimeo) {
+          player = new Vimeo.Player($el);
+
+          player.on("ended", function () {
+            instance.next();
+          });
+        }
+      }
+    }
+  };
+
+  $(document).on({
+    "afterShow.fb": function (e, instance, current) {
+      if (instance.group.length > 1 && (current.contentSource === "youtube" || current.contentSource === "vimeo")) {
+        VideoAPILoader.load(current.contentSource);
+      }
+    }
+  });
+})(jQuery);
+// ==========================================================================
+//
+// Guestures
+// Adds touch guestures, handles click and tap events
+//
+// ==========================================================================
+(function (window, document, $) {
+  "use strict";
+
+  var requestAFrame = (function () {
+    return (
+      window.requestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.oRequestAnimationFrame ||
+      // if all else fails, use setTimeout
+      function (callback) {
+        return window.setTimeout(callback, 1000 / 60);
+      }
+    );
+  })();
+
+  var cancelAFrame = (function () {
+    return (
+      window.cancelAnimationFrame ||
+      window.webkitCancelAnimationFrame ||
+      window.mozCancelAnimationFrame ||
+      window.oCancelAnimationFrame ||
+      function (id) {
+        window.clearTimeout(id);
+      }
+    );
+  })();
+
+  var getPointerXY = function (e) {
+    var result = [];
+
+    e = e.originalEvent || e || window.e;
+    e = e.touches && e.touches.length ? e.touches : e.changedTouches && e.changedTouches.length ? e.changedTouches : [e];
+
+    for (var key in e) {
+      if (e[key].pageX) {
+        result.push({
+          x: e[key].pageX,
+          y: e[key].pageY
+        });
+      } else if (e[key].clientX) {
+        result.push({
+          x: e[key].clientX,
+          y: e[key].clientY
+        });
+      }
+    }
+
+    return result;
+  };
+
+  var distance = function (point2, point1, what) {
+    if (!point1 || !point2) {
+      return 0;
+    }
+
+    if (what === "x") {
+      return point2.x - point1.x;
+    } else if (what === "y") {
+      return point2.y - point1.y;
+    }
+
+    return Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2));
+  };
+
+  var isClickable = function ($el) {
+    if (
+      $el.is('a,area,button,[role="button"],input,label,select,summary,textarea,video,audio,iframe') ||
+      $.isFunction($el.get(0).onclick) ||
+      $el.data("selectable")
+    ) {
+      return true;
+    }
+
+    // Check for attributes like data-fancybox-next or data-fancybox-close
+    for (var i = 0, atts = $el[0].attributes, n = atts.length; i < n; i++) {
+      if (atts[i].nodeName.substr(0, 14) === "data-fancybox-") {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  var hasScrollbars = function (el) {
+    var overflowY = window.getComputedStyle(el)["overflow-y"],
+      overflowX = window.getComputedStyle(el)["overflow-x"],
+      vertical = (overflowY === "scroll" || overflowY === "auto") && el.scrollHeight > el.clientHeight,
+      horizontal = (overflowX === "scroll" || overflowX === "auto") && el.scrollWidth > el.clientWidth;
+
+    return vertical || horizontal;
+  };
+
+  var isScrollable = function ($el) {
+    var rez = false;
+
+    while (true) {
+      rez = hasScrollbars($el.get(0));
+
+      if (rez) {
+        break;
+      }
+
+      $el = $el.parent();
+
+      if (!$el.length || $el.hasClass("fancybox-stage") || $el.is("body")) {
+        break;
+      }
+    }
+
+    return rez;
+  };
+
+  var Guestures = function (instance) {
+    var self = this;
+
+    self.instance = instance;
+
+    self.$bg = instance.$refs.bg;
+    self.$stage = instance.$refs.stage;
+    self.$container = instance.$refs.container;
+
+    self.destroy();
+
+    self.$container.on("touchstart.fb.touch mousedown.fb.touch", $.proxy(self, "ontouchstart"));
+  };
+
+  Guestures.prototype.destroy = function () {
+    var self = this;
+
+    self.$container.off(".fb.touch");
+
+    $(document).off(".fb.touch");
+
+    if (self.requestId) {
+      cancelAFrame(self.requestId);
+      self.requestId = null;
+    }
+
+    if (self.tapped) {
+      clearTimeout(self.tapped);
+      self.tapped = null;
+    }
+  };
+
+  Guestures.prototype.ontouchstart = function (e) {
+    var self = this,
+      $target = $(e.target),
+      instance = self.instance,
+      current = instance.current,
+      $slide = current.$slide,
+      $content = current.$content,
+      isTouchDevice = e.type == "touchstart";
+
+    // Do not respond to both (touch and mouse) events
+    if (isTouchDevice) {
+      self.$container.off("mousedown.fb.touch");
+    }
+
+    // Ignore right click
+    if (e.originalEvent && e.originalEvent.button == 2) {
+      return;
+    }
+
+    // Ignore taping on links, buttons, input elements
+    if (!$slide.length || !$target.length || isClickable($target) || isClickable($target.parent())) {
+      return;
+    }
+    // Ignore clicks on the scrollbar
+    if (!$target.is("img") && e.originalEvent.clientX > $target[0].clientWidth + $target.offset().left) {
+      return;
+    }
+
+    // Ignore clicks while zooming or closing
+    if (!current || instance.isAnimating || current.$slide.hasClass("fancybox-animated")) {
+      e.stopPropagation();
+      e.preventDefault();
+
+      return;
+    }
+
+    self.realPoints = self.startPoints = getPointerXY(e);
+
+    if (!self.startPoints.length) {
+      return;
+    }
+
+    // Allow other scripts to catch touch event if "touch" is set to false
+    if (current.touch) {
+      e.stopPropagation();
+    }
+
+    self.startEvent = e;
+
+    self.canTap = true;
+    self.$target = $target;
+    self.$content = $content;
+    self.opts = current.opts.touch;
+
+    self.isPanning = false;
+    self.isSwiping = false;
+    self.isZooming = false;
+    self.isScrolling = false;
+    self.canPan = instance.canPan();
+
+    self.startTime = new Date().getTime();
+    self.distanceX = self.distanceY = self.distance = 0;
+
+    self.canvasWidth = Math.round($slide[0].clientWidth);
+    self.canvasHeight = Math.round($slide[0].clientHeight);
+
+    self.contentLastPos = null;
+    self.contentStartPos = $.fancybox.getTranslate(self.$content) || {
+      top: 0,
+      left: 0
+    };
+    self.sliderStartPos = $.fancybox.getTranslate($slide);
+
+    // Since position will be absolute, but we need to make it relative to the stage
+    self.stagePos = $.fancybox.getTranslate(instance.$refs.stage);
+
+    self.sliderStartPos.top -= self.stagePos.top;
+    self.sliderStartPos.left -= self.stagePos.left;
+
+    self.contentStartPos.top -= self.stagePos.top;
+    self.contentStartPos.left -= self.stagePos.left;
+
+    $(document)
+      .off(".fb.touch")
+      .on(isTouchDevice ? "touchend.fb.touch touchcancel.fb.touch" : "mouseup.fb.touch mouseleave.fb.touch", $.proxy(self, "ontouchend"))
+      .on(isTouchDevice ? "touchmove.fb.touch" : "mousemove.fb.touch", $.proxy(self, "ontouchmove"));
+
+    if ($.fancybox.isMobile) {
+      document.addEventListener("scroll", self.onscroll, true);
+    }
+
+    // Skip if clicked outside the sliding area
+    if (!(self.opts || self.canPan) || !($target.is(self.$stage) || self.$stage.find($target).length)) {
+      if ($target.is(".fancybox-image")) {
+        e.preventDefault();
+      }
+
+      if (!($.fancybox.isMobile && $target.parents(".fancybox-caption").length)) {
+        return;
+      }
+    }
+
+    self.isScrollable = isScrollable($target) || isScrollable($target.parent());
+
+    // Check if element is scrollable and try to prevent default behavior (scrolling)
+    if (!($.fancybox.isMobile && self.isScrollable)) {
+      e.preventDefault();
+    }
+
+    // One finger or mouse click - swipe or pan an image
+    if (self.startPoints.length === 1 || current.hasError) {
+      if (self.canPan) {
+        $.fancybox.stop(self.$content);
+
+        self.isPanning = true;
+      } else {
+        self.isSwiping = true;
+      }
+
+      self.$container.addClass("fancybox-is-grabbing");
+    }
+
+    // Two fingers - zoom image
+    if (self.startPoints.length === 2 && current.type === "image" && (current.isLoaded || current.$ghost)) {
+      self.canTap = false;
+      self.isSwiping = false;
+      self.isPanning = false;
+
+      self.isZooming = true;
+
+      $.fancybox.stop(self.$content);
+
+      self.centerPointStartX = (self.startPoints[0].x + self.startPoints[1].x) * 0.5 - $(window).scrollLeft();
+      self.centerPointStartY = (self.startPoints[0].y + self.startPoints[1].y) * 0.5 - $(window).scrollTop();
+
+      self.percentageOfImageAtPinchPointX = (self.centerPointStartX - self.contentStartPos.left) / self.contentStartPos.width;
+      self.percentageOfImageAtPinchPointY = (self.centerPointStartY - self.contentStartPos.top) / self.contentStartPos.height;
+
+      self.startDistanceBetweenFingers = distance(self.startPoints[0], self.startPoints[1]);
+    }
+  };
+
+  Guestures.prototype.onscroll = function (e) {
+    var self = this;
+
+    self.isScrolling = true;
+
+    document.removeEventListener("scroll", self.onscroll, true);
+  };
+
+  Guestures.prototype.ontouchmove = function (e) {
+    var self = this;
+
+    // Make sure user has not released over iframe or disabled element
+    if (e.originalEvent.buttons !== undefined && e.originalEvent.buttons === 0) {
+      self.ontouchend(e);
+      return;
+    }
+
+    if (self.isScrolling) {
+      self.canTap = false;
+      return;
+    }
+
+    self.newPoints = getPointerXY(e);
+
+    if (!(self.opts || self.canPan) || !self.newPoints.length || !self.newPoints.length) {
+      return;
+    }
+
+    if (!(self.isSwiping && self.isSwiping === true)) {
+      e.preventDefault();
+    }
+
+    self.distanceX = distance(self.newPoints[0], self.startPoints[0], "x");
+    self.distanceY = distance(self.newPoints[0], self.startPoints[0], "y");
+
+    self.distance = distance(self.newPoints[0], self.startPoints[0]);
+
+    // Skip false ontouchmove events (Chrome)
+    if (self.distance > 0) {
+      if (self.isSwiping) {
+        self.onSwipe(e);
+      } else if (self.isPanning) {
+        self.onPan();
+      } else if (self.isZooming) {
+        self.onZoom();
+      }
+    }
+  };
+
+  Guestures.prototype.onSwipe = function (e) {
+    var self = this,
+      instance = self.instance,
+      swiping = self.isSwiping,
+      left = self.sliderStartPos.left || 0,
+      angle;
+
+    // If direction is not yet determined
+    if (swiping === true) {
+      // We need at least 10px distance to correctly calculate an angle
+      if (Math.abs(self.distance) > 10) {
+        self.canTap = false;
+
+        if (instance.group.length < 2 && self.opts.vertical) {
+          self.isSwiping = "y";
+        } else if (instance.isDragging || self.opts.vertical === false || (self.opts.vertical === "auto" && $(window).width() > 800)) {
+          self.isSwiping = "x";
+        } else {
+          angle = Math.abs((Math.atan2(self.distanceY, self.distanceX) * 180) / Math.PI);
+
+          self.isSwiping = angle > 45 && angle < 135 ? "y" : "x";
+        }
+
+        if (self.isSwiping === "y" && $.fancybox.isMobile && self.isScrollable) {
+          self.isScrolling = true;
+
+          return;
+        }
+
+        instance.isDragging = self.isSwiping;
+
+        // Reset points to avoid jumping, because we dropped first swipes to calculate the angle
+        self.startPoints = self.newPoints;
+
+        $.each(instance.slides, function (index, slide) {
+          var slidePos, stagePos;
+
+          $.fancybox.stop(slide.$slide);
+
+          slidePos = $.fancybox.getTranslate(slide.$slide);
+          stagePos = $.fancybox.getTranslate(instance.$refs.stage);
+
+          slide.$slide
+            .css({
+              transform: "",
+              opacity: "",
+              "transition-duration": ""
+            })
+            .removeClass("fancybox-animated")
+            .removeClass(function (index, className) {
+              return (className.match(/(^|\s)fancybox-fx-\S+/g) || []).join(" ");
+            });
+
+          if (slide.pos === instance.current.pos) {
+            self.sliderStartPos.top = slidePos.top - stagePos.top;
+            self.sliderStartPos.left = slidePos.left - stagePos.left;
+          }
+
+          $.fancybox.setTranslate(slide.$slide, {
+            top: slidePos.top - stagePos.top,
+            left: slidePos.left - stagePos.left
+          });
+        });
+
+        // Stop slideshow
+        if (instance.SlideShow && instance.SlideShow.isActive) {
+          instance.SlideShow.stop();
+        }
+      }
+
+      return;
+    }
+
+    // Sticky edges
+    if (swiping == "x") {
+      if (
+        self.distanceX > 0 &&
+        (self.instance.group.length < 2 || (self.instance.current.index === 0 && !self.instance.current.opts.loop))
+      ) {
+        left = left + Math.pow(self.distanceX, 0.8);
+      } else if (
+        self.distanceX < 0 &&
+        (self.instance.group.length < 2 ||
+          (self.instance.current.index === self.instance.group.length - 1 && !self.instance.current.opts.loop))
+      ) {
+        left = left - Math.pow(-self.distanceX, 0.8);
+      } else {
+        left = left + self.distanceX;
+      }
+    }
+
+    self.sliderLastPos = {
+      top: swiping == "x" ? 0 : self.sliderStartPos.top + self.distanceY,
+      left: left
+    };
+
+    if (self.requestId) {
+      cancelAFrame(self.requestId);
+
+      self.requestId = null;
+    }
+
+    self.requestId = requestAFrame(function () {
+      if (self.sliderLastPos) {
+        $.each(self.instance.slides, function (index, slide) {
+          var pos = slide.pos - self.instance.currPos;
+
+          $.fancybox.setTranslate(slide.$slide, {
+            top: self.sliderLastPos.top,
+            left: self.sliderLastPos.left + pos * self.canvasWidth + pos * slide.opts.gutter
+          });
+        });
+
+        self.$container.addClass("fancybox-is-sliding");
+      }
+    });
+  };
+
+  Guestures.prototype.onPan = function () {
+    var self = this;
+
+    // Prevent accidental movement (sometimes, when tapping casually, finger can move a bit)
+    if (distance(self.newPoints[0], self.realPoints[0]) < ($.fancybox.isMobile ? 10 : 5)) {
+      self.startPoints = self.newPoints;
+      return;
+    }
+
+    self.canTap = false;
+
+    self.contentLastPos = self.limitMovement();
+
+    if (self.requestId) {
+      cancelAFrame(self.requestId);
+    }
+
+    self.requestId = requestAFrame(function () {
+      $.fancybox.setTranslate(self.$content, self.contentLastPos);
+    });
+  };
+
+  // Make panning sticky to the edges
+  Guestures.prototype.limitMovement = function () {
+    var self = this;
+
+    var canvasWidth = self.canvasWidth;
+    var canvasHeight = self.canvasHeight;
+
+    var distanceX = self.distanceX;
+    var distanceY = self.distanceY;
+
+    var contentStartPos = self.contentStartPos;
+
+    var currentOffsetX = contentStartPos.left;
+    var currentOffsetY = contentStartPos.top;
+
+    var currentWidth = contentStartPos.width;
+    var currentHeight = contentStartPos.height;
+
+    var minTranslateX, minTranslateY, maxTranslateX, maxTranslateY, newOffsetX, newOffsetY;
+
+    if (currentWidth > canvasWidth) {
+      newOffsetX = currentOffsetX + distanceX;
+    } else {
+      newOffsetX = currentOffsetX;
+    }
+
+    newOffsetY = currentOffsetY + distanceY;
+
+    // Slow down proportionally to traveled distance
+    minTranslateX = Math.max(0, canvasWidth * 0.5 - currentWidth * 0.5);
+    minTranslateY = Math.max(0, canvasHeight * 0.5 - currentHeight * 0.5);
+
+    maxTranslateX = Math.min(canvasWidth - currentWidth, canvasWidth * 0.5 - currentWidth * 0.5);
+    maxTranslateY = Math.min(canvasHeight - currentHeight, canvasHeight * 0.5 - currentHeight * 0.5);
+
+    //   ->
+    if (distanceX > 0 && newOffsetX > minTranslateX) {
+      newOffsetX = minTranslateX - 1 + Math.pow(-minTranslateX + currentOffsetX + distanceX, 0.8) || 0;
+    }
+
+    //    <-
+    if (distanceX < 0 && newOffsetX < maxTranslateX) {
+      newOffsetX = maxTranslateX + 1 - Math.pow(maxTranslateX - currentOffsetX - distanceX, 0.8) || 0;
+    }
+
+    //   \/
+    if (distanceY > 0 && newOffsetY > minTranslateY) {
+      newOffsetY = minTranslateY - 1 + Math.pow(-minTranslateY + currentOffsetY + distanceY, 0.8) || 0;
+    }
+
+    //   /\
+    if (distanceY < 0 && newOffsetY < maxTranslateY) {
+      newOffsetY = maxTranslateY + 1 - Math.pow(maxTranslateY - currentOffsetY - distanceY, 0.8) || 0;
+    }
+
+    return {
+      top: newOffsetY,
+      left: newOffsetX
+    };
+  };
+
+  Guestures.prototype.limitPosition = function (newOffsetX, newOffsetY, newWidth, newHeight) {
+    var self = this;
+
+    var canvasWidth = self.canvasWidth;
+    var canvasHeight = self.canvasHeight;
+
+    if (newWidth > canvasWidth) {
+      newOffsetX = newOffsetX > 0 ? 0 : newOffsetX;
+      newOffsetX = newOffsetX < canvasWidth - newWidth ? canvasWidth - newWidth : newOffsetX;
+    } else {
+      // Center horizontally
+      newOffsetX = Math.max(0, canvasWidth / 2 - newWidth / 2);
+    }
+
+    if (newHeight > canvasHeight) {
+      newOffsetY = newOffsetY > 0 ? 0 : newOffsetY;
+      newOffsetY = newOffsetY < canvasHeight - newHeight ? canvasHeight - newHeight : newOffsetY;
+    } else {
+      // Center vertically
+      newOffsetY = Math.max(0, canvasHeight / 2 - newHeight / 2);
+    }
+
+    return {
+      top: newOffsetY,
+      left: newOffsetX
+    };
+  };
+
+  Guestures.prototype.onZoom = function () {
+    var self = this;
+
+    // Calculate current distance between points to get pinch ratio and new width and height
+    var contentStartPos = self.contentStartPos;
+
+    var currentWidth = contentStartPos.width;
+    var currentHeight = contentStartPos.height;
+
+    var currentOffsetX = contentStartPos.left;
+    var currentOffsetY = contentStartPos.top;
+
+    var endDistanceBetweenFingers = distance(self.newPoints[0], self.newPoints[1]);
+
+    var pinchRatio = endDistanceBetweenFingers / self.startDistanceBetweenFingers;
+
+    var newWidth = Math.floor(currentWidth * pinchRatio);
+    var newHeight = Math.floor(currentHeight * pinchRatio);
+
+    // This is the translation due to pinch-zooming
+    var translateFromZoomingX = (currentWidth - newWidth) * self.percentageOfImageAtPinchPointX;
+    var translateFromZoomingY = (currentHeight - newHeight) * self.percentageOfImageAtPinchPointY;
+
+    // Point between the two touches
+    var centerPointEndX = (self.newPoints[0].x + self.newPoints[1].x) / 2 - $(window).scrollLeft();
+    var centerPointEndY = (self.newPoints[0].y + self.newPoints[1].y) / 2 - $(window).scrollTop();
+
+    // And this is the translation due to translation of the centerpoint
+    // between the two fingers
+    var translateFromTranslatingX = centerPointEndX - self.centerPointStartX;
+    var translateFromTranslatingY = centerPointEndY - self.centerPointStartY;
+
+    // The new offset is the old/current one plus the total translation
+    var newOffsetX = currentOffsetX + (translateFromZoomingX + translateFromTranslatingX);
+    var newOffsetY = currentOffsetY + (translateFromZoomingY + translateFromTranslatingY);
+
+    var newPos = {
+      top: newOffsetY,
+      left: newOffsetX,
+      scaleX: pinchRatio,
+      scaleY: pinchRatio
+    };
+
+    self.canTap = false;
+
+    self.newWidth = newWidth;
+    self.newHeight = newHeight;
+
+    self.contentLastPos = newPos;
+
+    if (self.requestId) {
+      cancelAFrame(self.requestId);
+    }
+
+    self.requestId = requestAFrame(function () {
+      $.fancybox.setTranslate(self.$content, self.contentLastPos);
+    });
+  };
+
+  Guestures.prototype.ontouchend = function (e) {
+    var self = this;
+
+    var swiping = self.isSwiping;
+    var panning = self.isPanning;
+    var zooming = self.isZooming;
+    var scrolling = self.isScrolling;
+
+    self.endPoints = getPointerXY(e);
+    self.dMs = Math.max(new Date().getTime() - self.startTime, 1);
+
+    self.$container.removeClass("fancybox-is-grabbing");
+
+    $(document).off(".fb.touch");
+
+    document.removeEventListener("scroll", self.onscroll, true);
+
+    if (self.requestId) {
+      cancelAFrame(self.requestId);
+
+      self.requestId = null;
+    }
+
+    self.isSwiping = false;
+    self.isPanning = false;
+    self.isZooming = false;
+    self.isScrolling = false;
+
+    self.instance.isDragging = false;
+
+    if (self.canTap) {
+      return self.onTap(e);
+    }
+
+    self.speed = 100;
+
+    // Speed in px/ms
+    self.velocityX = (self.distanceX / self.dMs) * 0.5;
+    self.velocityY = (self.distanceY / self.dMs) * 0.5;
+
+    if (panning) {
+      self.endPanning();
+    } else if (zooming) {
+      self.endZooming();
+    } else {
+      self.endSwiping(swiping, scrolling);
+    }
+
+    return;
+  };
+
+  Guestures.prototype.endSwiping = function (swiping, scrolling) {
+    var self = this,
+      ret = false,
+      len = self.instance.group.length,
+      distanceX = Math.abs(self.distanceX),
+      canAdvance = swiping == "x" && len > 1 && ((self.dMs > 130 && distanceX > 10) || distanceX > 50),
+      speedX = 300;
+
+    self.sliderLastPos = null;
+
+    // Close if swiped vertically / navigate if horizontally
+    if (swiping == "y" && !scrolling && Math.abs(self.distanceY) > 50) {
+      // Continue vertical movement
+      $.fancybox.animate(
+        self.instance.current.$slide, {
+          top: self.sliderStartPos.top + self.distanceY + self.velocityY * 150,
+          opacity: 0
+        },
+        200
+      );
+      ret = self.instance.close(true, 250);
+    } else if (canAdvance && self.distanceX > 0) {
+      ret = self.instance.previous(speedX);
+    } else if (canAdvance && self.distanceX < 0) {
+      ret = self.instance.next(speedX);
+    }
+
+    if (ret === false && (swiping == "x" || swiping == "y")) {
+      self.instance.centerSlide(200);
+    }
+
+    self.$container.removeClass("fancybox-is-sliding");
+  };
+
+  // Limit panning from edges
+  // ========================
+  Guestures.prototype.endPanning = function () {
+    var self = this,
+      newOffsetX,
+      newOffsetY,
+      newPos;
+
+    if (!self.contentLastPos) {
+      return;
+    }
+
+    if (self.opts.momentum === false || self.dMs > 350) {
+      newOffsetX = self.contentLastPos.left;
+      newOffsetY = self.contentLastPos.top;
+    } else {
+      // Continue movement
+      newOffsetX = self.contentLastPos.left + self.velocityX * 500;
+      newOffsetY = self.contentLastPos.top + self.velocityY * 500;
+    }
+
+    newPos = self.limitPosition(newOffsetX, newOffsetY, self.contentStartPos.width, self.contentStartPos.height);
+
+    newPos.width = self.contentStartPos.width;
+    newPos.height = self.contentStartPos.height;
+
+    $.fancybox.animate(self.$content, newPos, 366);
+  };
+
+  Guestures.prototype.endZooming = function () {
+    var self = this;
+
+    var current = self.instance.current;
+
+    var newOffsetX, newOffsetY, newPos, reset;
+
+    var newWidth = self.newWidth;
+    var newHeight = self.newHeight;
+
+    if (!self.contentLastPos) {
+      return;
+    }
+
+    newOffsetX = self.contentLastPos.left;
+    newOffsetY = self.contentLastPos.top;
+
+    reset = {
+      top: newOffsetY,
+      left: newOffsetX,
+      width: newWidth,
+      height: newHeight,
+      scaleX: 1,
+      scaleY: 1
+    };
+
+    // Reset scalex/scaleY values; this helps for perfomance and does not break animation
+    $.fancybox.setTranslate(self.$content, reset);
+
+    if (newWidth < self.canvasWidth && newHeight < self.canvasHeight) {
+      self.instance.scaleToFit(150);
+    } else if (newWidth > current.width || newHeight > current.height) {
+      self.instance.scaleToActual(self.centerPointStartX, self.centerPointStartY, 150);
+    } else {
+      newPos = self.limitPosition(newOffsetX, newOffsetY, newWidth, newHeight);
+
+      $.fancybox.animate(self.$content, newPos, 150);
+    }
+  };
+
+  Guestures.prototype.onTap = function (e) {
+    var self = this;
+    var $target = $(e.target);
+
+    var instance = self.instance;
+    var current = instance.current;
+
+    var endPoints = (e && getPointerXY(e)) || self.startPoints;
+
+    var tapX = endPoints[0] ? endPoints[0].x - $(window).scrollLeft() - self.stagePos.left : 0;
+    var tapY = endPoints[0] ? endPoints[0].y - $(window).scrollTop() - self.stagePos.top : 0;
+
+    var where;
+
+    var process = function (prefix) {
+      var action = current.opts[prefix];
+
+      if ($.isFunction(action)) {
+        action = action.apply(instance, [current, e]);
+      }
+
+      if (!action) {
+        return;
+      }
+
+      switch (action) {
+        case "close":
+          instance.close(self.startEvent);
+
+          break;
+
+        case "toggleControls":
+          instance.toggleControls();
+
+          break;
+
+        case "next":
+          instance.next();
+
+          break;
+
+        case "nextOrClose":
+          if (instance.group.length > 1) {
+            instance.next();
+          } else {
+            instance.close(self.startEvent);
+          }
+
+          break;
+
+        case "zoom":
+          if (current.type == "image" && (current.isLoaded || current.$ghost)) {
+            if (instance.canPan()) {
+              instance.scaleToFit();
+            } else if (instance.isScaledDown()) {
+              instance.scaleToActual(tapX, tapY);
+            } else if (instance.group.length < 2) {
+              instance.close(self.startEvent);
+            }
+          }
+
+          break;
+      }
+    };
+
+    // Ignore right click
+    if (e.originalEvent && e.originalEvent.button == 2) {
+      return;
+    }
+
+    // Skip if clicked on the scrollbar
+    if (!$target.is("img") && tapX > $target[0].clientWidth + $target.offset().left) {
+      return;
+    }
+
+    // Check where is clicked
+    if ($target.is(".fancybox-bg,.fancybox-inner,.fancybox-outer,.fancybox-container")) {
+      where = "Outside";
+    } else if ($target.is(".fancybox-slide")) {
+      where = "Slide";
+    } else if (
+      instance.current.$content &&
+      instance.current.$content
+      .find($target)
+      .addBack()
+      .filter($target).length
+    ) {
+      where = "Content";
+    } else {
+      return;
+    }
+
+    // Check if this is a double tap
+    if (self.tapped) {
+      // Stop previously created single tap
+      clearTimeout(self.tapped);
+      self.tapped = null;
+
+      // Skip if distance between taps is too big
+      if (Math.abs(tapX - self.tapX) > 50 || Math.abs(tapY - self.tapY) > 50) {
+        return this;
+      }
+
+      // OK, now we assume that this is a double-tap
+      process("dblclick" + where);
+    } else {
+      // Single tap will be processed if user has not clicked second time within 300ms
+      // or there is no need to wait for double-tap
+      self.tapX = tapX;
+      self.tapY = tapY;
+
+      if (current.opts["dblclick" + where] && current.opts["dblclick" + where] !== current.opts["click" + where]) {
+        self.tapped = setTimeout(function () {
+          self.tapped = null;
+
+          if (!instance.isAnimating) {
+            process("click" + where);
+          }
+        }, 500);
+      } else {
+        process("click" + where);
+      }
+    }
+
+    return this;
+  };
+
+  $(document)
+    .on("onActivate.fb", function (e, instance) {
+      if (instance && !instance.Guestures) {
+        instance.Guestures = new Guestures(instance);
+      }
+    })
+    .on("beforeClose.fb", function (e, instance) {
+      if (instance && instance.Guestures) {
+        instance.Guestures.destroy();
+      }
+    });
+})(window, document, jQuery);
+// ==========================================================================
+//
+// SlideShow
+// Enables slideshow functionality
+//
+// Example of usage:
+// $.fancybox.getInstance().SlideShow.start()
+//
+// ==========================================================================
+(function (document, $) {
+  "use strict";
+
+  $.extend(true, $.fancybox.defaults, {
+    btnTpl: {
+      slideShow: '<button data-fancybox-play class="fancybox-button fancybox-button--play" title="{{PLAY_START}}">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.5 5.4v13.2l11-6.6z"/></svg>' +
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.33 5.75h2.2v12.5h-2.2V5.75zm5.15 0h2.2v12.5h-2.2V5.75z"/></svg>' +
+        "</button>"
+    },
+    slideShow: {
+      autoStart: false,
+      speed: 3000,
+      progress: true
+    }
+  });
+
+  var SlideShow = function (instance) {
+    this.instance = instance;
+    this.init();
+  };
+
+  $.extend(SlideShow.prototype, {
+    timer: null,
+    isActive: false,
+    $button: null,
+
+    init: function () {
+      var self = this,
+        instance = self.instance,
+        opts = instance.group[instance.currIndex].opts.slideShow;
+
+      self.$button = instance.$refs.toolbar.find("[data-fancybox-play]").on("click", function () {
+        self.toggle();
+      });
+
+      if (instance.group.length < 2 || !opts) {
+        self.$button.hide();
+      } else if (opts.progress) {
+        self.$progress = $('<div class="fancybox-progress"></div>').appendTo(instance.$refs.inner);
+      }
+    },
+
+    set: function (force) {
+      var self = this,
+        instance = self.instance,
+        current = instance.current;
+
+      // Check if reached last element
+      if (current && (force === true || current.opts.loop || instance.currIndex < instance.group.length - 1)) {
+        if (self.isActive && current.contentType !== "video") {
+          if (self.$progress) {
+            $.fancybox.animate(self.$progress.show(), {
+              scaleX: 1
+            }, current.opts.slideShow.speed);
+          }
+
+          self.timer = setTimeout(function () {
+            if (!instance.current.opts.loop && instance.current.index == instance.group.length - 1) {
+              instance.jumpTo(0);
+            } else {
+              instance.next();
+            }
+          }, current.opts.slideShow.speed);
+        }
+      } else {
+        self.stop();
+        instance.idleSecondsCounter = 0;
+        instance.showControls();
+      }
+    },
+
+    clear: function () {
+      var self = this;
+
+      clearTimeout(self.timer);
+
+      self.timer = null;
+
+      if (self.$progress) {
+        self.$progress.removeAttr("style").hide();
+      }
+    },
+
+    start: function () {
+      var self = this,
+        current = self.instance.current;
+
+      if (current) {
+        self.$button
+          .attr("title", (current.opts.i18n[current.opts.lang] || current.opts.i18n.en).PLAY_STOP)
+          .removeClass("fancybox-button--play")
+          .addClass("fancybox-button--pause");
+
+        self.isActive = true;
+
+        if (current.isComplete) {
+          self.set(true);
+        }
+
+        self.instance.trigger("onSlideShowChange", true);
+      }
+    },
+
+    stop: function () {
+      var self = this,
+        current = self.instance.current;
+
+      self.clear();
+
+      self.$button
+        .attr("title", (current.opts.i18n[current.opts.lang] || current.opts.i18n.en).PLAY_START)
+        .removeClass("fancybox-button--pause")
+        .addClass("fancybox-button--play");
+
+      self.isActive = false;
+
+      self.instance.trigger("onSlideShowChange", false);
+
+      if (self.$progress) {
+        self.$progress.removeAttr("style").hide();
+      }
+    },
+
+    toggle: function () {
+      var self = this;
+
+      if (self.isActive) {
+        self.stop();
+      } else {
+        self.start();
+      }
+    }
+  });
+
+  $(document).on({
+    "onInit.fb": function (e, instance) {
+      if (instance && !instance.SlideShow) {
+        instance.SlideShow = new SlideShow(instance);
+      }
+    },
+
+    "beforeShow.fb": function (e, instance, current, firstRun) {
+      var SlideShow = instance && instance.SlideShow;
+
+      if (firstRun) {
+        if (SlideShow && current.opts.slideShow.autoStart) {
+          SlideShow.start();
+        }
+      } else if (SlideShow && SlideShow.isActive) {
+        SlideShow.clear();
+      }
+    },
+
+    "afterShow.fb": function (e, instance, current) {
+      var SlideShow = instance && instance.SlideShow;
+
+      if (SlideShow && SlideShow.isActive) {
+        SlideShow.set();
+      }
+    },
+
+    "afterKeydown.fb": function (e, instance, current, keypress, keycode) {
+      var SlideShow = instance && instance.SlideShow;
+
+      // "P" or Spacebar
+      if (SlideShow && current.opts.slideShow && (keycode === 80 || keycode === 32) && !$(document.activeElement).is("button,a,input")) {
+        keypress.preventDefault();
+
+        SlideShow.toggle();
+      }
+    },
+
+    "beforeClose.fb onDeactivate.fb": function (e, instance) {
+      var SlideShow = instance && instance.SlideShow;
+
+      if (SlideShow) {
+        SlideShow.stop();
+      }
+    }
+  });
+
+  // Page Visibility API to pause slideshow when window is not active
+  $(document).on("visibilitychange", function () {
+    var instance = $.fancybox.getInstance(),
+      SlideShow = instance && instance.SlideShow;
+
+    if (SlideShow && SlideShow.isActive) {
+      if (document.hidden) {
+        SlideShow.clear();
+      } else {
+        SlideShow.set();
+      }
+    }
+  });
+})(document, jQuery);
+// ==========================================================================
+//
+// FullScreen
+// Adds fullscreen functionality
+//
+// ==========================================================================
+(function (document, $) {
+  "use strict";
+
+  // Collection of methods supported by user browser
+  var fn = (function () {
+    var fnMap = [
+      ["requestFullscreen", "exitFullscreen", "fullscreenElement", "fullscreenEnabled", "fullscreenchange", "fullscreenerror"],
+      // new WebKit
+      [
+        "webkitRequestFullscreen",
+        "webkitExitFullscreen",
+        "webkitFullscreenElement",
+        "webkitFullscreenEnabled",
+        "webkitfullscreenchange",
+        "webkitfullscreenerror"
+      ],
+      // old WebKit (Safari 5.1)
+      [
+        "webkitRequestFullScreen",
+        "webkitCancelFullScreen",
+        "webkitCurrentFullScreenElement",
+        "webkitCancelFullScreen",
+        "webkitfullscreenchange",
+        "webkitfullscreenerror"
+      ],
+      [
+        "mozRequestFullScreen",
+        "mozCancelFullScreen",
+        "mozFullScreenElement",
+        "mozFullScreenEnabled",
+        "mozfullscreenchange",
+        "mozfullscreenerror"
+      ],
+      ["msRequestFullscreen", "msExitFullscreen", "msFullscreenElement", "msFullscreenEnabled", "MSFullscreenChange", "MSFullscreenError"]
+    ];
+
+    var ret = {};
+
+    for (var i = 0; i < fnMap.length; i++) {
+      var val = fnMap[i];
+
+      if (val && val[1] in document) {
+        for (var j = 0; j < val.length; j++) {
+          ret[fnMap[0][j]] = val[j];
+        }
+
+        return ret;
+      }
+    }
+
+    return false;
+  })();
+
+  if (fn) {
+    var FullScreen = {
+      request: function (elem) {
+        elem = elem || document.documentElement;
+
+        elem[fn.requestFullscreen](elem.ALLOW_KEYBOARD_INPUT);
+      },
+      exit: function () {
+        document[fn.exitFullscreen]();
+      },
+      toggle: function (elem) {
+        elem = elem || document.documentElement;
+
+        if (this.isFullscreen()) {
+          this.exit();
+        } else {
+          this.request(elem);
+        }
+      },
+      isFullscreen: function () {
+        return Boolean(document[fn.fullscreenElement]);
+      },
+      enabled: function () {
+        return Boolean(document[fn.fullscreenEnabled]);
+      }
+    };
+
+    $.extend(true, $.fancybox.defaults, {
+      btnTpl: {
+        fullScreen: '<button data-fancybox-fullscreen class="fancybox-button fancybox-button--fsenter" title="{{FULL_SCREEN}}">' +
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>' +
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5zm3-8H5v2h5V5H8zm6 11h2v-3h3v-2h-5zm2-11V5h-2v5h5V8z"/></svg>' +
+          "</button>"
+      },
+      fullScreen: {
+        autoStart: false
+      }
+    });
+
+    $(document).on(fn.fullscreenchange, function () {
+      var isFullscreen = FullScreen.isFullscreen(),
+        instance = $.fancybox.getInstance();
+
+      if (instance) {
+        // If image is zooming, then force to stop and reposition properly
+        if (instance.current && instance.current.type === "image" && instance.isAnimating) {
+          instance.isAnimating = false;
+
+          instance.update(true, true, 0);
+
+          if (!instance.isComplete) {
+            instance.complete();
+          }
+        }
+
+        instance.trigger("onFullscreenChange", isFullscreen);
+
+        instance.$refs.container.toggleClass("fancybox-is-fullscreen", isFullscreen);
+
+        instance.$refs.toolbar
+          .find("[data-fancybox-fullscreen]")
+          .toggleClass("fancybox-button--fsenter", !isFullscreen)
+          .toggleClass("fancybox-button--fsexit", isFullscreen);
+      }
+    });
+  }
+
+  $(document).on({
+    "onInit.fb": function (e, instance) {
+      var $container;
+
+      if (!fn) {
+        instance.$refs.toolbar.find("[data-fancybox-fullscreen]").remove();
+
+        return;
+      }
+
+      if (instance && instance.group[instance.currIndex].opts.fullScreen) {
+        $container = instance.$refs.container;
+
+        $container.on("click.fb-fullscreen", "[data-fancybox-fullscreen]", function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+
+          FullScreen.toggle();
+        });
+
+        if (instance.opts.fullScreen && instance.opts.fullScreen.autoStart === true) {
+          FullScreen.request();
+        }
+
+        // Expose API
+        instance.FullScreen = FullScreen;
+      } else if (instance) {
+        instance.$refs.toolbar.find("[data-fancybox-fullscreen]").hide();
+      }
+    },
+
+    "afterKeydown.fb": function (e, instance, current, keypress, keycode) {
+      // "F"
+      if (instance && instance.FullScreen && keycode === 70) {
+        keypress.preventDefault();
+
+        instance.FullScreen.toggle();
+      }
+    },
+
+    "beforeClose.fb": function (e, instance) {
+      if (instance && instance.FullScreen && instance.$refs.container.hasClass("fancybox-is-fullscreen")) {
+        FullScreen.exit();
+      }
+    }
+  });
+})(document, jQuery);
+// ==========================================================================
+//
+// Thumbs
+// Displays thumbnails in a grid
+//
+// ==========================================================================
+(function (document, $) {
+  "use strict";
+
+  var CLASS = "fancybox-thumbs",
+    CLASS_ACTIVE = CLASS + "-active";
+
+  // Make sure there are default values
+  $.fancybox.defaults = $.extend(
+    true, {
+      btnTpl: {
+        thumbs: '<button data-fancybox-thumbs class="fancybox-button fancybox-button--thumbs" title="{{THUMBS}}">' +
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.59 14.59h3.76v3.76h-3.76v-3.76zm-4.47 0h3.76v3.76h-3.76v-3.76zm-4.47 0h3.76v3.76H5.65v-3.76zm8.94-4.47h3.76v3.76h-3.76v-3.76zm-4.47 0h3.76v3.76h-3.76v-3.76zm-4.47 0h3.76v3.76H5.65v-3.76zm8.94-4.47h3.76v3.76h-3.76V5.65zm-4.47 0h3.76v3.76h-3.76V5.65zm-4.47 0h3.76v3.76H5.65V5.65z"/></svg>' +
+          "</button>"
+      },
+      thumbs: {
+        autoStart: false, // Display thumbnails on opening
+        hideOnClose: true, // Hide thumbnail grid when closing animation starts
+        parentEl: ".fancybox-container", // Container is injected into this element
+        axis: "y" // Vertical (y) or horizontal (x) scrolling
+      }
+    },
+    $.fancybox.defaults
+  );
+
+  var FancyThumbs = function (instance) {
+    this.init(instance);
+  };
+
+  $.extend(FancyThumbs.prototype, {
+    $button: null,
+    $grid: null,
+    $list: null,
+    isVisible: false,
+    isActive: false,
+
+    init: function (instance) {
+      var self = this,
+        group = instance.group,
+        enabled = 0;
+
+      self.instance = instance;
+      self.opts = group[instance.currIndex].opts.thumbs;
+
+      instance.Thumbs = self;
+
+      self.$button = instance.$refs.toolbar.find("[data-fancybox-thumbs]");
+
+      // Enable thumbs if at least two group items have thumbnails
+      for (var i = 0, len = group.length; i < len; i++) {
+        if (group[i].thumb) {
+          enabled++;
+        }
+
+        if (enabled > 1) {
+          break;
+        }
+      }
+
+      if (enabled > 1 && !!self.opts) {
+        self.$button.removeAttr("style").on("click", function () {
+          self.toggle();
+        });
+
+        self.isActive = true;
+      } else {
+        self.$button.hide();
+      }
+    },
+
+    create: function () {
+      var self = this,
+        instance = self.instance,
+        parentEl = self.opts.parentEl,
+        list = [],
+        src;
+
+      if (!self.$grid) {
+        // Create main element
+        self.$grid = $('<div class="' + CLASS + " " + CLASS + "-" + self.opts.axis + '"></div>').appendTo(
+          instance.$refs.container
+          .find(parentEl)
+          .addBack()
+          .filter(parentEl)
+        );
+
+        // Add "click" event that performs gallery navigation
+        self.$grid.on("click", "a", function () {
+          instance.jumpTo($(this).attr("data-index"));
+        });
+      }
+
+      // Build the list
+      if (!self.$list) {
+        self.$list = $('<div class="' + CLASS + '__list">').appendTo(self.$grid);
+      }
+
+      $.each(instance.group, function (i, item) {
+        src = item.thumb;
+
+        if (!src && item.type === "image") {
+          src = item.src;
+        }
+
+        list.push(
+          '<a href="javascript:;" tabindex="0" data-index="' +
+          i +
+          '"' +
+          (src && src.length ? ' style="background-image:url(' + src + ')"' : 'class="fancybox-thumbs-missing"') +
+          "></a>"
+        );
+      });
+
+      self.$list[0].innerHTML = list.join("");
+
+      if (self.opts.axis === "x") {
+        // Set fixed width for list element to enable horizontal scrolling
+        self.$list.width(
+          parseInt(self.$grid.css("padding-right"), 10) +
+          instance.group.length *
+          self.$list
+          .children()
+          .eq(0)
+          .outerWidth(true)
+        );
+      }
+    },
+
+    focus: function (duration) {
+      var self = this,
+        $list = self.$list,
+        $grid = self.$grid,
+        thumb,
+        thumbPos;
+
+      if (!self.instance.current) {
+        return;
+      }
+
+      thumb = $list
+        .children()
+        .removeClass(CLASS_ACTIVE)
+        .filter('[data-index="' + self.instance.current.index + '"]')
+        .addClass(CLASS_ACTIVE);
+
+      thumbPos = thumb.position();
+
+      // Check if need to scroll to make current thumb visible
+      if (self.opts.axis === "y" && (thumbPos.top < 0 || thumbPos.top > $list.height() - thumb.outerHeight())) {
+        $list.stop().animate({
+            scrollTop: $list.scrollTop() + thumbPos.top
+          },
+          duration
+        );
+      } else if (
+        self.opts.axis === "x" &&
+        (thumbPos.left < $grid.scrollLeft() || thumbPos.left > $grid.scrollLeft() + ($grid.width() - thumb.outerWidth()))
+      ) {
+        $list
+          .parent()
+          .stop()
+          .animate({
+              scrollLeft: thumbPos.left
+            },
+            duration
+          );
+      }
+    },
+
+    update: function () {
+      var that = this;
+      that.instance.$refs.container.toggleClass("fancybox-show-thumbs", this.isVisible);
+
+      if (that.isVisible) {
+        if (!that.$grid) {
+          that.create();
+        }
+
+        that.instance.trigger("onThumbsShow");
+
+        that.focus(0);
+      } else if (that.$grid) {
+        that.instance.trigger("onThumbsHide");
+      }
+
+      // Update content position
+      that.instance.update();
+    },
+
+    hide: function () {
+      this.isVisible = false;
+      this.update();
+    },
+
+    show: function () {
+      this.isVisible = true;
+      this.update();
+    },
+
+    toggle: function () {
+      this.isVisible = !this.isVisible;
+      this.update();
+    }
+  });
+
+  $(document).on({
+    "onInit.fb": function (e, instance) {
+      var Thumbs;
+
+      if (instance && !instance.Thumbs) {
+        Thumbs = new FancyThumbs(instance);
+
+        if (Thumbs.isActive && Thumbs.opts.autoStart === true) {
+          Thumbs.show();
+        }
+      }
+    },
+
+    "beforeShow.fb": function (e, instance, item, firstRun) {
+      var Thumbs = instance && instance.Thumbs;
+
+      if (Thumbs && Thumbs.isVisible) {
+        Thumbs.focus(firstRun ? 0 : 250);
+      }
+    },
+
+    "afterKeydown.fb": function (e, instance, current, keypress, keycode) {
+      var Thumbs = instance && instance.Thumbs;
+
+      // "G"
+      if (Thumbs && Thumbs.isActive && keycode === 71) {
+        keypress.preventDefault();
+
+        Thumbs.toggle();
+      }
+    },
+
+    "beforeClose.fb": function (e, instance) {
+      var Thumbs = instance && instance.Thumbs;
+
+      if (Thumbs && Thumbs.isVisible && Thumbs.opts.hideOnClose !== false) {
+        Thumbs.$grid.hide();
+      }
+    }
+  });
+})(document, jQuery);
+//// ==========================================================================
+//
+// Share
+// Displays simple form for sharing current url
+//
+// ==========================================================================
+(function (document, $) {
+  "use strict";
+
+  $.extend(true, $.fancybox.defaults, {
+    btnTpl: {
+      share: '<button data-fancybox-share class="fancybox-button fancybox-button--share" title="{{SHARE}}">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2.55 19c1.4-8.4 9.1-9.8 11.9-9.8V5l7 7-7 6.3v-3.5c-2.8 0-10.5 2.1-11.9 4.2z"/></svg>' +
+        "</button>"
+    },
+    share: {
+      url: function (instance, item) {
+        return (
+          (!instance.currentHash && !(item.type === "inline" || item.type === "html") ? item.origSrc || item.src : false) || window.location
+        );
+      },
+      tpl: '<div class="fancybox-share">' +
+        "<h1>{{SHARE}}</h1>" +
+        "<p>" +
+        '<a class="fancybox-share__button fancybox-share__button--fb" href="https://www.facebook.com/sharer/sharer.php?u={{url}}">' +
+        '<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m287 456v-299c0-21 6-35 35-35h38v-63c-7-1-29-3-55-3-54 0-91 33-91 94v306m143-254h-205v72h196" /></svg>' +
+        "<span>Facebook</span>" +
+        "</a>" +
+        '<a class="fancybox-share__button fancybox-share__button--tw" href="https://twitter.com/intent/tweet?url={{url}}&text={{descr}}">' +
+        '<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m456 133c-14 7-31 11-47 13 17-10 30-27 37-46-15 10-34 16-52 20-61-62-157-7-141 75-68-3-129-35-169-85-22 37-11 86 26 109-13 0-26-4-37-9 0 39 28 72 65 80-12 3-25 4-37 2 10 33 41 57 77 57-42 30-77 38-122 34 170 111 378-32 359-208 16-11 30-25 41-42z" /></svg>' +
+        "<span>Twitter</span>" +
+        "</a>" +
+        '<a class="fancybox-share__button fancybox-share__button--pt" href="https://www.pinterest.com/pin/create/button/?url={{url}}&description={{descr}}&media={{media}}">' +
+        '<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m265 56c-109 0-164 78-164 144 0 39 15 74 47 87 5 2 10 0 12-5l4-19c2-6 1-8-3-13-9-11-15-25-15-45 0-58 43-110 113-110 62 0 96 38 96 88 0 67-30 122-73 122-24 0-42-19-36-44 6-29 20-60 20-81 0-19-10-35-31-35-25 0-44 26-44 60 0 21 7 36 7 36l-30 125c-8 37-1 83 0 87 0 3 4 4 5 2 2-3 32-39 42-75l16-64c8 16 31 29 56 29 74 0 124-67 124-157 0-69-58-132-146-132z" fill="#fff"/></svg>' +
+        "<span>Pinterest</span>" +
+        "</a>" +
+        "</p>" +
+        '<p><input class="fancybox-share__input" type="text" value="{{url_raw}}" onclick="select()" /></p>' +
+        "</div>"
+    }
+  });
+
+  function escapeHtml(string) {
+    var entityMap = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+      "/": "&#x2F;",
+      "`": "&#x60;",
+      "=": "&#x3D;"
+    };
+
+    return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+      return entityMap[s];
+    });
+  }
+
+  $(document).on("click", "[data-fancybox-share]", function () {
+    var instance = $.fancybox.getInstance(),
+      current = instance.current || null,
+      url,
+      tpl;
+
+    if (!current) {
+      return;
+    }
+
+    if ($.type(current.opts.share.url) === "function") {
+      url = current.opts.share.url.apply(current, [instance, current]);
+    }
+
+    tpl = current.opts.share.tpl
+      .replace(/\{\{media\}\}/g, current.type === "image" ? encodeURIComponent(current.src) : "")
+      .replace(/\{\{url\}\}/g, encodeURIComponent(url))
+      .replace(/\{\{url_raw\}\}/g, escapeHtml(url))
+      .replace(/\{\{descr\}\}/g, instance.$caption ? encodeURIComponent(instance.$caption.text()) : "");
+
+    $.fancybox.open({
+      src: instance.translate(instance, tpl),
+      type: "html",
+      opts: {
+        touch: false,
+        animationEffect: false,
+        afterLoad: function (shareInstance, shareCurrent) {
+          // Close self if parent instance is closing
+          instance.$refs.container.one("beforeClose.fb", function () {
+            shareInstance.close(null, 0);
+          });
+
+          // Opening links in a popup window
+          shareCurrent.$content.find(".fancybox-share__button").click(function () {
+            window.open(this.href, "Share", "width=550, height=450");
+            return false;
+          });
+        },
+        mobile: {
+          autoFocus: false
+        }
+      }
+    });
+  });
+})(document, jQuery);
+// ==========================================================================
+//
+// Hash
+// Enables linking to each modal
+//
+// ==========================================================================
+(function (window, document, $) {
+  "use strict";
+
+  // Simple $.escapeSelector polyfill (for jQuery prior v3)
+  if (!$.escapeSelector) {
+    $.escapeSelector = function (sel) {
+      var rcssescape = /([\0-\x1f\x7f]|^-?\d)|^-$|[^\x80-\uFFFF\w-]/g;
+      var fcssescape = function (ch, asCodePoint) {
+        if (asCodePoint) {
+          // U+0000 NULL becomes U+FFFD REPLACEMENT CHARACTER
+          if (ch === "\0") {
+            return "\uFFFD";
+          }
+
+          // Control characters and (dependent upon position) numbers get escaped as code points
+          return ch.slice(0, -1) + "\\" + ch.charCodeAt(ch.length - 1).toString(16) + " ";
+        }
+
+        // Other potentially-special ASCII characters get backslash-escaped
+        return "\\" + ch;
+      };
+
+      return (sel + "").replace(rcssescape, fcssescape);
+    };
+  }
+
+  // Get info about gallery name and current index from url
+  function parseUrl() {
+    var hash = window.location.hash.substr(1),
+      rez = hash.split("-"),
+      index = rez.length > 1 && /^\+?\d+$/.test(rez[rez.length - 1]) ? parseInt(rez.pop(-1), 10) || 1 : 1,
+      gallery = rez.join("-");
+
+    return {
+      hash: hash,
+      /* Index is starting from 1 */
+      index: index < 1 ? 1 : index,
+      gallery: gallery
+    };
+  }
+
+  // Trigger click evnt on links to open new fancyBox instance
+  function triggerFromUrl(url) {
+    if (url.gallery !== "") {
+      // If we can find element matching 'data-fancybox' atribute,
+      // then triggering click event should start fancyBox
+      $("[data-fancybox='" + $.escapeSelector(url.gallery) + "']")
+        .eq(url.index - 1)
+        .focus()
+        .trigger("click.fb-start");
+    }
+  }
+
+  // Get gallery name from current instance
+  function getGalleryID(instance) {
+    var opts, ret;
+
+    if (!instance) {
+      return false;
+    }
+
+    opts = instance.current ? instance.current.opts : instance.opts;
+    ret = opts.hash || (opts.$orig ? opts.$orig.data("fancybox") || opts.$orig.data("fancybox-trigger") : "");
+
+    return ret === "" ? false : ret;
+  }
+
+  // Start when DOM becomes ready
+  $(function () {
+    // Check if user has disabled this module
+    if ($.fancybox.defaults.hash === false) {
+      return;
+    }
+
+    // Update hash when opening/closing fancyBox
+    $(document).on({
+      "onInit.fb": function (e, instance) {
+        var url, gallery;
+
+        if (instance.group[instance.currIndex].opts.hash === false) {
+          return;
+        }
+
+        url = parseUrl();
+        gallery = getGalleryID(instance);
+
+        // Make sure gallery start index matches index from hash
+        if (gallery && url.gallery && gallery == url.gallery) {
+          instance.currIndex = url.index - 1;
+        }
+      },
+
+      "beforeShow.fb": function (e, instance, current, firstRun) {
+        var gallery;
+
+        if (!current || current.opts.hash === false) {
+          return;
+        }
+
+        // Check if need to update window hash
+        gallery = getGalleryID(instance);
+
+        if (!gallery) {
+          return;
+        }
+
+        // Variable containing last hash value set by fancyBox
+        // It will be used to determine if fancyBox needs to close after hash change is detected
+        instance.currentHash = gallery + (instance.group.length > 1 ? "-" + (current.index + 1) : "");
+
+        // If current hash is the same (this instance most likely is opened by hashchange), then do nothing
+        if (window.location.hash === "#" + instance.currentHash) {
+          return;
+        }
+
+        if (firstRun && !instance.origHash) {
+          instance.origHash = window.location.hash;
+        }
+
+        if (instance.hashTimer) {
+          clearTimeout(instance.hashTimer);
+        }
+
+        // Update hash
+        instance.hashTimer = setTimeout(function () {
+          if ("replaceState" in window.history) {
+            window.history[firstRun ? "pushState" : "replaceState"]({},
+              document.title,
+              window.location.pathname + window.location.search + "#" + instance.currentHash
+            );
+
+            if (firstRun) {
+              instance.hasCreatedHistory = true;
+            }
+          } else {
+            window.location.hash = instance.currentHash;
+          }
+
+          instance.hashTimer = null;
+        }, 300);
+      },
+
+      "beforeClose.fb": function (e, instance, current) {
+        if (!current || current.opts.hash === false) {
+          return;
+        }
+
+        clearTimeout(instance.hashTimer);
+
+        // Goto previous history entry
+        if (instance.currentHash && instance.hasCreatedHistory) {
+          window.history.back();
+        } else if (instance.currentHash) {
+          if ("replaceState" in window.history) {
+            window.history.replaceState({}, document.title, window.location.pathname + window.location.search + (instance.origHash || ""));
+          } else {
+            window.location.hash = instance.origHash;
+          }
+        }
+
+        instance.currentHash = null;
+      }
+    });
+
+    // Check if need to start/close after url has changed
+    $(window).on("hashchange.fb", function () {
+      var url = parseUrl(),
+        fb = null;
+
+      // Find last fancyBox instance that has "hash"
+      $.each(
+        $(".fancybox-container")
+        .get()
+        .reverse(),
+        function (index, value) {
+          var tmp = $(value).data("FancyBox");
+
+          if (tmp && tmp.currentHash) {
+            fb = tmp;
+            return false;
+          }
+        }
+      );
+
+      if (fb) {
+        // Now, compare hash values
+        if (fb.currentHash !== url.gallery + "-" + url.index && !(url.index === 1 && fb.currentHash == url.gallery)) {
+          fb.currentHash = null;
+
+          fb.close();
+        }
+      } else if (url.gallery !== "") {
+        triggerFromUrl(url);
+      }
+    });
+
+    // Check current hash and trigger click event on matching element to start fancyBox, if needed
+    setTimeout(function () {
+      if (!$.fancybox.getInstance()) {
+        triggerFromUrl(parseUrl());
+      }
+    }, 50);
+  });
+})(window, document, jQuery);
+// ==========================================================================
+//
+// Wheel
+// Basic mouse weheel support for gallery navigation
+//
+// ==========================================================================
+(function (document, $) {
+  "use strict";
+
+  var prevTime = new Date().getTime();
+
+  $(document).on({
+    "onInit.fb": function (e, instance, current) {
+      instance.$refs.stage.on("mousewheel DOMMouseScroll wheel MozMousePixelScroll", function (e) {
+        var current = instance.current,
+          currTime = new Date().getTime();
+
+        if (instance.group.length < 2 || current.opts.wheel === false || (current.opts.wheel === "auto" && current.type !== "image")) {
+          return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (current.$slide.hasClass("fancybox-animated")) {
+          return;
+        }
+
+        e = e.originalEvent || e;
+
+        if (currTime - prevTime < 250) {
+          return;
+        }
+
+        prevTime = currTime;
+
+        instance[(-e.deltaY || -e.deltaX || e.wheelDelta || -e.detail) < 0 ? "next" : "previous"]();
+      });
+    }
+  });
+})(document, jQuery);
+},{}],4:[function(require,module,exports){
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -1874,13 +7541,13 @@ return /******/ (function(modules) { // webpackBootstrap
 });
 ;
 
-},{}],3:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var inject = require('./../../../cssify');
 var css = "/*!\n * Bootstrap v4.3.1 (https://getbootstrap.com/)\n * Copyright 2011-2019 The Bootstrap Authors\n * Copyright 2011-2019 Twitter, Inc.\n * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)\n */:root{--blue:#007bff;--indigo:#6610f2;--purple:#6f42c1;--pink:#e83e8c;--red:#dc3545;--orange:#fd7e14;--yellow:#ffc107;--green:#28a745;--teal:#20c997;--cyan:#17a2b8;--white:#fff;--gray:#6c757d;--gray-dark:#343a40;--primary:#007bff;--secondary:#6c757d;--success:#28a745;--info:#17a2b8;--warning:#ffc107;--danger:#dc3545;--light:#f8f9fa;--dark:#343a40;--breakpoint-xs:0;--breakpoint-sm:576px;--breakpoint-md:768px;--breakpoint-lg:992px;--breakpoint-xl:1200px;--font-family-sans-serif:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\";--font-family-monospace:SFMono-Regular,Menlo,Monaco,Consolas,\"Liberation Mono\",\"Courier New\",monospace}*,::after,::before{box-sizing:border-box}html{font-family:sans-serif;line-height:1.15;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}article,aside,figcaption,figure,footer,header,hgroup,main,nav,section{display:block}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\";font-size:1rem;font-weight:400;line-height:1.5;color:#212529;text-align:left;background-color:#fff}[tabindex=\"-1\"]:focus{outline:0!important}hr{box-sizing:content-box;height:0;overflow:visible}h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:.5rem}p{margin-top:0;margin-bottom:1rem}abbr[data-original-title],abbr[title]{text-decoration:underline;-webkit-text-decoration:underline dotted;text-decoration:underline dotted;cursor:help;border-bottom:0;-webkit-text-decoration-skip-ink:none;text-decoration-skip-ink:none}address{margin-bottom:1rem;font-style:normal;line-height:inherit}dl,ol,ul{margin-top:0;margin-bottom:1rem}ol ol,ol ul,ul ol,ul ul{margin-bottom:0}dt{font-weight:700}dd{margin-bottom:.5rem;margin-left:0}blockquote{margin:0 0 1rem}b,strong{font-weight:bolder}small{font-size:80%}sub,sup{position:relative;font-size:75%;line-height:0;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}a{color:#007bff;text-decoration:none;background-color:transparent}a:hover{color:#0056b3;text-decoration:underline}a:not([href]):not([tabindex]){color:inherit;text-decoration:none}a:not([href]):not([tabindex]):focus,a:not([href]):not([tabindex]):hover{color:inherit;text-decoration:none}a:not([href]):not([tabindex]):focus{outline:0}code,kbd,pre,samp{font-family:SFMono-Regular,Menlo,Monaco,Consolas,\"Liberation Mono\",\"Courier New\",monospace;font-size:1em}pre{margin-top:0;margin-bottom:1rem;overflow:auto}figure{margin:0 0 1rem}img{vertical-align:middle;border-style:none}svg{overflow:hidden;vertical-align:middle}table{border-collapse:collapse}caption{padding-top:.75rem;padding-bottom:.75rem;color:#6c757d;text-align:left;caption-side:bottom}th{text-align:inherit}label{display:inline-block;margin-bottom:.5rem}button{border-radius:0}button:focus{outline:1px dotted;outline:5px auto -webkit-focus-ring-color}button,input,optgroup,select,textarea{margin:0;font-family:inherit;font-size:inherit;line-height:inherit}button,input{overflow:visible}button,select{text-transform:none}select{word-wrap:normal}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]:not(:disabled),[type=reset]:not(:disabled),[type=submit]:not(:disabled),button:not(:disabled){cursor:pointer}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{padding:0;border-style:none}input[type=checkbox],input[type=radio]{box-sizing:border-box;padding:0}input[type=date],input[type=datetime-local],input[type=month],input[type=time]{-webkit-appearance:listbox}textarea{overflow:auto;resize:vertical}fieldset{min-width:0;padding:0;margin:0;border:0}legend{display:block;width:100%;max-width:100%;padding:0;margin-bottom:.5rem;font-size:1.5rem;line-height:inherit;color:inherit;white-space:normal}progress{vertical-align:baseline}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{outline-offset:-2px;-webkit-appearance:none}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{font:inherit;-webkit-appearance:button}output{display:inline-block}summary{display:list-item;cursor:pointer}template{display:none}[hidden]{display:none!important}.h1,.h2,.h3,.h4,.h5,.h6,h1,h2,h3,h4,h5,h6{margin-bottom:.5rem;font-weight:500;line-height:1.2}.h1,h1{font-size:2.5rem}.h2,h2{font-size:2rem}.h3,h3{font-size:1.75rem}.h4,h4{font-size:1.5rem}.h5,h5{font-size:1.25rem}.h6,h6{font-size:1rem}.lead{font-size:1.25rem;font-weight:300}.display-1{font-size:6rem;font-weight:300;line-height:1.2}.display-2{font-size:5.5rem;font-weight:300;line-height:1.2}.display-3{font-size:4.5rem;font-weight:300;line-height:1.2}.display-4{font-size:3.5rem;font-weight:300;line-height:1.2}hr{margin-top:1rem;margin-bottom:1rem;border:0;border-top:1px solid rgba(0,0,0,.1)}.small,small{font-size:80%;font-weight:400}.mark,mark{padding:.2em;background-color:#fcf8e3}.list-unstyled{padding-left:0;list-style:none}.list-inline{padding-left:0;list-style:none}.list-inline-item{display:inline-block}.list-inline-item:not(:last-child){margin-right:.5rem}.initialism{font-size:90%;text-transform:uppercase}.blockquote{margin-bottom:1rem;font-size:1.25rem}.blockquote-footer{display:block;font-size:80%;color:#6c757d}.blockquote-footer::before{content:\"\\2014\\00A0\"}.img-fluid{max-width:100%;height:auto}.img-thumbnail{padding:.25rem;background-color:#fff;border:1px solid #dee2e6;border-radius:.25rem;max-width:100%;height:auto}.figure{display:inline-block}.figure-img{margin-bottom:.5rem;line-height:1}.figure-caption{font-size:90%;color:#6c757d}code{font-size:87.5%;color:#e83e8c;word-break:break-word}a>code{color:inherit}kbd{padding:.2rem .4rem;font-size:87.5%;color:#fff;background-color:#212529;border-radius:.2rem}kbd kbd{padding:0;font-size:100%;font-weight:700}pre{display:block;font-size:87.5%;color:#212529}pre code{font-size:inherit;color:inherit;word-break:normal}.pre-scrollable{max-height:340px;overflow-y:scroll}.container{width:100%;padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}@media (min-width:576px){.container{max-width:540px}}@media (min-width:768px){.container{max-width:720px}}@media (min-width:992px){.container{max-width:960px}}@media (min-width:1200px){.container{max-width:1140px}}.container-fluid{width:100%;padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}.row{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-15px;margin-left:-15px}.no-gutters{margin-right:0;margin-left:0}.no-gutters>.col,.no-gutters>[class*=col-]{padding-right:0;padding-left:0}.col,.col-1,.col-10,.col-11,.col-12,.col-2,.col-3,.col-4,.col-5,.col-6,.col-7,.col-8,.col-9,.col-auto,.col-lg,.col-lg-1,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-auto,.col-md,.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-auto,.col-sm,.col-sm-1,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-auto,.col-xl,.col-xl-1,.col-xl-10,.col-xl-11,.col-xl-12,.col-xl-2,.col-xl-3,.col-xl-4,.col-xl-5,.col-xl-6,.col-xl-7,.col-xl-8,.col-xl-9,.col-xl-auto{position:relative;width:100%;padding-right:15px;padding-left:15px}.col{-ms-flex-preferred-size:0;flex-basis:0;-ms-flex-positive:1;flex-grow:1;max-width:100%}.col-auto{-ms-flex:0 0 auto;flex:0 0 auto;width:auto;max-width:100%}.col-1{-ms-flex:0 0 8.333333%;flex:0 0 8.333333%;max-width:8.333333%}.col-2{-ms-flex:0 0 16.666667%;flex:0 0 16.666667%;max-width:16.666667%}.col-3{-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}.col-4{-ms-flex:0 0 33.333333%;flex:0 0 33.333333%;max-width:33.333333%}.col-5{-ms-flex:0 0 41.666667%;flex:0 0 41.666667%;max-width:41.666667%}.col-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}.col-7{-ms-flex:0 0 58.333333%;flex:0 0 58.333333%;max-width:58.333333%}.col-8{-ms-flex:0 0 66.666667%;flex:0 0 66.666667%;max-width:66.666667%}.col-9{-ms-flex:0 0 75%;flex:0 0 75%;max-width:75%}.col-10{-ms-flex:0 0 83.333333%;flex:0 0 83.333333%;max-width:83.333333%}.col-11{-ms-flex:0 0 91.666667%;flex:0 0 91.666667%;max-width:91.666667%}.col-12{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%}.order-first{-ms-flex-order:-1;order:-1}.order-last{-ms-flex-order:13;order:13}.order-0{-ms-flex-order:0;order:0}.order-1{-ms-flex-order:1;order:1}.order-2{-ms-flex-order:2;order:2}.order-3{-ms-flex-order:3;order:3}.order-4{-ms-flex-order:4;order:4}.order-5{-ms-flex-order:5;order:5}.order-6{-ms-flex-order:6;order:6}.order-7{-ms-flex-order:7;order:7}.order-8{-ms-flex-order:8;order:8}.order-9{-ms-flex-order:9;order:9}.order-10{-ms-flex-order:10;order:10}.order-11{-ms-flex-order:11;order:11}.order-12{-ms-flex-order:12;order:12}.offset-1{margin-left:8.333333%}.offset-2{margin-left:16.666667%}.offset-3{margin-left:25%}.offset-4{margin-left:33.333333%}.offset-5{margin-left:41.666667%}.offset-6{margin-left:50%}.offset-7{margin-left:58.333333%}.offset-8{margin-left:66.666667%}.offset-9{margin-left:75%}.offset-10{margin-left:83.333333%}.offset-11{margin-left:91.666667%}@media (min-width:576px){.col-sm{-ms-flex-preferred-size:0;flex-basis:0;-ms-flex-positive:1;flex-grow:1;max-width:100%}.col-sm-auto{-ms-flex:0 0 auto;flex:0 0 auto;width:auto;max-width:100%}.col-sm-1{-ms-flex:0 0 8.333333%;flex:0 0 8.333333%;max-width:8.333333%}.col-sm-2{-ms-flex:0 0 16.666667%;flex:0 0 16.666667%;max-width:16.666667%}.col-sm-3{-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}.col-sm-4{-ms-flex:0 0 33.333333%;flex:0 0 33.333333%;max-width:33.333333%}.col-sm-5{-ms-flex:0 0 41.666667%;flex:0 0 41.666667%;max-width:41.666667%}.col-sm-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}.col-sm-7{-ms-flex:0 0 58.333333%;flex:0 0 58.333333%;max-width:58.333333%}.col-sm-8{-ms-flex:0 0 66.666667%;flex:0 0 66.666667%;max-width:66.666667%}.col-sm-9{-ms-flex:0 0 75%;flex:0 0 75%;max-width:75%}.col-sm-10{-ms-flex:0 0 83.333333%;flex:0 0 83.333333%;max-width:83.333333%}.col-sm-11{-ms-flex:0 0 91.666667%;flex:0 0 91.666667%;max-width:91.666667%}.col-sm-12{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%}.order-sm-first{-ms-flex-order:-1;order:-1}.order-sm-last{-ms-flex-order:13;order:13}.order-sm-0{-ms-flex-order:0;order:0}.order-sm-1{-ms-flex-order:1;order:1}.order-sm-2{-ms-flex-order:2;order:2}.order-sm-3{-ms-flex-order:3;order:3}.order-sm-4{-ms-flex-order:4;order:4}.order-sm-5{-ms-flex-order:5;order:5}.order-sm-6{-ms-flex-order:6;order:6}.order-sm-7{-ms-flex-order:7;order:7}.order-sm-8{-ms-flex-order:8;order:8}.order-sm-9{-ms-flex-order:9;order:9}.order-sm-10{-ms-flex-order:10;order:10}.order-sm-11{-ms-flex-order:11;order:11}.order-sm-12{-ms-flex-order:12;order:12}.offset-sm-0{margin-left:0}.offset-sm-1{margin-left:8.333333%}.offset-sm-2{margin-left:16.666667%}.offset-sm-3{margin-left:25%}.offset-sm-4{margin-left:33.333333%}.offset-sm-5{margin-left:41.666667%}.offset-sm-6{margin-left:50%}.offset-sm-7{margin-left:58.333333%}.offset-sm-8{margin-left:66.666667%}.offset-sm-9{margin-left:75%}.offset-sm-10{margin-left:83.333333%}.offset-sm-11{margin-left:91.666667%}}@media (min-width:768px){.col-md{-ms-flex-preferred-size:0;flex-basis:0;-ms-flex-positive:1;flex-grow:1;max-width:100%}.col-md-auto{-ms-flex:0 0 auto;flex:0 0 auto;width:auto;max-width:100%}.col-md-1{-ms-flex:0 0 8.333333%;flex:0 0 8.333333%;max-width:8.333333%}.col-md-2{-ms-flex:0 0 16.666667%;flex:0 0 16.666667%;max-width:16.666667%}.col-md-3{-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}.col-md-4{-ms-flex:0 0 33.333333%;flex:0 0 33.333333%;max-width:33.333333%}.col-md-5{-ms-flex:0 0 41.666667%;flex:0 0 41.666667%;max-width:41.666667%}.col-md-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}.col-md-7{-ms-flex:0 0 58.333333%;flex:0 0 58.333333%;max-width:58.333333%}.col-md-8{-ms-flex:0 0 66.666667%;flex:0 0 66.666667%;max-width:66.666667%}.col-md-9{-ms-flex:0 0 75%;flex:0 0 75%;max-width:75%}.col-md-10{-ms-flex:0 0 83.333333%;flex:0 0 83.333333%;max-width:83.333333%}.col-md-11{-ms-flex:0 0 91.666667%;flex:0 0 91.666667%;max-width:91.666667%}.col-md-12{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%}.order-md-first{-ms-flex-order:-1;order:-1}.order-md-last{-ms-flex-order:13;order:13}.order-md-0{-ms-flex-order:0;order:0}.order-md-1{-ms-flex-order:1;order:1}.order-md-2{-ms-flex-order:2;order:2}.order-md-3{-ms-flex-order:3;order:3}.order-md-4{-ms-flex-order:4;order:4}.order-md-5{-ms-flex-order:5;order:5}.order-md-6{-ms-flex-order:6;order:6}.order-md-7{-ms-flex-order:7;order:7}.order-md-8{-ms-flex-order:8;order:8}.order-md-9{-ms-flex-order:9;order:9}.order-md-10{-ms-flex-order:10;order:10}.order-md-11{-ms-flex-order:11;order:11}.order-md-12{-ms-flex-order:12;order:12}.offset-md-0{margin-left:0}.offset-md-1{margin-left:8.333333%}.offset-md-2{margin-left:16.666667%}.offset-md-3{margin-left:25%}.offset-md-4{margin-left:33.333333%}.offset-md-5{margin-left:41.666667%}.offset-md-6{margin-left:50%}.offset-md-7{margin-left:58.333333%}.offset-md-8{margin-left:66.666667%}.offset-md-9{margin-left:75%}.offset-md-10{margin-left:83.333333%}.offset-md-11{margin-left:91.666667%}}@media (min-width:992px){.col-lg{-ms-flex-preferred-size:0;flex-basis:0;-ms-flex-positive:1;flex-grow:1;max-width:100%}.col-lg-auto{-ms-flex:0 0 auto;flex:0 0 auto;width:auto;max-width:100%}.col-lg-1{-ms-flex:0 0 8.333333%;flex:0 0 8.333333%;max-width:8.333333%}.col-lg-2{-ms-flex:0 0 16.666667%;flex:0 0 16.666667%;max-width:16.666667%}.col-lg-3{-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}.col-lg-4{-ms-flex:0 0 33.333333%;flex:0 0 33.333333%;max-width:33.333333%}.col-lg-5{-ms-flex:0 0 41.666667%;flex:0 0 41.666667%;max-width:41.666667%}.col-lg-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}.col-lg-7{-ms-flex:0 0 58.333333%;flex:0 0 58.333333%;max-width:58.333333%}.col-lg-8{-ms-flex:0 0 66.666667%;flex:0 0 66.666667%;max-width:66.666667%}.col-lg-9{-ms-flex:0 0 75%;flex:0 0 75%;max-width:75%}.col-lg-10{-ms-flex:0 0 83.333333%;flex:0 0 83.333333%;max-width:83.333333%}.col-lg-11{-ms-flex:0 0 91.666667%;flex:0 0 91.666667%;max-width:91.666667%}.col-lg-12{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%}.order-lg-first{-ms-flex-order:-1;order:-1}.order-lg-last{-ms-flex-order:13;order:13}.order-lg-0{-ms-flex-order:0;order:0}.order-lg-1{-ms-flex-order:1;order:1}.order-lg-2{-ms-flex-order:2;order:2}.order-lg-3{-ms-flex-order:3;order:3}.order-lg-4{-ms-flex-order:4;order:4}.order-lg-5{-ms-flex-order:5;order:5}.order-lg-6{-ms-flex-order:6;order:6}.order-lg-7{-ms-flex-order:7;order:7}.order-lg-8{-ms-flex-order:8;order:8}.order-lg-9{-ms-flex-order:9;order:9}.order-lg-10{-ms-flex-order:10;order:10}.order-lg-11{-ms-flex-order:11;order:11}.order-lg-12{-ms-flex-order:12;order:12}.offset-lg-0{margin-left:0}.offset-lg-1{margin-left:8.333333%}.offset-lg-2{margin-left:16.666667%}.offset-lg-3{margin-left:25%}.offset-lg-4{margin-left:33.333333%}.offset-lg-5{margin-left:41.666667%}.offset-lg-6{margin-left:50%}.offset-lg-7{margin-left:58.333333%}.offset-lg-8{margin-left:66.666667%}.offset-lg-9{margin-left:75%}.offset-lg-10{margin-left:83.333333%}.offset-lg-11{margin-left:91.666667%}}@media (min-width:1200px){.col-xl{-ms-flex-preferred-size:0;flex-basis:0;-ms-flex-positive:1;flex-grow:1;max-width:100%}.col-xl-auto{-ms-flex:0 0 auto;flex:0 0 auto;width:auto;max-width:100%}.col-xl-1{-ms-flex:0 0 8.333333%;flex:0 0 8.333333%;max-width:8.333333%}.col-xl-2{-ms-flex:0 0 16.666667%;flex:0 0 16.666667%;max-width:16.666667%}.col-xl-3{-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}.col-xl-4{-ms-flex:0 0 33.333333%;flex:0 0 33.333333%;max-width:33.333333%}.col-xl-5{-ms-flex:0 0 41.666667%;flex:0 0 41.666667%;max-width:41.666667%}.col-xl-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}.col-xl-7{-ms-flex:0 0 58.333333%;flex:0 0 58.333333%;max-width:58.333333%}.col-xl-8{-ms-flex:0 0 66.666667%;flex:0 0 66.666667%;max-width:66.666667%}.col-xl-9{-ms-flex:0 0 75%;flex:0 0 75%;max-width:75%}.col-xl-10{-ms-flex:0 0 83.333333%;flex:0 0 83.333333%;max-width:83.333333%}.col-xl-11{-ms-flex:0 0 91.666667%;flex:0 0 91.666667%;max-width:91.666667%}.col-xl-12{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%}.order-xl-first{-ms-flex-order:-1;order:-1}.order-xl-last{-ms-flex-order:13;order:13}.order-xl-0{-ms-flex-order:0;order:0}.order-xl-1{-ms-flex-order:1;order:1}.order-xl-2{-ms-flex-order:2;order:2}.order-xl-3{-ms-flex-order:3;order:3}.order-xl-4{-ms-flex-order:4;order:4}.order-xl-5{-ms-flex-order:5;order:5}.order-xl-6{-ms-flex-order:6;order:6}.order-xl-7{-ms-flex-order:7;order:7}.order-xl-8{-ms-flex-order:8;order:8}.order-xl-9{-ms-flex-order:9;order:9}.order-xl-10{-ms-flex-order:10;order:10}.order-xl-11{-ms-flex-order:11;order:11}.order-xl-12{-ms-flex-order:12;order:12}.offset-xl-0{margin-left:0}.offset-xl-1{margin-left:8.333333%}.offset-xl-2{margin-left:16.666667%}.offset-xl-3{margin-left:25%}.offset-xl-4{margin-left:33.333333%}.offset-xl-5{margin-left:41.666667%}.offset-xl-6{margin-left:50%}.offset-xl-7{margin-left:58.333333%}.offset-xl-8{margin-left:66.666667%}.offset-xl-9{margin-left:75%}.offset-xl-10{margin-left:83.333333%}.offset-xl-11{margin-left:91.666667%}}.table{width:100%;margin-bottom:1rem;color:#212529}.table td,.table th{padding:.75rem;vertical-align:top;border-top:1px solid #dee2e6}.table thead th{vertical-align:bottom;border-bottom:2px solid #dee2e6}.table tbody+tbody{border-top:2px solid #dee2e6}.table-sm td,.table-sm th{padding:.3rem}.table-bordered{border:1px solid #dee2e6}.table-bordered td,.table-bordered th{border:1px solid #dee2e6}.table-bordered thead td,.table-bordered thead th{border-bottom-width:2px}.table-borderless tbody+tbody,.table-borderless td,.table-borderless th,.table-borderless thead th{border:0}.table-striped tbody tr:nth-of-type(odd){background-color:rgba(0,0,0,.05)}.table-hover tbody tr:hover{color:#212529;background-color:rgba(0,0,0,.075)}.table-primary,.table-primary>td,.table-primary>th{background-color:#b8daff}.table-primary tbody+tbody,.table-primary td,.table-primary th,.table-primary thead th{border-color:#7abaff}.table-hover .table-primary:hover{background-color:#9fcdff}.table-hover .table-primary:hover>td,.table-hover .table-primary:hover>th{background-color:#9fcdff}.table-secondary,.table-secondary>td,.table-secondary>th{background-color:#d6d8db}.table-secondary tbody+tbody,.table-secondary td,.table-secondary th,.table-secondary thead th{border-color:#b3b7bb}.table-hover .table-secondary:hover{background-color:#c8cbcf}.table-hover .table-secondary:hover>td,.table-hover .table-secondary:hover>th{background-color:#c8cbcf}.table-success,.table-success>td,.table-success>th{background-color:#c3e6cb}.table-success tbody+tbody,.table-success td,.table-success th,.table-success thead th{border-color:#8fd19e}.table-hover .table-success:hover{background-color:#b1dfbb}.table-hover .table-success:hover>td,.table-hover .table-success:hover>th{background-color:#b1dfbb}.table-info,.table-info>td,.table-info>th{background-color:#bee5eb}.table-info tbody+tbody,.table-info td,.table-info th,.table-info thead th{border-color:#86cfda}.table-hover .table-info:hover{background-color:#abdde5}.table-hover .table-info:hover>td,.table-hover .table-info:hover>th{background-color:#abdde5}.table-warning,.table-warning>td,.table-warning>th{background-color:#ffeeba}.table-warning tbody+tbody,.table-warning td,.table-warning th,.table-warning thead th{border-color:#ffdf7e}.table-hover .table-warning:hover{background-color:#ffe8a1}.table-hover .table-warning:hover>td,.table-hover .table-warning:hover>th{background-color:#ffe8a1}.table-danger,.table-danger>td,.table-danger>th{background-color:#f5c6cb}.table-danger tbody+tbody,.table-danger td,.table-danger th,.table-danger thead th{border-color:#ed969e}.table-hover .table-danger:hover{background-color:#f1b0b7}.table-hover .table-danger:hover>td,.table-hover .table-danger:hover>th{background-color:#f1b0b7}.table-light,.table-light>td,.table-light>th{background-color:#fdfdfe}.table-light tbody+tbody,.table-light td,.table-light th,.table-light thead th{border-color:#fbfcfc}.table-hover .table-light:hover{background-color:#ececf6}.table-hover .table-light:hover>td,.table-hover .table-light:hover>th{background-color:#ececf6}.table-dark,.table-dark>td,.table-dark>th{background-color:#c6c8ca}.table-dark tbody+tbody,.table-dark td,.table-dark th,.table-dark thead th{border-color:#95999c}.table-hover .table-dark:hover{background-color:#b9bbbe}.table-hover .table-dark:hover>td,.table-hover .table-dark:hover>th{background-color:#b9bbbe}.table-active,.table-active>td,.table-active>th{background-color:rgba(0,0,0,.075)}.table-hover .table-active:hover{background-color:rgba(0,0,0,.075)}.table-hover .table-active:hover>td,.table-hover .table-active:hover>th{background-color:rgba(0,0,0,.075)}.table .thead-dark th{color:#fff;background-color:#343a40;border-color:#454d55}.table .thead-light th{color:#495057;background-color:#e9ecef;border-color:#dee2e6}.table-dark{color:#fff;background-color:#343a40}.table-dark td,.table-dark th,.table-dark thead th{border-color:#454d55}.table-dark.table-bordered{border:0}.table-dark.table-striped tbody tr:nth-of-type(odd){background-color:rgba(255,255,255,.05)}.table-dark.table-hover tbody tr:hover{color:#fff;background-color:rgba(255,255,255,.075)}@media (max-width:575.98px){.table-responsive-sm{display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.table-responsive-sm>.table-bordered{border:0}}@media (max-width:767.98px){.table-responsive-md{display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.table-responsive-md>.table-bordered{border:0}}@media (max-width:991.98px){.table-responsive-lg{display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.table-responsive-lg>.table-bordered{border:0}}@media (max-width:1199.98px){.table-responsive-xl{display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.table-responsive-xl>.table-bordered{border:0}}.table-responsive{display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.table-responsive>.table-bordered{border:0}.form-control{display:block;width:100%;height:calc(1.5em + .75rem + 2px);padding:.375rem .75rem;font-size:1rem;font-weight:400;line-height:1.5;color:#495057;background-color:#fff;background-clip:padding-box;border:1px solid #ced4da;border-radius:.25rem;transition:border-color .15s ease-in-out,box-shadow .15s ease-in-out}@media (prefers-reduced-motion:reduce){.form-control{transition:none}}.form-control::-ms-expand{background-color:transparent;border:0}.form-control:focus{color:#495057;background-color:#fff;border-color:#80bdff;outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.form-control::-webkit-input-placeholder{color:#6c757d;opacity:1}.form-control::-moz-placeholder{color:#6c757d;opacity:1}.form-control:-ms-input-placeholder{color:#6c757d;opacity:1}.form-control::-ms-input-placeholder{color:#6c757d;opacity:1}.form-control::placeholder{color:#6c757d;opacity:1}.form-control:disabled,.form-control[readonly]{background-color:#e9ecef;opacity:1}select.form-control:focus::-ms-value{color:#495057;background-color:#fff}.form-control-file,.form-control-range{display:block;width:100%}.col-form-label{padding-top:calc(.375rem + 1px);padding-bottom:calc(.375rem + 1px);margin-bottom:0;font-size:inherit;line-height:1.5}.col-form-label-lg{padding-top:calc(.5rem + 1px);padding-bottom:calc(.5rem + 1px);font-size:1.25rem;line-height:1.5}.col-form-label-sm{padding-top:calc(.25rem + 1px);padding-bottom:calc(.25rem + 1px);font-size:.875rem;line-height:1.5}.form-control-plaintext{display:block;width:100%;padding-top:.375rem;padding-bottom:.375rem;margin-bottom:0;line-height:1.5;color:#212529;background-color:transparent;border:solid transparent;border-width:1px 0}.form-control-plaintext.form-control-lg,.form-control-plaintext.form-control-sm{padding-right:0;padding-left:0}.form-control-sm{height:calc(1.5em + .5rem + 2px);padding:.25rem .5rem;font-size:.875rem;line-height:1.5;border-radius:.2rem}.form-control-lg{height:calc(1.5em + 1rem + 2px);padding:.5rem 1rem;font-size:1.25rem;line-height:1.5;border-radius:.3rem}select.form-control[multiple],select.form-control[size]{height:auto}textarea.form-control{height:auto}.form-group{margin-bottom:1rem}.form-text{display:block;margin-top:.25rem}.form-row{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-5px;margin-left:-5px}.form-row>.col,.form-row>[class*=col-]{padding-right:5px;padding-left:5px}.form-check{position:relative;display:block;padding-left:1.25rem}.form-check-input{position:absolute;margin-top:.3rem;margin-left:-1.25rem}.form-check-input:disabled~.form-check-label{color:#6c757d}.form-check-label{margin-bottom:0}.form-check-inline{display:-ms-inline-flexbox;display:inline-flex;-ms-flex-align:center;align-items:center;padding-left:0;margin-right:.75rem}.form-check-inline .form-check-input{position:static;margin-top:0;margin-right:.3125rem;margin-left:0}.valid-feedback{display:none;width:100%;margin-top:.25rem;font-size:80%;color:#28a745}.valid-tooltip{position:absolute;top:100%;z-index:5;display:none;max-width:100%;padding:.25rem .5rem;margin-top:.1rem;font-size:.875rem;line-height:1.5;color:#fff;background-color:rgba(40,167,69,.9);border-radius:.25rem}.form-control.is-valid,.was-validated .form-control:valid{border-color:#28a745;padding-right:calc(1.5em + .75rem);background-image:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e\");background-repeat:no-repeat;background-position:center right calc(.375em + .1875rem);background-size:calc(.75em + .375rem) calc(.75em + .375rem)}.form-control.is-valid:focus,.was-validated .form-control:valid:focus{border-color:#28a745;box-shadow:0 0 0 .2rem rgba(40,167,69,.25)}.form-control.is-valid~.valid-feedback,.form-control.is-valid~.valid-tooltip,.was-validated .form-control:valid~.valid-feedback,.was-validated .form-control:valid~.valid-tooltip{display:block}.was-validated textarea.form-control:valid,textarea.form-control.is-valid{padding-right:calc(1.5em + .75rem);background-position:top calc(.375em + .1875rem) right calc(.375em + .1875rem)}.custom-select.is-valid,.was-validated .custom-select:valid{border-color:#28a745;padding-right:calc((1em + .75rem) * 3 / 4 + 1.75rem);background:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e\") no-repeat right .75rem center/8px 10px,url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e\") #fff no-repeat center right 1.75rem/calc(.75em + .375rem) calc(.75em + .375rem)}.custom-select.is-valid:focus,.was-validated .custom-select:valid:focus{border-color:#28a745;box-shadow:0 0 0 .2rem rgba(40,167,69,.25)}.custom-select.is-valid~.valid-feedback,.custom-select.is-valid~.valid-tooltip,.was-validated .custom-select:valid~.valid-feedback,.was-validated .custom-select:valid~.valid-tooltip{display:block}.form-control-file.is-valid~.valid-feedback,.form-control-file.is-valid~.valid-tooltip,.was-validated .form-control-file:valid~.valid-feedback,.was-validated .form-control-file:valid~.valid-tooltip{display:block}.form-check-input.is-valid~.form-check-label,.was-validated .form-check-input:valid~.form-check-label{color:#28a745}.form-check-input.is-valid~.valid-feedback,.form-check-input.is-valid~.valid-tooltip,.was-validated .form-check-input:valid~.valid-feedback,.was-validated .form-check-input:valid~.valid-tooltip{display:block}.custom-control-input.is-valid~.custom-control-label,.was-validated .custom-control-input:valid~.custom-control-label{color:#28a745}.custom-control-input.is-valid~.custom-control-label::before,.was-validated .custom-control-input:valid~.custom-control-label::before{border-color:#28a745}.custom-control-input.is-valid~.valid-feedback,.custom-control-input.is-valid~.valid-tooltip,.was-validated .custom-control-input:valid~.valid-feedback,.was-validated .custom-control-input:valid~.valid-tooltip{display:block}.custom-control-input.is-valid:checked~.custom-control-label::before,.was-validated .custom-control-input:valid:checked~.custom-control-label::before{border-color:#34ce57;background-color:#34ce57}.custom-control-input.is-valid:focus~.custom-control-label::before,.was-validated .custom-control-input:valid:focus~.custom-control-label::before{box-shadow:0 0 0 .2rem rgba(40,167,69,.25)}.custom-control-input.is-valid:focus:not(:checked)~.custom-control-label::before,.was-validated .custom-control-input:valid:focus:not(:checked)~.custom-control-label::before{border-color:#28a745}.custom-file-input.is-valid~.custom-file-label,.was-validated .custom-file-input:valid~.custom-file-label{border-color:#28a745}.custom-file-input.is-valid~.valid-feedback,.custom-file-input.is-valid~.valid-tooltip,.was-validated .custom-file-input:valid~.valid-feedback,.was-validated .custom-file-input:valid~.valid-tooltip{display:block}.custom-file-input.is-valid:focus~.custom-file-label,.was-validated .custom-file-input:valid:focus~.custom-file-label{border-color:#28a745;box-shadow:0 0 0 .2rem rgba(40,167,69,.25)}.invalid-feedback{display:none;width:100%;margin-top:.25rem;font-size:80%;color:#dc3545}.invalid-tooltip{position:absolute;top:100%;z-index:5;display:none;max-width:100%;padding:.25rem .5rem;margin-top:.1rem;font-size:.875rem;line-height:1.5;color:#fff;background-color:rgba(220,53,69,.9);border-radius:.25rem}.form-control.is-invalid,.was-validated .form-control:invalid{border-color:#dc3545;padding-right:calc(1.5em + .75rem);background-image:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23dc3545' viewBox='-2 -2 7 7'%3e%3cpath stroke='%23dc3545' d='M0 0l3 3m0-3L0 3'/%3e%3ccircle r='.5'/%3e%3ccircle cx='3' r='.5'/%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E\");background-repeat:no-repeat;background-position:center right calc(.375em + .1875rem);background-size:calc(.75em + .375rem) calc(.75em + .375rem)}.form-control.is-invalid:focus,.was-validated .form-control:invalid:focus{border-color:#dc3545;box-shadow:0 0 0 .2rem rgba(220,53,69,.25)}.form-control.is-invalid~.invalid-feedback,.form-control.is-invalid~.invalid-tooltip,.was-validated .form-control:invalid~.invalid-feedback,.was-validated .form-control:invalid~.invalid-tooltip{display:block}.was-validated textarea.form-control:invalid,textarea.form-control.is-invalid{padding-right:calc(1.5em + .75rem);background-position:top calc(.375em + .1875rem) right calc(.375em + .1875rem)}.custom-select.is-invalid,.was-validated .custom-select:invalid{border-color:#dc3545;padding-right:calc((1em + .75rem) * 3 / 4 + 1.75rem);background:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e\") no-repeat right .75rem center/8px 10px,url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23dc3545' viewBox='-2 -2 7 7'%3e%3cpath stroke='%23dc3545' d='M0 0l3 3m0-3L0 3'/%3e%3ccircle r='.5'/%3e%3ccircle cx='3' r='.5'/%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E\") #fff no-repeat center right 1.75rem/calc(.75em + .375rem) calc(.75em + .375rem)}.custom-select.is-invalid:focus,.was-validated .custom-select:invalid:focus{border-color:#dc3545;box-shadow:0 0 0 .2rem rgba(220,53,69,.25)}.custom-select.is-invalid~.invalid-feedback,.custom-select.is-invalid~.invalid-tooltip,.was-validated .custom-select:invalid~.invalid-feedback,.was-validated .custom-select:invalid~.invalid-tooltip{display:block}.form-control-file.is-invalid~.invalid-feedback,.form-control-file.is-invalid~.invalid-tooltip,.was-validated .form-control-file:invalid~.invalid-feedback,.was-validated .form-control-file:invalid~.invalid-tooltip{display:block}.form-check-input.is-invalid~.form-check-label,.was-validated .form-check-input:invalid~.form-check-label{color:#dc3545}.form-check-input.is-invalid~.invalid-feedback,.form-check-input.is-invalid~.invalid-tooltip,.was-validated .form-check-input:invalid~.invalid-feedback,.was-validated .form-check-input:invalid~.invalid-tooltip{display:block}.custom-control-input.is-invalid~.custom-control-label,.was-validated .custom-control-input:invalid~.custom-control-label{color:#dc3545}.custom-control-input.is-invalid~.custom-control-label::before,.was-validated .custom-control-input:invalid~.custom-control-label::before{border-color:#dc3545}.custom-control-input.is-invalid~.invalid-feedback,.custom-control-input.is-invalid~.invalid-tooltip,.was-validated .custom-control-input:invalid~.invalid-feedback,.was-validated .custom-control-input:invalid~.invalid-tooltip{display:block}.custom-control-input.is-invalid:checked~.custom-control-label::before,.was-validated .custom-control-input:invalid:checked~.custom-control-label::before{border-color:#e4606d;background-color:#e4606d}.custom-control-input.is-invalid:focus~.custom-control-label::before,.was-validated .custom-control-input:invalid:focus~.custom-control-label::before{box-shadow:0 0 0 .2rem rgba(220,53,69,.25)}.custom-control-input.is-invalid:focus:not(:checked)~.custom-control-label::before,.was-validated .custom-control-input:invalid:focus:not(:checked)~.custom-control-label::before{border-color:#dc3545}.custom-file-input.is-invalid~.custom-file-label,.was-validated .custom-file-input:invalid~.custom-file-label{border-color:#dc3545}.custom-file-input.is-invalid~.invalid-feedback,.custom-file-input.is-invalid~.invalid-tooltip,.was-validated .custom-file-input:invalid~.invalid-feedback,.was-validated .custom-file-input:invalid~.invalid-tooltip{display:block}.custom-file-input.is-invalid:focus~.custom-file-label,.was-validated .custom-file-input:invalid:focus~.custom-file-label{border-color:#dc3545;box-shadow:0 0 0 .2rem rgba(220,53,69,.25)}.form-inline{display:-ms-flexbox;display:flex;-ms-flex-flow:row wrap;flex-flow:row wrap;-ms-flex-align:center;align-items:center}.form-inline .form-check{width:100%}@media (min-width:576px){.form-inline label{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;margin-bottom:0}.form-inline .form-group{display:-ms-flexbox;display:flex;-ms-flex:0 0 auto;flex:0 0 auto;-ms-flex-flow:row wrap;flex-flow:row wrap;-ms-flex-align:center;align-items:center;margin-bottom:0}.form-inline .form-control{display:inline-block;width:auto;vertical-align:middle}.form-inline .form-control-plaintext{display:inline-block}.form-inline .custom-select,.form-inline .input-group{width:auto}.form-inline .form-check{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:auto;padding-left:0}.form-inline .form-check-input{position:relative;-ms-flex-negative:0;flex-shrink:0;margin-top:0;margin-right:.25rem;margin-left:0}.form-inline .custom-control{-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center}.form-inline .custom-control-label{margin-bottom:0}}.btn{display:inline-block;font-weight:400;color:#212529;text-align:center;vertical-align:middle;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-color:transparent;border:1px solid transparent;padding:.375rem .75rem;font-size:1rem;line-height:1.5;border-radius:.25rem;transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out}@media (prefers-reduced-motion:reduce){.btn{transition:none}}.btn:hover{color:#212529;text-decoration:none}.btn.focus,.btn:focus{outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.btn.disabled,.btn:disabled{opacity:.65}a.btn.disabled,fieldset:disabled a.btn{pointer-events:none}.btn-primary{color:#fff;background-color:#007bff;border-color:#007bff}.btn-primary:hover{color:#fff;background-color:#0069d9;border-color:#0062cc}.btn-primary.focus,.btn-primary:focus{box-shadow:0 0 0 .2rem rgba(38,143,255,.5)}.btn-primary.disabled,.btn-primary:disabled{color:#fff;background-color:#007bff;border-color:#007bff}.btn-primary:not(:disabled):not(.disabled).active,.btn-primary:not(:disabled):not(.disabled):active,.show>.btn-primary.dropdown-toggle{color:#fff;background-color:#0062cc;border-color:#005cbf}.btn-primary:not(:disabled):not(.disabled).active:focus,.btn-primary:not(:disabled):not(.disabled):active:focus,.show>.btn-primary.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(38,143,255,.5)}.btn-secondary{color:#fff;background-color:#6c757d;border-color:#6c757d}.btn-secondary:hover{color:#fff;background-color:#5a6268;border-color:#545b62}.btn-secondary.focus,.btn-secondary:focus{box-shadow:0 0 0 .2rem rgba(130,138,145,.5)}.btn-secondary.disabled,.btn-secondary:disabled{color:#fff;background-color:#6c757d;border-color:#6c757d}.btn-secondary:not(:disabled):not(.disabled).active,.btn-secondary:not(:disabled):not(.disabled):active,.show>.btn-secondary.dropdown-toggle{color:#fff;background-color:#545b62;border-color:#4e555b}.btn-secondary:not(:disabled):not(.disabled).active:focus,.btn-secondary:not(:disabled):not(.disabled):active:focus,.show>.btn-secondary.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(130,138,145,.5)}.btn-success{color:#fff;background-color:#28a745;border-color:#28a745}.btn-success:hover{color:#fff;background-color:#218838;border-color:#1e7e34}.btn-success.focus,.btn-success:focus{box-shadow:0 0 0 .2rem rgba(72,180,97,.5)}.btn-success.disabled,.btn-success:disabled{color:#fff;background-color:#28a745;border-color:#28a745}.btn-success:not(:disabled):not(.disabled).active,.btn-success:not(:disabled):not(.disabled):active,.show>.btn-success.dropdown-toggle{color:#fff;background-color:#1e7e34;border-color:#1c7430}.btn-success:not(:disabled):not(.disabled).active:focus,.btn-success:not(:disabled):not(.disabled):active:focus,.show>.btn-success.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(72,180,97,.5)}.btn-info{color:#fff;background-color:#17a2b8;border-color:#17a2b8}.btn-info:hover{color:#fff;background-color:#138496;border-color:#117a8b}.btn-info.focus,.btn-info:focus{box-shadow:0 0 0 .2rem rgba(58,176,195,.5)}.btn-info.disabled,.btn-info:disabled{color:#fff;background-color:#17a2b8;border-color:#17a2b8}.btn-info:not(:disabled):not(.disabled).active,.btn-info:not(:disabled):not(.disabled):active,.show>.btn-info.dropdown-toggle{color:#fff;background-color:#117a8b;border-color:#10707f}.btn-info:not(:disabled):not(.disabled).active:focus,.btn-info:not(:disabled):not(.disabled):active:focus,.show>.btn-info.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(58,176,195,.5)}.btn-warning{color:#212529;background-color:#ffc107;border-color:#ffc107}.btn-warning:hover{color:#212529;background-color:#e0a800;border-color:#d39e00}.btn-warning.focus,.btn-warning:focus{box-shadow:0 0 0 .2rem rgba(222,170,12,.5)}.btn-warning.disabled,.btn-warning:disabled{color:#212529;background-color:#ffc107;border-color:#ffc107}.btn-warning:not(:disabled):not(.disabled).active,.btn-warning:not(:disabled):not(.disabled):active,.show>.btn-warning.dropdown-toggle{color:#212529;background-color:#d39e00;border-color:#c69500}.btn-warning:not(:disabled):not(.disabled).active:focus,.btn-warning:not(:disabled):not(.disabled):active:focus,.show>.btn-warning.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(222,170,12,.5)}.btn-danger{color:#fff;background-color:#dc3545;border-color:#dc3545}.btn-danger:hover{color:#fff;background-color:#c82333;border-color:#bd2130}.btn-danger.focus,.btn-danger:focus{box-shadow:0 0 0 .2rem rgba(225,83,97,.5)}.btn-danger.disabled,.btn-danger:disabled{color:#fff;background-color:#dc3545;border-color:#dc3545}.btn-danger:not(:disabled):not(.disabled).active,.btn-danger:not(:disabled):not(.disabled):active,.show>.btn-danger.dropdown-toggle{color:#fff;background-color:#bd2130;border-color:#b21f2d}.btn-danger:not(:disabled):not(.disabled).active:focus,.btn-danger:not(:disabled):not(.disabled):active:focus,.show>.btn-danger.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(225,83,97,.5)}.btn-light{color:#212529;background-color:#f8f9fa;border-color:#f8f9fa}.btn-light:hover{color:#212529;background-color:#e2e6ea;border-color:#dae0e5}.btn-light.focus,.btn-light:focus{box-shadow:0 0 0 .2rem rgba(216,217,219,.5)}.btn-light.disabled,.btn-light:disabled{color:#212529;background-color:#f8f9fa;border-color:#f8f9fa}.btn-light:not(:disabled):not(.disabled).active,.btn-light:not(:disabled):not(.disabled):active,.show>.btn-light.dropdown-toggle{color:#212529;background-color:#dae0e5;border-color:#d3d9df}.btn-light:not(:disabled):not(.disabled).active:focus,.btn-light:not(:disabled):not(.disabled):active:focus,.show>.btn-light.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(216,217,219,.5)}.btn-dark{color:#fff;background-color:#343a40;border-color:#343a40}.btn-dark:hover{color:#fff;background-color:#23272b;border-color:#1d2124}.btn-dark.focus,.btn-dark:focus{box-shadow:0 0 0 .2rem rgba(82,88,93,.5)}.btn-dark.disabled,.btn-dark:disabled{color:#fff;background-color:#343a40;border-color:#343a40}.btn-dark:not(:disabled):not(.disabled).active,.btn-dark:not(:disabled):not(.disabled):active,.show>.btn-dark.dropdown-toggle{color:#fff;background-color:#1d2124;border-color:#171a1d}.btn-dark:not(:disabled):not(.disabled).active:focus,.btn-dark:not(:disabled):not(.disabled):active:focus,.show>.btn-dark.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(82,88,93,.5)}.btn-outline-primary{color:#007bff;border-color:#007bff}.btn-outline-primary:hover{color:#fff;background-color:#007bff;border-color:#007bff}.btn-outline-primary.focus,.btn-outline-primary:focus{box-shadow:0 0 0 .2rem rgba(0,123,255,.5)}.btn-outline-primary.disabled,.btn-outline-primary:disabled{color:#007bff;background-color:transparent}.btn-outline-primary:not(:disabled):not(.disabled).active,.btn-outline-primary:not(:disabled):not(.disabled):active,.show>.btn-outline-primary.dropdown-toggle{color:#fff;background-color:#007bff;border-color:#007bff}.btn-outline-primary:not(:disabled):not(.disabled).active:focus,.btn-outline-primary:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-primary.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(0,123,255,.5)}.btn-outline-secondary{color:#6c757d;border-color:#6c757d}.btn-outline-secondary:hover{color:#fff;background-color:#6c757d;border-color:#6c757d}.btn-outline-secondary.focus,.btn-outline-secondary:focus{box-shadow:0 0 0 .2rem rgba(108,117,125,.5)}.btn-outline-secondary.disabled,.btn-outline-secondary:disabled{color:#6c757d;background-color:transparent}.btn-outline-secondary:not(:disabled):not(.disabled).active,.btn-outline-secondary:not(:disabled):not(.disabled):active,.show>.btn-outline-secondary.dropdown-toggle{color:#fff;background-color:#6c757d;border-color:#6c757d}.btn-outline-secondary:not(:disabled):not(.disabled).active:focus,.btn-outline-secondary:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-secondary.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(108,117,125,.5)}.btn-outline-success{color:#28a745;border-color:#28a745}.btn-outline-success:hover{color:#fff;background-color:#28a745;border-color:#28a745}.btn-outline-success.focus,.btn-outline-success:focus{box-shadow:0 0 0 .2rem rgba(40,167,69,.5)}.btn-outline-success.disabled,.btn-outline-success:disabled{color:#28a745;background-color:transparent}.btn-outline-success:not(:disabled):not(.disabled).active,.btn-outline-success:not(:disabled):not(.disabled):active,.show>.btn-outline-success.dropdown-toggle{color:#fff;background-color:#28a745;border-color:#28a745}.btn-outline-success:not(:disabled):not(.disabled).active:focus,.btn-outline-success:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-success.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(40,167,69,.5)}.btn-outline-info{color:#17a2b8;border-color:#17a2b8}.btn-outline-info:hover{color:#fff;background-color:#17a2b8;border-color:#17a2b8}.btn-outline-info.focus,.btn-outline-info:focus{box-shadow:0 0 0 .2rem rgba(23,162,184,.5)}.btn-outline-info.disabled,.btn-outline-info:disabled{color:#17a2b8;background-color:transparent}.btn-outline-info:not(:disabled):not(.disabled).active,.btn-outline-info:not(:disabled):not(.disabled):active,.show>.btn-outline-info.dropdown-toggle{color:#fff;background-color:#17a2b8;border-color:#17a2b8}.btn-outline-info:not(:disabled):not(.disabled).active:focus,.btn-outline-info:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-info.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(23,162,184,.5)}.btn-outline-warning{color:#ffc107;border-color:#ffc107}.btn-outline-warning:hover{color:#212529;background-color:#ffc107;border-color:#ffc107}.btn-outline-warning.focus,.btn-outline-warning:focus{box-shadow:0 0 0 .2rem rgba(255,193,7,.5)}.btn-outline-warning.disabled,.btn-outline-warning:disabled{color:#ffc107;background-color:transparent}.btn-outline-warning:not(:disabled):not(.disabled).active,.btn-outline-warning:not(:disabled):not(.disabled):active,.show>.btn-outline-warning.dropdown-toggle{color:#212529;background-color:#ffc107;border-color:#ffc107}.btn-outline-warning:not(:disabled):not(.disabled).active:focus,.btn-outline-warning:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-warning.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(255,193,7,.5)}.btn-outline-danger{color:#dc3545;border-color:#dc3545}.btn-outline-danger:hover{color:#fff;background-color:#dc3545;border-color:#dc3545}.btn-outline-danger.focus,.btn-outline-danger:focus{box-shadow:0 0 0 .2rem rgba(220,53,69,.5)}.btn-outline-danger.disabled,.btn-outline-danger:disabled{color:#dc3545;background-color:transparent}.btn-outline-danger:not(:disabled):not(.disabled).active,.btn-outline-danger:not(:disabled):not(.disabled):active,.show>.btn-outline-danger.dropdown-toggle{color:#fff;background-color:#dc3545;border-color:#dc3545}.btn-outline-danger:not(:disabled):not(.disabled).active:focus,.btn-outline-danger:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-danger.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(220,53,69,.5)}.btn-outline-light{color:#f8f9fa;border-color:#f8f9fa}.btn-outline-light:hover{color:#212529;background-color:#f8f9fa;border-color:#f8f9fa}.btn-outline-light.focus,.btn-outline-light:focus{box-shadow:0 0 0 .2rem rgba(248,249,250,.5)}.btn-outline-light.disabled,.btn-outline-light:disabled{color:#f8f9fa;background-color:transparent}.btn-outline-light:not(:disabled):not(.disabled).active,.btn-outline-light:not(:disabled):not(.disabled):active,.show>.btn-outline-light.dropdown-toggle{color:#212529;background-color:#f8f9fa;border-color:#f8f9fa}.btn-outline-light:not(:disabled):not(.disabled).active:focus,.btn-outline-light:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-light.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(248,249,250,.5)}.btn-outline-dark{color:#343a40;border-color:#343a40}.btn-outline-dark:hover{color:#fff;background-color:#343a40;border-color:#343a40}.btn-outline-dark.focus,.btn-outline-dark:focus{box-shadow:0 0 0 .2rem rgba(52,58,64,.5)}.btn-outline-dark.disabled,.btn-outline-dark:disabled{color:#343a40;background-color:transparent}.btn-outline-dark:not(:disabled):not(.disabled).active,.btn-outline-dark:not(:disabled):not(.disabled):active,.show>.btn-outline-dark.dropdown-toggle{color:#fff;background-color:#343a40;border-color:#343a40}.btn-outline-dark:not(:disabled):not(.disabled).active:focus,.btn-outline-dark:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-dark.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(52,58,64,.5)}.btn-link{font-weight:400;color:#007bff;text-decoration:none}.btn-link:hover{color:#0056b3;text-decoration:underline}.btn-link.focus,.btn-link:focus{text-decoration:underline;box-shadow:none}.btn-link.disabled,.btn-link:disabled{color:#6c757d;pointer-events:none}.btn-group-lg>.btn,.btn-lg{padding:.5rem 1rem;font-size:1.25rem;line-height:1.5;border-radius:.3rem}.btn-group-sm>.btn,.btn-sm{padding:.25rem .5rem;font-size:.875rem;line-height:1.5;border-radius:.2rem}.btn-block{display:block;width:100%}.btn-block+.btn-block{margin-top:.5rem}input[type=button].btn-block,input[type=reset].btn-block,input[type=submit].btn-block{width:100%}.fade{transition:opacity .15s linear}@media (prefers-reduced-motion:reduce){.fade{transition:none}}.fade:not(.show){opacity:0}.collapse:not(.show){display:none}.collapsing{position:relative;height:0;overflow:hidden;transition:height .35s ease}@media (prefers-reduced-motion:reduce){.collapsing{transition:none}}.dropdown,.dropleft,.dropright,.dropup{position:relative}.dropdown-toggle{white-space:nowrap}.dropdown-toggle::after{display:inline-block;margin-left:.255em;vertical-align:.255em;content:\"\";border-top:.3em solid;border-right:.3em solid transparent;border-bottom:0;border-left:.3em solid transparent}.dropdown-toggle:empty::after{margin-left:0}.dropdown-menu{position:absolute;top:100%;left:0;z-index:1000;display:none;float:left;min-width:10rem;padding:.5rem 0;margin:.125rem 0 0;font-size:1rem;color:#212529;text-align:left;list-style:none;background-color:#fff;background-clip:padding-box;border:1px solid rgba(0,0,0,.15);border-radius:.25rem}.dropdown-menu-left{right:auto;left:0}.dropdown-menu-right{right:0;left:auto}@media (min-width:576px){.dropdown-menu-sm-left{right:auto;left:0}.dropdown-menu-sm-right{right:0;left:auto}}@media (min-width:768px){.dropdown-menu-md-left{right:auto;left:0}.dropdown-menu-md-right{right:0;left:auto}}@media (min-width:992px){.dropdown-menu-lg-left{right:auto;left:0}.dropdown-menu-lg-right{right:0;left:auto}}@media (min-width:1200px){.dropdown-menu-xl-left{right:auto;left:0}.dropdown-menu-xl-right{right:0;left:auto}}.dropup .dropdown-menu{top:auto;bottom:100%;margin-top:0;margin-bottom:.125rem}.dropup .dropdown-toggle::after{display:inline-block;margin-left:.255em;vertical-align:.255em;content:\"\";border-top:0;border-right:.3em solid transparent;border-bottom:.3em solid;border-left:.3em solid transparent}.dropup .dropdown-toggle:empty::after{margin-left:0}.dropright .dropdown-menu{top:0;right:auto;left:100%;margin-top:0;margin-left:.125rem}.dropright .dropdown-toggle::after{display:inline-block;margin-left:.255em;vertical-align:.255em;content:\"\";border-top:.3em solid transparent;border-right:0;border-bottom:.3em solid transparent;border-left:.3em solid}.dropright .dropdown-toggle:empty::after{margin-left:0}.dropright .dropdown-toggle::after{vertical-align:0}.dropleft .dropdown-menu{top:0;right:100%;left:auto;margin-top:0;margin-right:.125rem}.dropleft .dropdown-toggle::after{display:inline-block;margin-left:.255em;vertical-align:.255em;content:\"\"}.dropleft .dropdown-toggle::after{display:none}.dropleft .dropdown-toggle::before{display:inline-block;margin-right:.255em;vertical-align:.255em;content:\"\";border-top:.3em solid transparent;border-right:.3em solid;border-bottom:.3em solid transparent}.dropleft .dropdown-toggle:empty::after{margin-left:0}.dropleft .dropdown-toggle::before{vertical-align:0}.dropdown-menu[x-placement^=bottom],.dropdown-menu[x-placement^=left],.dropdown-menu[x-placement^=right],.dropdown-menu[x-placement^=top]{right:auto;bottom:auto}.dropdown-divider{height:0;margin:.5rem 0;overflow:hidden;border-top:1px solid #e9ecef}.dropdown-item{display:block;width:100%;padding:.25rem 1.5rem;clear:both;font-weight:400;color:#212529;text-align:inherit;white-space:nowrap;background-color:transparent;border:0}.dropdown-item:focus,.dropdown-item:hover{color:#16181b;text-decoration:none;background-color:#f8f9fa}.dropdown-item.active,.dropdown-item:active{color:#fff;text-decoration:none;background-color:#007bff}.dropdown-item.disabled,.dropdown-item:disabled{color:#6c757d;pointer-events:none;background-color:transparent}.dropdown-menu.show{display:block}.dropdown-header{display:block;padding:.5rem 1.5rem;margin-bottom:0;font-size:.875rem;color:#6c757d;white-space:nowrap}.dropdown-item-text{display:block;padding:.25rem 1.5rem;color:#212529}.btn-group,.btn-group-vertical{position:relative;display:-ms-inline-flexbox;display:inline-flex;vertical-align:middle}.btn-group-vertical>.btn,.btn-group>.btn{position:relative;-ms-flex:1 1 auto;flex:1 1 auto}.btn-group-vertical>.btn:hover,.btn-group>.btn:hover{z-index:1}.btn-group-vertical>.btn.active,.btn-group-vertical>.btn:active,.btn-group-vertical>.btn:focus,.btn-group>.btn.active,.btn-group>.btn:active,.btn-group>.btn:focus{z-index:1}.btn-toolbar{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;-ms-flex-pack:start;justify-content:flex-start}.btn-toolbar .input-group{width:auto}.btn-group>.btn-group:not(:first-child),.btn-group>.btn:not(:first-child){margin-left:-1px}.btn-group>.btn-group:not(:last-child)>.btn,.btn-group>.btn:not(:last-child):not(.dropdown-toggle){border-top-right-radius:0;border-bottom-right-radius:0}.btn-group>.btn-group:not(:first-child)>.btn,.btn-group>.btn:not(:first-child){border-top-left-radius:0;border-bottom-left-radius:0}.dropdown-toggle-split{padding-right:.5625rem;padding-left:.5625rem}.dropdown-toggle-split::after,.dropright .dropdown-toggle-split::after,.dropup .dropdown-toggle-split::after{margin-left:0}.dropleft .dropdown-toggle-split::before{margin-right:0}.btn-group-sm>.btn+.dropdown-toggle-split,.btn-sm+.dropdown-toggle-split{padding-right:.375rem;padding-left:.375rem}.btn-group-lg>.btn+.dropdown-toggle-split,.btn-lg+.dropdown-toggle-split{padding-right:.75rem;padding-left:.75rem}.btn-group-vertical{-ms-flex-direction:column;flex-direction:column;-ms-flex-align:start;align-items:flex-start;-ms-flex-pack:center;justify-content:center}.btn-group-vertical>.btn,.btn-group-vertical>.btn-group{width:100%}.btn-group-vertical>.btn-group:not(:first-child),.btn-group-vertical>.btn:not(:first-child){margin-top:-1px}.btn-group-vertical>.btn-group:not(:last-child)>.btn,.btn-group-vertical>.btn:not(:last-child):not(.dropdown-toggle){border-bottom-right-radius:0;border-bottom-left-radius:0}.btn-group-vertical>.btn-group:not(:first-child)>.btn,.btn-group-vertical>.btn:not(:first-child){border-top-left-radius:0;border-top-right-radius:0}.btn-group-toggle>.btn,.btn-group-toggle>.btn-group>.btn{margin-bottom:0}.btn-group-toggle>.btn input[type=checkbox],.btn-group-toggle>.btn input[type=radio],.btn-group-toggle>.btn-group>.btn input[type=checkbox],.btn-group-toggle>.btn-group>.btn input[type=radio]{position:absolute;clip:rect(0,0,0,0);pointer-events:none}.input-group{position:relative;display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;-ms-flex-align:stretch;align-items:stretch;width:100%}.input-group>.custom-file,.input-group>.custom-select,.input-group>.form-control,.input-group>.form-control-plaintext{position:relative;-ms-flex:1 1 auto;flex:1 1 auto;width:1%;margin-bottom:0}.input-group>.custom-file+.custom-file,.input-group>.custom-file+.custom-select,.input-group>.custom-file+.form-control,.input-group>.custom-select+.custom-file,.input-group>.custom-select+.custom-select,.input-group>.custom-select+.form-control,.input-group>.form-control+.custom-file,.input-group>.form-control+.custom-select,.input-group>.form-control+.form-control,.input-group>.form-control-plaintext+.custom-file,.input-group>.form-control-plaintext+.custom-select,.input-group>.form-control-plaintext+.form-control{margin-left:-1px}.input-group>.custom-file .custom-file-input:focus~.custom-file-label,.input-group>.custom-select:focus,.input-group>.form-control:focus{z-index:3}.input-group>.custom-file .custom-file-input:focus{z-index:4}.input-group>.custom-select:not(:last-child),.input-group>.form-control:not(:last-child){border-top-right-radius:0;border-bottom-right-radius:0}.input-group>.custom-select:not(:first-child),.input-group>.form-control:not(:first-child){border-top-left-radius:0;border-bottom-left-radius:0}.input-group>.custom-file{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center}.input-group>.custom-file:not(:last-child) .custom-file-label,.input-group>.custom-file:not(:last-child) .custom-file-label::after{border-top-right-radius:0;border-bottom-right-radius:0}.input-group>.custom-file:not(:first-child) .custom-file-label{border-top-left-radius:0;border-bottom-left-radius:0}.input-group-append,.input-group-prepend{display:-ms-flexbox;display:flex}.input-group-append .btn,.input-group-prepend .btn{position:relative;z-index:2}.input-group-append .btn:focus,.input-group-prepend .btn:focus{z-index:3}.input-group-append .btn+.btn,.input-group-append .btn+.input-group-text,.input-group-append .input-group-text+.btn,.input-group-append .input-group-text+.input-group-text,.input-group-prepend .btn+.btn,.input-group-prepend .btn+.input-group-text,.input-group-prepend .input-group-text+.btn,.input-group-prepend .input-group-text+.input-group-text{margin-left:-1px}.input-group-prepend{margin-right:-1px}.input-group-append{margin-left:-1px}.input-group-text{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;padding:.375rem .75rem;margin-bottom:0;font-size:1rem;font-weight:400;line-height:1.5;color:#495057;text-align:center;white-space:nowrap;background-color:#e9ecef;border:1px solid #ced4da;border-radius:.25rem}.input-group-text input[type=checkbox],.input-group-text input[type=radio]{margin-top:0}.input-group-lg>.custom-select,.input-group-lg>.form-control:not(textarea){height:calc(1.5em + 1rem + 2px)}.input-group-lg>.custom-select,.input-group-lg>.form-control,.input-group-lg>.input-group-append>.btn,.input-group-lg>.input-group-append>.input-group-text,.input-group-lg>.input-group-prepend>.btn,.input-group-lg>.input-group-prepend>.input-group-text{padding:.5rem 1rem;font-size:1.25rem;line-height:1.5;border-radius:.3rem}.input-group-sm>.custom-select,.input-group-sm>.form-control:not(textarea){height:calc(1.5em + .5rem + 2px)}.input-group-sm>.custom-select,.input-group-sm>.form-control,.input-group-sm>.input-group-append>.btn,.input-group-sm>.input-group-append>.input-group-text,.input-group-sm>.input-group-prepend>.btn,.input-group-sm>.input-group-prepend>.input-group-text{padding:.25rem .5rem;font-size:.875rem;line-height:1.5;border-radius:.2rem}.input-group-lg>.custom-select,.input-group-sm>.custom-select{padding-right:1.75rem}.input-group>.input-group-append:last-child>.btn:not(:last-child):not(.dropdown-toggle),.input-group>.input-group-append:last-child>.input-group-text:not(:last-child),.input-group>.input-group-append:not(:last-child)>.btn,.input-group>.input-group-append:not(:last-child)>.input-group-text,.input-group>.input-group-prepend>.btn,.input-group>.input-group-prepend>.input-group-text{border-top-right-radius:0;border-bottom-right-radius:0}.input-group>.input-group-append>.btn,.input-group>.input-group-append>.input-group-text,.input-group>.input-group-prepend:first-child>.btn:not(:first-child),.input-group>.input-group-prepend:first-child>.input-group-text:not(:first-child),.input-group>.input-group-prepend:not(:first-child)>.btn,.input-group>.input-group-prepend:not(:first-child)>.input-group-text{border-top-left-radius:0;border-bottom-left-radius:0}.custom-control{position:relative;display:block;min-height:1.5rem;padding-left:1.5rem}.custom-control-inline{display:-ms-inline-flexbox;display:inline-flex;margin-right:1rem}.custom-control-input{position:absolute;z-index:-1;opacity:0}.custom-control-input:checked~.custom-control-label::before{color:#fff;border-color:#007bff;background-color:#007bff}.custom-control-input:focus~.custom-control-label::before{box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.custom-control-input:focus:not(:checked)~.custom-control-label::before{border-color:#80bdff}.custom-control-input:not(:disabled):active~.custom-control-label::before{color:#fff;background-color:#b3d7ff;border-color:#b3d7ff}.custom-control-input:disabled~.custom-control-label{color:#6c757d}.custom-control-input:disabled~.custom-control-label::before{background-color:#e9ecef}.custom-control-label{position:relative;margin-bottom:0;vertical-align:top}.custom-control-label::before{position:absolute;top:.25rem;left:-1.5rem;display:block;width:1rem;height:1rem;pointer-events:none;content:\"\";background-color:#fff;border:#adb5bd solid 1px}.custom-control-label::after{position:absolute;top:.25rem;left:-1.5rem;display:block;width:1rem;height:1rem;content:\"\";background:no-repeat 50%/50% 50%}.custom-checkbox .custom-control-label::before{border-radius:.25rem}.custom-checkbox .custom-control-input:checked~.custom-control-label::after{background-image:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e\")}.custom-checkbox .custom-control-input:indeterminate~.custom-control-label::before{border-color:#007bff;background-color:#007bff}.custom-checkbox .custom-control-input:indeterminate~.custom-control-label::after{background-image:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 4'%3e%3cpath stroke='%23fff' d='M0 2h4'/%3e%3c/svg%3e\")}.custom-checkbox .custom-control-input:disabled:checked~.custom-control-label::before{background-color:rgba(0,123,255,.5)}.custom-checkbox .custom-control-input:disabled:indeterminate~.custom-control-label::before{background-color:rgba(0,123,255,.5)}.custom-radio .custom-control-label::before{border-radius:50%}.custom-radio .custom-control-input:checked~.custom-control-label::after{background-image:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e\")}.custom-radio .custom-control-input:disabled:checked~.custom-control-label::before{background-color:rgba(0,123,255,.5)}.custom-switch{padding-left:2.25rem}.custom-switch .custom-control-label::before{left:-2.25rem;width:1.75rem;pointer-events:all;border-radius:.5rem}.custom-switch .custom-control-label::after{top:calc(.25rem + 2px);left:calc(-2.25rem + 2px);width:calc(1rem - 4px);height:calc(1rem - 4px);background-color:#adb5bd;border-radius:.5rem;transition:background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-transform .15s ease-in-out;transition:transform .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;transition:transform .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-transform .15s ease-in-out}@media (prefers-reduced-motion:reduce){.custom-switch .custom-control-label::after{transition:none}}.custom-switch .custom-control-input:checked~.custom-control-label::after{background-color:#fff;-webkit-transform:translateX(.75rem);transform:translateX(.75rem)}.custom-switch .custom-control-input:disabled:checked~.custom-control-label::before{background-color:rgba(0,123,255,.5)}.custom-select{display:inline-block;width:100%;height:calc(1.5em + .75rem + 2px);padding:.375rem 1.75rem .375rem .75rem;font-size:1rem;font-weight:400;line-height:1.5;color:#495057;vertical-align:middle;background:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e\") no-repeat right .75rem center/8px 10px;background-color:#fff;border:1px solid #ced4da;border-radius:.25rem;-webkit-appearance:none;-moz-appearance:none;appearance:none}.custom-select:focus{border-color:#80bdff;outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.custom-select:focus::-ms-value{color:#495057;background-color:#fff}.custom-select[multiple],.custom-select[size]:not([size=\"1\"]){height:auto;padding-right:.75rem;background-image:none}.custom-select:disabled{color:#6c757d;background-color:#e9ecef}.custom-select::-ms-expand{display:none}.custom-select-sm{height:calc(1.5em + .5rem + 2px);padding-top:.25rem;padding-bottom:.25rem;padding-left:.5rem;font-size:.875rem}.custom-select-lg{height:calc(1.5em + 1rem + 2px);padding-top:.5rem;padding-bottom:.5rem;padding-left:1rem;font-size:1.25rem}.custom-file{position:relative;display:inline-block;width:100%;height:calc(1.5em + .75rem + 2px);margin-bottom:0}.custom-file-input{position:relative;z-index:2;width:100%;height:calc(1.5em + .75rem + 2px);margin:0;opacity:0}.custom-file-input:focus~.custom-file-label{border-color:#80bdff;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.custom-file-input:disabled~.custom-file-label{background-color:#e9ecef}.custom-file-input:lang(en)~.custom-file-label::after{content:\"Browse\"}.custom-file-input~.custom-file-label[data-browse]::after{content:attr(data-browse)}.custom-file-label{position:absolute;top:0;right:0;left:0;z-index:1;height:calc(1.5em + .75rem + 2px);padding:.375rem .75rem;font-weight:400;line-height:1.5;color:#495057;background-color:#fff;border:1px solid #ced4da;border-radius:.25rem}.custom-file-label::after{position:absolute;top:0;right:0;bottom:0;z-index:3;display:block;height:calc(1.5em + .75rem);padding:.375rem .75rem;line-height:1.5;color:#495057;content:\"Browse\";background-color:#e9ecef;border-left:inherit;border-radius:0 .25rem .25rem 0}.custom-range{width:100%;height:calc(1rem + .4rem);padding:0;background-color:transparent;-webkit-appearance:none;-moz-appearance:none;appearance:none}.custom-range:focus{outline:0}.custom-range:focus::-webkit-slider-thumb{box-shadow:0 0 0 1px #fff,0 0 0 .2rem rgba(0,123,255,.25)}.custom-range:focus::-moz-range-thumb{box-shadow:0 0 0 1px #fff,0 0 0 .2rem rgba(0,123,255,.25)}.custom-range:focus::-ms-thumb{box-shadow:0 0 0 1px #fff,0 0 0 .2rem rgba(0,123,255,.25)}.custom-range::-moz-focus-outer{border:0}.custom-range::-webkit-slider-thumb{width:1rem;height:1rem;margin-top:-.25rem;background-color:#007bff;border:0;border-radius:1rem;transition:background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;-webkit-appearance:none;appearance:none}@media (prefers-reduced-motion:reduce){.custom-range::-webkit-slider-thumb{transition:none}}.custom-range::-webkit-slider-thumb:active{background-color:#b3d7ff}.custom-range::-webkit-slider-runnable-track{width:100%;height:.5rem;color:transparent;cursor:pointer;background-color:#dee2e6;border-color:transparent;border-radius:1rem}.custom-range::-moz-range-thumb{width:1rem;height:1rem;background-color:#007bff;border:0;border-radius:1rem;transition:background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;-moz-appearance:none;appearance:none}@media (prefers-reduced-motion:reduce){.custom-range::-moz-range-thumb{transition:none}}.custom-range::-moz-range-thumb:active{background-color:#b3d7ff}.custom-range::-moz-range-track{width:100%;height:.5rem;color:transparent;cursor:pointer;background-color:#dee2e6;border-color:transparent;border-radius:1rem}.custom-range::-ms-thumb{width:1rem;height:1rem;margin-top:0;margin-right:.2rem;margin-left:.2rem;background-color:#007bff;border:0;border-radius:1rem;transition:background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;appearance:none}@media (prefers-reduced-motion:reduce){.custom-range::-ms-thumb{transition:none}}.custom-range::-ms-thumb:active{background-color:#b3d7ff}.custom-range::-ms-track{width:100%;height:.5rem;color:transparent;cursor:pointer;background-color:transparent;border-color:transparent;border-width:.5rem}.custom-range::-ms-fill-lower{background-color:#dee2e6;border-radius:1rem}.custom-range::-ms-fill-upper{margin-right:15px;background-color:#dee2e6;border-radius:1rem}.custom-range:disabled::-webkit-slider-thumb{background-color:#adb5bd}.custom-range:disabled::-webkit-slider-runnable-track{cursor:default}.custom-range:disabled::-moz-range-thumb{background-color:#adb5bd}.custom-range:disabled::-moz-range-track{cursor:default}.custom-range:disabled::-ms-thumb{background-color:#adb5bd}.custom-control-label::before,.custom-file-label,.custom-select{transition:background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out}@media (prefers-reduced-motion:reduce){.custom-control-label::before,.custom-file-label,.custom-select{transition:none}}.nav{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;padding-left:0;margin-bottom:0;list-style:none}.nav-link{display:block;padding:.5rem 1rem}.nav-link:focus,.nav-link:hover{text-decoration:none}.nav-link.disabled{color:#6c757d;pointer-events:none;cursor:default}.nav-tabs{border-bottom:1px solid #dee2e6}.nav-tabs .nav-item{margin-bottom:-1px}.nav-tabs .nav-link{border:1px solid transparent;border-top-left-radius:.25rem;border-top-right-radius:.25rem}.nav-tabs .nav-link:focus,.nav-tabs .nav-link:hover{border-color:#e9ecef #e9ecef #dee2e6}.nav-tabs .nav-link.disabled{color:#6c757d;background-color:transparent;border-color:transparent}.nav-tabs .nav-item.show .nav-link,.nav-tabs .nav-link.active{color:#495057;background-color:#fff;border-color:#dee2e6 #dee2e6 #fff}.nav-tabs .dropdown-menu{margin-top:-1px;border-top-left-radius:0;border-top-right-radius:0}.nav-pills .nav-link{border-radius:.25rem}.nav-pills .nav-link.active,.nav-pills .show>.nav-link{color:#fff;background-color:#007bff}.nav-fill .nav-item{-ms-flex:1 1 auto;flex:1 1 auto;text-align:center}.nav-justified .nav-item{-ms-flex-preferred-size:0;flex-basis:0;-ms-flex-positive:1;flex-grow:1;text-align:center}.tab-content>.tab-pane{display:none}.tab-content>.active{display:block}.navbar{position:relative;display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between;padding:.5rem 1rem}.navbar>.container,.navbar>.container-fluid{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;-ms-flex-align:center;align-items:center;-ms-flex-pack:justify;justify-content:space-between}.navbar-brand{display:inline-block;padding-top:.3125rem;padding-bottom:.3125rem;margin-right:1rem;font-size:1.25rem;line-height:inherit;white-space:nowrap}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}.navbar-nav{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;padding-left:0;margin-bottom:0;list-style:none}.navbar-nav .nav-link{padding-right:0;padding-left:0}.navbar-nav .dropdown-menu{position:static;float:none}.navbar-text{display:inline-block;padding-top:.5rem;padding-bottom:.5rem}.navbar-collapse{-ms-flex-preferred-size:100%;flex-basis:100%;-ms-flex-positive:1;flex-grow:1;-ms-flex-align:center;align-items:center}.navbar-toggler{padding:.25rem .75rem;font-size:1.25rem;line-height:1;background-color:transparent;border:1px solid transparent;border-radius:.25rem}.navbar-toggler:focus,.navbar-toggler:hover{text-decoration:none}.navbar-toggler-icon{display:inline-block;width:1.5em;height:1.5em;vertical-align:middle;content:\"\";background:no-repeat center center;background-size:100% 100%}@media (max-width:575.98px){.navbar-expand-sm>.container,.navbar-expand-sm>.container-fluid{padding-right:0;padding-left:0}}@media (min-width:576px){.navbar-expand-sm{-ms-flex-flow:row nowrap;flex-flow:row nowrap;-ms-flex-pack:start;justify-content:flex-start}.navbar-expand-sm .navbar-nav{-ms-flex-direction:row;flex-direction:row}.navbar-expand-sm .navbar-nav .dropdown-menu{position:absolute}.navbar-expand-sm .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand-sm>.container,.navbar-expand-sm>.container-fluid{-ms-flex-wrap:nowrap;flex-wrap:nowrap}.navbar-expand-sm .navbar-collapse{display:-ms-flexbox!important;display:flex!important;-ms-flex-preferred-size:auto;flex-basis:auto}.navbar-expand-sm .navbar-toggler{display:none}}@media (max-width:767.98px){.navbar-expand-md>.container,.navbar-expand-md>.container-fluid{padding-right:0;padding-left:0}}@media (min-width:768px){.navbar-expand-md{-ms-flex-flow:row nowrap;flex-flow:row nowrap;-ms-flex-pack:start;justify-content:flex-start}.navbar-expand-md .navbar-nav{-ms-flex-direction:row;flex-direction:row}.navbar-expand-md .navbar-nav .dropdown-menu{position:absolute}.navbar-expand-md .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand-md>.container,.navbar-expand-md>.container-fluid{-ms-flex-wrap:nowrap;flex-wrap:nowrap}.navbar-expand-md .navbar-collapse{display:-ms-flexbox!important;display:flex!important;-ms-flex-preferred-size:auto;flex-basis:auto}.navbar-expand-md .navbar-toggler{display:none}}@media (max-width:991.98px){.navbar-expand-lg>.container,.navbar-expand-lg>.container-fluid{padding-right:0;padding-left:0}}@media (min-width:992px){.navbar-expand-lg{-ms-flex-flow:row nowrap;flex-flow:row nowrap;-ms-flex-pack:start;justify-content:flex-start}.navbar-expand-lg .navbar-nav{-ms-flex-direction:row;flex-direction:row}.navbar-expand-lg .navbar-nav .dropdown-menu{position:absolute}.navbar-expand-lg .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand-lg>.container,.navbar-expand-lg>.container-fluid{-ms-flex-wrap:nowrap;flex-wrap:nowrap}.navbar-expand-lg .navbar-collapse{display:-ms-flexbox!important;display:flex!important;-ms-flex-preferred-size:auto;flex-basis:auto}.navbar-expand-lg .navbar-toggler{display:none}}@media (max-width:1199.98px){.navbar-expand-xl>.container,.navbar-expand-xl>.container-fluid{padding-right:0;padding-left:0}}@media (min-width:1200px){.navbar-expand-xl{-ms-flex-flow:row nowrap;flex-flow:row nowrap;-ms-flex-pack:start;justify-content:flex-start}.navbar-expand-xl .navbar-nav{-ms-flex-direction:row;flex-direction:row}.navbar-expand-xl .navbar-nav .dropdown-menu{position:absolute}.navbar-expand-xl .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand-xl>.container,.navbar-expand-xl>.container-fluid{-ms-flex-wrap:nowrap;flex-wrap:nowrap}.navbar-expand-xl .navbar-collapse{display:-ms-flexbox!important;display:flex!important;-ms-flex-preferred-size:auto;flex-basis:auto}.navbar-expand-xl .navbar-toggler{display:none}}.navbar-expand{-ms-flex-flow:row nowrap;flex-flow:row nowrap;-ms-flex-pack:start;justify-content:flex-start}.navbar-expand>.container,.navbar-expand>.container-fluid{padding-right:0;padding-left:0}.navbar-expand .navbar-nav{-ms-flex-direction:row;flex-direction:row}.navbar-expand .navbar-nav .dropdown-menu{position:absolute}.navbar-expand .navbar-nav .nav-link{padding-right:.5rem;padding-left:.5rem}.navbar-expand>.container,.navbar-expand>.container-fluid{-ms-flex-wrap:nowrap;flex-wrap:nowrap}.navbar-expand .navbar-collapse{display:-ms-flexbox!important;display:flex!important;-ms-flex-preferred-size:auto;flex-basis:auto}.navbar-expand .navbar-toggler{display:none}.navbar-light .navbar-brand{color:rgba(0,0,0,.9)}.navbar-light .navbar-brand:focus,.navbar-light .navbar-brand:hover{color:rgba(0,0,0,.9)}.navbar-light .navbar-nav .nav-link{color:rgba(0,0,0,.5)}.navbar-light .navbar-nav .nav-link:focus,.navbar-light .navbar-nav .nav-link:hover{color:rgba(0,0,0,.7)}.navbar-light .navbar-nav .nav-link.disabled{color:rgba(0,0,0,.3)}.navbar-light .navbar-nav .active>.nav-link,.navbar-light .navbar-nav .nav-link.active,.navbar-light .navbar-nav .nav-link.show,.navbar-light .navbar-nav .show>.nav-link{color:rgba(0,0,0,.9)}.navbar-light .navbar-toggler{color:rgba(0,0,0,.5);border-color:rgba(0,0,0,.1)}.navbar-light .navbar-toggler-icon{background-image:url(\"data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e\")}.navbar-light .navbar-text{color:rgba(0,0,0,.5)}.navbar-light .navbar-text a{color:rgba(0,0,0,.9)}.navbar-light .navbar-text a:focus,.navbar-light .navbar-text a:hover{color:rgba(0,0,0,.9)}.navbar-dark .navbar-brand{color:#fff}.navbar-dark .navbar-brand:focus,.navbar-dark .navbar-brand:hover{color:#fff}.navbar-dark .navbar-nav .nav-link{color:rgba(255,255,255,.5)}.navbar-dark .navbar-nav .nav-link:focus,.navbar-dark .navbar-nav .nav-link:hover{color:rgba(255,255,255,.75)}.navbar-dark .navbar-nav .nav-link.disabled{color:rgba(255,255,255,.25)}.navbar-dark .navbar-nav .active>.nav-link,.navbar-dark .navbar-nav .nav-link.active,.navbar-dark .navbar-nav .nav-link.show,.navbar-dark .navbar-nav .show>.nav-link{color:#fff}.navbar-dark .navbar-toggler{color:rgba(255,255,255,.5);border-color:rgba(255,255,255,.1)}.navbar-dark .navbar-toggler-icon{background-image:url(\"data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e\")}.navbar-dark .navbar-text{color:rgba(255,255,255,.5)}.navbar-dark .navbar-text a{color:#fff}.navbar-dark .navbar-text a:focus,.navbar-dark .navbar-text a:hover{color:#fff}.card{position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;min-width:0;word-wrap:break-word;background-color:#fff;background-clip:border-box;border:1px solid rgba(0,0,0,.125);border-radius:.25rem}.card>hr{margin-right:0;margin-left:0}.card>.list-group:first-child .list-group-item:first-child{border-top-left-radius:.25rem;border-top-right-radius:.25rem}.card>.list-group:last-child .list-group-item:last-child{border-bottom-right-radius:.25rem;border-bottom-left-radius:.25rem}.card-body{-ms-flex:1 1 auto;flex:1 1 auto;padding:1.25rem}.card-title{margin-bottom:.75rem}.card-subtitle{margin-top:-.375rem;margin-bottom:0}.card-text:last-child{margin-bottom:0}.card-link:hover{text-decoration:none}.card-link+.card-link{margin-left:1.25rem}.card-header{padding:.75rem 1.25rem;margin-bottom:0;background-color:rgba(0,0,0,.03);border-bottom:1px solid rgba(0,0,0,.125)}.card-header:first-child{border-radius:calc(.25rem - 1px) calc(.25rem - 1px) 0 0}.card-header+.list-group .list-group-item:first-child{border-top:0}.card-footer{padding:.75rem 1.25rem;background-color:rgba(0,0,0,.03);border-top:1px solid rgba(0,0,0,.125)}.card-footer:last-child{border-radius:0 0 calc(.25rem - 1px) calc(.25rem - 1px)}.card-header-tabs{margin-right:-.625rem;margin-bottom:-.75rem;margin-left:-.625rem;border-bottom:0}.card-header-pills{margin-right:-.625rem;margin-left:-.625rem}.card-img-overlay{position:absolute;top:0;right:0;bottom:0;left:0;padding:1.25rem}.card-img{width:100%;border-radius:calc(.25rem - 1px)}.card-img-top{width:100%;border-top-left-radius:calc(.25rem - 1px);border-top-right-radius:calc(.25rem - 1px)}.card-img-bottom{width:100%;border-bottom-right-radius:calc(.25rem - 1px);border-bottom-left-radius:calc(.25rem - 1px)}.card-deck{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column}.card-deck .card{margin-bottom:15px}@media (min-width:576px){.card-deck{-ms-flex-flow:row wrap;flex-flow:row wrap;margin-right:-15px;margin-left:-15px}.card-deck .card{display:-ms-flexbox;display:flex;-ms-flex:1 0 0%;flex:1 0 0%;-ms-flex-direction:column;flex-direction:column;margin-right:15px;margin-bottom:0;margin-left:15px}}.card-group{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column}.card-group>.card{margin-bottom:15px}@media (min-width:576px){.card-group{-ms-flex-flow:row wrap;flex-flow:row wrap}.card-group>.card{-ms-flex:1 0 0%;flex:1 0 0%;margin-bottom:0}.card-group>.card+.card{margin-left:0;border-left:0}.card-group>.card:not(:last-child){border-top-right-radius:0;border-bottom-right-radius:0}.card-group>.card:not(:last-child) .card-header,.card-group>.card:not(:last-child) .card-img-top{border-top-right-radius:0}.card-group>.card:not(:last-child) .card-footer,.card-group>.card:not(:last-child) .card-img-bottom{border-bottom-right-radius:0}.card-group>.card:not(:first-child){border-top-left-radius:0;border-bottom-left-radius:0}.card-group>.card:not(:first-child) .card-header,.card-group>.card:not(:first-child) .card-img-top{border-top-left-radius:0}.card-group>.card:not(:first-child) .card-footer,.card-group>.card:not(:first-child) .card-img-bottom{border-bottom-left-radius:0}}.card-columns .card{margin-bottom:.75rem}@media (min-width:576px){.card-columns{-webkit-column-count:3;-moz-column-count:3;column-count:3;-webkit-column-gap:1.25rem;-moz-column-gap:1.25rem;column-gap:1.25rem;orphans:1;widows:1}.card-columns .card{display:inline-block;width:100%}}.accordion>.card{overflow:hidden}.accordion>.card:not(:first-of-type) .card-header:first-child{border-radius:0}.accordion>.card:not(:first-of-type):not(:last-of-type){border-bottom:0;border-radius:0}.accordion>.card:first-of-type{border-bottom:0;border-bottom-right-radius:0;border-bottom-left-radius:0}.accordion>.card:last-of-type{border-top-left-radius:0;border-top-right-radius:0}.accordion>.card .card-header{margin-bottom:-1px}.breadcrumb{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;padding:.75rem 1rem;margin-bottom:1rem;list-style:none;background-color:#e9ecef;border-radius:.25rem}.breadcrumb-item+.breadcrumb-item{padding-left:.5rem}.breadcrumb-item+.breadcrumb-item::before{display:inline-block;padding-right:.5rem;color:#6c757d;content:\"/\"}.breadcrumb-item+.breadcrumb-item:hover::before{text-decoration:underline}.breadcrumb-item+.breadcrumb-item:hover::before{text-decoration:none}.breadcrumb-item.active{color:#6c757d}.pagination{display:-ms-flexbox;display:flex;padding-left:0;list-style:none;border-radius:.25rem}.page-link{position:relative;display:block;padding:.5rem .75rem;margin-left:-1px;line-height:1.25;color:#007bff;background-color:#fff;border:1px solid #dee2e6}.page-link:hover{z-index:2;color:#0056b3;text-decoration:none;background-color:#e9ecef;border-color:#dee2e6}.page-link:focus{z-index:2;outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.page-item:first-child .page-link{margin-left:0;border-top-left-radius:.25rem;border-bottom-left-radius:.25rem}.page-item:last-child .page-link{border-top-right-radius:.25rem;border-bottom-right-radius:.25rem}.page-item.active .page-link{z-index:1;color:#fff;background-color:#007bff;border-color:#007bff}.page-item.disabled .page-link{color:#6c757d;pointer-events:none;cursor:auto;background-color:#fff;border-color:#dee2e6}.pagination-lg .page-link{padding:.75rem 1.5rem;font-size:1.25rem;line-height:1.5}.pagination-lg .page-item:first-child .page-link{border-top-left-radius:.3rem;border-bottom-left-radius:.3rem}.pagination-lg .page-item:last-child .page-link{border-top-right-radius:.3rem;border-bottom-right-radius:.3rem}.pagination-sm .page-link{padding:.25rem .5rem;font-size:.875rem;line-height:1.5}.pagination-sm .page-item:first-child .page-link{border-top-left-radius:.2rem;border-bottom-left-radius:.2rem}.pagination-sm .page-item:last-child .page-link{border-top-right-radius:.2rem;border-bottom-right-radius:.2rem}.badge{display:inline-block;padding:.25em .4em;font-size:75%;font-weight:700;line-height:1;text-align:center;white-space:nowrap;vertical-align:baseline;border-radius:.25rem;transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out}@media (prefers-reduced-motion:reduce){.badge{transition:none}}a.badge:focus,a.badge:hover{text-decoration:none}.badge:empty{display:none}.btn .badge{position:relative;top:-1px}.badge-pill{padding-right:.6em;padding-left:.6em;border-radius:10rem}.badge-primary{color:#fff;background-color:#007bff}a.badge-primary:focus,a.badge-primary:hover{color:#fff;background-color:#0062cc}a.badge-primary.focus,a.badge-primary:focus{outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.5)}.badge-secondary{color:#fff;background-color:#6c757d}a.badge-secondary:focus,a.badge-secondary:hover{color:#fff;background-color:#545b62}a.badge-secondary.focus,a.badge-secondary:focus{outline:0;box-shadow:0 0 0 .2rem rgba(108,117,125,.5)}.badge-success{color:#fff;background-color:#28a745}a.badge-success:focus,a.badge-success:hover{color:#fff;background-color:#1e7e34}a.badge-success.focus,a.badge-success:focus{outline:0;box-shadow:0 0 0 .2rem rgba(40,167,69,.5)}.badge-info{color:#fff;background-color:#17a2b8}a.badge-info:focus,a.badge-info:hover{color:#fff;background-color:#117a8b}a.badge-info.focus,a.badge-info:focus{outline:0;box-shadow:0 0 0 .2rem rgba(23,162,184,.5)}.badge-warning{color:#212529;background-color:#ffc107}a.badge-warning:focus,a.badge-warning:hover{color:#212529;background-color:#d39e00}a.badge-warning.focus,a.badge-warning:focus{outline:0;box-shadow:0 0 0 .2rem rgba(255,193,7,.5)}.badge-danger{color:#fff;background-color:#dc3545}a.badge-danger:focus,a.badge-danger:hover{color:#fff;background-color:#bd2130}a.badge-danger.focus,a.badge-danger:focus{outline:0;box-shadow:0 0 0 .2rem rgba(220,53,69,.5)}.badge-light{color:#212529;background-color:#f8f9fa}a.badge-light:focus,a.badge-light:hover{color:#212529;background-color:#dae0e5}a.badge-light.focus,a.badge-light:focus{outline:0;box-shadow:0 0 0 .2rem rgba(248,249,250,.5)}.badge-dark{color:#fff;background-color:#343a40}a.badge-dark:focus,a.badge-dark:hover{color:#fff;background-color:#1d2124}a.badge-dark.focus,a.badge-dark:focus{outline:0;box-shadow:0 0 0 .2rem rgba(52,58,64,.5)}.jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}@media (min-width:576px){.jumbotron{padding:4rem 2rem}}.jumbotron-fluid{padding-right:0;padding-left:0;border-radius:0}.alert{position:relative;padding:.75rem 1.25rem;margin-bottom:1rem;border:1px solid transparent;border-radius:.25rem}.alert-heading{color:inherit}.alert-link{font-weight:700}.alert-dismissible{padding-right:4rem}.alert-dismissible .close{position:absolute;top:0;right:0;padding:.75rem 1.25rem;color:inherit}.alert-primary{color:#004085;background-color:#cce5ff;border-color:#b8daff}.alert-primary hr{border-top-color:#9fcdff}.alert-primary .alert-link{color:#002752}.alert-secondary{color:#383d41;background-color:#e2e3e5;border-color:#d6d8db}.alert-secondary hr{border-top-color:#c8cbcf}.alert-secondary .alert-link{color:#202326}.alert-success{color:#155724;background-color:#d4edda;border-color:#c3e6cb}.alert-success hr{border-top-color:#b1dfbb}.alert-success .alert-link{color:#0b2e13}.alert-info{color:#0c5460;background-color:#d1ecf1;border-color:#bee5eb}.alert-info hr{border-top-color:#abdde5}.alert-info .alert-link{color:#062c33}.alert-warning{color:#856404;background-color:#fff3cd;border-color:#ffeeba}.alert-warning hr{border-top-color:#ffe8a1}.alert-warning .alert-link{color:#533f03}.alert-danger{color:#721c24;background-color:#f8d7da;border-color:#f5c6cb}.alert-danger hr{border-top-color:#f1b0b7}.alert-danger .alert-link{color:#491217}.alert-light{color:#818182;background-color:#fefefe;border-color:#fdfdfe}.alert-light hr{border-top-color:#ececf6}.alert-light .alert-link{color:#686868}.alert-dark{color:#1b1e21;background-color:#d6d8d9;border-color:#c6c8ca}.alert-dark hr{border-top-color:#b9bbbe}.alert-dark .alert-link{color:#040505}@-webkit-keyframes progress-bar-stripes{from{background-position:1rem 0}to{background-position:0 0}}@keyframes progress-bar-stripes{from{background-position:1rem 0}to{background-position:0 0}}.progress{display:-ms-flexbox;display:flex;height:1rem;overflow:hidden;font-size:.75rem;background-color:#e9ecef;border-radius:.25rem}.progress-bar{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-pack:center;justify-content:center;color:#fff;text-align:center;white-space:nowrap;background-color:#007bff;transition:width .6s ease}@media (prefers-reduced-motion:reduce){.progress-bar{transition:none}}.progress-bar-striped{background-image:linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);background-size:1rem 1rem}.progress-bar-animated{-webkit-animation:progress-bar-stripes 1s linear infinite;animation:progress-bar-stripes 1s linear infinite}@media (prefers-reduced-motion:reduce){.progress-bar-animated{-webkit-animation:none;animation:none}}.media{display:-ms-flexbox;display:flex;-ms-flex-align:start;align-items:flex-start}.media-body{-ms-flex:1;flex:1}.list-group{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;padding-left:0;margin-bottom:0}.list-group-item-action{width:100%;color:#495057;text-align:inherit}.list-group-item-action:focus,.list-group-item-action:hover{z-index:1;color:#495057;text-decoration:none;background-color:#f8f9fa}.list-group-item-action:active{color:#212529;background-color:#e9ecef}.list-group-item{position:relative;display:block;padding:.75rem 1.25rem;margin-bottom:-1px;background-color:#fff;border:1px solid rgba(0,0,0,.125)}.list-group-item:first-child{border-top-left-radius:.25rem;border-top-right-radius:.25rem}.list-group-item:last-child{margin-bottom:0;border-bottom-right-radius:.25rem;border-bottom-left-radius:.25rem}.list-group-item.disabled,.list-group-item:disabled{color:#6c757d;pointer-events:none;background-color:#fff}.list-group-item.active{z-index:2;color:#fff;background-color:#007bff;border-color:#007bff}.list-group-horizontal{-ms-flex-direction:row;flex-direction:row}.list-group-horizontal .list-group-item{margin-right:-1px;margin-bottom:0}.list-group-horizontal .list-group-item:first-child{border-top-left-radius:.25rem;border-bottom-left-radius:.25rem;border-top-right-radius:0}.list-group-horizontal .list-group-item:last-child{margin-right:0;border-top-right-radius:.25rem;border-bottom-right-radius:.25rem;border-bottom-left-radius:0}@media (min-width:576px){.list-group-horizontal-sm{-ms-flex-direction:row;flex-direction:row}.list-group-horizontal-sm .list-group-item{margin-right:-1px;margin-bottom:0}.list-group-horizontal-sm .list-group-item:first-child{border-top-left-radius:.25rem;border-bottom-left-radius:.25rem;border-top-right-radius:0}.list-group-horizontal-sm .list-group-item:last-child{margin-right:0;border-top-right-radius:.25rem;border-bottom-right-radius:.25rem;border-bottom-left-radius:0}}@media (min-width:768px){.list-group-horizontal-md{-ms-flex-direction:row;flex-direction:row}.list-group-horizontal-md .list-group-item{margin-right:-1px;margin-bottom:0}.list-group-horizontal-md .list-group-item:first-child{border-top-left-radius:.25rem;border-bottom-left-radius:.25rem;border-top-right-radius:0}.list-group-horizontal-md .list-group-item:last-child{margin-right:0;border-top-right-radius:.25rem;border-bottom-right-radius:.25rem;border-bottom-left-radius:0}}@media (min-width:992px){.list-group-horizontal-lg{-ms-flex-direction:row;flex-direction:row}.list-group-horizontal-lg .list-group-item{margin-right:-1px;margin-bottom:0}.list-group-horizontal-lg .list-group-item:first-child{border-top-left-radius:.25rem;border-bottom-left-radius:.25rem;border-top-right-radius:0}.list-group-horizontal-lg .list-group-item:last-child{margin-right:0;border-top-right-radius:.25rem;border-bottom-right-radius:.25rem;border-bottom-left-radius:0}}@media (min-width:1200px){.list-group-horizontal-xl{-ms-flex-direction:row;flex-direction:row}.list-group-horizontal-xl .list-group-item{margin-right:-1px;margin-bottom:0}.list-group-horizontal-xl .list-group-item:first-child{border-top-left-radius:.25rem;border-bottom-left-radius:.25rem;border-top-right-radius:0}.list-group-horizontal-xl .list-group-item:last-child{margin-right:0;border-top-right-radius:.25rem;border-bottom-right-radius:.25rem;border-bottom-left-radius:0}}.list-group-flush .list-group-item{border-right:0;border-left:0;border-radius:0}.list-group-flush .list-group-item:last-child{margin-bottom:-1px}.list-group-flush:first-child .list-group-item:first-child{border-top:0}.list-group-flush:last-child .list-group-item:last-child{margin-bottom:0;border-bottom:0}.list-group-item-primary{color:#004085;background-color:#b8daff}.list-group-item-primary.list-group-item-action:focus,.list-group-item-primary.list-group-item-action:hover{color:#004085;background-color:#9fcdff}.list-group-item-primary.list-group-item-action.active{color:#fff;background-color:#004085;border-color:#004085}.list-group-item-secondary{color:#383d41;background-color:#d6d8db}.list-group-item-secondary.list-group-item-action:focus,.list-group-item-secondary.list-group-item-action:hover{color:#383d41;background-color:#c8cbcf}.list-group-item-secondary.list-group-item-action.active{color:#fff;background-color:#383d41;border-color:#383d41}.list-group-item-success{color:#155724;background-color:#c3e6cb}.list-group-item-success.list-group-item-action:focus,.list-group-item-success.list-group-item-action:hover{color:#155724;background-color:#b1dfbb}.list-group-item-success.list-group-item-action.active{color:#fff;background-color:#155724;border-color:#155724}.list-group-item-info{color:#0c5460;background-color:#bee5eb}.list-group-item-info.list-group-item-action:focus,.list-group-item-info.list-group-item-action:hover{color:#0c5460;background-color:#abdde5}.list-group-item-info.list-group-item-action.active{color:#fff;background-color:#0c5460;border-color:#0c5460}.list-group-item-warning{color:#856404;background-color:#ffeeba}.list-group-item-warning.list-group-item-action:focus,.list-group-item-warning.list-group-item-action:hover{color:#856404;background-color:#ffe8a1}.list-group-item-warning.list-group-item-action.active{color:#fff;background-color:#856404;border-color:#856404}.list-group-item-danger{color:#721c24;background-color:#f5c6cb}.list-group-item-danger.list-group-item-action:focus,.list-group-item-danger.list-group-item-action:hover{color:#721c24;background-color:#f1b0b7}.list-group-item-danger.list-group-item-action.active{color:#fff;background-color:#721c24;border-color:#721c24}.list-group-item-light{color:#818182;background-color:#fdfdfe}.list-group-item-light.list-group-item-action:focus,.list-group-item-light.list-group-item-action:hover{color:#818182;background-color:#ececf6}.list-group-item-light.list-group-item-action.active{color:#fff;background-color:#818182;border-color:#818182}.list-group-item-dark{color:#1b1e21;background-color:#c6c8ca}.list-group-item-dark.list-group-item-action:focus,.list-group-item-dark.list-group-item-action:hover{color:#1b1e21;background-color:#b9bbbe}.list-group-item-dark.list-group-item-action.active{color:#fff;background-color:#1b1e21;border-color:#1b1e21}.close{float:right;font-size:1.5rem;font-weight:700;line-height:1;color:#000;text-shadow:0 1px 0 #fff;opacity:.5}.close:hover{color:#000;text-decoration:none}.close:not(:disabled):not(.disabled):focus,.close:not(:disabled):not(.disabled):hover{opacity:.75}button.close{padding:0;background-color:transparent;border:0;-webkit-appearance:none;-moz-appearance:none;appearance:none}a.close.disabled{pointer-events:none}.toast{max-width:350px;overflow:hidden;font-size:.875rem;background-color:rgba(255,255,255,.85);background-clip:padding-box;border:1px solid rgba(0,0,0,.1);box-shadow:0 .25rem .75rem rgba(0,0,0,.1);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;border-radius:.25rem}.toast:not(:last-child){margin-bottom:.75rem}.toast.showing{opacity:1}.toast.show{display:block;opacity:1}.toast.hide{display:none}.toast-header{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;padding:.25rem .75rem;color:#6c757d;background-color:rgba(255,255,255,.85);background-clip:padding-box;border-bottom:1px solid rgba(0,0,0,.05)}.toast-body{padding:.75rem}.modal-open{overflow:hidden}.modal-open .modal{overflow-x:hidden;overflow-y:auto}.modal{position:fixed;top:0;left:0;z-index:1050;display:none;width:100%;height:100%;overflow:hidden;outline:0}.modal-dialog{position:relative;width:auto;margin:.5rem;pointer-events:none}.modal.fade .modal-dialog{transition:-webkit-transform .3s ease-out;transition:transform .3s ease-out;transition:transform .3s ease-out,-webkit-transform .3s ease-out;-webkit-transform:translate(0,-50px);transform:translate(0,-50px)}@media (prefers-reduced-motion:reduce){.modal.fade .modal-dialog{transition:none}}.modal.show .modal-dialog{-webkit-transform:none;transform:none}.modal-dialog-scrollable{display:-ms-flexbox;display:flex;max-height:calc(100% - 1rem)}.modal-dialog-scrollable .modal-content{max-height:calc(100vh - 1rem);overflow:hidden}.modal-dialog-scrollable .modal-footer,.modal-dialog-scrollable .modal-header{-ms-flex-negative:0;flex-shrink:0}.modal-dialog-scrollable .modal-body{overflow-y:auto}.modal-dialog-centered{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;min-height:calc(100% - 1rem)}.modal-dialog-centered::before{display:block;height:calc(100vh - 1rem);content:\"\"}.modal-dialog-centered.modal-dialog-scrollable{-ms-flex-direction:column;flex-direction:column;-ms-flex-pack:center;justify-content:center;height:100%}.modal-dialog-centered.modal-dialog-scrollable .modal-content{max-height:none}.modal-dialog-centered.modal-dialog-scrollable::before{content:none}.modal-content{position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;width:100%;pointer-events:auto;background-color:#fff;background-clip:padding-box;border:1px solid rgba(0,0,0,.2);border-radius:.3rem;outline:0}.modal-backdrop{position:fixed;top:0;left:0;z-index:1040;width:100vw;height:100vh;background-color:#000}.modal-backdrop.fade{opacity:0}.modal-backdrop.show{opacity:.5}.modal-header{display:-ms-flexbox;display:flex;-ms-flex-align:start;align-items:flex-start;-ms-flex-pack:justify;justify-content:space-between;padding:1rem 1rem;border-bottom:1px solid #dee2e6;border-top-left-radius:.3rem;border-top-right-radius:.3rem}.modal-header .close{padding:1rem 1rem;margin:-1rem -1rem -1rem auto}.modal-title{margin-bottom:0;line-height:1.5}.modal-body{position:relative;-ms-flex:1 1 auto;flex:1 1 auto;padding:1rem}.modal-footer{display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:end;justify-content:flex-end;padding:1rem;border-top:1px solid #dee2e6;border-bottom-right-radius:.3rem;border-bottom-left-radius:.3rem}.modal-footer>:not(:first-child){margin-left:.25rem}.modal-footer>:not(:last-child){margin-right:.25rem}.modal-scrollbar-measure{position:absolute;top:-9999px;width:50px;height:50px;overflow:scroll}@media (min-width:576px){.modal-dialog{max-width:500px;margin:1.75rem auto}.modal-dialog-scrollable{max-height:calc(100% - 3.5rem)}.modal-dialog-scrollable .modal-content{max-height:calc(100vh - 3.5rem)}.modal-dialog-centered{min-height:calc(100% - 3.5rem)}.modal-dialog-centered::before{height:calc(100vh - 3.5rem)}.modal-sm{max-width:300px}}@media (min-width:992px){.modal-lg,.modal-xl{max-width:800px}}@media (min-width:1200px){.modal-xl{max-width:1140px}}.tooltip{position:absolute;z-index:1070;display:block;margin:0;font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\";font-style:normal;font-weight:400;line-height:1.5;text-align:left;text-align:start;text-decoration:none;text-shadow:none;text-transform:none;letter-spacing:normal;word-break:normal;word-spacing:normal;white-space:normal;line-break:auto;font-size:.875rem;word-wrap:break-word;opacity:0}.tooltip.show{opacity:.9}.tooltip .arrow{position:absolute;display:block;width:.8rem;height:.4rem}.tooltip .arrow::before{position:absolute;content:\"\";border-color:transparent;border-style:solid}.bs-tooltip-auto[x-placement^=top],.bs-tooltip-top{padding:.4rem 0}.bs-tooltip-auto[x-placement^=top] .arrow,.bs-tooltip-top .arrow{bottom:0}.bs-tooltip-auto[x-placement^=top] .arrow::before,.bs-tooltip-top .arrow::before{top:0;border-width:.4rem .4rem 0;border-top-color:#000}.bs-tooltip-auto[x-placement^=right],.bs-tooltip-right{padding:0 .4rem}.bs-tooltip-auto[x-placement^=right] .arrow,.bs-tooltip-right .arrow{left:0;width:.4rem;height:.8rem}.bs-tooltip-auto[x-placement^=right] .arrow::before,.bs-tooltip-right .arrow::before{right:0;border-width:.4rem .4rem .4rem 0;border-right-color:#000}.bs-tooltip-auto[x-placement^=bottom],.bs-tooltip-bottom{padding:.4rem 0}.bs-tooltip-auto[x-placement^=bottom] .arrow,.bs-tooltip-bottom .arrow{top:0}.bs-tooltip-auto[x-placement^=bottom] .arrow::before,.bs-tooltip-bottom .arrow::before{bottom:0;border-width:0 .4rem .4rem;border-bottom-color:#000}.bs-tooltip-auto[x-placement^=left],.bs-tooltip-left{padding:0 .4rem}.bs-tooltip-auto[x-placement^=left] .arrow,.bs-tooltip-left .arrow{right:0;width:.4rem;height:.8rem}.bs-tooltip-auto[x-placement^=left] .arrow::before,.bs-tooltip-left .arrow::before{left:0;border-width:.4rem 0 .4rem .4rem;border-left-color:#000}.tooltip-inner{max-width:200px;padding:.25rem .5rem;color:#fff;text-align:center;background-color:#000;border-radius:.25rem}.popover{position:absolute;top:0;left:0;z-index:1060;display:block;max-width:276px;font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\";font-style:normal;font-weight:400;line-height:1.5;text-align:left;text-align:start;text-decoration:none;text-shadow:none;text-transform:none;letter-spacing:normal;word-break:normal;word-spacing:normal;white-space:normal;line-break:auto;font-size:.875rem;word-wrap:break-word;background-color:#fff;background-clip:padding-box;border:1px solid rgba(0,0,0,.2);border-radius:.3rem}.popover .arrow{position:absolute;display:block;width:1rem;height:.5rem;margin:0 .3rem}.popover .arrow::after,.popover .arrow::before{position:absolute;display:block;content:\"\";border-color:transparent;border-style:solid}.bs-popover-auto[x-placement^=top],.bs-popover-top{margin-bottom:.5rem}.bs-popover-auto[x-placement^=top]>.arrow,.bs-popover-top>.arrow{bottom:calc((.5rem + 1px) * -1)}.bs-popover-auto[x-placement^=top]>.arrow::before,.bs-popover-top>.arrow::before{bottom:0;border-width:.5rem .5rem 0;border-top-color:rgba(0,0,0,.25)}.bs-popover-auto[x-placement^=top]>.arrow::after,.bs-popover-top>.arrow::after{bottom:1px;border-width:.5rem .5rem 0;border-top-color:#fff}.bs-popover-auto[x-placement^=right],.bs-popover-right{margin-left:.5rem}.bs-popover-auto[x-placement^=right]>.arrow,.bs-popover-right>.arrow{left:calc((.5rem + 1px) * -1);width:.5rem;height:1rem;margin:.3rem 0}.bs-popover-auto[x-placement^=right]>.arrow::before,.bs-popover-right>.arrow::before{left:0;border-width:.5rem .5rem .5rem 0;border-right-color:rgba(0,0,0,.25)}.bs-popover-auto[x-placement^=right]>.arrow::after,.bs-popover-right>.arrow::after{left:1px;border-width:.5rem .5rem .5rem 0;border-right-color:#fff}.bs-popover-auto[x-placement^=bottom],.bs-popover-bottom{margin-top:.5rem}.bs-popover-auto[x-placement^=bottom]>.arrow,.bs-popover-bottom>.arrow{top:calc((.5rem + 1px) * -1)}.bs-popover-auto[x-placement^=bottom]>.arrow::before,.bs-popover-bottom>.arrow::before{top:0;border-width:0 .5rem .5rem .5rem;border-bottom-color:rgba(0,0,0,.25)}.bs-popover-auto[x-placement^=bottom]>.arrow::after,.bs-popover-bottom>.arrow::after{top:1px;border-width:0 .5rem .5rem .5rem;border-bottom-color:#fff}.bs-popover-auto[x-placement^=bottom] .popover-header::before,.bs-popover-bottom .popover-header::before{position:absolute;top:0;left:50%;display:block;width:1rem;margin-left:-.5rem;content:\"\";border-bottom:1px solid #f7f7f7}.bs-popover-auto[x-placement^=left],.bs-popover-left{margin-right:.5rem}.bs-popover-auto[x-placement^=left]>.arrow,.bs-popover-left>.arrow{right:calc((.5rem + 1px) * -1);width:.5rem;height:1rem;margin:.3rem 0}.bs-popover-auto[x-placement^=left]>.arrow::before,.bs-popover-left>.arrow::before{right:0;border-width:.5rem 0 .5rem .5rem;border-left-color:rgba(0,0,0,.25)}.bs-popover-auto[x-placement^=left]>.arrow::after,.bs-popover-left>.arrow::after{right:1px;border-width:.5rem 0 .5rem .5rem;border-left-color:#fff}.popover-header{padding:.5rem .75rem;margin-bottom:0;font-size:1rem;background-color:#f7f7f7;border-bottom:1px solid #ebebeb;border-top-left-radius:calc(.3rem - 1px);border-top-right-radius:calc(.3rem - 1px)}.popover-header:empty{display:none}.popover-body{padding:.5rem .75rem;color:#212529}.carousel{position:relative}.carousel.pointer-event{-ms-touch-action:pan-y;touch-action:pan-y}.carousel-inner{position:relative;width:100%;overflow:hidden}.carousel-inner::after{display:block;clear:both;content:\"\"}.carousel-item{position:relative;display:none;float:left;width:100%;margin-right:-100%;-webkit-backface-visibility:hidden;backface-visibility:hidden;transition:-webkit-transform .6s ease-in-out;transition:transform .6s ease-in-out;transition:transform .6s ease-in-out,-webkit-transform .6s ease-in-out}@media (prefers-reduced-motion:reduce){.carousel-item{transition:none}}.carousel-item-next,.carousel-item-prev,.carousel-item.active{display:block}.active.carousel-item-right,.carousel-item-next:not(.carousel-item-left){-webkit-transform:translateX(100%);transform:translateX(100%)}.active.carousel-item-left,.carousel-item-prev:not(.carousel-item-right){-webkit-transform:translateX(-100%);transform:translateX(-100%)}.carousel-fade .carousel-item{opacity:0;transition-property:opacity;-webkit-transform:none;transform:none}.carousel-fade .carousel-item-next.carousel-item-left,.carousel-fade .carousel-item-prev.carousel-item-right,.carousel-fade .carousel-item.active{z-index:1;opacity:1}.carousel-fade .active.carousel-item-left,.carousel-fade .active.carousel-item-right{z-index:0;opacity:0;transition:0s .6s opacity}@media (prefers-reduced-motion:reduce){.carousel-fade .active.carousel-item-left,.carousel-fade .active.carousel-item-right{transition:none}}.carousel-control-next,.carousel-control-prev{position:absolute;top:0;bottom:0;z-index:1;display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:15%;color:#fff;text-align:center;opacity:.5;transition:opacity .15s ease}@media (prefers-reduced-motion:reduce){.carousel-control-next,.carousel-control-prev{transition:none}}.carousel-control-next:focus,.carousel-control-next:hover,.carousel-control-prev:focus,.carousel-control-prev:hover{color:#fff;text-decoration:none;outline:0;opacity:.9}.carousel-control-prev{left:0}.carousel-control-next{right:0}.carousel-control-next-icon,.carousel-control-prev-icon{display:inline-block;width:20px;height:20px;background:no-repeat 50%/100% 100%}.carousel-control-prev-icon{background-image:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3e%3c/svg%3e\")}.carousel-control-next-icon{background-image:url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3e%3c/svg%3e\")}.carousel-indicators{position:absolute;right:0;bottom:0;left:0;z-index:15;display:-ms-flexbox;display:flex;-ms-flex-pack:center;justify-content:center;padding-left:0;margin-right:15%;margin-left:15%;list-style:none}.carousel-indicators li{box-sizing:content-box;-ms-flex:0 1 auto;flex:0 1 auto;width:30px;height:3px;margin-right:3px;margin-left:3px;text-indent:-999px;cursor:pointer;background-color:#fff;background-clip:padding-box;border-top:10px solid transparent;border-bottom:10px solid transparent;opacity:.5;transition:opacity .6s ease}@media (prefers-reduced-motion:reduce){.carousel-indicators li{transition:none}}.carousel-indicators .active{opacity:1}.carousel-caption{position:absolute;right:15%;bottom:20px;left:15%;z-index:10;padding-top:20px;padding-bottom:20px;color:#fff;text-align:center}@-webkit-keyframes spinner-border{to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes spinner-border{to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}.spinner-border{display:inline-block;width:2rem;height:2rem;vertical-align:text-bottom;border:.25em solid currentColor;border-right-color:transparent;border-radius:50%;-webkit-animation:spinner-border .75s linear infinite;animation:spinner-border .75s linear infinite}.spinner-border-sm{width:1rem;height:1rem;border-width:.2em}@-webkit-keyframes spinner-grow{0%{-webkit-transform:scale(0);transform:scale(0)}50%{opacity:1}}@keyframes spinner-grow{0%{-webkit-transform:scale(0);transform:scale(0)}50%{opacity:1}}.spinner-grow{display:inline-block;width:2rem;height:2rem;vertical-align:text-bottom;background-color:currentColor;border-radius:50%;opacity:0;-webkit-animation:spinner-grow .75s linear infinite;animation:spinner-grow .75s linear infinite}.spinner-grow-sm{width:1rem;height:1rem}.align-baseline{vertical-align:baseline!important}.align-top{vertical-align:top!important}.align-middle{vertical-align:middle!important}.align-bottom{vertical-align:bottom!important}.align-text-bottom{vertical-align:text-bottom!important}.align-text-top{vertical-align:text-top!important}.bg-primary{background-color:#007bff!important}a.bg-primary:focus,a.bg-primary:hover,button.bg-primary:focus,button.bg-primary:hover{background-color:#0062cc!important}.bg-secondary{background-color:#6c757d!important}a.bg-secondary:focus,a.bg-secondary:hover,button.bg-secondary:focus,button.bg-secondary:hover{background-color:#545b62!important}.bg-success{background-color:#28a745!important}a.bg-success:focus,a.bg-success:hover,button.bg-success:focus,button.bg-success:hover{background-color:#1e7e34!important}.bg-info{background-color:#17a2b8!important}a.bg-info:focus,a.bg-info:hover,button.bg-info:focus,button.bg-info:hover{background-color:#117a8b!important}.bg-warning{background-color:#ffc107!important}a.bg-warning:focus,a.bg-warning:hover,button.bg-warning:focus,button.bg-warning:hover{background-color:#d39e00!important}.bg-danger{background-color:#dc3545!important}a.bg-danger:focus,a.bg-danger:hover,button.bg-danger:focus,button.bg-danger:hover{background-color:#bd2130!important}.bg-light{background-color:#f8f9fa!important}a.bg-light:focus,a.bg-light:hover,button.bg-light:focus,button.bg-light:hover{background-color:#dae0e5!important}.bg-dark{background-color:#343a40!important}a.bg-dark:focus,a.bg-dark:hover,button.bg-dark:focus,button.bg-dark:hover{background-color:#1d2124!important}.bg-white{background-color:#fff!important}.bg-transparent{background-color:transparent!important}.border{border:1px solid #dee2e6!important}.border-top{border-top:1px solid #dee2e6!important}.border-right{border-right:1px solid #dee2e6!important}.border-bottom{border-bottom:1px solid #dee2e6!important}.border-left{border-left:1px solid #dee2e6!important}.border-0{border:0!important}.border-top-0{border-top:0!important}.border-right-0{border-right:0!important}.border-bottom-0{border-bottom:0!important}.border-left-0{border-left:0!important}.border-primary{border-color:#007bff!important}.border-secondary{border-color:#6c757d!important}.border-success{border-color:#28a745!important}.border-info{border-color:#17a2b8!important}.border-warning{border-color:#ffc107!important}.border-danger{border-color:#dc3545!important}.border-light{border-color:#f8f9fa!important}.border-dark{border-color:#343a40!important}.border-white{border-color:#fff!important}.rounded-sm{border-radius:.2rem!important}.rounded{border-radius:.25rem!important}.rounded-top{border-top-left-radius:.25rem!important;border-top-right-radius:.25rem!important}.rounded-right{border-top-right-radius:.25rem!important;border-bottom-right-radius:.25rem!important}.rounded-bottom{border-bottom-right-radius:.25rem!important;border-bottom-left-radius:.25rem!important}.rounded-left{border-top-left-radius:.25rem!important;border-bottom-left-radius:.25rem!important}.rounded-lg{border-radius:.3rem!important}.rounded-circle{border-radius:50%!important}.rounded-pill{border-radius:50rem!important}.rounded-0{border-radius:0!important}.clearfix::after{display:block;clear:both;content:\"\"}.d-none{display:none!important}.d-inline{display:inline!important}.d-inline-block{display:inline-block!important}.d-block{display:block!important}.d-table{display:table!important}.d-table-row{display:table-row!important}.d-table-cell{display:table-cell!important}.d-flex{display:-ms-flexbox!important;display:flex!important}.d-inline-flex{display:-ms-inline-flexbox!important;display:inline-flex!important}@media (min-width:576px){.d-sm-none{display:none!important}.d-sm-inline{display:inline!important}.d-sm-inline-block{display:inline-block!important}.d-sm-block{display:block!important}.d-sm-table{display:table!important}.d-sm-table-row{display:table-row!important}.d-sm-table-cell{display:table-cell!important}.d-sm-flex{display:-ms-flexbox!important;display:flex!important}.d-sm-inline-flex{display:-ms-inline-flexbox!important;display:inline-flex!important}}@media (min-width:768px){.d-md-none{display:none!important}.d-md-inline{display:inline!important}.d-md-inline-block{display:inline-block!important}.d-md-block{display:block!important}.d-md-table{display:table!important}.d-md-table-row{display:table-row!important}.d-md-table-cell{display:table-cell!important}.d-md-flex{display:-ms-flexbox!important;display:flex!important}.d-md-inline-flex{display:-ms-inline-flexbox!important;display:inline-flex!important}}@media (min-width:992px){.d-lg-none{display:none!important}.d-lg-inline{display:inline!important}.d-lg-inline-block{display:inline-block!important}.d-lg-block{display:block!important}.d-lg-table{display:table!important}.d-lg-table-row{display:table-row!important}.d-lg-table-cell{display:table-cell!important}.d-lg-flex{display:-ms-flexbox!important;display:flex!important}.d-lg-inline-flex{display:-ms-inline-flexbox!important;display:inline-flex!important}}@media (min-width:1200px){.d-xl-none{display:none!important}.d-xl-inline{display:inline!important}.d-xl-inline-block{display:inline-block!important}.d-xl-block{display:block!important}.d-xl-table{display:table!important}.d-xl-table-row{display:table-row!important}.d-xl-table-cell{display:table-cell!important}.d-xl-flex{display:-ms-flexbox!important;display:flex!important}.d-xl-inline-flex{display:-ms-inline-flexbox!important;display:inline-flex!important}}@media print{.d-print-none{display:none!important}.d-print-inline{display:inline!important}.d-print-inline-block{display:inline-block!important}.d-print-block{display:block!important}.d-print-table{display:table!important}.d-print-table-row{display:table-row!important}.d-print-table-cell{display:table-cell!important}.d-print-flex{display:-ms-flexbox!important;display:flex!important}.d-print-inline-flex{display:-ms-inline-flexbox!important;display:inline-flex!important}}.embed-responsive{position:relative;display:block;width:100%;padding:0;overflow:hidden}.embed-responsive::before{display:block;content:\"\"}.embed-responsive .embed-responsive-item,.embed-responsive embed,.embed-responsive iframe,.embed-responsive object,.embed-responsive video{position:absolute;top:0;bottom:0;left:0;width:100%;height:100%;border:0}.embed-responsive-21by9::before{padding-top:42.857143%}.embed-responsive-16by9::before{padding-top:56.25%}.embed-responsive-4by3::before{padding-top:75%}.embed-responsive-1by1::before{padding-top:100%}.flex-row{-ms-flex-direction:row!important;flex-direction:row!important}.flex-column{-ms-flex-direction:column!important;flex-direction:column!important}.flex-row-reverse{-ms-flex-direction:row-reverse!important;flex-direction:row-reverse!important}.flex-column-reverse{-ms-flex-direction:column-reverse!important;flex-direction:column-reverse!important}.flex-wrap{-ms-flex-wrap:wrap!important;flex-wrap:wrap!important}.flex-nowrap{-ms-flex-wrap:nowrap!important;flex-wrap:nowrap!important}.flex-wrap-reverse{-ms-flex-wrap:wrap-reverse!important;flex-wrap:wrap-reverse!important}.flex-fill{-ms-flex:1 1 auto!important;flex:1 1 auto!important}.flex-grow-0{-ms-flex-positive:0!important;flex-grow:0!important}.flex-grow-1{-ms-flex-positive:1!important;flex-grow:1!important}.flex-shrink-0{-ms-flex-negative:0!important;flex-shrink:0!important}.flex-shrink-1{-ms-flex-negative:1!important;flex-shrink:1!important}.justify-content-start{-ms-flex-pack:start!important;justify-content:flex-start!important}.justify-content-end{-ms-flex-pack:end!important;justify-content:flex-end!important}.justify-content-center{-ms-flex-pack:center!important;justify-content:center!important}.justify-content-between{-ms-flex-pack:justify!important;justify-content:space-between!important}.justify-content-around{-ms-flex-pack:distribute!important;justify-content:space-around!important}.align-items-start{-ms-flex-align:start!important;align-items:flex-start!important}.align-items-end{-ms-flex-align:end!important;align-items:flex-end!important}.align-items-center{-ms-flex-align:center!important;align-items:center!important}.align-items-baseline{-ms-flex-align:baseline!important;align-items:baseline!important}.align-items-stretch{-ms-flex-align:stretch!important;align-items:stretch!important}.align-content-start{-ms-flex-line-pack:start!important;align-content:flex-start!important}.align-content-end{-ms-flex-line-pack:end!important;align-content:flex-end!important}.align-content-center{-ms-flex-line-pack:center!important;align-content:center!important}.align-content-between{-ms-flex-line-pack:justify!important;align-content:space-between!important}.align-content-around{-ms-flex-line-pack:distribute!important;align-content:space-around!important}.align-content-stretch{-ms-flex-line-pack:stretch!important;align-content:stretch!important}.align-self-auto{-ms-flex-item-align:auto!important;align-self:auto!important}.align-self-start{-ms-flex-item-align:start!important;align-self:flex-start!important}.align-self-end{-ms-flex-item-align:end!important;align-self:flex-end!important}.align-self-center{-ms-flex-item-align:center!important;align-self:center!important}.align-self-baseline{-ms-flex-item-align:baseline!important;align-self:baseline!important}.align-self-stretch{-ms-flex-item-align:stretch!important;align-self:stretch!important}@media (min-width:576px){.flex-sm-row{-ms-flex-direction:row!important;flex-direction:row!important}.flex-sm-column{-ms-flex-direction:column!important;flex-direction:column!important}.flex-sm-row-reverse{-ms-flex-direction:row-reverse!important;flex-direction:row-reverse!important}.flex-sm-column-reverse{-ms-flex-direction:column-reverse!important;flex-direction:column-reverse!important}.flex-sm-wrap{-ms-flex-wrap:wrap!important;flex-wrap:wrap!important}.flex-sm-nowrap{-ms-flex-wrap:nowrap!important;flex-wrap:nowrap!important}.flex-sm-wrap-reverse{-ms-flex-wrap:wrap-reverse!important;flex-wrap:wrap-reverse!important}.flex-sm-fill{-ms-flex:1 1 auto!important;flex:1 1 auto!important}.flex-sm-grow-0{-ms-flex-positive:0!important;flex-grow:0!important}.flex-sm-grow-1{-ms-flex-positive:1!important;flex-grow:1!important}.flex-sm-shrink-0{-ms-flex-negative:0!important;flex-shrink:0!important}.flex-sm-shrink-1{-ms-flex-negative:1!important;flex-shrink:1!important}.justify-content-sm-start{-ms-flex-pack:start!important;justify-content:flex-start!important}.justify-content-sm-end{-ms-flex-pack:end!important;justify-content:flex-end!important}.justify-content-sm-center{-ms-flex-pack:center!important;justify-content:center!important}.justify-content-sm-between{-ms-flex-pack:justify!important;justify-content:space-between!important}.justify-content-sm-around{-ms-flex-pack:distribute!important;justify-content:space-around!important}.align-items-sm-start{-ms-flex-align:start!important;align-items:flex-start!important}.align-items-sm-end{-ms-flex-align:end!important;align-items:flex-end!important}.align-items-sm-center{-ms-flex-align:center!important;align-items:center!important}.align-items-sm-baseline{-ms-flex-align:baseline!important;align-items:baseline!important}.align-items-sm-stretch{-ms-flex-align:stretch!important;align-items:stretch!important}.align-content-sm-start{-ms-flex-line-pack:start!important;align-content:flex-start!important}.align-content-sm-end{-ms-flex-line-pack:end!important;align-content:flex-end!important}.align-content-sm-center{-ms-flex-line-pack:center!important;align-content:center!important}.align-content-sm-between{-ms-flex-line-pack:justify!important;align-content:space-between!important}.align-content-sm-around{-ms-flex-line-pack:distribute!important;align-content:space-around!important}.align-content-sm-stretch{-ms-flex-line-pack:stretch!important;align-content:stretch!important}.align-self-sm-auto{-ms-flex-item-align:auto!important;align-self:auto!important}.align-self-sm-start{-ms-flex-item-align:start!important;align-self:flex-start!important}.align-self-sm-end{-ms-flex-item-align:end!important;align-self:flex-end!important}.align-self-sm-center{-ms-flex-item-align:center!important;align-self:center!important}.align-self-sm-baseline{-ms-flex-item-align:baseline!important;align-self:baseline!important}.align-self-sm-stretch{-ms-flex-item-align:stretch!important;align-self:stretch!important}}@media (min-width:768px){.flex-md-row{-ms-flex-direction:row!important;flex-direction:row!important}.flex-md-column{-ms-flex-direction:column!important;flex-direction:column!important}.flex-md-row-reverse{-ms-flex-direction:row-reverse!important;flex-direction:row-reverse!important}.flex-md-column-reverse{-ms-flex-direction:column-reverse!important;flex-direction:column-reverse!important}.flex-md-wrap{-ms-flex-wrap:wrap!important;flex-wrap:wrap!important}.flex-md-nowrap{-ms-flex-wrap:nowrap!important;flex-wrap:nowrap!important}.flex-md-wrap-reverse{-ms-flex-wrap:wrap-reverse!important;flex-wrap:wrap-reverse!important}.flex-md-fill{-ms-flex:1 1 auto!important;flex:1 1 auto!important}.flex-md-grow-0{-ms-flex-positive:0!important;flex-grow:0!important}.flex-md-grow-1{-ms-flex-positive:1!important;flex-grow:1!important}.flex-md-shrink-0{-ms-flex-negative:0!important;flex-shrink:0!important}.flex-md-shrink-1{-ms-flex-negative:1!important;flex-shrink:1!important}.justify-content-md-start{-ms-flex-pack:start!important;justify-content:flex-start!important}.justify-content-md-end{-ms-flex-pack:end!important;justify-content:flex-end!important}.justify-content-md-center{-ms-flex-pack:center!important;justify-content:center!important}.justify-content-md-between{-ms-flex-pack:justify!important;justify-content:space-between!important}.justify-content-md-around{-ms-flex-pack:distribute!important;justify-content:space-around!important}.align-items-md-start{-ms-flex-align:start!important;align-items:flex-start!important}.align-items-md-end{-ms-flex-align:end!important;align-items:flex-end!important}.align-items-md-center{-ms-flex-align:center!important;align-items:center!important}.align-items-md-baseline{-ms-flex-align:baseline!important;align-items:baseline!important}.align-items-md-stretch{-ms-flex-align:stretch!important;align-items:stretch!important}.align-content-md-start{-ms-flex-line-pack:start!important;align-content:flex-start!important}.align-content-md-end{-ms-flex-line-pack:end!important;align-content:flex-end!important}.align-content-md-center{-ms-flex-line-pack:center!important;align-content:center!important}.align-content-md-between{-ms-flex-line-pack:justify!important;align-content:space-between!important}.align-content-md-around{-ms-flex-line-pack:distribute!important;align-content:space-around!important}.align-content-md-stretch{-ms-flex-line-pack:stretch!important;align-content:stretch!important}.align-self-md-auto{-ms-flex-item-align:auto!important;align-self:auto!important}.align-self-md-start{-ms-flex-item-align:start!important;align-self:flex-start!important}.align-self-md-end{-ms-flex-item-align:end!important;align-self:flex-end!important}.align-self-md-center{-ms-flex-item-align:center!important;align-self:center!important}.align-self-md-baseline{-ms-flex-item-align:baseline!important;align-self:baseline!important}.align-self-md-stretch{-ms-flex-item-align:stretch!important;align-self:stretch!important}}@media (min-width:992px){.flex-lg-row{-ms-flex-direction:row!important;flex-direction:row!important}.flex-lg-column{-ms-flex-direction:column!important;flex-direction:column!important}.flex-lg-row-reverse{-ms-flex-direction:row-reverse!important;flex-direction:row-reverse!important}.flex-lg-column-reverse{-ms-flex-direction:column-reverse!important;flex-direction:column-reverse!important}.flex-lg-wrap{-ms-flex-wrap:wrap!important;flex-wrap:wrap!important}.flex-lg-nowrap{-ms-flex-wrap:nowrap!important;flex-wrap:nowrap!important}.flex-lg-wrap-reverse{-ms-flex-wrap:wrap-reverse!important;flex-wrap:wrap-reverse!important}.flex-lg-fill{-ms-flex:1 1 auto!important;flex:1 1 auto!important}.flex-lg-grow-0{-ms-flex-positive:0!important;flex-grow:0!important}.flex-lg-grow-1{-ms-flex-positive:1!important;flex-grow:1!important}.flex-lg-shrink-0{-ms-flex-negative:0!important;flex-shrink:0!important}.flex-lg-shrink-1{-ms-flex-negative:1!important;flex-shrink:1!important}.justify-content-lg-start{-ms-flex-pack:start!important;justify-content:flex-start!important}.justify-content-lg-end{-ms-flex-pack:end!important;justify-content:flex-end!important}.justify-content-lg-center{-ms-flex-pack:center!important;justify-content:center!important}.justify-content-lg-between{-ms-flex-pack:justify!important;justify-content:space-between!important}.justify-content-lg-around{-ms-flex-pack:distribute!important;justify-content:space-around!important}.align-items-lg-start{-ms-flex-align:start!important;align-items:flex-start!important}.align-items-lg-end{-ms-flex-align:end!important;align-items:flex-end!important}.align-items-lg-center{-ms-flex-align:center!important;align-items:center!important}.align-items-lg-baseline{-ms-flex-align:baseline!important;align-items:baseline!important}.align-items-lg-stretch{-ms-flex-align:stretch!important;align-items:stretch!important}.align-content-lg-start{-ms-flex-line-pack:start!important;align-content:flex-start!important}.align-content-lg-end{-ms-flex-line-pack:end!important;align-content:flex-end!important}.align-content-lg-center{-ms-flex-line-pack:center!important;align-content:center!important}.align-content-lg-between{-ms-flex-line-pack:justify!important;align-content:space-between!important}.align-content-lg-around{-ms-flex-line-pack:distribute!important;align-content:space-around!important}.align-content-lg-stretch{-ms-flex-line-pack:stretch!important;align-content:stretch!important}.align-self-lg-auto{-ms-flex-item-align:auto!important;align-self:auto!important}.align-self-lg-start{-ms-flex-item-align:start!important;align-self:flex-start!important}.align-self-lg-end{-ms-flex-item-align:end!important;align-self:flex-end!important}.align-self-lg-center{-ms-flex-item-align:center!important;align-self:center!important}.align-self-lg-baseline{-ms-flex-item-align:baseline!important;align-self:baseline!important}.align-self-lg-stretch{-ms-flex-item-align:stretch!important;align-self:stretch!important}}@media (min-width:1200px){.flex-xl-row{-ms-flex-direction:row!important;flex-direction:row!important}.flex-xl-column{-ms-flex-direction:column!important;flex-direction:column!important}.flex-xl-row-reverse{-ms-flex-direction:row-reverse!important;flex-direction:row-reverse!important}.flex-xl-column-reverse{-ms-flex-direction:column-reverse!important;flex-direction:column-reverse!important}.flex-xl-wrap{-ms-flex-wrap:wrap!important;flex-wrap:wrap!important}.flex-xl-nowrap{-ms-flex-wrap:nowrap!important;flex-wrap:nowrap!important}.flex-xl-wrap-reverse{-ms-flex-wrap:wrap-reverse!important;flex-wrap:wrap-reverse!important}.flex-xl-fill{-ms-flex:1 1 auto!important;flex:1 1 auto!important}.flex-xl-grow-0{-ms-flex-positive:0!important;flex-grow:0!important}.flex-xl-grow-1{-ms-flex-positive:1!important;flex-grow:1!important}.flex-xl-shrink-0{-ms-flex-negative:0!important;flex-shrink:0!important}.flex-xl-shrink-1{-ms-flex-negative:1!important;flex-shrink:1!important}.justify-content-xl-start{-ms-flex-pack:start!important;justify-content:flex-start!important}.justify-content-xl-end{-ms-flex-pack:end!important;justify-content:flex-end!important}.justify-content-xl-center{-ms-flex-pack:center!important;justify-content:center!important}.justify-content-xl-between{-ms-flex-pack:justify!important;justify-content:space-between!important}.justify-content-xl-around{-ms-flex-pack:distribute!important;justify-content:space-around!important}.align-items-xl-start{-ms-flex-align:start!important;align-items:flex-start!important}.align-items-xl-end{-ms-flex-align:end!important;align-items:flex-end!important}.align-items-xl-center{-ms-flex-align:center!important;align-items:center!important}.align-items-xl-baseline{-ms-flex-align:baseline!important;align-items:baseline!important}.align-items-xl-stretch{-ms-flex-align:stretch!important;align-items:stretch!important}.align-content-xl-start{-ms-flex-line-pack:start!important;align-content:flex-start!important}.align-content-xl-end{-ms-flex-line-pack:end!important;align-content:flex-end!important}.align-content-xl-center{-ms-flex-line-pack:center!important;align-content:center!important}.align-content-xl-between{-ms-flex-line-pack:justify!important;align-content:space-between!important}.align-content-xl-around{-ms-flex-line-pack:distribute!important;align-content:space-around!important}.align-content-xl-stretch{-ms-flex-line-pack:stretch!important;align-content:stretch!important}.align-self-xl-auto{-ms-flex-item-align:auto!important;align-self:auto!important}.align-self-xl-start{-ms-flex-item-align:start!important;align-self:flex-start!important}.align-self-xl-end{-ms-flex-item-align:end!important;align-self:flex-end!important}.align-self-xl-center{-ms-flex-item-align:center!important;align-self:center!important}.align-self-xl-baseline{-ms-flex-item-align:baseline!important;align-self:baseline!important}.align-self-xl-stretch{-ms-flex-item-align:stretch!important;align-self:stretch!important}}.float-left{float:left!important}.float-right{float:right!important}.float-none{float:none!important}@media (min-width:576px){.float-sm-left{float:left!important}.float-sm-right{float:right!important}.float-sm-none{float:none!important}}@media (min-width:768px){.float-md-left{float:left!important}.float-md-right{float:right!important}.float-md-none{float:none!important}}@media (min-width:992px){.float-lg-left{float:left!important}.float-lg-right{float:right!important}.float-lg-none{float:none!important}}@media (min-width:1200px){.float-xl-left{float:left!important}.float-xl-right{float:right!important}.float-xl-none{float:none!important}}.overflow-auto{overflow:auto!important}.overflow-hidden{overflow:hidden!important}.position-static{position:static!important}.position-relative{position:relative!important}.position-absolute{position:absolute!important}.position-fixed{position:fixed!important}.position-sticky{position:-webkit-sticky!important;position:sticky!important}.fixed-top{position:fixed;top:0;right:0;left:0;z-index:1030}.fixed-bottom{position:fixed;right:0;bottom:0;left:0;z-index:1030}@supports ((position:-webkit-sticky) or (position:sticky)){.sticky-top{position:-webkit-sticky;position:sticky;top:0;z-index:1020}}.sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.sr-only-focusable:active,.sr-only-focusable:focus{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal}.shadow-sm{box-shadow:0 .125rem .25rem rgba(0,0,0,.075)!important}.shadow{box-shadow:0 .5rem 1rem rgba(0,0,0,.15)!important}.shadow-lg{box-shadow:0 1rem 3rem rgba(0,0,0,.175)!important}.shadow-none{box-shadow:none!important}.w-25{width:25%!important}.w-50{width:50%!important}.w-75{width:75%!important}.w-100{width:100%!important}.w-auto{width:auto!important}.h-25{height:25%!important}.h-50{height:50%!important}.h-75{height:75%!important}.h-100{height:100%!important}.h-auto{height:auto!important}.mw-100{max-width:100%!important}.mh-100{max-height:100%!important}.min-vw-100{min-width:100vw!important}.min-vh-100{min-height:100vh!important}.vw-100{width:100vw!important}.vh-100{height:100vh!important}.stretched-link::after{position:absolute;top:0;right:0;bottom:0;left:0;z-index:1;pointer-events:auto;content:\"\";background-color:rgba(0,0,0,0)}.m-0{margin:0!important}.mt-0,.my-0{margin-top:0!important}.mr-0,.mx-0{margin-right:0!important}.mb-0,.my-0{margin-bottom:0!important}.ml-0,.mx-0{margin-left:0!important}.m-1{margin:.25rem!important}.mt-1,.my-1{margin-top:.25rem!important}.mr-1,.mx-1{margin-right:.25rem!important}.mb-1,.my-1{margin-bottom:.25rem!important}.ml-1,.mx-1{margin-left:.25rem!important}.m-2{margin:.5rem!important}.mt-2,.my-2{margin-top:.5rem!important}.mr-2,.mx-2{margin-right:.5rem!important}.mb-2,.my-2{margin-bottom:.5rem!important}.ml-2,.mx-2{margin-left:.5rem!important}.m-3{margin:1rem!important}.mt-3,.my-3{margin-top:1rem!important}.mr-3,.mx-3{margin-right:1rem!important}.mb-3,.my-3{margin-bottom:1rem!important}.ml-3,.mx-3{margin-left:1rem!important}.m-4{margin:1.5rem!important}.mt-4,.my-4{margin-top:1.5rem!important}.mr-4,.mx-4{margin-right:1.5rem!important}.mb-4,.my-4{margin-bottom:1.5rem!important}.ml-4,.mx-4{margin-left:1.5rem!important}.m-5{margin:3rem!important}.mt-5,.my-5{margin-top:3rem!important}.mr-5,.mx-5{margin-right:3rem!important}.mb-5,.my-5{margin-bottom:3rem!important}.ml-5,.mx-5{margin-left:3rem!important}.p-0{padding:0!important}.pt-0,.py-0{padding-top:0!important}.pr-0,.px-0{padding-right:0!important}.pb-0,.py-0{padding-bottom:0!important}.pl-0,.px-0{padding-left:0!important}.p-1{padding:.25rem!important}.pt-1,.py-1{padding-top:.25rem!important}.pr-1,.px-1{padding-right:.25rem!important}.pb-1,.py-1{padding-bottom:.25rem!important}.pl-1,.px-1{padding-left:.25rem!important}.p-2{padding:.5rem!important}.pt-2,.py-2{padding-top:.5rem!important}.pr-2,.px-2{padding-right:.5rem!important}.pb-2,.py-2{padding-bottom:.5rem!important}.pl-2,.px-2{padding-left:.5rem!important}.p-3{padding:1rem!important}.pt-3,.py-3{padding-top:1rem!important}.pr-3,.px-3{padding-right:1rem!important}.pb-3,.py-3{padding-bottom:1rem!important}.pl-3,.px-3{padding-left:1rem!important}.p-4{padding:1.5rem!important}.pt-4,.py-4{padding-top:1.5rem!important}.pr-4,.px-4{padding-right:1.5rem!important}.pb-4,.py-4{padding-bottom:1.5rem!important}.pl-4,.px-4{padding-left:1.5rem!important}.p-5{padding:3rem!important}.pt-5,.py-5{padding-top:3rem!important}.pr-5,.px-5{padding-right:3rem!important}.pb-5,.py-5{padding-bottom:3rem!important}.pl-5,.px-5{padding-left:3rem!important}.m-n1{margin:-.25rem!important}.mt-n1,.my-n1{margin-top:-.25rem!important}.mr-n1,.mx-n1{margin-right:-.25rem!important}.mb-n1,.my-n1{margin-bottom:-.25rem!important}.ml-n1,.mx-n1{margin-left:-.25rem!important}.m-n2{margin:-.5rem!important}.mt-n2,.my-n2{margin-top:-.5rem!important}.mr-n2,.mx-n2{margin-right:-.5rem!important}.mb-n2,.my-n2{margin-bottom:-.5rem!important}.ml-n2,.mx-n2{margin-left:-.5rem!important}.m-n3{margin:-1rem!important}.mt-n3,.my-n3{margin-top:-1rem!important}.mr-n3,.mx-n3{margin-right:-1rem!important}.mb-n3,.my-n3{margin-bottom:-1rem!important}.ml-n3,.mx-n3{margin-left:-1rem!important}.m-n4{margin:-1.5rem!important}.mt-n4,.my-n4{margin-top:-1.5rem!important}.mr-n4,.mx-n4{margin-right:-1.5rem!important}.mb-n4,.my-n4{margin-bottom:-1.5rem!important}.ml-n4,.mx-n4{margin-left:-1.5rem!important}.m-n5{margin:-3rem!important}.mt-n5,.my-n5{margin-top:-3rem!important}.mr-n5,.mx-n5{margin-right:-3rem!important}.mb-n5,.my-n5{margin-bottom:-3rem!important}.ml-n5,.mx-n5{margin-left:-3rem!important}.m-auto{margin:auto!important}.mt-auto,.my-auto{margin-top:auto!important}.mr-auto,.mx-auto{margin-right:auto!important}.mb-auto,.my-auto{margin-bottom:auto!important}.ml-auto,.mx-auto{margin-left:auto!important}@media (min-width:576px){.m-sm-0{margin:0!important}.mt-sm-0,.my-sm-0{margin-top:0!important}.mr-sm-0,.mx-sm-0{margin-right:0!important}.mb-sm-0,.my-sm-0{margin-bottom:0!important}.ml-sm-0,.mx-sm-0{margin-left:0!important}.m-sm-1{margin:.25rem!important}.mt-sm-1,.my-sm-1{margin-top:.25rem!important}.mr-sm-1,.mx-sm-1{margin-right:.25rem!important}.mb-sm-1,.my-sm-1{margin-bottom:.25rem!important}.ml-sm-1,.mx-sm-1{margin-left:.25rem!important}.m-sm-2{margin:.5rem!important}.mt-sm-2,.my-sm-2{margin-top:.5rem!important}.mr-sm-2,.mx-sm-2{margin-right:.5rem!important}.mb-sm-2,.my-sm-2{margin-bottom:.5rem!important}.ml-sm-2,.mx-sm-2{margin-left:.5rem!important}.m-sm-3{margin:1rem!important}.mt-sm-3,.my-sm-3{margin-top:1rem!important}.mr-sm-3,.mx-sm-3{margin-right:1rem!important}.mb-sm-3,.my-sm-3{margin-bottom:1rem!important}.ml-sm-3,.mx-sm-3{margin-left:1rem!important}.m-sm-4{margin:1.5rem!important}.mt-sm-4,.my-sm-4{margin-top:1.5rem!important}.mr-sm-4,.mx-sm-4{margin-right:1.5rem!important}.mb-sm-4,.my-sm-4{margin-bottom:1.5rem!important}.ml-sm-4,.mx-sm-4{margin-left:1.5rem!important}.m-sm-5{margin:3rem!important}.mt-sm-5,.my-sm-5{margin-top:3rem!important}.mr-sm-5,.mx-sm-5{margin-right:3rem!important}.mb-sm-5,.my-sm-5{margin-bottom:3rem!important}.ml-sm-5,.mx-sm-5{margin-left:3rem!important}.p-sm-0{padding:0!important}.pt-sm-0,.py-sm-0{padding-top:0!important}.pr-sm-0,.px-sm-0{padding-right:0!important}.pb-sm-0,.py-sm-0{padding-bottom:0!important}.pl-sm-0,.px-sm-0{padding-left:0!important}.p-sm-1{padding:.25rem!important}.pt-sm-1,.py-sm-1{padding-top:.25rem!important}.pr-sm-1,.px-sm-1{padding-right:.25rem!important}.pb-sm-1,.py-sm-1{padding-bottom:.25rem!important}.pl-sm-1,.px-sm-1{padding-left:.25rem!important}.p-sm-2{padding:.5rem!important}.pt-sm-2,.py-sm-2{padding-top:.5rem!important}.pr-sm-2,.px-sm-2{padding-right:.5rem!important}.pb-sm-2,.py-sm-2{padding-bottom:.5rem!important}.pl-sm-2,.px-sm-2{padding-left:.5rem!important}.p-sm-3{padding:1rem!important}.pt-sm-3,.py-sm-3{padding-top:1rem!important}.pr-sm-3,.px-sm-3{padding-right:1rem!important}.pb-sm-3,.py-sm-3{padding-bottom:1rem!important}.pl-sm-3,.px-sm-3{padding-left:1rem!important}.p-sm-4{padding:1.5rem!important}.pt-sm-4,.py-sm-4{padding-top:1.5rem!important}.pr-sm-4,.px-sm-4{padding-right:1.5rem!important}.pb-sm-4,.py-sm-4{padding-bottom:1.5rem!important}.pl-sm-4,.px-sm-4{padding-left:1.5rem!important}.p-sm-5{padding:3rem!important}.pt-sm-5,.py-sm-5{padding-top:3rem!important}.pr-sm-5,.px-sm-5{padding-right:3rem!important}.pb-sm-5,.py-sm-5{padding-bottom:3rem!important}.pl-sm-5,.px-sm-5{padding-left:3rem!important}.m-sm-n1{margin:-.25rem!important}.mt-sm-n1,.my-sm-n1{margin-top:-.25rem!important}.mr-sm-n1,.mx-sm-n1{margin-right:-.25rem!important}.mb-sm-n1,.my-sm-n1{margin-bottom:-.25rem!important}.ml-sm-n1,.mx-sm-n1{margin-left:-.25rem!important}.m-sm-n2{margin:-.5rem!important}.mt-sm-n2,.my-sm-n2{margin-top:-.5rem!important}.mr-sm-n2,.mx-sm-n2{margin-right:-.5rem!important}.mb-sm-n2,.my-sm-n2{margin-bottom:-.5rem!important}.ml-sm-n2,.mx-sm-n2{margin-left:-.5rem!important}.m-sm-n3{margin:-1rem!important}.mt-sm-n3,.my-sm-n3{margin-top:-1rem!important}.mr-sm-n3,.mx-sm-n3{margin-right:-1rem!important}.mb-sm-n3,.my-sm-n3{margin-bottom:-1rem!important}.ml-sm-n3,.mx-sm-n3{margin-left:-1rem!important}.m-sm-n4{margin:-1.5rem!important}.mt-sm-n4,.my-sm-n4{margin-top:-1.5rem!important}.mr-sm-n4,.mx-sm-n4{margin-right:-1.5rem!important}.mb-sm-n4,.my-sm-n4{margin-bottom:-1.5rem!important}.ml-sm-n4,.mx-sm-n4{margin-left:-1.5rem!important}.m-sm-n5{margin:-3rem!important}.mt-sm-n5,.my-sm-n5{margin-top:-3rem!important}.mr-sm-n5,.mx-sm-n5{margin-right:-3rem!important}.mb-sm-n5,.my-sm-n5{margin-bottom:-3rem!important}.ml-sm-n5,.mx-sm-n5{margin-left:-3rem!important}.m-sm-auto{margin:auto!important}.mt-sm-auto,.my-sm-auto{margin-top:auto!important}.mr-sm-auto,.mx-sm-auto{margin-right:auto!important}.mb-sm-auto,.my-sm-auto{margin-bottom:auto!important}.ml-sm-auto,.mx-sm-auto{margin-left:auto!important}}@media (min-width:768px){.m-md-0{margin:0!important}.mt-md-0,.my-md-0{margin-top:0!important}.mr-md-0,.mx-md-0{margin-right:0!important}.mb-md-0,.my-md-0{margin-bottom:0!important}.ml-md-0,.mx-md-0{margin-left:0!important}.m-md-1{margin:.25rem!important}.mt-md-1,.my-md-1{margin-top:.25rem!important}.mr-md-1,.mx-md-1{margin-right:.25rem!important}.mb-md-1,.my-md-1{margin-bottom:.25rem!important}.ml-md-1,.mx-md-1{margin-left:.25rem!important}.m-md-2{margin:.5rem!important}.mt-md-2,.my-md-2{margin-top:.5rem!important}.mr-md-2,.mx-md-2{margin-right:.5rem!important}.mb-md-2,.my-md-2{margin-bottom:.5rem!important}.ml-md-2,.mx-md-2{margin-left:.5rem!important}.m-md-3{margin:1rem!important}.mt-md-3,.my-md-3{margin-top:1rem!important}.mr-md-3,.mx-md-3{margin-right:1rem!important}.mb-md-3,.my-md-3{margin-bottom:1rem!important}.ml-md-3,.mx-md-3{margin-left:1rem!important}.m-md-4{margin:1.5rem!important}.mt-md-4,.my-md-4{margin-top:1.5rem!important}.mr-md-4,.mx-md-4{margin-right:1.5rem!important}.mb-md-4,.my-md-4{margin-bottom:1.5rem!important}.ml-md-4,.mx-md-4{margin-left:1.5rem!important}.m-md-5{margin:3rem!important}.mt-md-5,.my-md-5{margin-top:3rem!important}.mr-md-5,.mx-md-5{margin-right:3rem!important}.mb-md-5,.my-md-5{margin-bottom:3rem!important}.ml-md-5,.mx-md-5{margin-left:3rem!important}.p-md-0{padding:0!important}.pt-md-0,.py-md-0{padding-top:0!important}.pr-md-0,.px-md-0{padding-right:0!important}.pb-md-0,.py-md-0{padding-bottom:0!important}.pl-md-0,.px-md-0{padding-left:0!important}.p-md-1{padding:.25rem!important}.pt-md-1,.py-md-1{padding-top:.25rem!important}.pr-md-1,.px-md-1{padding-right:.25rem!important}.pb-md-1,.py-md-1{padding-bottom:.25rem!important}.pl-md-1,.px-md-1{padding-left:.25rem!important}.p-md-2{padding:.5rem!important}.pt-md-2,.py-md-2{padding-top:.5rem!important}.pr-md-2,.px-md-2{padding-right:.5rem!important}.pb-md-2,.py-md-2{padding-bottom:.5rem!important}.pl-md-2,.px-md-2{padding-left:.5rem!important}.p-md-3{padding:1rem!important}.pt-md-3,.py-md-3{padding-top:1rem!important}.pr-md-3,.px-md-3{padding-right:1rem!important}.pb-md-3,.py-md-3{padding-bottom:1rem!important}.pl-md-3,.px-md-3{padding-left:1rem!important}.p-md-4{padding:1.5rem!important}.pt-md-4,.py-md-4{padding-top:1.5rem!important}.pr-md-4,.px-md-4{padding-right:1.5rem!important}.pb-md-4,.py-md-4{padding-bottom:1.5rem!important}.pl-md-4,.px-md-4{padding-left:1.5rem!important}.p-md-5{padding:3rem!important}.pt-md-5,.py-md-5{padding-top:3rem!important}.pr-md-5,.px-md-5{padding-right:3rem!important}.pb-md-5,.py-md-5{padding-bottom:3rem!important}.pl-md-5,.px-md-5{padding-left:3rem!important}.m-md-n1{margin:-.25rem!important}.mt-md-n1,.my-md-n1{margin-top:-.25rem!important}.mr-md-n1,.mx-md-n1{margin-right:-.25rem!important}.mb-md-n1,.my-md-n1{margin-bottom:-.25rem!important}.ml-md-n1,.mx-md-n1{margin-left:-.25rem!important}.m-md-n2{margin:-.5rem!important}.mt-md-n2,.my-md-n2{margin-top:-.5rem!important}.mr-md-n2,.mx-md-n2{margin-right:-.5rem!important}.mb-md-n2,.my-md-n2{margin-bottom:-.5rem!important}.ml-md-n2,.mx-md-n2{margin-left:-.5rem!important}.m-md-n3{margin:-1rem!important}.mt-md-n3,.my-md-n3{margin-top:-1rem!important}.mr-md-n3,.mx-md-n3{margin-right:-1rem!important}.mb-md-n3,.my-md-n3{margin-bottom:-1rem!important}.ml-md-n3,.mx-md-n3{margin-left:-1rem!important}.m-md-n4{margin:-1.5rem!important}.mt-md-n4,.my-md-n4{margin-top:-1.5rem!important}.mr-md-n4,.mx-md-n4{margin-right:-1.5rem!important}.mb-md-n4,.my-md-n4{margin-bottom:-1.5rem!important}.ml-md-n4,.mx-md-n4{margin-left:-1.5rem!important}.m-md-n5{margin:-3rem!important}.mt-md-n5,.my-md-n5{margin-top:-3rem!important}.mr-md-n5,.mx-md-n5{margin-right:-3rem!important}.mb-md-n5,.my-md-n5{margin-bottom:-3rem!important}.ml-md-n5,.mx-md-n5{margin-left:-3rem!important}.m-md-auto{margin:auto!important}.mt-md-auto,.my-md-auto{margin-top:auto!important}.mr-md-auto,.mx-md-auto{margin-right:auto!important}.mb-md-auto,.my-md-auto{margin-bottom:auto!important}.ml-md-auto,.mx-md-auto{margin-left:auto!important}}@media (min-width:992px){.m-lg-0{margin:0!important}.mt-lg-0,.my-lg-0{margin-top:0!important}.mr-lg-0,.mx-lg-0{margin-right:0!important}.mb-lg-0,.my-lg-0{margin-bottom:0!important}.ml-lg-0,.mx-lg-0{margin-left:0!important}.m-lg-1{margin:.25rem!important}.mt-lg-1,.my-lg-1{margin-top:.25rem!important}.mr-lg-1,.mx-lg-1{margin-right:.25rem!important}.mb-lg-1,.my-lg-1{margin-bottom:.25rem!important}.ml-lg-1,.mx-lg-1{margin-left:.25rem!important}.m-lg-2{margin:.5rem!important}.mt-lg-2,.my-lg-2{margin-top:.5rem!important}.mr-lg-2,.mx-lg-2{margin-right:.5rem!important}.mb-lg-2,.my-lg-2{margin-bottom:.5rem!important}.ml-lg-2,.mx-lg-2{margin-left:.5rem!important}.m-lg-3{margin:1rem!important}.mt-lg-3,.my-lg-3{margin-top:1rem!important}.mr-lg-3,.mx-lg-3{margin-right:1rem!important}.mb-lg-3,.my-lg-3{margin-bottom:1rem!important}.ml-lg-3,.mx-lg-3{margin-left:1rem!important}.m-lg-4{margin:1.5rem!important}.mt-lg-4,.my-lg-4{margin-top:1.5rem!important}.mr-lg-4,.mx-lg-4{margin-right:1.5rem!important}.mb-lg-4,.my-lg-4{margin-bottom:1.5rem!important}.ml-lg-4,.mx-lg-4{margin-left:1.5rem!important}.m-lg-5{margin:3rem!important}.mt-lg-5,.my-lg-5{margin-top:3rem!important}.mr-lg-5,.mx-lg-5{margin-right:3rem!important}.mb-lg-5,.my-lg-5{margin-bottom:3rem!important}.ml-lg-5,.mx-lg-5{margin-left:3rem!important}.p-lg-0{padding:0!important}.pt-lg-0,.py-lg-0{padding-top:0!important}.pr-lg-0,.px-lg-0{padding-right:0!important}.pb-lg-0,.py-lg-0{padding-bottom:0!important}.pl-lg-0,.px-lg-0{padding-left:0!important}.p-lg-1{padding:.25rem!important}.pt-lg-1,.py-lg-1{padding-top:.25rem!important}.pr-lg-1,.px-lg-1{padding-right:.25rem!important}.pb-lg-1,.py-lg-1{padding-bottom:.25rem!important}.pl-lg-1,.px-lg-1{padding-left:.25rem!important}.p-lg-2{padding:.5rem!important}.pt-lg-2,.py-lg-2{padding-top:.5rem!important}.pr-lg-2,.px-lg-2{padding-right:.5rem!important}.pb-lg-2,.py-lg-2{padding-bottom:.5rem!important}.pl-lg-2,.px-lg-2{padding-left:.5rem!important}.p-lg-3{padding:1rem!important}.pt-lg-3,.py-lg-3{padding-top:1rem!important}.pr-lg-3,.px-lg-3{padding-right:1rem!important}.pb-lg-3,.py-lg-3{padding-bottom:1rem!important}.pl-lg-3,.px-lg-3{padding-left:1rem!important}.p-lg-4{padding:1.5rem!important}.pt-lg-4,.py-lg-4{padding-top:1.5rem!important}.pr-lg-4,.px-lg-4{padding-right:1.5rem!important}.pb-lg-4,.py-lg-4{padding-bottom:1.5rem!important}.pl-lg-4,.px-lg-4{padding-left:1.5rem!important}.p-lg-5{padding:3rem!important}.pt-lg-5,.py-lg-5{padding-top:3rem!important}.pr-lg-5,.px-lg-5{padding-right:3rem!important}.pb-lg-5,.py-lg-5{padding-bottom:3rem!important}.pl-lg-5,.px-lg-5{padding-left:3rem!important}.m-lg-n1{margin:-.25rem!important}.mt-lg-n1,.my-lg-n1{margin-top:-.25rem!important}.mr-lg-n1,.mx-lg-n1{margin-right:-.25rem!important}.mb-lg-n1,.my-lg-n1{margin-bottom:-.25rem!important}.ml-lg-n1,.mx-lg-n1{margin-left:-.25rem!important}.m-lg-n2{margin:-.5rem!important}.mt-lg-n2,.my-lg-n2{margin-top:-.5rem!important}.mr-lg-n2,.mx-lg-n2{margin-right:-.5rem!important}.mb-lg-n2,.my-lg-n2{margin-bottom:-.5rem!important}.ml-lg-n2,.mx-lg-n2{margin-left:-.5rem!important}.m-lg-n3{margin:-1rem!important}.mt-lg-n3,.my-lg-n3{margin-top:-1rem!important}.mr-lg-n3,.mx-lg-n3{margin-right:-1rem!important}.mb-lg-n3,.my-lg-n3{margin-bottom:-1rem!important}.ml-lg-n3,.mx-lg-n3{margin-left:-1rem!important}.m-lg-n4{margin:-1.5rem!important}.mt-lg-n4,.my-lg-n4{margin-top:-1.5rem!important}.mr-lg-n4,.mx-lg-n4{margin-right:-1.5rem!important}.mb-lg-n4,.my-lg-n4{margin-bottom:-1.5rem!important}.ml-lg-n4,.mx-lg-n4{margin-left:-1.5rem!important}.m-lg-n5{margin:-3rem!important}.mt-lg-n5,.my-lg-n5{margin-top:-3rem!important}.mr-lg-n5,.mx-lg-n5{margin-right:-3rem!important}.mb-lg-n5,.my-lg-n5{margin-bottom:-3rem!important}.ml-lg-n5,.mx-lg-n5{margin-left:-3rem!important}.m-lg-auto{margin:auto!important}.mt-lg-auto,.my-lg-auto{margin-top:auto!important}.mr-lg-auto,.mx-lg-auto{margin-right:auto!important}.mb-lg-auto,.my-lg-auto{margin-bottom:auto!important}.ml-lg-auto,.mx-lg-auto{margin-left:auto!important}}@media (min-width:1200px){.m-xl-0{margin:0!important}.mt-xl-0,.my-xl-0{margin-top:0!important}.mr-xl-0,.mx-xl-0{margin-right:0!important}.mb-xl-0,.my-xl-0{margin-bottom:0!important}.ml-xl-0,.mx-xl-0{margin-left:0!important}.m-xl-1{margin:.25rem!important}.mt-xl-1,.my-xl-1{margin-top:.25rem!important}.mr-xl-1,.mx-xl-1{margin-right:.25rem!important}.mb-xl-1,.my-xl-1{margin-bottom:.25rem!important}.ml-xl-1,.mx-xl-1{margin-left:.25rem!important}.m-xl-2{margin:.5rem!important}.mt-xl-2,.my-xl-2{margin-top:.5rem!important}.mr-xl-2,.mx-xl-2{margin-right:.5rem!important}.mb-xl-2,.my-xl-2{margin-bottom:.5rem!important}.ml-xl-2,.mx-xl-2{margin-left:.5rem!important}.m-xl-3{margin:1rem!important}.mt-xl-3,.my-xl-3{margin-top:1rem!important}.mr-xl-3,.mx-xl-3{margin-right:1rem!important}.mb-xl-3,.my-xl-3{margin-bottom:1rem!important}.ml-xl-3,.mx-xl-3{margin-left:1rem!important}.m-xl-4{margin:1.5rem!important}.mt-xl-4,.my-xl-4{margin-top:1.5rem!important}.mr-xl-4,.mx-xl-4{margin-right:1.5rem!important}.mb-xl-4,.my-xl-4{margin-bottom:1.5rem!important}.ml-xl-4,.mx-xl-4{margin-left:1.5rem!important}.m-xl-5{margin:3rem!important}.mt-xl-5,.my-xl-5{margin-top:3rem!important}.mr-xl-5,.mx-xl-5{margin-right:3rem!important}.mb-xl-5,.my-xl-5{margin-bottom:3rem!important}.ml-xl-5,.mx-xl-5{margin-left:3rem!important}.p-xl-0{padding:0!important}.pt-xl-0,.py-xl-0{padding-top:0!important}.pr-xl-0,.px-xl-0{padding-right:0!important}.pb-xl-0,.py-xl-0{padding-bottom:0!important}.pl-xl-0,.px-xl-0{padding-left:0!important}.p-xl-1{padding:.25rem!important}.pt-xl-1,.py-xl-1{padding-top:.25rem!important}.pr-xl-1,.px-xl-1{padding-right:.25rem!important}.pb-xl-1,.py-xl-1{padding-bottom:.25rem!important}.pl-xl-1,.px-xl-1{padding-left:.25rem!important}.p-xl-2{padding:.5rem!important}.pt-xl-2,.py-xl-2{padding-top:.5rem!important}.pr-xl-2,.px-xl-2{padding-right:.5rem!important}.pb-xl-2,.py-xl-2{padding-bottom:.5rem!important}.pl-xl-2,.px-xl-2{padding-left:.5rem!important}.p-xl-3{padding:1rem!important}.pt-xl-3,.py-xl-3{padding-top:1rem!important}.pr-xl-3,.px-xl-3{padding-right:1rem!important}.pb-xl-3,.py-xl-3{padding-bottom:1rem!important}.pl-xl-3,.px-xl-3{padding-left:1rem!important}.p-xl-4{padding:1.5rem!important}.pt-xl-4,.py-xl-4{padding-top:1.5rem!important}.pr-xl-4,.px-xl-4{padding-right:1.5rem!important}.pb-xl-4,.py-xl-4{padding-bottom:1.5rem!important}.pl-xl-4,.px-xl-4{padding-left:1.5rem!important}.p-xl-5{padding:3rem!important}.pt-xl-5,.py-xl-5{padding-top:3rem!important}.pr-xl-5,.px-xl-5{padding-right:3rem!important}.pb-xl-5,.py-xl-5{padding-bottom:3rem!important}.pl-xl-5,.px-xl-5{padding-left:3rem!important}.m-xl-n1{margin:-.25rem!important}.mt-xl-n1,.my-xl-n1{margin-top:-.25rem!important}.mr-xl-n1,.mx-xl-n1{margin-right:-.25rem!important}.mb-xl-n1,.my-xl-n1{margin-bottom:-.25rem!important}.ml-xl-n1,.mx-xl-n1{margin-left:-.25rem!important}.m-xl-n2{margin:-.5rem!important}.mt-xl-n2,.my-xl-n2{margin-top:-.5rem!important}.mr-xl-n2,.mx-xl-n2{margin-right:-.5rem!important}.mb-xl-n2,.my-xl-n2{margin-bottom:-.5rem!important}.ml-xl-n2,.mx-xl-n2{margin-left:-.5rem!important}.m-xl-n3{margin:-1rem!important}.mt-xl-n3,.my-xl-n3{margin-top:-1rem!important}.mr-xl-n3,.mx-xl-n3{margin-right:-1rem!important}.mb-xl-n3,.my-xl-n3{margin-bottom:-1rem!important}.ml-xl-n3,.mx-xl-n3{margin-left:-1rem!important}.m-xl-n4{margin:-1.5rem!important}.mt-xl-n4,.my-xl-n4{margin-top:-1.5rem!important}.mr-xl-n4,.mx-xl-n4{margin-right:-1.5rem!important}.mb-xl-n4,.my-xl-n4{margin-bottom:-1.5rem!important}.ml-xl-n4,.mx-xl-n4{margin-left:-1.5rem!important}.m-xl-n5{margin:-3rem!important}.mt-xl-n5,.my-xl-n5{margin-top:-3rem!important}.mr-xl-n5,.mx-xl-n5{margin-right:-3rem!important}.mb-xl-n5,.my-xl-n5{margin-bottom:-3rem!important}.ml-xl-n5,.mx-xl-n5{margin-left:-3rem!important}.m-xl-auto{margin:auto!important}.mt-xl-auto,.my-xl-auto{margin-top:auto!important}.mr-xl-auto,.mx-xl-auto{margin-right:auto!important}.mb-xl-auto,.my-xl-auto{margin-bottom:auto!important}.ml-xl-auto,.mx-xl-auto{margin-left:auto!important}}.text-monospace{font-family:SFMono-Regular,Menlo,Monaco,Consolas,\"Liberation Mono\",\"Courier New\",monospace!important}.text-justify{text-align:justify!important}.text-wrap{white-space:normal!important}.text-nowrap{white-space:nowrap!important}.text-truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.text-left{text-align:left!important}.text-right{text-align:right!important}.text-center{text-align:center!important}@media (min-width:576px){.text-sm-left{text-align:left!important}.text-sm-right{text-align:right!important}.text-sm-center{text-align:center!important}}@media (min-width:768px){.text-md-left{text-align:left!important}.text-md-right{text-align:right!important}.text-md-center{text-align:center!important}}@media (min-width:992px){.text-lg-left{text-align:left!important}.text-lg-right{text-align:right!important}.text-lg-center{text-align:center!important}}@media (min-width:1200px){.text-xl-left{text-align:left!important}.text-xl-right{text-align:right!important}.text-xl-center{text-align:center!important}}.text-lowercase{text-transform:lowercase!important}.text-uppercase{text-transform:uppercase!important}.text-capitalize{text-transform:capitalize!important}.font-weight-light{font-weight:300!important}.font-weight-lighter{font-weight:lighter!important}.font-weight-normal{font-weight:400!important}.font-weight-bold{font-weight:700!important}.font-weight-bolder{font-weight:bolder!important}.font-italic{font-style:italic!important}.text-white{color:#fff!important}.text-primary{color:#007bff!important}a.text-primary:focus,a.text-primary:hover{color:#0056b3!important}.text-secondary{color:#6c757d!important}a.text-secondary:focus,a.text-secondary:hover{color:#494f54!important}.text-success{color:#28a745!important}a.text-success:focus,a.text-success:hover{color:#19692c!important}.text-info{color:#17a2b8!important}a.text-info:focus,a.text-info:hover{color:#0f6674!important}.text-warning{color:#ffc107!important}a.text-warning:focus,a.text-warning:hover{color:#ba8b00!important}.text-danger{color:#dc3545!important}a.text-danger:focus,a.text-danger:hover{color:#a71d2a!important}.text-light{color:#f8f9fa!important}a.text-light:focus,a.text-light:hover{color:#cbd3da!important}.text-dark{color:#343a40!important}a.text-dark:focus,a.text-dark:hover{color:#121416!important}.text-body{color:#212529!important}.text-muted{color:#6c757d!important}.text-black-50{color:rgba(0,0,0,.5)!important}.text-white-50{color:rgba(255,255,255,.5)!important}.text-hide{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0}.text-decoration-none{text-decoration:none!important}.text-break{word-break:break-word!important;overflow-wrap:break-word!important}.text-reset{color:inherit!important}.visible{visibility:visible!important}.invisible{visibility:hidden!important}@media print{*,::after,::before{text-shadow:none!important;box-shadow:none!important}a:not(.btn){text-decoration:underline}abbr[title]::after{content:\" (\" attr(title) \")\"}pre{white-space:pre-wrap!important}blockquote,pre{border:1px solid #adb5bd;page-break-inside:avoid}thead{display:table-header-group}img,tr{page-break-inside:avoid}h2,h3,p{orphans:3;widows:3}h2,h3{page-break-after:avoid}@page{size:a3}body{min-width:992px!important}.container{min-width:992px!important}.navbar{display:none}.badge{border:1px solid #000}.table{border-collapse:collapse!important}.table td,.table th{background-color:#fff!important}.table-bordered td,.table-bordered th{border:1px solid #dee2e6!important}.table-dark{color:inherit}.table-dark tbody+tbody,.table-dark td,.table-dark th,.table-dark thead th{border-color:#dee2e6}.table .thead-dark th{color:inherit;border-color:#dee2e6}}\n/*# sourceMappingURL=bootstrap.min.css.map */";
-inject(css, undefined, '_bfyjkt');
+inject(css, undefined, '_1yq0bj8');
 module.exports = css;
 
-},{"./../../../cssify":5}],4:[function(require,module,exports){
+},{"./../../../cssify":7}],6:[function(require,module,exports){
 /*!
   * Bootstrap v4.3.1 (https://getbootstrap.com/)
   * Copyright 2011-2019 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -6317,7 +11984,7 @@ module.exports = css;
 }));
 
 
-},{"jquery":6,"popper.js":8}],5:[function(require,module,exports){
+},{"jquery":8,"popper.js":11}],7:[function(require,module,exports){
 'use strict'
 
 function injectStyleTag (document, fileName, cb) {
@@ -6372,7 +12039,7 @@ module.exports.byUrl = function (url) {
   }
 }
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v3.3.1
  * https://jquery.com/
@@ -16738,7 +22405,7 @@ if ( !noGlobal ) {
 return jQuery;
 } );
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -28751,7 +34418,1011 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
+// THIS FILE IS GENERATED - DO NOT EDIT!
+/*!mobile-detect v1.4.3 2018-09-08*/
+/*global module:false, define:false*/
+/*jshint latedef:false*/
+/*!@license Copyright 2013, Heinrich Goebl, License: MIT, see https://github.com/hgoebl/mobile-detect.js*/
+(function (define, undefined) {
+define(function () {
+    'use strict';
+
+    var impl = {};
+
+    impl.mobileDetectRules = {
+    "phones": {
+        "iPhone": "\\biPhone\\b|\\biPod\\b",
+        "BlackBerry": "BlackBerry|\\bBB10\\b|rim[0-9]+",
+        "HTC": "HTC|HTC.*(Sensation|Evo|Vision|Explorer|6800|8100|8900|A7272|S510e|C110e|Legend|Desire|T8282)|APX515CKT|Qtek9090|APA9292KT|HD_mini|Sensation.*Z710e|PG86100|Z715e|Desire.*(A8181|HD)|ADR6200|ADR6400L|ADR6425|001HT|Inspire 4G|Android.*\\bEVO\\b|T-Mobile G1|Z520m|Android [0-9.]+; Pixel",
+        "Nexus": "Nexus One|Nexus S|Galaxy.*Nexus|Android.*Nexus.*Mobile|Nexus 4|Nexus 5|Nexus 6",
+        "Dell": "Dell[;]? (Streak|Aero|Venue|Venue Pro|Flash|Smoke|Mini 3iX)|XCD28|XCD35|\\b001DL\\b|\\b101DL\\b|\\bGS01\\b",
+        "Motorola": "Motorola|DROIDX|DROID BIONIC|\\bDroid\\b.*Build|Android.*Xoom|HRI39|MOT-|A1260|A1680|A555|A853|A855|A953|A955|A956|Motorola.*ELECTRIFY|Motorola.*i1|i867|i940|MB200|MB300|MB501|MB502|MB508|MB511|MB520|MB525|MB526|MB611|MB612|MB632|MB810|MB855|MB860|MB861|MB865|MB870|ME501|ME502|ME511|ME525|ME600|ME632|ME722|ME811|ME860|ME863|ME865|MT620|MT710|MT716|MT720|MT810|MT870|MT917|Motorola.*TITANIUM|WX435|WX445|XT300|XT301|XT311|XT316|XT317|XT319|XT320|XT390|XT502|XT530|XT531|XT532|XT535|XT603|XT610|XT611|XT615|XT681|XT701|XT702|XT711|XT720|XT800|XT806|XT860|XT862|XT875|XT882|XT883|XT894|XT901|XT907|XT909|XT910|XT912|XT928|XT926|XT915|XT919|XT925|XT1021|\\bMoto E\\b|XT1068|XT1092|XT1052",
+        "Samsung": "\\bSamsung\\b|SM-G950F|SM-G955F|SM-G9250|GT-19300|SGH-I337|BGT-S5230|GT-B2100|GT-B2700|GT-B2710|GT-B3210|GT-B3310|GT-B3410|GT-B3730|GT-B3740|GT-B5510|GT-B5512|GT-B5722|GT-B6520|GT-B7300|GT-B7320|GT-B7330|GT-B7350|GT-B7510|GT-B7722|GT-B7800|GT-C3010|GT-C3011|GT-C3060|GT-C3200|GT-C3212|GT-C3212I|GT-C3262|GT-C3222|GT-C3300|GT-C3300K|GT-C3303|GT-C3303K|GT-C3310|GT-C3322|GT-C3330|GT-C3350|GT-C3500|GT-C3510|GT-C3530|GT-C3630|GT-C3780|GT-C5010|GT-C5212|GT-C6620|GT-C6625|GT-C6712|GT-E1050|GT-E1070|GT-E1075|GT-E1080|GT-E1081|GT-E1085|GT-E1087|GT-E1100|GT-E1107|GT-E1110|GT-E1120|GT-E1125|GT-E1130|GT-E1160|GT-E1170|GT-E1175|GT-E1180|GT-E1182|GT-E1200|GT-E1210|GT-E1225|GT-E1230|GT-E1390|GT-E2100|GT-E2120|GT-E2121|GT-E2152|GT-E2220|GT-E2222|GT-E2230|GT-E2232|GT-E2250|GT-E2370|GT-E2550|GT-E2652|GT-E3210|GT-E3213|GT-I5500|GT-I5503|GT-I5700|GT-I5800|GT-I5801|GT-I6410|GT-I6420|GT-I7110|GT-I7410|GT-I7500|GT-I8000|GT-I8150|GT-I8160|GT-I8190|GT-I8320|GT-I8330|GT-I8350|GT-I8530|GT-I8700|GT-I8703|GT-I8910|GT-I9000|GT-I9001|GT-I9003|GT-I9010|GT-I9020|GT-I9023|GT-I9070|GT-I9082|GT-I9100|GT-I9103|GT-I9220|GT-I9250|GT-I9300|GT-I9305|GT-I9500|GT-I9505|GT-M3510|GT-M5650|GT-M7500|GT-M7600|GT-M7603|GT-M8800|GT-M8910|GT-N7000|GT-S3110|GT-S3310|GT-S3350|GT-S3353|GT-S3370|GT-S3650|GT-S3653|GT-S3770|GT-S3850|GT-S5210|GT-S5220|GT-S5229|GT-S5230|GT-S5233|GT-S5250|GT-S5253|GT-S5260|GT-S5263|GT-S5270|GT-S5300|GT-S5330|GT-S5350|GT-S5360|GT-S5363|GT-S5369|GT-S5380|GT-S5380D|GT-S5560|GT-S5570|GT-S5600|GT-S5603|GT-S5610|GT-S5620|GT-S5660|GT-S5670|GT-S5690|GT-S5750|GT-S5780|GT-S5830|GT-S5839|GT-S6102|GT-S6500|GT-S7070|GT-S7200|GT-S7220|GT-S7230|GT-S7233|GT-S7250|GT-S7500|GT-S7530|GT-S7550|GT-S7562|GT-S7710|GT-S8000|GT-S8003|GT-S8500|GT-S8530|GT-S8600|SCH-A310|SCH-A530|SCH-A570|SCH-A610|SCH-A630|SCH-A650|SCH-A790|SCH-A795|SCH-A850|SCH-A870|SCH-A890|SCH-A930|SCH-A950|SCH-A970|SCH-A990|SCH-I100|SCH-I110|SCH-I400|SCH-I405|SCH-I500|SCH-I510|SCH-I515|SCH-I600|SCH-I730|SCH-I760|SCH-I770|SCH-I830|SCH-I910|SCH-I920|SCH-I959|SCH-LC11|SCH-N150|SCH-N300|SCH-R100|SCH-R300|SCH-R351|SCH-R400|SCH-R410|SCH-T300|SCH-U310|SCH-U320|SCH-U350|SCH-U360|SCH-U365|SCH-U370|SCH-U380|SCH-U410|SCH-U430|SCH-U450|SCH-U460|SCH-U470|SCH-U490|SCH-U540|SCH-U550|SCH-U620|SCH-U640|SCH-U650|SCH-U660|SCH-U700|SCH-U740|SCH-U750|SCH-U810|SCH-U820|SCH-U900|SCH-U940|SCH-U960|SCS-26UC|SGH-A107|SGH-A117|SGH-A127|SGH-A137|SGH-A157|SGH-A167|SGH-A177|SGH-A187|SGH-A197|SGH-A227|SGH-A237|SGH-A257|SGH-A437|SGH-A517|SGH-A597|SGH-A637|SGH-A657|SGH-A667|SGH-A687|SGH-A697|SGH-A707|SGH-A717|SGH-A727|SGH-A737|SGH-A747|SGH-A767|SGH-A777|SGH-A797|SGH-A817|SGH-A827|SGH-A837|SGH-A847|SGH-A867|SGH-A877|SGH-A887|SGH-A897|SGH-A927|SGH-B100|SGH-B130|SGH-B200|SGH-B220|SGH-C100|SGH-C110|SGH-C120|SGH-C130|SGH-C140|SGH-C160|SGH-C170|SGH-C180|SGH-C200|SGH-C207|SGH-C210|SGH-C225|SGH-C230|SGH-C417|SGH-C450|SGH-D307|SGH-D347|SGH-D357|SGH-D407|SGH-D415|SGH-D780|SGH-D807|SGH-D980|SGH-E105|SGH-E200|SGH-E315|SGH-E316|SGH-E317|SGH-E335|SGH-E590|SGH-E635|SGH-E715|SGH-E890|SGH-F300|SGH-F480|SGH-I200|SGH-I300|SGH-I320|SGH-I550|SGH-I577|SGH-I600|SGH-I607|SGH-I617|SGH-I627|SGH-I637|SGH-I677|SGH-I700|SGH-I717|SGH-I727|SGH-i747M|SGH-I777|SGH-I780|SGH-I827|SGH-I847|SGH-I857|SGH-I896|SGH-I897|SGH-I900|SGH-I907|SGH-I917|SGH-I927|SGH-I937|SGH-I997|SGH-J150|SGH-J200|SGH-L170|SGH-L700|SGH-M110|SGH-M150|SGH-M200|SGH-N105|SGH-N500|SGH-N600|SGH-N620|SGH-N625|SGH-N700|SGH-N710|SGH-P107|SGH-P207|SGH-P300|SGH-P310|SGH-P520|SGH-P735|SGH-P777|SGH-Q105|SGH-R210|SGH-R220|SGH-R225|SGH-S105|SGH-S307|SGH-T109|SGH-T119|SGH-T139|SGH-T209|SGH-T219|SGH-T229|SGH-T239|SGH-T249|SGH-T259|SGH-T309|SGH-T319|SGH-T329|SGH-T339|SGH-T349|SGH-T359|SGH-T369|SGH-T379|SGH-T409|SGH-T429|SGH-T439|SGH-T459|SGH-T469|SGH-T479|SGH-T499|SGH-T509|SGH-T519|SGH-T539|SGH-T559|SGH-T589|SGH-T609|SGH-T619|SGH-T629|SGH-T639|SGH-T659|SGH-T669|SGH-T679|SGH-T709|SGH-T719|SGH-T729|SGH-T739|SGH-T746|SGH-T749|SGH-T759|SGH-T769|SGH-T809|SGH-T819|SGH-T839|SGH-T919|SGH-T929|SGH-T939|SGH-T959|SGH-T989|SGH-U100|SGH-U200|SGH-U800|SGH-V205|SGH-V206|SGH-X100|SGH-X105|SGH-X120|SGH-X140|SGH-X426|SGH-X427|SGH-X475|SGH-X495|SGH-X497|SGH-X507|SGH-X600|SGH-X610|SGH-X620|SGH-X630|SGH-X700|SGH-X820|SGH-X890|SGH-Z130|SGH-Z150|SGH-Z170|SGH-ZX10|SGH-ZX20|SHW-M110|SPH-A120|SPH-A400|SPH-A420|SPH-A460|SPH-A500|SPH-A560|SPH-A600|SPH-A620|SPH-A660|SPH-A700|SPH-A740|SPH-A760|SPH-A790|SPH-A800|SPH-A820|SPH-A840|SPH-A880|SPH-A900|SPH-A940|SPH-A960|SPH-D600|SPH-D700|SPH-D710|SPH-D720|SPH-I300|SPH-I325|SPH-I330|SPH-I350|SPH-I500|SPH-I600|SPH-I700|SPH-L700|SPH-M100|SPH-M220|SPH-M240|SPH-M300|SPH-M305|SPH-M320|SPH-M330|SPH-M350|SPH-M360|SPH-M370|SPH-M380|SPH-M510|SPH-M540|SPH-M550|SPH-M560|SPH-M570|SPH-M580|SPH-M610|SPH-M620|SPH-M630|SPH-M800|SPH-M810|SPH-M850|SPH-M900|SPH-M910|SPH-M920|SPH-M930|SPH-N100|SPH-N200|SPH-N240|SPH-N300|SPH-N400|SPH-Z400|SWC-E100|SCH-i909|GT-N7100|GT-N7105|SCH-I535|SM-N900A|SGH-I317|SGH-T999L|GT-S5360B|GT-I8262|GT-S6802|GT-S6312|GT-S6310|GT-S5312|GT-S5310|GT-I9105|GT-I8510|GT-S6790N|SM-G7105|SM-N9005|GT-S5301|GT-I9295|GT-I9195|SM-C101|GT-S7392|GT-S7560|GT-B7610|GT-I5510|GT-S7582|GT-S7530E|GT-I8750|SM-G9006V|SM-G9008V|SM-G9009D|SM-G900A|SM-G900D|SM-G900F|SM-G900H|SM-G900I|SM-G900J|SM-G900K|SM-G900L|SM-G900M|SM-G900P|SM-G900R4|SM-G900S|SM-G900T|SM-G900V|SM-G900W8|SHV-E160K|SCH-P709|SCH-P729|SM-T2558|GT-I9205|SM-G9350|SM-J120F|SM-G920F|SM-G920V|SM-G930F|SM-N910C|SM-A310F|GT-I9190|SM-J500FN|SM-G903F|SM-J330F",
+        "LG": "\\bLG\\b;|LG[- ]?(C800|C900|E400|E610|E900|E-900|F160|F180K|F180L|F180S|730|855|L160|LS740|LS840|LS970|LU6200|MS690|MS695|MS770|MS840|MS870|MS910|P500|P700|P705|VM696|AS680|AS695|AX840|C729|E970|GS505|272|C395|E739BK|E960|L55C|L75C|LS696|LS860|P769BK|P350|P500|P509|P870|UN272|US730|VS840|VS950|LN272|LN510|LS670|LS855|LW690|MN270|MN510|P509|P769|P930|UN200|UN270|UN510|UN610|US670|US740|US760|UX265|UX840|VN271|VN530|VS660|VS700|VS740|VS750|VS910|VS920|VS930|VX9200|VX11000|AX840A|LW770|P506|P925|P999|E612|D955|D802|MS323|M257)",
+        "Sony": "SonyST|SonyLT|SonyEricsson|SonyEricssonLT15iv|LT18i|E10i|LT28h|LT26w|SonyEricssonMT27i|C5303|C6902|C6903|C6906|C6943|D2533",
+        "Asus": "Asus.*Galaxy|PadFone.*Mobile",
+        "NokiaLumia": "Lumia [0-9]{3,4}",
+        "Micromax": "Micromax.*\\b(A210|A92|A88|A72|A111|A110Q|A115|A116|A110|A90S|A26|A51|A35|A54|A25|A27|A89|A68|A65|A57|A90)\\b",
+        "Palm": "PalmSource|Palm",
+        "Vertu": "Vertu|Vertu.*Ltd|Vertu.*Ascent|Vertu.*Ayxta|Vertu.*Constellation(F|Quest)?|Vertu.*Monika|Vertu.*Signature",
+        "Pantech": "PANTECH|IM-A850S|IM-A840S|IM-A830L|IM-A830K|IM-A830S|IM-A820L|IM-A810K|IM-A810S|IM-A800S|IM-T100K|IM-A725L|IM-A780L|IM-A775C|IM-A770K|IM-A760S|IM-A750K|IM-A740S|IM-A730S|IM-A720L|IM-A710K|IM-A690L|IM-A690S|IM-A650S|IM-A630K|IM-A600S|VEGA PTL21|PT003|P8010|ADR910L|P6030|P6020|P9070|P4100|P9060|P5000|CDM8992|TXT8045|ADR8995|IS11PT|P2030|P6010|P8000|PT002|IS06|CDM8999|P9050|PT001|TXT8040|P2020|P9020|P2000|P7040|P7000|C790",
+        "Fly": "IQ230|IQ444|IQ450|IQ440|IQ442|IQ441|IQ245|IQ256|IQ236|IQ255|IQ235|IQ245|IQ275|IQ240|IQ285|IQ280|IQ270|IQ260|IQ250",
+        "Wiko": "KITE 4G|HIGHWAY|GETAWAY|STAIRWAY|DARKSIDE|DARKFULL|DARKNIGHT|DARKMOON|SLIDE|WAX 4G|RAINBOW|BLOOM|SUNSET|GOA(?!nna)|LENNY|BARRY|IGGY|OZZY|CINK FIVE|CINK PEAX|CINK PEAX 2|CINK SLIM|CINK SLIM 2|CINK +|CINK KING|CINK PEAX|CINK SLIM|SUBLIM",
+        "iMobile": "i-mobile (IQ|i-STYLE|idea|ZAA|Hitz)",
+        "SimValley": "\\b(SP-80|XT-930|SX-340|XT-930|SX-310|SP-360|SP60|SPT-800|SP-120|SPT-800|SP-140|SPX-5|SPX-8|SP-100|SPX-8|SPX-12)\\b",
+        "Wolfgang": "AT-B24D|AT-AS50HD|AT-AS40W|AT-AS55HD|AT-AS45q2|AT-B26D|AT-AS50Q",
+        "Alcatel": "Alcatel",
+        "Nintendo": "Nintendo (3DS|Switch)",
+        "Amoi": "Amoi",
+        "INQ": "INQ",
+        "GenericPhone": "Tapatalk|PDA;|SAGEM|\\bmmp\\b|pocket|\\bpsp\\b|symbian|Smartphone|smartfon|treo|up.browser|up.link|vodafone|\\bwap\\b|nokia|Series40|Series60|S60|SonyEricsson|N900|MAUI.*WAP.*Browser"
+    },
+    "tablets": {
+        "iPad": "iPad|iPad.*Mobile",
+        "NexusTablet": "Android.*Nexus[\\s]+(7|9|10)",
+        "GoogleTablet": "Android.*Pixel C",
+        "SamsungTablet": "SAMSUNG.*Tablet|Galaxy.*Tab|SC-01C|GT-P1000|GT-P1003|GT-P1010|GT-P3105|GT-P6210|GT-P6800|GT-P6810|GT-P7100|GT-P7300|GT-P7310|GT-P7500|GT-P7510|SCH-I800|SCH-I815|SCH-I905|SGH-I957|SGH-I987|SGH-T849|SGH-T859|SGH-T869|SPH-P100|GT-P3100|GT-P3108|GT-P3110|GT-P5100|GT-P5110|GT-P6200|GT-P7320|GT-P7511|GT-N8000|GT-P8510|SGH-I497|SPH-P500|SGH-T779|SCH-I705|SCH-I915|GT-N8013|GT-P3113|GT-P5113|GT-P8110|GT-N8010|GT-N8005|GT-N8020|GT-P1013|GT-P6201|GT-P7501|GT-N5100|GT-N5105|GT-N5110|SHV-E140K|SHV-E140L|SHV-E140S|SHV-E150S|SHV-E230K|SHV-E230L|SHV-E230S|SHW-M180K|SHW-M180L|SHW-M180S|SHW-M180W|SHW-M300W|SHW-M305W|SHW-M380K|SHW-M380S|SHW-M380W|SHW-M430W|SHW-M480K|SHW-M480S|SHW-M480W|SHW-M485W|SHW-M486W|SHW-M500W|GT-I9228|SCH-P739|SCH-I925|GT-I9200|GT-P5200|GT-P5210|GT-P5210X|SM-T311|SM-T310|SM-T310X|SM-T210|SM-T210R|SM-T211|SM-P600|SM-P601|SM-P605|SM-P900|SM-P901|SM-T217|SM-T217A|SM-T217S|SM-P6000|SM-T3100|SGH-I467|XE500|SM-T110|GT-P5220|GT-I9200X|GT-N5110X|GT-N5120|SM-P905|SM-T111|SM-T2105|SM-T315|SM-T320|SM-T320X|SM-T321|SM-T520|SM-T525|SM-T530NU|SM-T230NU|SM-T330NU|SM-T900|XE500T1C|SM-P605V|SM-P905V|SM-T337V|SM-T537V|SM-T707V|SM-T807V|SM-P600X|SM-P900X|SM-T210X|SM-T230|SM-T230X|SM-T325|GT-P7503|SM-T531|SM-T330|SM-T530|SM-T705|SM-T705C|SM-T535|SM-T331|SM-T800|SM-T700|SM-T537|SM-T807|SM-P907A|SM-T337A|SM-T537A|SM-T707A|SM-T807A|SM-T237|SM-T807P|SM-P607T|SM-T217T|SM-T337T|SM-T807T|SM-T116NQ|SM-T116BU|SM-P550|SM-T350|SM-T550|SM-T9000|SM-P9000|SM-T705Y|SM-T805|GT-P3113|SM-T710|SM-T810|SM-T815|SM-T360|SM-T533|SM-T113|SM-T335|SM-T715|SM-T560|SM-T670|SM-T677|SM-T377|SM-T567|SM-T357T|SM-T555|SM-T561|SM-T713|SM-T719|SM-T813|SM-T819|SM-T580|SM-T355Y?|SM-T280|SM-T817A|SM-T820|SM-W700|SM-P580|SM-T587|SM-P350|SM-P555M|SM-P355M|SM-T113NU|SM-T815Y|SM-T585|SM-T285|SM-T825|SM-W708|SM-T835",
+        "Kindle": "Kindle|Silk.*Accelerated|Android.*\\b(KFOT|KFTT|KFJWI|KFJWA|KFOTE|KFSOWI|KFTHWI|KFTHWA|KFAPWI|KFAPWA|WFJWAE|KFSAWA|KFSAWI|KFASWI|KFARWI|KFFOWI|KFGIWI|KFMEWI)\\b|Android.*Silk\/[0-9.]+ like Chrome\/[0-9.]+ (?!Mobile)",
+        "SurfaceTablet": "Windows NT [0-9.]+; ARM;.*(Tablet|ARMBJS)",
+        "HPTablet": "HP Slate (7|8|10)|HP ElitePad 900|hp-tablet|EliteBook.*Touch|HP 8|Slate 21|HP SlateBook 10",
+        "AsusTablet": "^.*PadFone((?!Mobile).)*$|Transformer|TF101|TF101G|TF300T|TF300TG|TF300TL|TF700T|TF700KL|TF701T|TF810C|ME171|ME301T|ME302C|ME371MG|ME370T|ME372MG|ME172V|ME173X|ME400C|Slider SL101|\\bK00F\\b|\\bK00C\\b|\\bK00E\\b|\\bK00L\\b|TX201LA|ME176C|ME102A|\\bM80TA\\b|ME372CL|ME560CG|ME372CG|ME302KL| K010 | K011 | K017 | K01E |ME572C|ME103K|ME170C|ME171C|\\bME70C\\b|ME581C|ME581CL|ME8510C|ME181C|P01Y|PO1MA|P01Z|\\bP027\\b|\\bP024\\b|\\bP00C\\b",
+        "BlackBerryTablet": "PlayBook|RIM Tablet",
+        "HTCtablet": "HTC_Flyer_P512|HTC Flyer|HTC Jetstream|HTC-P715a|HTC EVO View 4G|PG41200|PG09410",
+        "MotorolaTablet": "xoom|sholest|MZ615|MZ605|MZ505|MZ601|MZ602|MZ603|MZ604|MZ606|MZ607|MZ608|MZ609|MZ615|MZ616|MZ617",
+        "NookTablet": "Android.*Nook|NookColor|nook browser|BNRV200|BNRV200A|BNTV250|BNTV250A|BNTV400|BNTV600|LogicPD Zoom2",
+        "AcerTablet": "Android.*; \\b(A100|A101|A110|A200|A210|A211|A500|A501|A510|A511|A700|A701|W500|W500P|W501|W501P|W510|W511|W700|G100|G100W|B1-A71|B1-710|B1-711|A1-810|A1-811|A1-830)\\b|W3-810|\\bA3-A10\\b|\\bA3-A11\\b|\\bA3-A20\\b|\\bA3-A30",
+        "ToshibaTablet": "Android.*(AT100|AT105|AT200|AT205|AT270|AT275|AT300|AT305|AT1S5|AT500|AT570|AT700|AT830)|TOSHIBA.*FOLIO",
+        "LGTablet": "\\bL-06C|LG-V909|LG-V900|LG-V700|LG-V510|LG-V500|LG-V410|LG-V400|LG-VK810\\b",
+        "FujitsuTablet": "Android.*\\b(F-01D|F-02F|F-05E|F-10D|M532|Q572)\\b",
+        "PrestigioTablet": "PMP3170B|PMP3270B|PMP3470B|PMP7170B|PMP3370B|PMP3570C|PMP5870C|PMP3670B|PMP5570C|PMP5770D|PMP3970B|PMP3870C|PMP5580C|PMP5880D|PMP5780D|PMP5588C|PMP7280C|PMP7280C3G|PMP7280|PMP7880D|PMP5597D|PMP5597|PMP7100D|PER3464|PER3274|PER3574|PER3884|PER5274|PER5474|PMP5097CPRO|PMP5097|PMP7380D|PMP5297C|PMP5297C_QUAD|PMP812E|PMP812E3G|PMP812F|PMP810E|PMP880TD|PMT3017|PMT3037|PMT3047|PMT3057|PMT7008|PMT5887|PMT5001|PMT5002",
+        "LenovoTablet": "Lenovo TAB|Idea(Tab|Pad)( A1|A10| K1|)|ThinkPad([ ]+)?Tablet|YT3-850M|YT3-X90L|YT3-X90F|YT3-X90X|Lenovo.*(S2109|S2110|S5000|S6000|K3011|A3000|A3500|A1000|A2107|A2109|A1107|A5500|A7600|B6000|B8000|B8080)(-|)(FL|F|HV|H|)|TB-X103F|TB-X304F|TB-X304L|TB-8703F|Tab2A7-10F|TB2-X30L",
+        "DellTablet": "Venue 11|Venue 8|Venue 7|Dell Streak 10|Dell Streak 7",
+        "YarvikTablet": "Android.*\\b(TAB210|TAB211|TAB224|TAB250|TAB260|TAB264|TAB310|TAB360|TAB364|TAB410|TAB411|TAB420|TAB424|TAB450|TAB460|TAB461|TAB464|TAB465|TAB467|TAB468|TAB07-100|TAB07-101|TAB07-150|TAB07-151|TAB07-152|TAB07-200|TAB07-201-3G|TAB07-210|TAB07-211|TAB07-212|TAB07-214|TAB07-220|TAB07-400|TAB07-485|TAB08-150|TAB08-200|TAB08-201-3G|TAB08-201-30|TAB09-100|TAB09-211|TAB09-410|TAB10-150|TAB10-201|TAB10-211|TAB10-400|TAB10-410|TAB13-201|TAB274EUK|TAB275EUK|TAB374EUK|TAB462EUK|TAB474EUK|TAB9-200)\\b",
+        "MedionTablet": "Android.*\\bOYO\\b|LIFE.*(P9212|P9514|P9516|S9512)|LIFETAB",
+        "ArnovaTablet": "97G4|AN10G2|AN7bG3|AN7fG3|AN8G3|AN8cG3|AN7G3|AN9G3|AN7dG3|AN7dG3ST|AN7dG3ChildPad|AN10bG3|AN10bG3DT|AN9G2",
+        "IntensoTablet": "INM8002KP|INM1010FP|INM805ND|Intenso Tab|TAB1004",
+        "IRUTablet": "M702pro",
+        "MegafonTablet": "MegaFon V9|\\bZTE V9\\b|Android.*\\bMT7A\\b",
+        "EbodaTablet": "E-Boda (Supreme|Impresspeed|Izzycomm|Essential)",
+        "AllViewTablet": "Allview.*(Viva|Alldro|City|Speed|All TV|Frenzy|Quasar|Shine|TX1|AX1|AX2)",
+        "ArchosTablet": "\\b(101G9|80G9|A101IT)\\b|Qilive 97R|Archos5|\\bARCHOS (70|79|80|90|97|101|FAMILYPAD|)(b|c|)(G10| Cobalt| TITANIUM(HD|)| Xenon| Neon|XSK| 2| XS 2| PLATINUM| CARBON|GAMEPAD)\\b",
+        "AinolTablet": "NOVO7|NOVO8|NOVO10|Novo7Aurora|Novo7Basic|NOVO7PALADIN|novo9-Spark",
+        "NokiaLumiaTablet": "Lumia 2520",
+        "SonyTablet": "Sony.*Tablet|Xperia Tablet|Sony Tablet S|SO-03E|SGPT12|SGPT13|SGPT114|SGPT121|SGPT122|SGPT123|SGPT111|SGPT112|SGPT113|SGPT131|SGPT132|SGPT133|SGPT211|SGPT212|SGPT213|SGP311|SGP312|SGP321|EBRD1101|EBRD1102|EBRD1201|SGP351|SGP341|SGP511|SGP512|SGP521|SGP541|SGP551|SGP621|SGP641|SGP612|SOT31|SGP771|SGP611|SGP612|SGP712",
+        "PhilipsTablet": "\\b(PI2010|PI3000|PI3100|PI3105|PI3110|PI3205|PI3210|PI3900|PI4010|PI7000|PI7100)\\b",
+        "CubeTablet": "Android.*(K8GT|U9GT|U10GT|U16GT|U17GT|U18GT|U19GT|U20GT|U23GT|U30GT)|CUBE U8GT",
+        "CobyTablet": "MID1042|MID1045|MID1125|MID1126|MID7012|MID7014|MID7015|MID7034|MID7035|MID7036|MID7042|MID7048|MID7127|MID8042|MID8048|MID8127|MID9042|MID9740|MID9742|MID7022|MID7010",
+        "MIDTablet": "M9701|M9000|M9100|M806|M1052|M806|T703|MID701|MID713|MID710|MID727|MID760|MID830|MID728|MID933|MID125|MID810|MID732|MID120|MID930|MID800|MID731|MID900|MID100|MID820|MID735|MID980|MID130|MID833|MID737|MID960|MID135|MID860|MID736|MID140|MID930|MID835|MID733|MID4X10",
+        "MSITablet": "MSI \\b(Primo 73K|Primo 73L|Primo 81L|Primo 77|Primo 93|Primo 75|Primo 76|Primo 73|Primo 81|Primo 91|Primo 90|Enjoy 71|Enjoy 7|Enjoy 10)\\b",
+        "SMiTTablet": "Android.*(\\bMID\\b|MID-560|MTV-T1200|MTV-PND531|MTV-P1101|MTV-PND530)",
+        "RockChipTablet": "Android.*(RK2818|RK2808A|RK2918|RK3066)|RK2738|RK2808A",
+        "FlyTablet": "IQ310|Fly Vision",
+        "bqTablet": "Android.*(bq)?.*(Elcano|Curie|Edison|Maxwell|Kepler|Pascal|Tesla|Hypatia|Platon|Newton|Livingstone|Cervantes|Avant|Aquaris ([E|M]10|M8))|Maxwell.*Lite|Maxwell.*Plus",
+        "HuaweiTablet": "MediaPad|MediaPad 7 Youth|IDEOS S7|S7-201c|S7-202u|S7-101|S7-103|S7-104|S7-105|S7-106|S7-201|S7-Slim|M2-A01L|BAH-L09|BAH-W09",
+        "NecTablet": "\\bN-06D|\\bN-08D",
+        "PantechTablet": "Pantech.*P4100",
+        "BronchoTablet": "Broncho.*(N701|N708|N802|a710)",
+        "VersusTablet": "TOUCHPAD.*[78910]|\\bTOUCHTAB\\b",
+        "ZyncTablet": "z1000|Z99 2G|z99|z930|z999|z990|z909|Z919|z900",
+        "PositivoTablet": "TB07STA|TB10STA|TB07FTA|TB10FTA",
+        "NabiTablet": "Android.*\\bNabi",
+        "KoboTablet": "Kobo Touch|\\bK080\\b|\\bVox\\b Build|\\bArc\\b Build",
+        "DanewTablet": "DSlide.*\\b(700|701R|702|703R|704|802|970|971|972|973|974|1010|1012)\\b",
+        "TexetTablet": "NaviPad|TB-772A|TM-7045|TM-7055|TM-9750|TM-7016|TM-7024|TM-7026|TM-7041|TM-7043|TM-7047|TM-8041|TM-9741|TM-9747|TM-9748|TM-9751|TM-7022|TM-7021|TM-7020|TM-7011|TM-7010|TM-7023|TM-7025|TM-7037W|TM-7038W|TM-7027W|TM-9720|TM-9725|TM-9737W|TM-1020|TM-9738W|TM-9740|TM-9743W|TB-807A|TB-771A|TB-727A|TB-725A|TB-719A|TB-823A|TB-805A|TB-723A|TB-715A|TB-707A|TB-705A|TB-709A|TB-711A|TB-890HD|TB-880HD|TB-790HD|TB-780HD|TB-770HD|TB-721HD|TB-710HD|TB-434HD|TB-860HD|TB-840HD|TB-760HD|TB-750HD|TB-740HD|TB-730HD|TB-722HD|TB-720HD|TB-700HD|TB-500HD|TB-470HD|TB-431HD|TB-430HD|TB-506|TB-504|TB-446|TB-436|TB-416|TB-146SE|TB-126SE",
+        "PlaystationTablet": "Playstation.*(Portable|Vita)",
+        "TrekstorTablet": "ST10416-1|VT10416-1|ST70408-1|ST702xx-1|ST702xx-2|ST80208|ST97216|ST70104-2|VT10416-2|ST10216-2A|SurfTab",
+        "PyleAudioTablet": "\\b(PTBL10CEU|PTBL10C|PTBL72BC|PTBL72BCEU|PTBL7CEU|PTBL7C|PTBL92BC|PTBL92BCEU|PTBL9CEU|PTBL9CUK|PTBL9C)\\b",
+        "AdvanTablet": "Android.* \\b(E3A|T3X|T5C|T5B|T3E|T3C|T3B|T1J|T1F|T2A|T1H|T1i|E1C|T1-E|T5-A|T4|E1-B|T2Ci|T1-B|T1-D|O1-A|E1-A|T1-A|T3A|T4i)\\b ",
+        "DanyTechTablet": "Genius Tab G3|Genius Tab S2|Genius Tab Q3|Genius Tab G4|Genius Tab Q4|Genius Tab G-II|Genius TAB GII|Genius TAB GIII|Genius Tab S1",
+        "GalapadTablet": "Android.*\\bG1\\b(?!\\))",
+        "MicromaxTablet": "Funbook|Micromax.*\\b(P250|P560|P360|P362|P600|P300|P350|P500|P275)\\b",
+        "KarbonnTablet": "Android.*\\b(A39|A37|A34|ST8|ST10|ST7|Smart Tab3|Smart Tab2)\\b",
+        "AllFineTablet": "Fine7 Genius|Fine7 Shine|Fine7 Air|Fine8 Style|Fine9 More|Fine10 Joy|Fine11 Wide",
+        "PROSCANTablet": "\\b(PEM63|PLT1023G|PLT1041|PLT1044|PLT1044G|PLT1091|PLT4311|PLT4311PL|PLT4315|PLT7030|PLT7033|PLT7033D|PLT7035|PLT7035D|PLT7044K|PLT7045K|PLT7045KB|PLT7071KG|PLT7072|PLT7223G|PLT7225G|PLT7777G|PLT7810K|PLT7849G|PLT7851G|PLT7852G|PLT8015|PLT8031|PLT8034|PLT8036|PLT8080K|PLT8082|PLT8088|PLT8223G|PLT8234G|PLT8235G|PLT8816K|PLT9011|PLT9045K|PLT9233G|PLT9735|PLT9760G|PLT9770G)\\b",
+        "YONESTablet": "BQ1078|BC1003|BC1077|RK9702|BC9730|BC9001|IT9001|BC7008|BC7010|BC708|BC728|BC7012|BC7030|BC7027|BC7026",
+        "ChangJiaTablet": "TPC7102|TPC7103|TPC7105|TPC7106|TPC7107|TPC7201|TPC7203|TPC7205|TPC7210|TPC7708|TPC7709|TPC7712|TPC7110|TPC8101|TPC8103|TPC8105|TPC8106|TPC8203|TPC8205|TPC8503|TPC9106|TPC9701|TPC97101|TPC97103|TPC97105|TPC97106|TPC97111|TPC97113|TPC97203|TPC97603|TPC97809|TPC97205|TPC10101|TPC10103|TPC10106|TPC10111|TPC10203|TPC10205|TPC10503",
+        "GUTablet": "TX-A1301|TX-M9002|Q702|kf026",
+        "PointOfViewTablet": "TAB-P506|TAB-navi-7-3G-M|TAB-P517|TAB-P-527|TAB-P701|TAB-P703|TAB-P721|TAB-P731N|TAB-P741|TAB-P825|TAB-P905|TAB-P925|TAB-PR945|TAB-PL1015|TAB-P1025|TAB-PI1045|TAB-P1325|TAB-PROTAB[0-9]+|TAB-PROTAB25|TAB-PROTAB26|TAB-PROTAB27|TAB-PROTAB26XL|TAB-PROTAB2-IPS9|TAB-PROTAB30-IPS9|TAB-PROTAB25XXL|TAB-PROTAB26-IPS10|TAB-PROTAB30-IPS10",
+        "OvermaxTablet": "OV-(SteelCore|NewBase|Basecore|Baseone|Exellen|Quattor|EduTab|Solution|ACTION|BasicTab|TeddyTab|MagicTab|Stream|TB-08|TB-09)|Qualcore 1027",
+        "HCLTablet": "HCL.*Tablet|Connect-3G-2.0|Connect-2G-2.0|ME Tablet U1|ME Tablet U2|ME Tablet G1|ME Tablet X1|ME Tablet Y2|ME Tablet Sync",
+        "DPSTablet": "DPS Dream 9|DPS Dual 7",
+        "VistureTablet": "V97 HD|i75 3G|Visture V4( HD)?|Visture V5( HD)?|Visture V10",
+        "CrestaTablet": "CTP(-)?810|CTP(-)?818|CTP(-)?828|CTP(-)?838|CTP(-)?888|CTP(-)?978|CTP(-)?980|CTP(-)?987|CTP(-)?988|CTP(-)?989",
+        "MediatekTablet": "\\bMT8125|MT8389|MT8135|MT8377\\b",
+        "ConcordeTablet": "Concorde([ ]+)?Tab|ConCorde ReadMan",
+        "GoCleverTablet": "GOCLEVER TAB|A7GOCLEVER|M1042|M7841|M742|R1042BK|R1041|TAB A975|TAB A7842|TAB A741|TAB A741L|TAB M723G|TAB M721|TAB A1021|TAB I921|TAB R721|TAB I720|TAB T76|TAB R70|TAB R76.2|TAB R106|TAB R83.2|TAB M813G|TAB I721|GCTA722|TAB I70|TAB I71|TAB S73|TAB R73|TAB R74|TAB R93|TAB R75|TAB R76.1|TAB A73|TAB A93|TAB A93.2|TAB T72|TAB R83|TAB R974|TAB R973|TAB A101|TAB A103|TAB A104|TAB A104.2|R105BK|M713G|A972BK|TAB A971|TAB R974.2|TAB R104|TAB R83.3|TAB A1042",
+        "ModecomTablet": "FreeTAB 9000|FreeTAB 7.4|FreeTAB 7004|FreeTAB 7800|FreeTAB 2096|FreeTAB 7.5|FreeTAB 1014|FreeTAB 1001 |FreeTAB 8001|FreeTAB 9706|FreeTAB 9702|FreeTAB 7003|FreeTAB 7002|FreeTAB 1002|FreeTAB 7801|FreeTAB 1331|FreeTAB 1004|FreeTAB 8002|FreeTAB 8014|FreeTAB 9704|FreeTAB 1003",
+        "VoninoTablet": "\\b(Argus[ _]?S|Diamond[ _]?79HD|Emerald[ _]?78E|Luna[ _]?70C|Onyx[ _]?S|Onyx[ _]?Z|Orin[ _]?HD|Orin[ _]?S|Otis[ _]?S|SpeedStar[ _]?S|Magnet[ _]?M9|Primus[ _]?94[ _]?3G|Primus[ _]?94HD|Primus[ _]?QS|Android.*\\bQ8\\b|Sirius[ _]?EVO[ _]?QS|Sirius[ _]?QS|Spirit[ _]?S)\\b",
+        "ECSTablet": "V07OT2|TM105A|S10OT1|TR10CS1",
+        "StorexTablet": "eZee[_']?(Tab|Go)[0-9]+|TabLC7|Looney Tunes Tab",
+        "VodafoneTablet": "SmartTab([ ]+)?[0-9]+|SmartTabII10|SmartTabII7|VF-1497",
+        "EssentielBTablet": "Smart[ ']?TAB[ ]+?[0-9]+|Family[ ']?TAB2",
+        "RossMoorTablet": "RM-790|RM-997|RMD-878G|RMD-974R|RMT-705A|RMT-701|RME-601|RMT-501|RMT-711",
+        "iMobileTablet": "i-mobile i-note",
+        "TolinoTablet": "tolino tab [0-9.]+|tolino shine",
+        "AudioSonicTablet": "\\bC-22Q|T7-QC|T-17B|T-17P\\b",
+        "AMPETablet": "Android.* A78 ",
+        "SkkTablet": "Android.* (SKYPAD|PHOENIX|CYCLOPS)",
+        "TecnoTablet": "TECNO P9|TECNO DP8D",
+        "JXDTablet": "Android.* \\b(F3000|A3300|JXD5000|JXD3000|JXD2000|JXD300B|JXD300|S5800|S7800|S602b|S5110b|S7300|S5300|S602|S603|S5100|S5110|S601|S7100a|P3000F|P3000s|P101|P200s|P1000m|P200m|P9100|P1000s|S6600b|S908|P1000|P300|S18|S6600|S9100)\\b",
+        "iJoyTablet": "Tablet (Spirit 7|Essentia|Galatea|Fusion|Onix 7|Landa|Titan|Scooby|Deox|Stella|Themis|Argon|Unique 7|Sygnus|Hexen|Finity 7|Cream|Cream X2|Jade|Neon 7|Neron 7|Kandy|Scape|Saphyr 7|Rebel|Biox|Rebel|Rebel 8GB|Myst|Draco 7|Myst|Tab7-004|Myst|Tadeo Jones|Tablet Boing|Arrow|Draco Dual Cam|Aurix|Mint|Amity|Revolution|Finity 9|Neon 9|T9w|Amity 4GB Dual Cam|Stone 4GB|Stone 8GB|Andromeda|Silken|X2|Andromeda II|Halley|Flame|Saphyr 9,7|Touch 8|Planet|Triton|Unique 10|Hexen 10|Memphis 4GB|Memphis 8GB|Onix 10)",
+        "FX2Tablet": "FX2 PAD7|FX2 PAD10",
+        "XoroTablet": "KidsPAD 701|PAD[ ]?712|PAD[ ]?714|PAD[ ]?716|PAD[ ]?717|PAD[ ]?718|PAD[ ]?720|PAD[ ]?721|PAD[ ]?722|PAD[ ]?790|PAD[ ]?792|PAD[ ]?900|PAD[ ]?9715D|PAD[ ]?9716DR|PAD[ ]?9718DR|PAD[ ]?9719QR|PAD[ ]?9720QR|TelePAD1030|Telepad1032|TelePAD730|TelePAD731|TelePAD732|TelePAD735Q|TelePAD830|TelePAD9730|TelePAD795|MegaPAD 1331|MegaPAD 1851|MegaPAD 2151",
+        "ViewsonicTablet": "ViewPad 10pi|ViewPad 10e|ViewPad 10s|ViewPad E72|ViewPad7|ViewPad E100|ViewPad 7e|ViewSonic VB733|VB100a",
+        "VerizonTablet": "QTAQZ3|QTAIR7|QTAQTZ3|QTASUN1|QTASUN2|QTAXIA1",
+        "OdysTablet": "LOOX|XENO10|ODYS[ -](Space|EVO|Xpress|NOON)|\\bXELIO\\b|Xelio10Pro|XELIO7PHONETAB|XELIO10EXTREME|XELIOPT2|NEO_QUAD10",
+        "CaptivaTablet": "CAPTIVA PAD",
+        "IconbitTablet": "NetTAB|NT-3702|NT-3702S|NT-3702S|NT-3603P|NT-3603P|NT-0704S|NT-0704S|NT-3805C|NT-3805C|NT-0806C|NT-0806C|NT-0909T|NT-0909T|NT-0907S|NT-0907S|NT-0902S|NT-0902S",
+        "TeclastTablet": "T98 4G|\\bP80\\b|\\bX90HD\\b|X98 Air|X98 Air 3G|\\bX89\\b|P80 3G|\\bX80h\\b|P98 Air|\\bX89HD\\b|P98 3G|\\bP90HD\\b|P89 3G|X98 3G|\\bP70h\\b|P79HD 3G|G18d 3G|\\bP79HD\\b|\\bP89s\\b|\\bA88\\b|\\bP10HD\\b|\\bP19HD\\b|G18 3G|\\bP78HD\\b|\\bA78\\b|\\bP75\\b|G17s 3G|G17h 3G|\\bP85t\\b|\\bP90\\b|\\bP11\\b|\\bP98t\\b|\\bP98HD\\b|\\bG18d\\b|\\bP85s\\b|\\bP11HD\\b|\\bP88s\\b|\\bA80HD\\b|\\bA80se\\b|\\bA10h\\b|\\bP89\\b|\\bP78s\\b|\\bG18\\b|\\bP85\\b|\\bA70h\\b|\\bA70\\b|\\bG17\\b|\\bP18\\b|\\bA80s\\b|\\bA11s\\b|\\bP88HD\\b|\\bA80h\\b|\\bP76s\\b|\\bP76h\\b|\\bP98\\b|\\bA10HD\\b|\\bP78\\b|\\bP88\\b|\\bA11\\b|\\bA10t\\b|\\bP76a\\b|\\bP76t\\b|\\bP76e\\b|\\bP85HD\\b|\\bP85a\\b|\\bP86\\b|\\bP75HD\\b|\\bP76v\\b|\\bA12\\b|\\bP75a\\b|\\bA15\\b|\\bP76Ti\\b|\\bP81HD\\b|\\bA10\\b|\\bT760VE\\b|\\bT720HD\\b|\\bP76\\b|\\bP73\\b|\\bP71\\b|\\bP72\\b|\\bT720SE\\b|\\bC520Ti\\b|\\bT760\\b|\\bT720VE\\b|T720-3GE|T720-WiFi",
+        "OndaTablet": "\\b(V975i|Vi30|VX530|V701|Vi60|V701s|Vi50|V801s|V719|Vx610w|VX610W|V819i|Vi10|VX580W|Vi10|V711s|V813|V811|V820w|V820|Vi20|V711|VI30W|V712|V891w|V972|V819w|V820w|Vi60|V820w|V711|V813s|V801|V819|V975s|V801|V819|V819|V818|V811|V712|V975m|V101w|V961w|V812|V818|V971|V971s|V919|V989|V116w|V102w|V973|Vi40)\\b[\\s]+|V10 \\b4G\\b",
+        "JaytechTablet": "TPC-PA762",
+        "BlaupunktTablet": "Endeavour 800NG|Endeavour 1010",
+        "DigmaTablet": "\\b(iDx10|iDx9|iDx8|iDx7|iDxD7|iDxD8|iDsQ8|iDsQ7|iDsQ8|iDsD10|iDnD7|3TS804H|iDsQ11|iDj7|iDs10)\\b",
+        "EvolioTablet": "ARIA_Mini_wifi|Aria[ _]Mini|Evolio X10|Evolio X7|Evolio X8|\\bEvotab\\b|\\bNeura\\b",
+        "LavaTablet": "QPAD E704|\\bIvoryS\\b|E-TAB IVORY|\\bE-TAB\\b",
+        "AocTablet": "MW0811|MW0812|MW0922|MTK8382|MW1031|MW0831|MW0821|MW0931|MW0712",
+        "MpmanTablet": "MP11 OCTA|MP10 OCTA|MPQC1114|MPQC1004|MPQC994|MPQC974|MPQC973|MPQC804|MPQC784|MPQC780|\\bMPG7\\b|MPDCG75|MPDCG71|MPDC1006|MP101DC|MPDC9000|MPDC905|MPDC706HD|MPDC706|MPDC705|MPDC110|MPDC100|MPDC99|MPDC97|MPDC88|MPDC8|MPDC77|MP709|MID701|MID711|MID170|MPDC703|MPQC1010",
+        "CelkonTablet": "CT695|CT888|CT[\\s]?910|CT7 Tab|CT9 Tab|CT3 Tab|CT2 Tab|CT1 Tab|C820|C720|\\bCT-1\\b",
+        "WolderTablet": "miTab \\b(DIAMOND|SPACE|BROOKLYN|NEO|FLY|MANHATTAN|FUNK|EVOLUTION|SKY|GOCAR|IRON|GENIUS|POP|MINT|EPSILON|BROADWAY|JUMP|HOP|LEGEND|NEW AGE|LINE|ADVANCE|FEEL|FOLLOW|LIKE|LINK|LIVE|THINK|FREEDOM|CHICAGO|CLEVELAND|BALTIMORE-GH|IOWA|BOSTON|SEATTLE|PHOENIX|DALLAS|IN 101|MasterChef)\\b",
+        "MediacomTablet": "M-MPI10C3G|M-SP10EG|M-SP10EGP|M-SP10HXAH|M-SP7HXAH|M-SP10HXBH|M-SP8HXAH|M-SP8MXA",
+        "MiTablet": "\\bMI PAD\\b|\\bHM NOTE 1W\\b",
+        "NibiruTablet": "Nibiru M1|Nibiru Jupiter One",
+        "NexoTablet": "NEXO NOVA|NEXO 10|NEXO AVIO|NEXO FREE|NEXO GO|NEXO EVO|NEXO 3G|NEXO SMART|NEXO KIDDO|NEXO MOBI",
+        "LeaderTablet": "TBLT10Q|TBLT10I|TBL-10WDKB|TBL-10WDKBO2013|TBL-W230V2|TBL-W450|TBL-W500|SV572|TBLT7I|TBA-AC7-8G|TBLT79|TBL-8W16|TBL-10W32|TBL-10WKB|TBL-W100",
+        "UbislateTablet": "UbiSlate[\\s]?7C",
+        "PocketBookTablet": "Pocketbook",
+        "KocasoTablet": "\\b(TB-1207)\\b",
+        "HisenseTablet": "\\b(F5281|E2371)\\b",
+        "Hudl": "Hudl HT7S3|Hudl 2",
+        "TelstraTablet": "T-Hub2",
+        "GenericTablet": "Android.*\\b97D\\b|Tablet(?!.*PC)|BNTV250A|MID-WCDMA|LogicPD Zoom2|\\bA7EB\\b|CatNova8|A1_07|CT704|CT1002|\\bM721\\b|rk30sdk|\\bEVOTAB\\b|M758A|ET904|ALUMIUM10|Smartfren Tab|Endeavour 1010|Tablet-PC-4|Tagi Tab|\\bM6pro\\b|CT1020W|arc 10HD|\\bTP750\\b|\\bQTAQZ3\\b|WVT101|TM1088|KT107"
+    },
+    "oss": {
+        "AndroidOS": "Android",
+        "BlackBerryOS": "blackberry|\\bBB10\\b|rim tablet os",
+        "PalmOS": "PalmOS|avantgo|blazer|elaine|hiptop|palm|plucker|xiino",
+        "SymbianOS": "Symbian|SymbOS|Series60|Series40|SYB-[0-9]+|\\bS60\\b",
+        "WindowsMobileOS": "Windows CE.*(PPC|Smartphone|Mobile|[0-9]{3}x[0-9]{3})|Window Mobile|Windows Phone [0-9.]+|WCE;",
+        "WindowsPhoneOS": "Windows Phone 10.0|Windows Phone 8.1|Windows Phone 8.0|Windows Phone OS|XBLWP7|ZuneWP7|Windows NT 6.[23]; ARM;",
+        "iOS": "\\biPhone.*Mobile|\\biPod|\\biPad|AppleCoreMedia",
+        "MeeGoOS": "MeeGo",
+        "MaemoOS": "Maemo",
+        "JavaOS": "J2ME\/|\\bMIDP\\b|\\bCLDC\\b",
+        "webOS": "webOS|hpwOS",
+        "badaOS": "\\bBada\\b",
+        "BREWOS": "BREW"
+    },
+    "uas": {
+        "Chrome": "\\bCrMo\\b|CriOS|Android.*Chrome\/[.0-9]* (Mobile)?",
+        "Dolfin": "\\bDolfin\\b",
+        "Opera": "Opera.*Mini|Opera.*Mobi|Android.*Opera|Mobile.*OPR\/[0-9.]+$|Coast\/[0-9.]+",
+        "Skyfire": "Skyfire",
+        "Edge": "Mobile Safari\/[.0-9]* Edge",
+        "IE": "IEMobile|MSIEMobile",
+        "Firefox": "fennec|firefox.*maemo|(Mobile|Tablet).*Firefox|Firefox.*Mobile|FxiOS",
+        "Bolt": "bolt",
+        "TeaShark": "teashark",
+        "Blazer": "Blazer",
+        "Safari": "Version.*Mobile.*Safari|Safari.*Mobile|MobileSafari",
+        "WeChat": "\\bMicroMessenger\\b",
+        "UCBrowser": "UC.*Browser|UCWEB",
+        "baiduboxapp": "baiduboxapp",
+        "baidubrowser": "baidubrowser",
+        "DiigoBrowser": "DiigoBrowser",
+        "Puffin": "Puffin",
+        "Mercury": "\\bMercury\\b",
+        "ObigoBrowser": "Obigo",
+        "NetFront": "NF-Browser",
+        "GenericBrowser": "NokiaBrowser|OviBrowser|OneBrowser|TwonkyBeamBrowser|SEMC.*Browser|FlyFlow|Minimo|NetFront|Novarra-Vision|MQQBrowser|MicroMessenger",
+        "PaleMoon": "Android.*PaleMoon|Mobile.*PaleMoon"
+    },
+    "props": {
+        "Mobile": "Mobile\/[VER]",
+        "Build": "Build\/[VER]",
+        "Version": "Version\/[VER]",
+        "VendorID": "VendorID\/[VER]",
+        "iPad": "iPad.*CPU[a-z ]+[VER]",
+        "iPhone": "iPhone.*CPU[a-z ]+[VER]",
+        "iPod": "iPod.*CPU[a-z ]+[VER]",
+        "Kindle": "Kindle\/[VER]",
+        "Chrome": [
+            "Chrome\/[VER]",
+            "CriOS\/[VER]",
+            "CrMo\/[VER]"
+        ],
+        "Coast": [
+            "Coast\/[VER]"
+        ],
+        "Dolfin": "Dolfin\/[VER]",
+        "Firefox": [
+            "Firefox\/[VER]",
+            "FxiOS\/[VER]"
+        ],
+        "Fennec": "Fennec\/[VER]",
+        "Edge": "Edge\/[VER]",
+        "IE": [
+            "IEMobile\/[VER];",
+            "IEMobile [VER]",
+            "MSIE [VER];",
+            "Trident\/[0-9.]+;.*rv:[VER]"
+        ],
+        "NetFront": "NetFront\/[VER]",
+        "NokiaBrowser": "NokiaBrowser\/[VER]",
+        "Opera": [
+            " OPR\/[VER]",
+            "Opera Mini\/[VER]",
+            "Version\/[VER]"
+        ],
+        "Opera Mini": "Opera Mini\/[VER]",
+        "Opera Mobi": "Version\/[VER]",
+        "UCBrowser": [
+            "UCWEB[VER]",
+            "UC.*Browser\/[VER]"
+        ],
+        "MQQBrowser": "MQQBrowser\/[VER]",
+        "MicroMessenger": "MicroMessenger\/[VER]",
+        "baiduboxapp": "baiduboxapp\/[VER]",
+        "baidubrowser": "baidubrowser\/[VER]",
+        "SamsungBrowser": "SamsungBrowser\/[VER]",
+        "Iron": "Iron\/[VER]",
+        "Safari": [
+            "Version\/[VER]",
+            "Safari\/[VER]"
+        ],
+        "Skyfire": "Skyfire\/[VER]",
+        "Tizen": "Tizen\/[VER]",
+        "Webkit": "webkit[ \/][VER]",
+        "PaleMoon": "PaleMoon\/[VER]",
+        "Gecko": "Gecko\/[VER]",
+        "Trident": "Trident\/[VER]",
+        "Presto": "Presto\/[VER]",
+        "Goanna": "Goanna\/[VER]",
+        "iOS": " \\bi?OS\\b [VER][ ;]{1}",
+        "Android": "Android [VER]",
+        "BlackBerry": [
+            "BlackBerry[\\w]+\/[VER]",
+            "BlackBerry.*Version\/[VER]",
+            "Version\/[VER]"
+        ],
+        "BREW": "BREW [VER]",
+        "Java": "Java\/[VER]",
+        "Windows Phone OS": [
+            "Windows Phone OS [VER]",
+            "Windows Phone [VER]"
+        ],
+        "Windows Phone": "Windows Phone [VER]",
+        "Windows CE": "Windows CE\/[VER]",
+        "Windows NT": "Windows NT [VER]",
+        "Symbian": [
+            "SymbianOS\/[VER]",
+            "Symbian\/[VER]"
+        ],
+        "webOS": [
+            "webOS\/[VER]",
+            "hpwOS\/[VER];"
+        ]
+    },
+    "utils": {
+        "Bot": "Googlebot|facebookexternalhit|AdsBot-Google|Google Keyword Suggestion|Facebot|YandexBot|YandexMobileBot|bingbot|ia_archiver|AhrefsBot|Ezooms|GSLFbot|WBSearchBot|Twitterbot|TweetmemeBot|Twikle|PaperLiBot|Wotbox|UnwindFetchor|Exabot|MJ12bot|YandexImages|TurnitinBot|Pingdom",
+        "MobileBot": "Googlebot-Mobile|AdsBot-Google-Mobile|YahooSeeker\/M1A1-R2D2",
+        "DesktopMode": "WPDesktop",
+        "TV": "SonyDTV|HbbTV",
+        "WebKit": "(webkit)[ \/]([\\w.]+)",
+        "Console": "\\b(Nintendo|Nintendo WiiU|Nintendo 3DS|Nintendo Switch|PLAYSTATION|Xbox)\\b",
+        "Watch": "SM-V700"
+    }
+};
+
+    // following patterns come from http://detectmobilebrowsers.com/
+    impl.detectMobileBrowsers = {
+        fullPattern: /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i,
+        shortPattern: /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i,
+        tabletPattern: /android|ipad|playbook|silk/i
+    };
+
+    var hasOwnProp = Object.prototype.hasOwnProperty,
+        isArray;
+
+    impl.FALLBACK_PHONE = 'UnknownPhone';
+    impl.FALLBACK_TABLET = 'UnknownTablet';
+    impl.FALLBACK_MOBILE = 'UnknownMobile';
+
+    isArray = ('isArray' in Array) ?
+        Array.isArray : function (value) { return Object.prototype.toString.call(value) === '[object Array]'; };
+
+    function equalIC(a, b) {
+        return a != null && b != null && a.toLowerCase() === b.toLowerCase();
+    }
+
+    function containsIC(array, value) {
+        var valueLC, i, len = array.length;
+        if (!len || !value) {
+            return false;
+        }
+        valueLC = value.toLowerCase();
+        for (i = 0; i < len; ++i) {
+            if (valueLC === array[i].toLowerCase()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function convertPropsToRegExp(object) {
+        for (var key in object) {
+            if (hasOwnProp.call(object, key)) {
+                object[key] = new RegExp(object[key], 'i');
+            }
+        }
+    }
+
+    function prepareUserAgent(userAgent) {
+        return (userAgent || '').substr(0, 500); // mitigate vulnerable to ReDoS
+    }
+
+    (function init() {
+        var key, values, value, i, len, verPos, mobileDetectRules = impl.mobileDetectRules;
+        for (key in mobileDetectRules.props) {
+            if (hasOwnProp.call(mobileDetectRules.props, key)) {
+                values = mobileDetectRules.props[key];
+                if (!isArray(values)) {
+                    values = [values];
+                }
+                len = values.length;
+                for (i = 0; i < len; ++i) {
+                    value = values[i];
+                    verPos = value.indexOf('[VER]');
+                    if (verPos >= 0) {
+                        value = value.substring(0, verPos) + '([\\w._\\+]+)' + value.substring(verPos + 5);
+                    }
+                    values[i] = new RegExp(value, 'i');
+                }
+                mobileDetectRules.props[key] = values;
+            }
+        }
+        convertPropsToRegExp(mobileDetectRules.oss);
+        convertPropsToRegExp(mobileDetectRules.phones);
+        convertPropsToRegExp(mobileDetectRules.tablets);
+        convertPropsToRegExp(mobileDetectRules.uas);
+        convertPropsToRegExp(mobileDetectRules.utils);
+
+        // copy some patterns to oss0 which are tested first (see issue#15)
+        mobileDetectRules.oss0 = {
+            WindowsPhoneOS: mobileDetectRules.oss.WindowsPhoneOS,
+            WindowsMobileOS: mobileDetectRules.oss.WindowsMobileOS
+        };
+    }());
+
+    /**
+     * Test userAgent string against a set of rules and find the first matched key.
+     * @param {Object} rules (key is String, value is RegExp)
+     * @param {String} userAgent the navigator.userAgent (or HTTP-Header 'User-Agent').
+     * @returns {String|null} the matched key if found, otherwise <tt>null</tt>
+     * @private
+     */
+    impl.findMatch = function(rules, userAgent) {
+        for (var key in rules) {
+            if (hasOwnProp.call(rules, key)) {
+                if (rules[key].test(userAgent)) {
+                    return key;
+                }
+            }
+        }
+        return null;
+    };
+
+    /**
+     * Test userAgent string against a set of rules and return an array of matched keys.
+     * @param {Object} rules (key is String, value is RegExp)
+     * @param {String} userAgent the navigator.userAgent (or HTTP-Header 'User-Agent').
+     * @returns {Array} an array of matched keys, may be empty when there is no match, but not <tt>null</tt>
+     * @private
+     */
+    impl.findMatches = function(rules, userAgent) {
+        var result = [];
+        for (var key in rules) {
+            if (hasOwnProp.call(rules, key)) {
+                if (rules[key].test(userAgent)) {
+                    result.push(key);
+                }
+            }
+        }
+        return result;
+    };
+
+    /**
+     * Check the version of the given property in the User-Agent.
+     *
+     * @param {String} propertyName
+     * @param {String} userAgent
+     * @return {String} version or <tt>null</tt> if version not found
+     * @private
+     */
+    impl.getVersionStr = function (propertyName, userAgent) {
+        var props = impl.mobileDetectRules.props, patterns, i, len, match;
+        if (hasOwnProp.call(props, propertyName)) {
+            patterns = props[propertyName];
+            len = patterns.length;
+            for (i = 0; i < len; ++i) {
+                match = patterns[i].exec(userAgent);
+                if (match !== null) {
+                    return match[1];
+                }
+            }
+        }
+        return null;
+    };
+
+    /**
+     * Check the version of the given property in the User-Agent.
+     * Will return a float number. (eg. 2_0 will return 2.0, 4.3.1 will return 4.31)
+     *
+     * @param {String} propertyName
+     * @param {String} userAgent
+     * @return {Number} version or <tt>NaN</tt> if version not found
+     * @private
+     */
+    impl.getVersion = function (propertyName, userAgent) {
+        var version = impl.getVersionStr(propertyName, userAgent);
+        return version ? impl.prepareVersionNo(version) : NaN;
+    };
+
+    /**
+     * Prepare the version number.
+     *
+     * @param {String} version
+     * @return {Number} the version number as a floating number
+     * @private
+     */
+    impl.prepareVersionNo = function (version) {
+        var numbers;
+
+        numbers = version.split(/[a-z._ \/\-]/i);
+        if (numbers.length === 1) {
+            version = numbers[0];
+        }
+        if (numbers.length > 1) {
+            version = numbers[0] + '.';
+            numbers.shift();
+            version += numbers.join('');
+        }
+        return Number(version);
+    };
+
+    impl.isMobileFallback = function (userAgent) {
+        return impl.detectMobileBrowsers.fullPattern.test(userAgent) ||
+            impl.detectMobileBrowsers.shortPattern.test(userAgent.substr(0,4));
+    };
+
+    impl.isTabletFallback = function (userAgent) {
+        return impl.detectMobileBrowsers.tabletPattern.test(userAgent);
+    };
+
+    impl.prepareDetectionCache = function (cache, userAgent, maxPhoneWidth) {
+        if (cache.mobile !== undefined) {
+            return;
+        }
+        var phone, tablet, phoneSized;
+
+        // first check for stronger tablet rules, then phone (see issue#5)
+        tablet = impl.findMatch(impl.mobileDetectRules.tablets, userAgent);
+        if (tablet) {
+            cache.mobile = cache.tablet = tablet;
+            cache.phone = null;
+            return; // unambiguously identified as tablet
+        }
+
+        phone = impl.findMatch(impl.mobileDetectRules.phones, userAgent);
+        if (phone) {
+            cache.mobile = cache.phone = phone;
+            cache.tablet = null;
+            return; // unambiguously identified as phone
+        }
+
+        // our rules haven't found a match -> try more general fallback rules
+        if (impl.isMobileFallback(userAgent)) {
+            phoneSized = MobileDetect.isPhoneSized(maxPhoneWidth);
+            if (phoneSized === undefined) {
+                cache.mobile = impl.FALLBACK_MOBILE;
+                cache.tablet = cache.phone = null;
+            } else if (phoneSized) {
+                cache.mobile = cache.phone = impl.FALLBACK_PHONE;
+                cache.tablet = null;
+            } else {
+                cache.mobile = cache.tablet = impl.FALLBACK_TABLET;
+                cache.phone = null;
+            }
+        } else if (impl.isTabletFallback(userAgent)) {
+            cache.mobile = cache.tablet = impl.FALLBACK_TABLET;
+            cache.phone = null;
+        } else {
+            // not mobile at all!
+            cache.mobile = cache.tablet = cache.phone = null;
+        }
+    };
+
+    // t is a reference to a MobileDetect instance
+    impl.mobileGrade = function (t) {
+        // impl note:
+        // To keep in sync w/ Mobile_Detect.php easily, the following code is tightly aligned to the PHP version.
+        // When changes are made in Mobile_Detect.php, copy this method and replace:
+        //     $this-> / t.
+        //     self::MOBILE_GRADE_(.) / '$1'
+        //     , self::VERSION_TYPE_FLOAT / (nothing)
+        //     isIOS() / os('iOS')
+        //     [reg] / (nothing)   <-- jsdelivr complaining about unescaped unicode character U+00AE
+        var $isMobile = t.mobile() !== null;
+
+        if (
+            // Apple iOS 3.2-5.1 - Tested on the original iPad (4.3 / 5.0), iPad 2 (4.3), iPad 3 (5.1), original iPhone (3.1), iPhone 3 (3.2), 3GS (4.3), 4 (4.3 / 5.0), and 4S (5.1)
+            t.os('iOS') && t.version('iPad')>=4.3 ||
+            t.os('iOS') && t.version('iPhone')>=3.1 ||
+            t.os('iOS') && t.version('iPod')>=3.1 ||
+
+            // Android 2.1-2.3 - Tested on the HTC Incredible (2.2), original Droid (2.2), HTC Aria (2.1), Google Nexus S (2.3). Functional on 1.5 & 1.6 but performance may be sluggish, tested on Google G1 (1.5)
+            // Android 3.1 (Honeycomb)  - Tested on the Samsung Galaxy Tab 10.1 and Motorola XOOM
+            // Android 4.0 (ICS)  - Tested on a Galaxy Nexus. Note: transition performance can be poor on upgraded devices
+            // Android 4.1 (Jelly Bean)  - Tested on a Galaxy Nexus and Galaxy 7
+            ( t.version('Android')>2.1 && t.is('Webkit') ) ||
+
+            // Windows Phone 7-7.5 - Tested on the HTC Surround (7.0) HTC Trophy (7.5), LG-E900 (7.5), Nokia Lumia 800
+            t.version('Windows Phone OS')>=7.0 ||
+
+            // Blackberry 7 - Tested on BlackBerry Torch 9810
+            // Blackberry 6.0 - Tested on the Torch 9800 and Style 9670
+            t.is('BlackBerry') && t.version('BlackBerry')>=6.0 ||
+            // Blackberry Playbook (1.0-2.0) - Tested on PlayBook
+            t.match('Playbook.*Tablet') ||
+
+            // Palm WebOS (1.4-2.0) - Tested on the Palm Pixi (1.4), Pre (1.4), Pre 2 (2.0)
+            ( t.version('webOS')>=1.4 && t.match('Palm|Pre|Pixi') ) ||
+            // Palm WebOS 3.0  - Tested on HP TouchPad
+            t.match('hp.*TouchPad') ||
+
+            // Firefox Mobile (12 Beta) - Tested on Android 2.3 device
+            ( t.is('Firefox') && t.version('Firefox')>=12 ) ||
+
+            // Chrome for Android - Tested on Android 4.0, 4.1 device
+            ( t.is('Chrome') && t.is('AndroidOS') && t.version('Android')>=4.0 ) ||
+
+            // Skyfire 4.1 - Tested on Android 2.3 device
+            ( t.is('Skyfire') && t.version('Skyfire')>=4.1 && t.is('AndroidOS') && t.version('Android')>=2.3 ) ||
+
+            // Opera Mobile 11.5-12: Tested on Android 2.3
+            ( t.is('Opera') && t.version('Opera Mobi')>11 && t.is('AndroidOS') ) ||
+
+            // Meego 1.2 - Tested on Nokia 950 and N9
+            t.is('MeeGoOS') ||
+
+            // Tizen (pre-release) - Tested on early hardware
+            t.is('Tizen') ||
+
+            // Samsung Bada 2.0 - Tested on a Samsung Wave 3, Dolphin browser
+            // @todo: more tests here!
+            t.is('Dolfin') && t.version('Bada')>=2.0 ||
+
+            // UC Browser - Tested on Android 2.3 device
+            ( (t.is('UC Browser') || t.is('Dolfin')) && t.version('Android')>=2.3 ) ||
+
+            // Kindle 3 and Fire  - Tested on the built-in WebKit browser for each
+            ( t.match('Kindle Fire') ||
+                t.is('Kindle') && t.version('Kindle')>=3.0 ) ||
+
+            // Nook Color 1.4.1 - Tested on original Nook Color, not Nook Tablet
+            t.is('AndroidOS') && t.is('NookTablet') ||
+
+            // Chrome Desktop 11-21 - Tested on OS X 10.7 and Windows 7
+            t.version('Chrome')>=11 && !$isMobile ||
+
+            // Safari Desktop 4-5 - Tested on OS X 10.7 and Windows 7
+            t.version('Safari')>=5.0 && !$isMobile ||
+
+            // Firefox Desktop 4-13 - Tested on OS X 10.7 and Windows 7
+            t.version('Firefox')>=4.0 && !$isMobile ||
+
+            // Internet Explorer 7-9 - Tested on Windows XP, Vista and 7
+            t.version('MSIE')>=7.0 && !$isMobile ||
+
+            // Opera Desktop 10-12 - Tested on OS X 10.7 and Windows 7
+            // @reference: http://my.opera.com/community/openweb/idopera/
+            t.version('Opera')>=10 && !$isMobile
+
+            ){
+            return 'A';
+        }
+
+        if (
+            t.os('iOS') && t.version('iPad')<4.3 ||
+            t.os('iOS') && t.version('iPhone')<3.1 ||
+            t.os('iOS') && t.version('iPod')<3.1 ||
+
+            // Blackberry 5.0: Tested on the Storm 2 9550, Bold 9770
+            t.is('Blackberry') && t.version('BlackBerry')>=5 && t.version('BlackBerry')<6 ||
+
+            //Opera Mini (5.0-6.5) - Tested on iOS 3.2/4.3 and Android 2.3
+            ( t.version('Opera Mini')>=5.0 && t.version('Opera Mini')<=6.5 &&
+                (t.version('Android')>=2.3 || t.is('iOS')) ) ||
+
+            // Nokia Symbian^3 - Tested on Nokia N8 (Symbian^3), C7 (Symbian^3), also works on N97 (Symbian^1)
+            t.match('NokiaN8|NokiaC7|N97.*Series60|Symbian/3') ||
+
+            // @todo: report this (tested on Nokia N71)
+            t.version('Opera Mobi')>=11 && t.is('SymbianOS')
+            ){
+            return 'B';
+        }
+
+        if (
+        // Blackberry 4.x - Tested on the Curve 8330
+            t.version('BlackBerry')<5.0 ||
+            // Windows Mobile - Tested on the HTC Leo (WinMo 5.2)
+            t.match('MSIEMobile|Windows CE.*Mobile') || t.version('Windows Mobile')<=5.2
+
+            ){
+            return 'C';
+        }
+
+        //All older smartphone platforms and featurephones - Any device that doesn't support media queries
+        //will receive the basic, C grade experience.
+        return 'C';
+    };
+
+    impl.detectOS = function (ua) {
+        return impl.findMatch(impl.mobileDetectRules.oss0, ua) ||
+            impl.findMatch(impl.mobileDetectRules.oss, ua);
+    };
+
+    impl.getDeviceSmallerSide = function () {
+        return window.screen.width < window.screen.height ?
+            window.screen.width :
+            window.screen.height;
+    };
+
+    /**
+     * Constructor for MobileDetect object.
+     * <br>
+     * Such an object will keep a reference to the given user-agent string and cache most of the detect queries.<br>
+     * <div style="background-color: #d9edf7; border: 1px solid #bce8f1; color: #3a87ad; padding: 14px; border-radius: 2px; margin-top: 20px">
+     *     <strong>Find information how to download and install:</strong>
+     *     <a href="https://github.com/hgoebl/mobile-detect.js/">github.com/hgoebl/mobile-detect.js/</a>
+     * </div>
+     *
+     * @example <pre>
+     *     var md = new MobileDetect(window.navigator.userAgent);
+     *     if (md.mobile()) {
+     *         location.href = (md.mobileGrade() === 'A') ? '/mobile/' : '/lynx/';
+     *     }
+     * </pre>
+     *
+     * @param {string} userAgent typically taken from window.navigator.userAgent or http_header['User-Agent']
+     * @param {number} [maxPhoneWidth=600] <strong>only for browsers</strong> specify a value for the maximum
+     *        width of smallest device side (in logical "CSS" pixels) until a device detected as mobile will be handled
+     *        as phone.
+     *        This is only used in cases where the device cannot be classified as phone or tablet.<br>
+     *        See <a href="http://developer.android.com/guide/practices/screens_support.html">Declaring Tablet Layouts
+     *        for Android</a>.<br>
+     *        If you provide a value < 0, then this "fuzzy" check is disabled.
+     * @constructor
+     * @global
+     */
+    function MobileDetect(userAgent, maxPhoneWidth) {
+        this.ua = prepareUserAgent(userAgent);
+        this._cache = {};
+        //600dp is typical 7" tablet minimum width
+        this.maxPhoneWidth = maxPhoneWidth || 600;
+    }
+
+    MobileDetect.prototype = {
+        constructor: MobileDetect,
+
+        /**
+         * Returns the detected phone or tablet type or <tt>null</tt> if it is not a mobile device.
+         * <br>
+         * For a list of possible return values see {@link MobileDetect#phone} and {@link MobileDetect#tablet}.<br>
+         * <br>
+         * If the device is not detected by the regular expressions from Mobile-Detect, a test is made against
+         * the patterns of <a href="http://detectmobilebrowsers.com/">detectmobilebrowsers.com</a>. If this test
+         * is positive, a value of <code>UnknownPhone</code>, <code>UnknownTablet</code> or
+         * <code>UnknownMobile</code> is returned.<br>
+         * When used in browser, the decision whether phone or tablet is made based on <code>screen.width/height</code>.<br>
+         * <br>
+         * When used server-side (node.js), there is no way to tell the difference between <code>UnknownTablet</code>
+         * and <code>UnknownMobile</code>, so you will get <code>UnknownMobile</code> here.<br>
+         * Be aware that since v1.0.0 in this special case you will get <code>UnknownMobile</code> only for:
+         * {@link MobileDetect#mobile}, not for {@link MobileDetect#phone} and {@link MobileDetect#tablet}.
+         * In versions before v1.0.0 all 3 methods returned <code>UnknownMobile</code> which was tedious to use.
+         * <br>
+         * In most cases you will use the return value just as a boolean.
+         *
+         * @returns {String} the key for the phone family or tablet family, e.g. "Nexus".
+         * @function MobileDetect#mobile
+         */
+        mobile: function () {
+            impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth);
+            return this._cache.mobile;
+        },
+
+        /**
+         * Returns the detected phone type/family string or <tt>null</tt>.
+         * <br>
+         * The returned tablet (family or producer) is one of following keys:<br>
+         * <br><tt>iPhone, BlackBerry, HTC, Nexus, Dell, Motorola, Samsung, LG, Sony, Asus,
+         * NokiaLumia, Micromax, Palm, Vertu, Pantech, Fly, Wiko, iMobile, SimValley,
+         * Wolfgang, Alcatel, Nintendo, Amoi, INQ, GenericPhone</tt><br>
+         * <br>
+         * If the device is not detected by the regular expressions from Mobile-Detect, a test is made against
+         * the patterns of <a href="http://detectmobilebrowsers.com/">detectmobilebrowsers.com</a>. If this test
+         * is positive, a value of <code>UnknownPhone</code> or <code>UnknownMobile</code> is returned.<br>
+         * When used in browser, the decision whether phone or tablet is made based on <code>screen.width/height</code>.<br>
+         * <br>
+         * When used server-side (node.js), there is no way to tell the difference between <code>UnknownTablet</code>
+         * and <code>UnknownMobile</code>, so you will get <code>null</code> here, while {@link MobileDetect#mobile}
+         * will return <code>UnknownMobile</code>.<br>
+         * Be aware that since v1.0.0 in this special case you will get <code>UnknownMobile</code> only for:
+         * {@link MobileDetect#mobile}, not for {@link MobileDetect#phone} and {@link MobileDetect#tablet}.
+         * In versions before v1.0.0 all 3 methods returned <code>UnknownMobile</code> which was tedious to use.
+         * <br>
+         * In most cases you will use the return value just as a boolean.
+         *
+         * @returns {String} the key of the phone family or producer, e.g. "iPhone"
+         * @function MobileDetect#phone
+         */
+        phone: function () {
+            impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth);
+            return this._cache.phone;
+        },
+
+        /**
+         * Returns the detected tablet type/family string or <tt>null</tt>.
+         * <br>
+         * The returned tablet (family or producer) is one of following keys:<br>
+         * <br><tt>iPad, NexusTablet, GoogleTablet, SamsungTablet, Kindle, SurfaceTablet,
+         * HPTablet, AsusTablet, BlackBerryTablet, HTCtablet, MotorolaTablet, NookTablet,
+         * AcerTablet, ToshibaTablet, LGTablet, FujitsuTablet, PrestigioTablet,
+         * LenovoTablet, DellTablet, YarvikTablet, MedionTablet, ArnovaTablet,
+         * IntensoTablet, IRUTablet, MegafonTablet, EbodaTablet, AllViewTablet,
+         * ArchosTablet, AinolTablet, NokiaLumiaTablet, SonyTablet, PhilipsTablet,
+         * CubeTablet, CobyTablet, MIDTablet, MSITablet, SMiTTablet, RockChipTablet,
+         * FlyTablet, bqTablet, HuaweiTablet, NecTablet, PantechTablet, BronchoTablet,
+         * VersusTablet, ZyncTablet, PositivoTablet, NabiTablet, KoboTablet, DanewTablet,
+         * TexetTablet, PlaystationTablet, TrekstorTablet, PyleAudioTablet, AdvanTablet,
+         * DanyTechTablet, GalapadTablet, MicromaxTablet, KarbonnTablet, AllFineTablet,
+         * PROSCANTablet, YONESTablet, ChangJiaTablet, GUTablet, PointOfViewTablet,
+         * OvermaxTablet, HCLTablet, DPSTablet, VistureTablet, CrestaTablet,
+         * MediatekTablet, ConcordeTablet, GoCleverTablet, ModecomTablet, VoninoTablet,
+         * ECSTablet, StorexTablet, VodafoneTablet, EssentielBTablet, RossMoorTablet,
+         * iMobileTablet, TolinoTablet, AudioSonicTablet, AMPETablet, SkkTablet,
+         * TecnoTablet, JXDTablet, iJoyTablet, FX2Tablet, XoroTablet, ViewsonicTablet,
+         * VerizonTablet, OdysTablet, CaptivaTablet, IconbitTablet, TeclastTablet,
+         * OndaTablet, JaytechTablet, BlaupunktTablet, DigmaTablet, EvolioTablet,
+         * LavaTablet, AocTablet, MpmanTablet, CelkonTablet, WolderTablet, MediacomTablet,
+         * MiTablet, NibiruTablet, NexoTablet, LeaderTablet, UbislateTablet,
+         * PocketBookTablet, KocasoTablet, HisenseTablet, Hudl, TelstraTablet,
+         * GenericTablet</tt><br>
+         * <br>
+         * If the device is not detected by the regular expressions from Mobile-Detect, a test is made against
+         * the patterns of <a href="http://detectmobilebrowsers.com/">detectmobilebrowsers.com</a>. If this test
+         * is positive, a value of <code>UnknownTablet</code> or <code>UnknownMobile</code> is returned.<br>
+         * When used in browser, the decision whether phone or tablet is made based on <code>screen.width/height</code>.<br>
+         * <br>
+         * When used server-side (node.js), there is no way to tell the difference between <code>UnknownTablet</code>
+         * and <code>UnknownMobile</code>, so you will get <code>null</code> here, while {@link MobileDetect#mobile}
+         * will return <code>UnknownMobile</code>.<br>
+         * Be aware that since v1.0.0 in this special case you will get <code>UnknownMobile</code> only for:
+         * {@link MobileDetect#mobile}, not for {@link MobileDetect#phone} and {@link MobileDetect#tablet}.
+         * In versions before v1.0.0 all 3 methods returned <code>UnknownMobile</code> which was tedious to use.
+         * <br>
+         * In most cases you will use the return value just as a boolean.
+         *
+         * @returns {String} the key of the tablet family or producer, e.g. "SamsungTablet"
+         * @function MobileDetect#tablet
+         */
+        tablet: function () {
+            impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth);
+            return this._cache.tablet;
+        },
+
+        /**
+         * Returns the (first) detected user-agent string or <tt>null</tt>.
+         * <br>
+         * The returned user-agent is one of following keys:<br>
+         * <br><tt>Chrome, Dolfin, Opera, Skyfire, Edge, IE, Firefox, Bolt, TeaShark, Blazer,
+         * Safari, WeChat, UCBrowser, baiduboxapp, baidubrowser, DiigoBrowser, Puffin,
+         * Mercury, ObigoBrowser, NetFront, GenericBrowser, PaleMoon</tt><br>
+         * <br>
+         * In most cases calling {@link MobileDetect#userAgent} will be sufficient. But there are rare
+         * cases where a mobile device pretends to be more than one particular browser. You can get the
+         * list of all matches with {@link MobileDetect#userAgents} or check for a particular value by
+         * providing one of the defined keys as first argument to {@link MobileDetect#is}.
+         *
+         * @returns {String} the key for the detected user-agent or <tt>null</tt>
+         * @function MobileDetect#userAgent
+         */
+        userAgent: function () {
+            if (this._cache.userAgent === undefined) {
+                this._cache.userAgent = impl.findMatch(impl.mobileDetectRules.uas, this.ua);
+            }
+            return this._cache.userAgent;
+        },
+
+        /**
+         * Returns all detected user-agent strings.
+         * <br>
+         * The array is empty or contains one or more of following keys:<br>
+         * <br><tt>Chrome, Dolfin, Opera, Skyfire, Edge, IE, Firefox, Bolt, TeaShark, Blazer,
+         * Safari, WeChat, UCBrowser, baiduboxapp, baidubrowser, DiigoBrowser, Puffin,
+         * Mercury, ObigoBrowser, NetFront, GenericBrowser, PaleMoon</tt><br>
+         * <br>
+         * In most cases calling {@link MobileDetect#userAgent} will be sufficient. But there are rare
+         * cases where a mobile device pretends to be more than one particular browser. You can get the
+         * list of all matches with {@link MobileDetect#userAgents} or check for a particular value by
+         * providing one of the defined keys as first argument to {@link MobileDetect#is}.
+         *
+         * @returns {Array} the array of detected user-agent keys or <tt>[]</tt>
+         * @function MobileDetect#userAgents
+         */
+        userAgents: function () {
+            if (this._cache.userAgents === undefined) {
+                this._cache.userAgents = impl.findMatches(impl.mobileDetectRules.uas, this.ua);
+            }
+            return this._cache.userAgents;
+        },
+
+        /**
+         * Returns the detected operating system string or <tt>null</tt>.
+         * <br>
+         * The operating system is one of following keys:<br>
+         * <br><tt>AndroidOS, BlackBerryOS, PalmOS, SymbianOS, WindowsMobileOS, WindowsPhoneOS,
+         * iOS, MeeGoOS, MaemoOS, JavaOS, webOS, badaOS, BREWOS</tt><br>
+         *
+         * @returns {String} the key for the detected operating system.
+         * @function MobileDetect#os
+         */
+        os: function () {
+            if (this._cache.os === undefined) {
+                this._cache.os = impl.detectOS(this.ua);
+            }
+            return this._cache.os;
+        },
+
+        /**
+         * Get the version (as Number) of the given property in the User-Agent.
+         * <br>
+         * Will return a float number. (eg. 2_0 will return 2.0, 4.3.1 will return 4.31)
+         *
+         * @param {String} key a key defining a thing which has a version.<br>
+         *        You can use one of following keys:<br>
+         * <br><tt>Mobile, Build, Version, VendorID, iPad, iPhone, iPod, Kindle, Chrome, Coast,
+         * Dolfin, Firefox, Fennec, Edge, IE, NetFront, NokiaBrowser, Opera, Opera Mini,
+         * Opera Mobi, UCBrowser, MQQBrowser, MicroMessenger, baiduboxapp, baidubrowser,
+         * SamsungBrowser, Iron, Safari, Skyfire, Tizen, Webkit, PaleMoon, Gecko, Trident,
+         * Presto, Goanna, iOS, Android, BlackBerry, BREW, Java, Windows Phone OS, Windows
+         * Phone, Windows CE, Windows NT, Symbian, webOS</tt><br>
+         *
+         * @returns {Number} the version as float or <tt>NaN</tt> if User-Agent doesn't contain this version.
+         *          Be careful when comparing this value with '==' operator!
+         * @function MobileDetect#version
+         */
+        version: function (key) {
+            return impl.getVersion(key, this.ua);
+        },
+
+        /**
+         * Get the version (as String) of the given property in the User-Agent.
+         * <br>
+         *
+         * @param {String} key a key defining a thing which has a version.<br>
+         *        You can use one of following keys:<br>
+         * <br><tt>Mobile, Build, Version, VendorID, iPad, iPhone, iPod, Kindle, Chrome, Coast,
+         * Dolfin, Firefox, Fennec, Edge, IE, NetFront, NokiaBrowser, Opera, Opera Mini,
+         * Opera Mobi, UCBrowser, MQQBrowser, MicroMessenger, baiduboxapp, baidubrowser,
+         * SamsungBrowser, Iron, Safari, Skyfire, Tizen, Webkit, PaleMoon, Gecko, Trident,
+         * Presto, Goanna, iOS, Android, BlackBerry, BREW, Java, Windows Phone OS, Windows
+         * Phone, Windows CE, Windows NT, Symbian, webOS</tt><br>
+         *
+         * @returns {String} the "raw" version as String or <tt>null</tt> if User-Agent doesn't contain this version.
+         *
+         * @function MobileDetect#versionStr
+         */
+        versionStr: function (key) {
+            return impl.getVersionStr(key, this.ua);
+        },
+
+        /**
+         * Global test key against userAgent, os, phone, tablet and some other properties of userAgent string.
+         *
+         * @param {String} key the key (case-insensitive) of a userAgent, an operating system, phone or
+         *        tablet family.<br>
+         *        For a complete list of possible values, see {@link MobileDetect#userAgent},
+         *        {@link MobileDetect#os}, {@link MobileDetect#phone}, {@link MobileDetect#tablet}.<br>
+         *        Additionally you have following keys:<br>
+         * <br><tt>Bot, MobileBot, DesktopMode, TV, WebKit, Console, Watch</tt><br>
+         *
+         * @returns {boolean} <tt>true</tt> when the given key is one of the defined keys of userAgent, os, phone,
+         *                    tablet or one of the listed additional keys, otherwise <tt>false</tt>
+         * @function MobileDetect#is
+         */
+        is: function (key) {
+            return containsIC(this.userAgents(), key) ||
+                   equalIC(key, this.os()) ||
+                   equalIC(key, this.phone()) ||
+                   equalIC(key, this.tablet()) ||
+                   containsIC(impl.findMatches(impl.mobileDetectRules.utils, this.ua), key);
+        },
+
+        /**
+         * Do a quick test against navigator::userAgent.
+         *
+         * @param {String|RegExp} pattern the pattern, either as String or RegExp
+         *                        (a string will be converted to a case-insensitive RegExp).
+         * @returns {boolean} <tt>true</tt> when the pattern matches, otherwise <tt>false</tt>
+         * @function MobileDetect#match
+         */
+        match: function (pattern) {
+            if (!(pattern instanceof RegExp)) {
+                pattern = new RegExp(pattern, 'i');
+            }
+            return pattern.test(this.ua);
+        },
+
+        /**
+         * Checks whether the mobile device can be considered as phone regarding <code>screen.width</code>.
+         * <br>
+         * Obviously this method makes sense in browser environments only (not for Node.js)!
+         * @param {number} [maxPhoneWidth] the maximum logical pixels (aka. CSS-pixels) to be considered as phone.<br>
+         *        The argument is optional and if not present or falsy, the value of the constructor is taken.
+         * @returns {boolean|undefined} <code>undefined</code> if screen size wasn't detectable, else <code>true</code>
+         *          when screen.width is less or equal to maxPhoneWidth, otherwise <code>false</code>.<br>
+         *          Will always return <code>undefined</code> server-side.
+         */
+        isPhoneSized: function (maxPhoneWidth) {
+            return MobileDetect.isPhoneSized(maxPhoneWidth || this.maxPhoneWidth);
+        },
+
+        /**
+         * Returns the mobile grade ('A', 'B', 'C').
+         *
+         * @returns {String} one of the mobile grades ('A', 'B', 'C').
+         * @function MobileDetect#mobileGrade
+         */
+        mobileGrade: function () {
+            if (this._cache.grade === undefined) {
+                this._cache.grade = impl.mobileGrade(this);
+            }
+            return this._cache.grade;
+        }
+    };
+
+    // environment-dependent
+    if (typeof window !== 'undefined' && window.screen) {
+        MobileDetect.isPhoneSized = function (maxPhoneWidth) {
+            return maxPhoneWidth < 0 ? undefined : impl.getDeviceSmallerSide() <= maxPhoneWidth;
+        };
+    } else {
+        MobileDetect.isPhoneSized = function () {};
+    }
+
+    // should not be replaced by a completely new object - just overwrite existing methods
+    MobileDetect._impl = impl;
+    
+    MobileDetect.version = '1.4.3 2018-09-08';
+
+    return MobileDetect;
+}); // end of call of define()
+})((function (undefined) {
+    if (typeof module !== 'undefined' && module.exports) {
+        return function (factory) { module.exports = factory(); };
+    } else if (typeof define === 'function' && define.amd) {
+        return define;
+    } else if (typeof window !== 'undefined') {
+        return function (factory) { window.MobileDetect = factory(); };
+    } else {
+        // please file a bug if you get this error!
+        throw new Error('unknown environment');
+    }
+})());
+},{}],11:[function(require,module,exports){
 (function (global){
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
@@ -31344,13 +38015,19 @@ return Popper;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],9:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var inject = require('./../../node_modules/cssify');
-var css = "*,\r\n*:after,\r\n*::before {\r\n\tmargin: 0;\r\n\tpadding: 0;\r\n\t-moz-box-sizing: border-box;\r\n\tbox-sizing: border-box;\r\n}\r\n\r\nhtml,\r\nbody,\r\n.popup,\r\n.pusher,\r\n.inner {\r\n\theight: 100%;\r\n\twidth: 100%;\r\n\toverflow: hidden;\r\n}\r\n\r\n.inner {\r\n\toverflow-x: hidden;\r\n\toverflow-y: scroll;\r\n\t-webkit-overflow-scrolling: touch;\r\n}\r\n\r\n.inner-content {\r\n\theight: 100%;\r\n}\r\n\r\nbody {\r\n\tbackground-color: #BF0222;\r\n\tcolor: #fff;\r\n\tfont-family: 'IBM Plex Sans', 'Work Sans', 'Karla', 'Lato', sans-serif;\r\n}\r\n\r\n.condensed {\r\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\r\n}\r\n\r\n.block-revealer__element {\r\n\tposition: absolute;\r\n\ttop: 0;\r\n\tleft: 0;\r\n\twidth: 100%;\r\n\theight: 100%;\r\n\tbackground: #000;\r\n\tpointer-events: none;\r\n\topacity: 0;\r\n}\r\n\r\n.splash {\r\n\twidth: 100%;\r\n\theight: 100%;\r\n}\r\n\r\n.container {\r\n\twidth: 100%;\r\n\theight: 100%;\r\n}\r\n\r\n.main-header {\r\n\tfont-size: 4.74rem;\r\n\tfont-weight: 700;\r\n\tfont-family: 'IBM Plex Sans', sans-serif;\r\n\ttext-transform: uppercase;\r\n\tposition: relative;\r\n\ttop: 50%;\r\n\tleft: 50%;\r\n\ttransform: translate(-50%, -50%);\r\n\ttext-align: center;\r\n}\r\n\r\n.main-header .thin {\r\n\tfont-weight: 200;\r\n}\r\n\r\nh2,\r\nh3,\r\nh4 {\r\n\ttext-transform: uppercase;\r\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\r\n\tfont-weight: 700;\r\n}\r\n\r\nh5,\r\nh6 {\r\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\r\n\tfont-style: italic;\r\n}\r\n\r\na {\r\n\tbackground: linear-gradient(to bottom, #BF0222 0%, #BF0222 100%);\r\n\tbackground-position: 0 100%;\r\n\tbackground-repeat: repeat-x;\r\n\tbackground-size: 3px 3px;\r\n\tfont-weight: 600;\r\n\tcolor: #000;\r\n\ttext-decoration: none;\r\n\t-webkit-transition: all 0.3s ease-in-out;\r\n\ttransition: all 0.3s ease-in-out;\r\n}\r\n\r\na:hover {\r\n\tcolor: #000;\r\n\tbackground-image: url(\"data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23bf0222' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E\");\r\n\tbackground-position: 0 100%;\r\n\tbackground-size: auto 6px;\r\n\tbackground-repeat: repeat-x;\r\n\ttext-decoration: none;\r\n}\r\n\r\na:visited {\r\n\tbackground: linear-gradient(to bottom, #4d0099 0%, #4d0099 100%);\r\n\tbackground-position: 0 100%;\r\n\tbackground-repeat: repeat-x;\r\n\tbackground-size: 3px 3px;\r\n\tfont-weight: 600;\r\n\tcolor: #000;\r\n\ttext-decoration: none;\r\n\ttransition: all ease-in-out 0.5s;\r\n}\r\n\r\na:visited:hover {\r\n\tcolor: #000;\r\n\tbackground-image: url(\"data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%234d0099' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E\");\r\n\tbackground-position: 0 100%;\r\n\tbackground-size: auto 6px;\r\n\tbackground-repeat: repeat-x;\r\n\ttext-decoration: none;\r\n}\r\n\r\n@media(min-width: 1350px) {\r\n\t.main-header {\r\n\t\tfont-size: 5rem;\r\n\t}\r\n}\r\n\r\n.no-select {\r\n\t-webkit-touch-callout: none;\r\n\t-webkit-user-select: none;\r\n\t-moz-user-select: none;\r\n\t-ms-user-select: none;\r\n\tuser-select: none;\r\n}\r\n\r\n.inner-nav {\r\n\tbackground: #BF0222;\r\n}\r\n\r\n.inner {\r\n\tbackground: #044BDA;\r\n}\r\n\r\n.inner-what-is-tsa {\r\n\tbackground: #07A9DF;\r\n}\r\n\r\n.inner-our-members {\r\n\tbackground: #E20069;\r\n}\r\n\r\n.inner-stem {\r\n\tbackground: #F5B800;\r\n}\r\n\r\n.inner-gallery {\r\n\tbackground: #000;\r\n}\r\n\r\n.inner-about {\r\n\tbackground: #fff;\r\n\tcolor: #000;\r\n}\r\n\r\n.pusher {\r\n\tposition: relative;\r\n\tleft: 0;\r\n\tz-index: 3;\r\n\theight: 100%;\r\n\twidth: 100%;\r\n\t-webkit-transition: -webkit-transform 0.5s;\r\n\ttransition: transform 0.5s;\r\n\t-webkit-box-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\r\n\t-moz-box-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\r\n\tbox-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\r\n}\r\n\r\n.pusher::after {\r\n\tposition: absolute;\r\n\ttop: 0;\r\n\tright: 0;\r\n\twidth: 0;\r\n\theight: 0;\r\n\tbackground: rgba(0, 0, 0, 0.2);\r\n\tcontent: '';\r\n\topacity: 0;\r\n\t-webkit-transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\r\n\ttransition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\r\n}\r\n\r\n.menu-open .pusher::after {\r\n\twidth: 100%;\r\n\theight: 100%;\r\n\topacity: 1;\r\n\t-webkit-transition: opacity 0.5s;\r\n\ttransition: opacity 0.5s;\r\n}\r\n\r\n.menu ul {\r\n\tlist-style-type: none;\r\n}\r\n\r\n.menu {\r\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\r\n\tfont-weight: 700;\r\n\tposition: absolute;\r\n\ttop: 0;\r\n\tleft: 0;\r\n\tz-index: 4;\r\n\tvisibility: hidden;\r\n\theight: 100%;\r\n\tbackground: #BF0222;\r\n\t-webkit-transition: all 0.5s;\r\n\ttransition: all 0.5s;\r\n}\r\n\r\n.menu::after {\r\n\tposition: absolute;\r\n\ttop: 0;\r\n\tright: 0;\r\n\twidth: 100%;\r\n\theight: 100%;\r\n\tbackground: rgba(0, 0, 0, 0.2);\r\n\tcontent: '';\r\n\topacity: 1;\r\n\t-webkit-transition: opacity 0.5s;\r\n\ttransition: opacity 0.5s;\r\n}\r\n\r\n.menu-open .menu::after {\r\n\twidth: 0;\r\n\theight: 0;\r\n\topacity: 0;\r\n\t-webkit-transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\r\n\ttransition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\r\n}\r\n\r\n.menu ul li a {\r\n\tdisplay: block;\r\n\tpadding: 1em 1em 1em 1.2em;\r\n\toutline: none;\r\n\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0.2);\r\n\tcolor: #f3efe0;\r\n\ttext-transform: uppercase;\r\n\ttext-decoration: none;\r\n\ttext-shadow: 0 0 1px rgba(255, 255, 255, 0.1);\r\n\tfont-weight: 700;\r\n\t-webkit-transition: all 0.3s;\r\n\ttransition: all 0.3s;\r\n}\r\n\r\n/* .menu ul li:first-child a {\r\n\tbox-shadow: inset 0 -1px rgba(0,0,0,0.2), inset 0 1px rgba(0,0,0,0.2);\r\n} */\r\n\r\n.menu ul li a:hover {\r\n\tbackground: rgba(0, 0, 0, 0.2);\r\n\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0);\r\n\tcolor: #fff;\r\n}\r\n\r\n.scale-rotate.popup {\r\n\t-webkit-perspective: 1500px;\r\n\tperspective: 1500px;\r\n}\r\n\r\n.scale-rotate.menu {\r\n\topacity: 1;\r\n\t-webkit-transform: translate3d(-100%, 0, 0);\r\n\ttransform: translate3d(-100%, 0, 0);\r\n}\r\n\r\n.scale-rotate.menu-open .scale-rotate.menu {\r\n\tvisibility: visible;\r\n\t-webkit-transition: -webkit-transform 0.5s;\r\n\ttransition: transform 0.5s;\r\n\t-webkit-transform: translate3d(0, 0, 0);\r\n\ttransform: translate3d(0, 0, 0);\r\n}\r\n\r\n.scale-rotate.menu::after {\r\n\tdisplay: none;\r\n}\r\n\r\n@media (max-width: 630px) {\r\n\t.menu {\r\n\t\twidth: 300px;\r\n\t\tpadding-top: 95px;\r\n\t}\r\n\r\n\t.col-12 ul {\r\n\t\tcolumns: 2;\r\n\t\t-webkit-columns: 2;\r\n\t\t-moz-columns: 2;\r\n\t}\r\n\r\n}\r\n\r\n@media (min-width: 630px) {\r\n\t.main-header {\r\n\t\twhite-space: nowrap;\r\n\t}\r\n\r\n\t.scale-rotate .pusher {\r\n\t\t-webkit-transform-style: preserve-3d;\r\n\t\ttransform-style: preserve-3d;\r\n\t}\r\n\r\n\t.scale-rotate.menu-open .pusher {\r\n\t\t-webkit-transform: translate3d(250px, 0, -500px) rotateY(-50deg);\r\n\t\ttransform: translate3d(250px, 0, -500px) rotateY(-50deg);\r\n\t}\r\n\r\n\t.menu {\r\n\t\tfont-size: 2rem;\r\n\t\tpadding-left: 9%;\r\n\t\ttransform: translate(-50%, -50%);\r\n\t\tmin-height: 100%;\r\n\t\t/* Fallback for browsers do NOT support vh unit */\r\n\t\tmin-height: 100vh;\r\n\t\t/* These two lines are counted as one :-)       */\r\n\t\tdisplay: flex;\r\n\t\talign-items: center;\r\n\t}\r\n\r\n\t.menu ul li a {\r\n\t\tbox-shadow: none;\r\n\t\tpadding: 0.25em 0.25em 0.25em 0.36em;\r\n\t}\r\n\r\n\t.menu ul:hover li:hover a:hover {\r\n\t\tbox-shadow: none;\r\n\t\t-moz-text-fill-color: transparent;\r\n\t\t-webkit-text-fill-color: transparent;\r\n\t\t-moz-text-stroke-color: #fff;\r\n\t\t-webkit-text-stroke-color: #fff;\r\n\t\t-moz-text-stroke-width: 1px;\r\n\t\t-webkit-text-stroke-width: 1px;\r\n\t}\r\n\r\n\t.menu ul li a:hover {\r\n\t\tbackground: rgba(0, 0, 0, 0);\r\n\t\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0);\r\n\t\tcolor: #fff;\r\n\t}\r\n\r\n\t.col-12 ul {\r\n\t\tcolumns: 3;\r\n\t\t-webkit-columns: 3;\r\n\t\t-moz-columns: 3;\r\n\t}\r\n}\r\n\r\n/* Fallback example for browsers that don't support 3D transforms (and no JS fallback) */\r\n.no-csstransforms3d .pusher,\r\n.no-js .pusher {\r\n\tpadding-left: 300px;\r\n}\r\n\r\n#nav-icon {\r\n\twidth: 60px;\r\n\theight: 45px;\r\n\tposition: absolute;\r\n\tmargin: 25px;\r\n\tz-index: 5;\r\n\t-webkit-transition: .5s ease-in-out;\r\n\t-moz-transition: .5s ease-in-out;\r\n\t-o-transition: .5s ease-in-out;\r\n\ttransition: .5s ease-in-out;\r\n\tcursor: pointer;\r\n}\r\n\r\n#nav-icon span {\r\n\tdisplay: block;\r\n\tposition: absolute;\r\n\theight: 5px;\r\n\twidth: 100%;\r\n\tbackground: #fff;\r\n\topacity: 1;\r\n\tleft: 0;\r\n\t-webkit-transition: .25s ease-in-out;\r\n\t-moz-transition: .25s ease-in-out;\r\n\t-o-transition: .25s ease-in-out;\r\n\ttransition: .25s ease-in-out;\r\n}\r\n\r\n#nav-icon.nav-icon-about span {\r\n\tbackground: #000;\r\n}\r\n\r\n#nav-icon span:nth-child(1) {\r\n\ttop: 0px;\r\n}\r\n\r\n#nav-icon span:nth-child(2) {\r\n\ttop: 15px;\r\n}\r\n\r\n#nav-icon span:nth-child(3) {\r\n\ttop: 30px;\r\n}\r\n\r\n#nav-icon.open span:nth-child(1) {\r\n\ttop: 18px;\r\n\t-webkit-transform: rotate(135deg);\r\n\t-moz-transform: rotate(135deg);\r\n\t-o-transform: rotate(135deg);\r\n\ttransform: rotate(135deg);\r\n}\r\n\r\n#nav-icon.open span:nth-child(2) {\r\n\topacity: 0;\r\n\tleft: -60px;\r\n}\r\n\r\n#nav-icon.open span:nth-child(3) {\r\n\ttop: 18px;\r\n\t-webkit-transform: rotate(-135deg);\r\n\t-moz-transform: rotate(-135deg);\r\n\t-o-transform: rotate(-135deg);\r\n\ttransform: rotate(-135deg);\r\n}\r\n\r\n.color-block {\r\n\twidth: 100%;\r\n\theight: 2rem;\r\n}\r\n\r\nblockquote {\r\n\tdisplay: block;\r\n\tmargin: 0 auto;\r\n\tfont-size: 2rem;\r\n\tfont-weight: 400;\r\n\tfont-style: oblique;\r\n}";
-inject(css, undefined, '_1j2xkd3');
+var css = "html,\nhtml *,\nbody,\nbody * {\n  cursor: none;\n}\n\n.cursor-dot,\n.cursor-dot-outline {\n  z-index: 2147483647;\n  pointer-events: none;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  border-radius: 50%;\n  opacity: 0;\n  -webkit-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n  transition: opacity 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;\n  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;\n  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;\n}\n\n.cursor-dot {\n  width: 8px;\n  height: 8px;\n  background-color: #dc5656;\n}\n\n.cursor-dot-outline {\n  width: 60px;\n  height: 60px;\n  background-color: rgba(229, 128, 128, 0.5);\n}";
+inject(css, undefined, '_7adszz');
 module.exports = css;
 
-},{"./../../node_modules/cssify":5}],10:[function(require,module,exports){
+},{"./../../node_modules/cssify":7}],13:[function(require,module,exports){
+var inject = require('./../../node_modules/cssify');
+var css = "*,\n*:after,\n*::before {\n\tmargin: 0;\n\tpadding: 0;\n\t-moz-box-sizing: border-box;\n\tbox-sizing: border-box;\n}\n\nhtml,\nbody,\n.popup,\n.pusher,\n.inner {\n\theight: 100%;\n\twidth: 100%;\n\toverflow: hidden;\n}\n\n.inner {\n\toverflow-x: hidden;\n\toverflow-y: scroll;\n\t-webkit-overflow-scrolling: touch;\n}\n\n.inner-content {\n\theight: 100%;\n}\n\nbody {\n\tbackground-color: #BF0222;\n\tcolor: #fff;\n\tfont-family: 'IBM Plex Sans', 'Work Sans', 'Karla', 'Lato', sans-serif;\n}\n\n.condensed {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n}\n\n.block-revealer__element {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbackground: #000;\n\tpointer-events: none;\n\topacity: 0;\n}\n\n.splash {\n\twidth: 100%;\n\theight: 100%;\n}\n\n.container {\n\twidth: 100%;\n\theight: 100%;\n}\n\n.main-header {\n\tfont-size: 4.74rem;\n\tfont-weight: 700;\n\tfont-family: 'IBM Plex Sans', sans-serif;\n\ttext-transform: uppercase;\n\tposition: relative;\n\ttop: 50%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n\ttext-align: center;\n}\n\n.main-header .thin {\n\tfont-weight: 200;\n}\n\nh2,\nh3,\nh4 {\n\ttext-transform: uppercase;\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-weight: 700;\n}\n\nh5,\nh6 {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-style: italic;\n}\n\na.dark-link {\n\tbackground: linear-gradient(to bottom, #BF0222 0%, #BF0222 100%);\n\tbackground-position: 0 100%;\n\tbackground-repeat: repeat-x;\n\tbackground-size: 3px 3px;\n\tfont-weight: 600;\n\tcolor: #000;\n\ttext-decoration: none;\n\t-webkit-transition: all 0.3s ease-in-out;\n\ttransition: all 0.3s ease-in-out;\n}\n\na:hover.dark-link {\n\tcolor: #000;\n\tbackground-image: url(\"data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23bf0222' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E\");\n\tbackground-position: 0 100%;\n\tbackground-size: auto 6px;\n\tbackground-repeat: repeat-x;\n\ttext-decoration: none;\n}\n\na:visited.dark-link {\n\tbackground: linear-gradient(to bottom, #4d0099 0%, #4d0099 100%);\n\tbackground-position: 0 100%;\n\tbackground-repeat: repeat-x;\n\tbackground-size: 3px 3px;\n\tfont-weight: 600;\n\tcolor: #000;\n\ttext-decoration: none;\n\ttransition: all ease-in-out 0.5s;\n}\n\na:visited:hover.dark-link {\n\tcolor: #000;\n\tbackground-image: url(\"data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%234d0099' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E\");\n\tbackground-position: 0 100%;\n\tbackground-size: auto 6px;\n\tbackground-repeat: repeat-x;\n\ttext-decoration: none;\n}\n\n@media(min-width: 1350px) {\n\t.main-header {\n\t\tfont-size: 5rem;\n\t}\n}\n\n.no-select {\n\t-webkit-touch-callout: none;\n\t-webkit-user-select: none;\n\t-moz-user-select: none;\n\t-ms-user-select: none;\n\tuser-select: none;\n}\n\n.overlay {\n\tdisplay: block;\n\topacity: 0.5;\n}\n\n.inner-nav {\n\tbackground: #BF0222;\n}\n\n.inner {\n\tbackground: #044BDA;\n}\n\n.inner-what-is-tsa {\n\tbackground: #07A9DF;\n}\n\n.inner-our-members {\n\tbackground: #E20069;\n}\n\n.inner-stem {\n\tbackground: #F5B800;\n}\n\n.inner-gallery {\n\tbackground: #000;\n}\n\n.inner-about {\n\tbackground: #fff;\n\tcolor: #000;\n}\n\n.pusher {\n\tposition: relative;\n\tleft: 0;\n\tz-index: 3;\n\theight: 100%;\n\twidth: 100%;\n\t-webkit-transition: -webkit-transform 0.5s;\n\ttransition: transform 0.5s;\n\t-webkit-box-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n\t-moz-box-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n\tbox-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n}\n\n.pusher::after {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n\twidth: 0;\n\theight: 0;\n\tbackground: rgba(0, 0, 0, 0.2);\n\tcontent: '';\n\topacity: 0;\n\t-webkit-transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n\ttransition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n}\n\n.menu-open .pusher::after {\n\twidth: 100%;\n\theight: 100%;\n\topacity: 1;\n\t-webkit-transition: opacity 0.5s;\n\ttransition: opacity 0.5s;\n}\n\n.menu ul {\n\tlist-style-type: none;\n}\n\n.menu {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-weight: 700;\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tz-index: 4;\n\tvisibility: hidden;\n\theight: 100%;\n\tbackground: #BF0222;\n\t-webkit-transition: all 0.5s;\n\ttransition: all 0.5s;\n}\n\n.menu::after {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbackground: rgba(0, 0, 0, 0.2);\n\tcontent: '';\n\topacity: 1;\n\t-webkit-transition: opacity 0.5s;\n\ttransition: opacity 0.5s;\n}\n\n.menu-open .menu::after {\n\twidth: 0;\n\theight: 0;\n\topacity: 0;\n\t-webkit-transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n\ttransition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n}\n\n.menu ul li a {\n\tdisplay: block;\n\tpadding: 1em 1em 1em 1.2em;\n\toutline: none;\n\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0.2);\n\tcolor: #f3efe0;\n\ttext-transform: uppercase;\n\ttext-decoration: none;\n\ttext-shadow: 0 0 1px rgba(255, 255, 255, 0.1);\n\tfont-weight: 700;\n\t-webkit-transition: all 0.3s;\n\ttransition: all 0.3s;\n}\n\n/* .menu ul li:first-child a {\n\tbox-shadow: inset 0 -1px rgba(0,0,0,0.2), inset 0 1px rgba(0,0,0,0.2);\n} */\n\n.menu ul li a:hover {\n\tbackground: rgba(0, 0, 0, 0.2);\n\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0);\n\tcolor: #fff;\n}\n\n.scale-rotate.popup {\n\t-webkit-perspective: 1500px;\n\tperspective: 1500px;\n}\n\n.scale-rotate.menu {\n\topacity: 1;\n\t-webkit-transform: translate3d(-100%, 0, 0);\n\ttransform: translate3d(-100%, 0, 0);\n}\n\n.scale-rotate.menu-open .scale-rotate.menu {\n\tvisibility: visible;\n\t-webkit-transition: -webkit-transform 0.5s;\n\ttransition: transform 0.5s;\n\t-webkit-transform: translate3d(0, 0, 0);\n\ttransform: translate3d(0, 0, 0);\n}\n\n.scale-rotate.menu::after {\n\tdisplay: none;\n}\n\n@media (max-width: 630px) {\n\t.menu {\n\t\twidth: 300px;\n\t\tpadding-top: 95px;\n\t}\n\n\t.col-12 ul {\n\t\tcolumns: 2;\n\t\t-webkit-columns: 2;\n\t\t-moz-columns: 2;\n\t}\n\n\t.main-header {\n\t\tfont-size: 4.5rem;\n\t}\n}\n\n@media (min-width: 630px) {\n\t.main-header {\n\t\twhite-space: nowrap;\n\t}\n\n\t.scale-rotate .pusher {\n\t\t-webkit-transform-style: preserve-3d;\n\t\ttransform-style: preserve-3d;\n\t}\n\n\t.scale-rotate.menu-open .pusher {\n\t\t-webkit-transform: translate3d(250px, 0, -500px) rotateY(-50deg);\n\t\ttransform: translate3d(250px, 0, -500px) rotateY(-50deg);\n\t}\n\n\t.menu {\n\t\tfont-size: 2rem;\n\t\tpadding-left: 9%;\n\t\ttransform: translate(-50%, -50%);\n\t\tmin-height: 100%;\n\t\t/* Fallback for browsers do NOT support vh unit */\n\t\tmin-height: 100vh;\n\t\t/* These two lines are counted as one :-)       */\n\t\tdisplay: flex;\n\t\talign-items: center;\n\t}\n\n\t.menu ul li a {\n\t\tbox-shadow: none;\n\t\tpadding: 0.25em 0.25em 0.25em 0.36em;\n\t}\n\n\t.menu ul:hover li:hover a:hover {\n\t\tbox-shadow: none;\n\t\t-moz-text-fill-color: transparent;\n\t\t-webkit-text-fill-color: transparent;\n\t\t-moz-text-stroke-color: #fff;\n\t\t-webkit-text-stroke-color: #fff;\n\t\t-moz-text-stroke-width: 1px;\n\t\t-webkit-text-stroke-width: 1px;\n\t}\n\n\t.menu ul li a:hover {\n\t\tbackground: rgba(0, 0, 0, 0);\n\t\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0);\n\t\tcolor: #fff;\n\t}\n\n\t.col-12 ul {\n\t\tcolumns: 3;\n\t\t-webkit-columns: 3;\n\t\t-moz-columns: 3;\n\t}\n}\n\n/* Fallback example for browsers that don't support 3D transforms (and no JS fallback) */\n.no-csstransforms3d .pusher,\n.no-js .pusher {\n\tpadding-left: 300px;\n}\n\n#nav-icon {\n\twidth: 60px;\n\theight: 45px;\n\tposition: absolute;\n\tmargin: 25px;\n\tz-index: 5;\n\t-webkit-transition: .5s ease-in-out;\n\t-moz-transition: .5s ease-in-out;\n\t-o-transition: .5s ease-in-out;\n\ttransition: .5s ease-in-out;\n}\n\n#nav-icon span {\n\tdisplay: block;\n\tposition: absolute;\n\theight: 5px;\n\twidth: 100%;\n\tbackground: #fff;\n\topacity: 1;\n\tleft: 0;\n\t-webkit-transition: .25s ease-in-out;\n\t-moz-transition: .25s ease-in-out;\n\t-o-transition: .25s ease-in-out;\n\ttransition: .25s ease-in-out;\n}\n\n#nav-icon.nav-icon-about span {\n\tbackground: #000;\n}\n\n#nav-icon span:nth-child(1) {\n\ttop: 0px;\n}\n\n#nav-icon span:nth-child(2) {\n\ttop: 15px;\n}\n\n#nav-icon span:nth-child(3) {\n\ttop: 30px;\n}\n\n#nav-icon.open span:nth-child(1) {\n\ttop: 18px;\n\t-webkit-transform: rotate(135deg);\n\t-moz-transform: rotate(135deg);\n\t-o-transform: rotate(135deg);\n\ttransform: rotate(135deg);\n}\n\n#nav-icon.open span:nth-child(2) {\n\topacity: 0;\n\tleft: -60px;\n}\n\n#nav-icon.open span:nth-child(3) {\n\ttop: 18px;\n\t-webkit-transform: rotate(-135deg);\n\t-moz-transform: rotate(-135deg);\n\t-o-transform: rotate(-135deg);\n\ttransform: rotate(-135deg);\n}\n\n.color-block {\n\twidth: 100%;\n\theight: 2rem;\n\toverflow: hidden;\n}\n\nblockquote {\n\tdisplay: block;\n\tmargin: 0 auto;\n\tfont-size: 2rem;\n\tfont-weight: 400;\n\tfont-style: oblique;\n}\n\n@media (max-width: 360px)\n{\n\t.main-header{\n\t\tfont-size: 3.5rem;\n\t}\n}";
+inject(css, undefined, '_xhba26');
+module.exports = css;
+
+},{"./../../node_modules/cssify":7}],14:[function(require,module,exports){
 /**
  * main.js
  * http://www.codrops.com
@@ -31567,7 +38244,123 @@ module.exports = css;
 	window.RevealFx = RevealFx;
 
 })(window);
-},{}],11:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
+var $ = require('jquery');
+var MobileDetect = require('mobile-detect'),
+	md = new MobileDetect(window.navigator.userAgent);
+
+var cursor = {
+	delay: 8,
+	_x: 0,
+	_y: 0,
+	endX: (window.innerWidth / 2),
+	endY: (window.innerHeight / 2),
+	cursorVisible: true,
+	cursorEnlarged: false,
+	$dot: document.querySelector('.cursor-dot'),
+	$outline: document.querySelector('.cursor-dot-outline'),
+
+	init: function () {
+		// Set up element sizes
+		this.dotSize = this.$dot.offsetWidth;
+		this.outlineSize = this.$outline.offsetWidth;
+
+		this.setupEventListeners();
+		this.animateDotOutline();
+	},
+
+	setupEventListeners: function () {
+		var self = this;
+
+		// Anchor hovering
+		document.querySelectorAll('a').forEach(function (el) {
+			el.addEventListener('mouseover', function () {
+				self.cursorEnlarged = true;
+				self.toggleCursorSize();
+			});
+			el.addEventListener('mouseout', function () {
+				self.cursorEnlarged = false;
+				self.toggleCursorSize();
+			});
+		});
+
+		// Click events
+		document.addEventListener('mousedown', function () {
+			self.cursorEnlarged = true;
+			self.toggleCursorSize();
+		});
+		document.addEventListener('mouseup', function () {
+			self.cursorEnlarged = false;
+			self.toggleCursorSize();
+		});
+
+		document.addEventListener('mousemove', function (e) {
+			// Show the cursor
+			self.cursorVisible = true;
+			self.toggleCursorVisibility();
+
+			// Position the dot
+			self.endX = e.pageX;
+			self.endY = e.pageY;
+			self.$dot.style.top = self.endY + 'px';
+			self.$dot.style.left = self.endX + 'px';
+		});
+
+		// Hide/show cursor
+		document.addEventListener('mouseenter', function (e) {
+			self.cursorVisible = true;
+			self.toggleCursorVisibility();
+			self.$dot.style.opacity = 1;
+			self.$outline.style.opacity = 1;
+		});
+
+		document.addEventListener('mouseleave', function (e) {
+			self.cursorVisible = true;
+			self.toggleCursorVisibility();
+			self.$dot.style.opacity = 0;
+			self.$outline.style.opacity = 0;
+		});
+	},
+
+	animateDotOutline: function () {
+		var self = this;
+
+		self._x += (self.endX - self._x) / self.delay;
+		self._y += (self.endY - self._y) / self.delay;
+		self.$outline.style.top = self._y + 'px';
+		self.$outline.style.left = self._x + 'px';
+
+		requestAnimationFrame(this.animateDotOutline.bind(self));
+	},
+
+	toggleCursorSize: function () {
+		var self = this;
+
+		if (self.cursorEnlarged) {
+			self.$dot.style.transform = 'translate(-50%, -50%) scale(0.75)';
+			self.$outline.style.transform = 'translate(-50%, -50%) scale(1.5)';
+		} else {
+			self.$dot.style.transform = 'translate(-50%, -50%) scale(1)';
+			self.$outline.style.transform = 'translate(-50%, -50%) scale(1)';
+		}
+	},
+
+	toggleCursorVisibility: function () {
+		var self = this;
+
+		if (self.cursorVisible) {
+			self.$dot.style.opacity = 1;
+			self.$outline.style.opacity = 1;
+		} else {
+			self.$dot.style.opacity = 0;
+			self.$outline.style.opacity = 0;
+		}
+	}
+}
+
+if (!md.mobile() && !md.tablet())
+	cursor.init();
+},{"jquery":8,"mobile-detect":10}],16:[function(require,module,exports){
 /**
  * Navigation
  */
@@ -31587,4 +38380,10 @@ $('.menu-link').click(function () {
 	$('#nav-icon').toggleClass('open');
 })
 
-},{"jquery":6}]},{},[1]);
+$('.pusher').click(function(){    
+	if($('#popup').hasClass('menu-open')) {
+		$('#popup').toggleClass('menu-open');
+		$('#nav-icon').toggleClass('open');
+	}
+});
+},{"jquery":8}]},{},[1]);

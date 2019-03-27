@@ -19,11 +19,14 @@
   },
   "homepage": "https://github.com/eeshaan/Webmaster-2019#readme",
   "dependencies": {
+    "@fancyapps/fancybox": "^3.5.7",
     "animejs": "^3.0.1",
     "barba.js": "^1.0.0",
     "bootstrap": "^4.3.1",
+    "browserify-shim": "^3.8.14",
     "jquery": "^3.3.1",
     "mo-js": "^0.288.2",
+    "mobile-detect": "^1.4.3",
     "popper.js": "^1.14.7",
     "scrollmonitor": "^1.2.4"
   },
@@ -34,7 +37,12 @@
   },
   "browserify": {
     "transform": [
-      "cssify"
+      "cssify",
+      "browserify-shim"
     ]
+  },
+  "browserify-shim": {
+    "./js/vendor/jquery.js": "$",
+    "three": "global:THREE"
   }
 }
