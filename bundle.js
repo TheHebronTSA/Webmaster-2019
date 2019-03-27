@@ -37373,4 +37373,10 @@ $('.menu-link').click(function () {
 	$('#nav-icon').toggleClass('open');
 })
 
+$('.pusher').click(function(){    
+	if($('#popup').hasClass('menu-open')) {
+		$('#popup').toggleClass('menu-open');
+		$('#nav-icon').toggleClass('open');
+	}
+});
 },{"jquery":8}]},{},[1]);
