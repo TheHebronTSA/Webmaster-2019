@@ -25,6 +25,7 @@
     "bootstrap": "^4.3.1",
     "browserify-shim": "^3.8.14",
     "jquery": "^3.3.1",
+    "masonry-layout": "^4.2.2",
     "mo-js": "^0.288.2",
     "mobile-detect": "^1.4.3",
     "popper.js": "^1.14.7",
