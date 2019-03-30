@@ -3,7 +3,8 @@ var bootstrap_style = require('./node_modules/bootstrap/dist/css/bootstrap.min.c
 var fancybox_style = require('./node_modules/@fancyapps/fancybox/dist/jquery.fancybox.css');
 var bootstrap = require('bootstrap');
 var css = require('./resources/css/main.css');
-var cursorcss = require('./resources/css/cursor.css');
+var cursor_css = require('./resources/css/cursor.css');
+var gallery_css = require('./resources/css/gallery.css');
 
 // var animation = require('./resources/js/animation.js');
 $(document).ready(function () {
@@ -13,6 +14,7 @@ $(document).ready(function () {
   var blockReveal = require('./resources/js/blockReveal');
   var fancybox = require('@fancyapps/fancybox');
   var cursorjs = require('./resources/js/cursor');
+  var Masonry = require('masonry-layout');
 
   $('[data-fancybox="images"]').fancybox({
     animationEffect: "zoom-in-out",
@@ -23,6 +25,13 @@ $(document).ready(function () {
         locked: false
       }
     }
+  });
+
+  var gallery_container = document.querySelector('.grid');
+  var msnry = new Masonry(gallery_container, {
+    itemSelector: '.grid-item',
+    percentPosition: true,
+    columnWidth: 20
   });
 
   /** DEFINE MOJS BURSTS */
@@ -176,10 +185,10 @@ $(document).ready(function () {
 
   var Aboutpage = Barba.BaseView.extend({
     namespace: 'about',
-    onEnter: function() {
+    onEnter: function () {
       $('#nav-icon').addClass('nav-icon-about');
     },
-    onLeave: function() {
+    onLeave: function () {
       $('#nav-icon').removeClass('nav-icon-about');
     }
   });
