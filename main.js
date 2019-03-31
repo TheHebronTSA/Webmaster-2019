@@ -14,6 +14,15 @@ $(document).ready(function () {
   var fancybox = require('@fancyapps/fancybox');
   var cursorjs = require('./resources/js/cursor');
 
+  /** THREE JS SPLASH */
+  var splash = document.getElementsByClassName("splash")[0];
+  var canvas = document.getElementsByTagName("canvas")[0];
+
+  splash.insertBefore(canvas, splash.firstChild);
+
+  console.log("hii");
+  /** END THREE JS SPLASH */
+
   $('[data-fancybox="images"]').fancybox({
     animationEffect: "zoom-in-out",
     parentEl: '.gallery-container',
