@@ -19,6 +19,7 @@ body,
 
 .splash canvas {
 	position: relative !important;
+	z-index: 5 !important;
 }
 
 .inner {
@@ -162,7 +163,6 @@ a:visited:hover.dark-link {
 
 .inner-what-is-tsa {
 	background: #07A9DF;
-	background: transparent;
 }
 
 .inner-our-members {
