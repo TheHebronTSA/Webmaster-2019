@@ -1,3 +1,4 @@
+
 ! function (t) {
   function e(e) {
     for (var o, a, u = e[0], c = e[1], f = e[2], p = 0, s = []; p < u.length; p++) a = u[p], r[a] && s.push(r[a][0]), r[a] = 0;
@@ -163,7 +164,7 @@
       opacity: 1
     });
     P.position.x = -P.basePosition * (y.a.isMobile ? .5 : .5), P.position.y = y.a.isMobile ? 0 : 0, P.position.z = 2, P.rotation.x = -.1;
-    var _ = ["#dc202e", "#f7ed99", "#2d338b", "#76306b", "#ea8c2d"].map(function (t) {
+    var _ = ["#bf0222", "#044bda", "#e20069", "#f5b800"].map(function (t) {
         return new i.Color(t)
       }),
       x = {
@@ -179,7 +180,7 @@
         return m(e, c["a"]), n = e, (o = [{
           key: "addLine",
           value: function () {
-            if (!(this.lines.length > 400)) {
+            if (!(this.lines.length > 200)) {
               for (var t = -1, n = Math.random() > .8 ? .1 : .3, o = Object(f.a)(0, 2 * Math.PI), r = []; t < g.camera.position.z;) x.x = Math.cos(o) * n, x.y = Math.sin(o) * n, x.z = t, t += .08, o += .025, n += .02, r.push(x.x, x.y, x.z);
               d(w(e.prototype), "addLine", this).call(this, {
                 visibleLength: Object(f.a)(.1, .4),
