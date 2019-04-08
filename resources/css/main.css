@@ -17,6 +17,11 @@ body,
 	overflow: hidden;
 }
 
+.splash canvas {
+	position: relative !important;
+	z-index: 5 !important;
+}
+
 .inner {
 	overflow-x: hidden;
 	overflow-y: scroll;
