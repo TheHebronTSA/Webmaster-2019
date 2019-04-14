@@ -148,11 +148,6 @@ a:visited:hover.dark-link {
 	user-select: none;
 }
 
-.overlay {
-	display: block;
-	opacity: 0.5;
-}
-
 .inner-nav {
 	background: #BF0222;
 }
@@ -463,3 +458,13 @@ blockquote {
 		font-size: 3.5rem;
 	}
 }
+
+.img1 {
+	opacity: 0.55;
+	width: 100%;
+}
+
+.inner-home {
+	background: #044BDA;
+}
+

@@ -25,7 +25,7 @@ $(document).ready(function () {
 
   $('[data-fancybox="images"]').fancybox({
     animationEffect: "zoom-in-out",
-    parentEl: '.gallery-container',
+    parentEl: 'body',
     padding: 0,
     helpers: {
       overlay: {
