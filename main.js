@@ -183,17 +183,29 @@ $(document).ready(function () {
   Barba.Pjax.start();
   Barba.Prefetch.init();
 
-  var Aboutpage = Barba.BaseView.extend({
+  var AboutPage = Barba.BaseView.extend({
     namespace: 'about',
     onEnter: function() {
-      $('#nav-icon').addClass('nav-icon-about');
+      $('#nav-icon').addClass('nav-icon-dark');
     },
     onLeave: function() {
-      $('#nav-icon').removeClass('nav-icon-about');
+      $('#nav-icon').removeClass('nav-icon-dark');
     }
   });
 
-  Aboutpage.init();
+  AboutPage.init();
+
+  var STEMPage = Barba.BaseView.extend({
+    namespace: 'STEM',
+    onEnter: function() {
+      $('#nav-icon').addClass('nav-icon-dark');
+    },
+    onLeave: function() {
+      $('#nav-icon').removeClass('nav-icon-dark');
+    }
+  });
+
+  STEMPage.init();
 });
 
 //alert('Welcome to Hebron TSA');
