@@ -185,7 +185,7 @@ $(document).ready(function () {
   Barba.Pjax.start();
   Barba.Prefetch.init();
 
-  var Aboutpage = Barba.BaseView.extend({
+  var AboutPage = Barba.BaseView.extend({
     namespace: 'about',
     onEnter: function() {
       $('#nav-icon').addClass('nav-icon-about');
@@ -195,7 +195,24 @@ $(document).ready(function () {
     }
   });
 
-  Aboutpage.init();
+  AboutPage.init();
+
+  var GalleryPage = Barba.BaseView.extend({
+    namespace: 'gallery',
+    onEnter: function() {
+      alert('Welcome to Gallery.');
+      // $.getScript('./resources/js/vendor.js');
+      $.getScript('./resources/js/stars.js');
+      // var splash = document.getElementsByClassName("splash")[0];
+      // var canvas = document.getElementsByTagName("canvas")[0];
+      // splash.insertBefore(canvas, splash.firstChild);
+    },
+    // onLeave: function() {
+
+    // }
+  });
+
+  GalleryPage.init();
 });
 
 //alert('Welcome to Hebron TSA');
