@@ -93,6 +93,47 @@ h6 {
 	font-style: italic;
 }
 
+a.light-link {
+	background: linear-gradient(to bottom, #BF0222 0%, #BF0222 100%);
+	background-position: 0 100%;
+	background-repeat: repeat-x;
+	background-size: 3px 3px;
+	font-weight: 600;
+	color: #fff;
+	text-decoration: none;
+	-webkit-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+}
+
+a:hover.light-link {
+	color: #fff;
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23bf0222' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E");
+	background-position: 0 100%;
+	background-size: auto 6px;
+	background-repeat: repeat-x;
+	text-decoration: none;
+}
+
+a:visited.light-link {
+	background: linear-gradient(to bottom, #4d0099 0%, #4d0099 100%);
+	background-position: 0 100%;
+	background-repeat: repeat-x;
+	background-size: 3px 3px;
+	font-weight: 600;
+	color: #fff;
+	text-decoration: none;
+	transition: all ease-in-out 0.5s;
+}
+
+a:visited:hover.light-link {
+	color: #fff;
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%234d0099' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E");
+	background-position: 0 100%;
+	background-size: auto 6px;
+	background-repeat: repeat-x;
+	text-decoration: none;
+}
+
 a.dark-link {
 	background: linear-gradient(to bottom, #BF0222 0%, #BF0222 100%);
 	background-position: 0 100%;
@@ -319,6 +360,12 @@ a:visited:hover.dark-link {
 	}
 }
 
+@media (max-width: 440px) {
+	.band-link-menu-open {
+		background: #000;
+	}
+}
+
 @media (min-width: 630px) {
 	.main-header {
 		white-space: nowrap;
@@ -441,6 +488,18 @@ a:visited:hover.dark-link {
 	-moz-transform: rotate(-135deg);
 	-o-transform: rotate(-135deg);
 	transform: rotate(-135deg);
+}
+
+.band-link {
+	position: absolute;
+	color: #fff;
+	top: 0;
+	right: 0;
+	margin: 25px;
+	padding: 5px;
+	z-index: 6;
+	text-transform: uppercase;
+	transition: all 0.3s ease-in-out;
 }
 
 .color-block {
