@@ -38390,13 +38390,7 @@ var $ = require('jquery');
 
 $('#nav-icon').click(function() {
 	$('#popup').toggleClass('menu-open');
-});
-
-$('#nav-icon').click(function () {
 	$(this).toggleClass('open');
-});
-
-$('#nav-icon').click(function () {
 	$('.band-link').toggleClass('band-link-menu-open');
 });
 
