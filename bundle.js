@@ -22,7 +22,7 @@ $(document).ready(function () {
 
   splash.insertBefore(canvas, splash.firstChild);
 
-  console.log("hii");
+  // console.log("hii");
   /** END THREE JS SPLASH */
 
   $('[data-fancybox="images"]').fancybox({
