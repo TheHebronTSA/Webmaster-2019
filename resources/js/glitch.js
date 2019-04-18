@@ -29,11 +29,7 @@ function setup() {
 
     createCanvas(windowWidth, windowHeight);
 
-    toggleBtn = createButton("Play / Pause");
-
-    uploadBtn = createFileInput(uploaded);
-
-    uploadBtn.addClass("upload-btn");
+    toggleBtn = createDiv("Mute/Unmute");
 
     toggleBtn.addClass("toggle-btn");
     

@@ -28,6 +28,7 @@
 body {
 	background: #0F0639;
 	color: #fff;
+	font-family: "glitch", sans-serif;
 }
 
 .splash {
@@ -111,4 +112,14 @@ a:visited:hover.light-link {
 	background-size: auto 6px;
 	background-repeat: repeat-x;
 	text-decoration: none;
+}
+
+.toggle-btn {
+	text-transform: uppercase;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	margin: 25px;
+	padding: 5px;
+	cursor: pointer;
 }
