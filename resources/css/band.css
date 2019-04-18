@@ -1,6 +1,19 @@
 @font-face {
-	font-family: "myfont";
+	font-family: "glitch";
 	src: url("/resources/fonts/BwModelicaSS02-Regular.woff") format('woff');
+	src: url("/resources/fonts/BwModelicaSS02-Regular.woff2") format('woff2');
+}
+
+@font-face {
+	font-family: "glitch-italic";
+	src: url("/resources/fonts/BwModelicaSS02-RegularItalic.woff") format('woff');
+	src: url("/resources/fonts/BwModelicaSS02-RegularItalic.woff2") format('woff2');
+}
+
+@font-face {
+	font-family: "glitch-bold";
+	src: url("/resources/fonts/BwModelicaSS02-ExtraBold.woff") format('woff');
+	src: url("/resources/fonts/BwModelicaSS02-ExtraBold.woff2") format('woff2');
 }
 
 *,
