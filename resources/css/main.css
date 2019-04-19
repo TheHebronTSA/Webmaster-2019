@@ -552,3 +552,7 @@ img.box-shadow-left {
 	-moz-box-shadow: -10px 10px 0px 0px rgba(191, 2, 34, 1);
 	box-shadow: -10px 10px 0px 0px rgba(191, 2, 34, 1);
 }
+
+div.col-md-8 {
+	transform: translateY(12.5%);
+}
