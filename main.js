@@ -10,9 +10,19 @@ $(document).ready(function () {
   var mojs = require('mo-js');
   var Barba = require('barba.js');
   var navigation = require('./resources/js/navigation');
-  var blockReveal = require('./resources/js/blockReveal');
   var fancybox = require('@fancyapps/fancybox');
   var cursorjs = require('./resources/js/cursor');
+  var RevealFx = require('./resources/js/blockReveal');
+
+  var rev_1 = new RevealFx($('#rev-1'), {
+    revealSettings : {
+      bgcolor: '#7f40f1',
+      onCover: function(contentEl, revealerEl) {
+        contentEl.style.opacity = 1;
+      }
+    }
+  });
+  rev_1.reveal();
 
   /** THREE JS SPLASH */
   var splash = document.getElementsByClassName("splash")[0];
