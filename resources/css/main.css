@@ -38,6 +38,10 @@ body {
 	font-family: 'IBM Plex Sans', 'Work Sans', 'Karla', 'Lato', sans-serif;
 }
 
+::selection {
+	background: #BF0222;
+}
+
 .condensed {
 	font-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;
 }
@@ -535,10 +539,16 @@ img {
 	padding: 0;
 }
 
-img.box-shadow {
-	perspective: 1500px;
+img.box-shadow-right {
 	padding: 0;
 	-webkit-box-shadow: 10px 10px 0px 0px rgba(191, 2, 34, 1);
 	-moz-box-shadow: 10px 10px 0px 0px rgba(191, 2, 34, 1);
 	box-shadow: 10px 10px 0px 0px rgba(191, 2, 34, 1);
+}
+
+img.box-shadow-left {
+	padding: 0;
+	-webkit-box-shadow: -10px 10px 0px 0px rgba(191, 2, 34, 1);
+	-moz-box-shadow: -10px 10px 0px 0px rgba(191, 2, 34, 1);
+	box-shadow: -10px 10px 0px 0px rgba(191, 2, 34, 1);
 }
