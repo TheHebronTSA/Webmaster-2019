@@ -14,17 +14,17 @@ $(document).ready(function () {
   var navigation = require('./resources/js/navigation');
   var fancybox = require('@fancyapps/fancybox');
   var cursorjs = require('./resources/js/cursor');
-  var RevealFx = require('./resources/js/blockReveal');
+  // var RevealFx = require('./resources/js/blockReveal');
 
-  var rev_1 = new RevealFx($('#rev-1'), {
-    revealSettings : {
-      bgcolor: '#7f40f1',
-      onCover: function(contentEl, revealerEl) {
-        contentEl.style.opacity = 1;
-      }
-    }
-  });
-  rev_1.reveal();
+  // var rev_1 = new RevealFx($('#rev-1'), {
+  //   revealSettings : {
+  //     bgcolor: '#7f40f1',
+  //     onCover: function(contentEl, revealerEl) {
+  //       contentEl.style.opacity = 1;
+  //     }
+  //   }
+  // });
+  // rev_1.reveal();
 
   /** THREE JS SPLASH */
   var splash = document.getElementsByClassName("splash")[0];
@@ -226,7 +226,7 @@ $(document).ready(function () {
 
 //alert('Welcome to Hebron TSA');
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./node_modules/@fancyapps/fancybox/dist/jquery.fancybox.css":2,"./node_modules/bootstrap/dist/css/bootstrap.min.css":5,"./resources/css/cursor.css":12,"./resources/css/main.css":13,"./resources/js/blockReveal":14,"./resources/js/cursor":15,"./resources/js/navigation":16,"@fancyapps/fancybox":3,"barba.js":4,"bootstrap":6,"jquery":8,"mo-js":9}],2:[function(require,module,exports){
+},{"./node_modules/@fancyapps/fancybox/dist/jquery.fancybox.css":2,"./node_modules/bootstrap/dist/css/bootstrap.min.css":5,"./resources/css/cursor.css":12,"./resources/css/main.css":13,"./resources/js/cursor":14,"./resources/js/navigation":15,"@fancyapps/fancybox":3,"barba.js":4,"bootstrap":6,"jquery":8,"mo-js":9}],2:[function(require,module,exports){
 var inject = require('./../../../cssify');
 var css = "body.compensate-for-scrollbar {\r\n    overflow: hidden;\r\n}\r\n\r\n.fancybox-active {\r\n    height: auto;\r\n}\r\n\r\n.fancybox-is-hidden {\r\n    left: -9999px;\r\n    margin: 0;\r\n    position: absolute !important;\r\n    top: -9999px;\r\n    visibility: hidden;\r\n}\r\n\r\n.fancybox-container {\r\n    -webkit-backface-visibility: hidden;\r\n    height: 100%;\r\n    left: 0;\r\n    outline: none;\r\n    position: fixed;\r\n    -webkit-tap-highlight-color: transparent;\r\n    top: 0;\r\n    -ms-touch-action: manipulation;\r\n    touch-action: manipulation;\r\n    transform: translateZ(0);\r\n    width: 100%;\r\n    z-index: 99992;\r\n}\r\n\r\n.fancybox-container * {\r\n    box-sizing: border-box;\r\n}\r\n\r\n.fancybox-outer,\r\n.fancybox-inner,\r\n.fancybox-bg,\r\n.fancybox-stage {\r\n    bottom: 0;\r\n    left: 0;\r\n    position: absolute;\r\n    right: 0;\r\n    top: 0;\r\n}\r\n\r\n.fancybox-outer {\r\n    -webkit-overflow-scrolling: touch;\r\n    overflow-y: auto;\r\n}\r\n\r\n.fancybox-bg {\r\n    background: rgb(30, 30, 30);\r\n    opacity: 0;\r\n    transition-duration: inherit;\r\n    transition-property: opacity;\r\n    transition-timing-function: cubic-bezier(.47, 0, .74, .71);\r\n}\r\n\r\n.fancybox-is-open .fancybox-bg {\r\n    opacity: .9;\r\n    transition-timing-function: cubic-bezier(.22, .61, .36, 1);\r\n}\r\n\r\n.fancybox-infobar,\r\n.fancybox-toolbar,\r\n.fancybox-caption,\r\n.fancybox-navigation .fancybox-button {\r\n    direction: ltr;\r\n    opacity: 0;\r\n    position: absolute;\r\n    transition: opacity .25s ease, visibility 0s ease .25s;\r\n    visibility: hidden;\r\n    z-index: 99997;\r\n}\r\n\r\n.fancybox-show-infobar .fancybox-infobar,\r\n.fancybox-show-toolbar .fancybox-toolbar,\r\n.fancybox-show-caption .fancybox-caption,\r\n.fancybox-show-nav .fancybox-navigation .fancybox-button {\r\n    opacity: 1;\r\n    transition: opacity .25s ease 0s, visibility 0s ease 0s;\r\n    visibility: visible;\r\n}\r\n\r\n.fancybox-infobar {\r\n    color: #ccc;\r\n    font-size: 13px;\r\n    -webkit-font-smoothing: subpixel-antialiased;\r\n    height: 44px;\r\n    left: 0;\r\n    line-height: 44px;\r\n    min-width: 44px;\r\n    mix-blend-mode: difference;\r\n    padding: 0 10px;\r\n    pointer-events: none;\r\n    top: 0;\r\n    -webkit-touch-callout: none;\r\n    -webkit-user-select: none;\r\n    -moz-user-select: none;\r\n    -ms-user-select: none;\r\n    user-select: none;\r\n}\r\n\r\n.fancybox-toolbar {\r\n    right: 0;\r\n    top: 0;\r\n}\r\n\r\n.fancybox-stage {\r\n    direction: ltr;\r\n    overflow: visible;\r\n    transform: translateZ(0);\r\n    z-index: 99994;\r\n}\r\n\r\n.fancybox-is-open .fancybox-stage {\r\n    overflow: hidden;\r\n}\r\n\r\n.fancybox-slide {\r\n    -webkit-backface-visibility: hidden;\r\n    /* Using without prefix would break IE11 */\r\n    display: none;\r\n    height: 100%;\r\n    left: 0;\r\n    outline: none;\r\n    overflow: auto;\r\n    -webkit-overflow-scrolling: touch;\r\n    padding: 44px;\r\n    position: absolute;\r\n    text-align: center;\r\n    top: 0;\r\n    transition-property: transform, opacity;\r\n    white-space: normal;\r\n    width: 100%;\r\n    z-index: 99994;\r\n}\r\n\r\n.fancybox-slide::before {\r\n    content: '';\r\n    display: inline-block;\r\n    font-size: 0;\r\n    height: 100%;\r\n    vertical-align: middle;\r\n    width: 0;\r\n}\r\n\r\n.fancybox-is-sliding .fancybox-slide,\r\n.fancybox-slide--previous,\r\n.fancybox-slide--current,\r\n.fancybox-slide--next {\r\n    display: block;\r\n}\r\n\r\n.fancybox-slide--image {\r\n    overflow: hidden;\r\n    padding: 44px 0;\r\n}\r\n\r\n.fancybox-slide--image::before {\r\n    display: none;\r\n}\r\n\r\n.fancybox-slide--html {\r\n    padding: 6px;\r\n}\r\n\r\n.fancybox-content {\r\n    background: #fff;\r\n    display: inline-block;\r\n    margin: 0;\r\n    max-width: 100%;\r\n    overflow: auto;\r\n    -webkit-overflow-scrolling: touch;\r\n    padding: 44px;\r\n    position: relative;\r\n    text-align: left;\r\n    vertical-align: middle;\r\n}\r\n\r\n.fancybox-slide--image .fancybox-content {\r\n    animation-timing-function: cubic-bezier(.5, 0, .14, 1);\r\n    -webkit-backface-visibility: hidden;\r\n    background: transparent;\r\n    background-repeat: no-repeat;\r\n    background-size: 100% 100%;\r\n    left: 0;\r\n    max-width: none;\r\n    overflow: visible;\r\n    padding: 0;\r\n    position: absolute;\r\n    top: 0;\r\n    -ms-transform-origin: top left;\r\n    transform-origin: top left;\r\n    transition-property: transform, opacity;\r\n    -webkit-user-select: none;\r\n    -moz-user-select: none;\r\n    -ms-user-select: none;\r\n    user-select: none;\r\n    z-index: 99995;\r\n}\r\n\r\n.fancybox-can-zoomOut .fancybox-content {\r\n    cursor: zoom-out;\r\n}\r\n\r\n.fancybox-can-zoomIn .fancybox-content {\r\n    cursor: zoom-in;\r\n}\r\n\r\n.fancybox-can-swipe .fancybox-content,\r\n.fancybox-can-pan .fancybox-content {\r\n    cursor: -webkit-grab;\r\n    cursor: grab;\r\n}\r\n\r\n.fancybox-is-grabbing .fancybox-content {\r\n    cursor: -webkit-grabbing;\r\n    cursor: grabbing;\r\n}\r\n\r\n.fancybox-container [data-selectable='true'] {\r\n    cursor: text;\r\n}\r\n\r\n.fancybox-image,\r\n.fancybox-spaceball {\r\n    background: transparent;\r\n    border: 0;\r\n    height: 100%;\r\n    left: 0;\r\n    margin: 0;\r\n    max-height: none;\r\n    max-width: none;\r\n    padding: 0;\r\n    position: absolute;\r\n    top: 0;\r\n    -webkit-user-select: none;\r\n    -moz-user-select: none;\r\n    -ms-user-select: none;\r\n    user-select: none;\r\n    width: 100%;\r\n}\r\n\r\n.fancybox-spaceball {\r\n    z-index: 1;\r\n}\r\n\r\n.fancybox-slide--video .fancybox-content,\r\n.fancybox-slide--map .fancybox-content,\r\n.fancybox-slide--pdf .fancybox-content,\r\n.fancybox-slide--iframe .fancybox-content {\r\n    height: 100%;\r\n    overflow: visible;\r\n    padding: 0;\r\n    width: 100%;\r\n}\r\n\r\n.fancybox-slide--video .fancybox-content {\r\n    background: #000;\r\n}\r\n\r\n.fancybox-slide--map .fancybox-content {\r\n    background: #e5e3df;\r\n}\r\n\r\n.fancybox-slide--iframe .fancybox-content {\r\n    background: #fff;\r\n}\r\n\r\n.fancybox-video,\r\n.fancybox-iframe {\r\n    background: transparent;\r\n    border: 0;\r\n    display: block;\r\n    height: 100%;\r\n    margin: 0;\r\n    overflow: hidden;\r\n    padding: 0;\r\n    width: 100%;\r\n}\r\n\r\n/* Fix iOS */\r\n.fancybox-iframe {\r\n    left: 0;\r\n    position: absolute;\r\n    top: 0;\r\n}\r\n\r\n.fancybox-error {\r\n    background: #fff;\r\n    cursor: default;\r\n    max-width: 400px;\r\n    padding: 40px;\r\n    width: 100%;\r\n}\r\n\r\n.fancybox-error p {\r\n    color: #444;\r\n    font-size: 16px;\r\n    line-height: 20px;\r\n    margin: 0;\r\n    padding: 0;\r\n}\r\n\r\n/* Buttons */\r\n\r\n.fancybox-button {\r\n    background: rgba(30, 30, 30, .6);\r\n    border: 0;\r\n    border-radius: 0;\r\n    box-shadow: none;\r\n    cursor: pointer;\r\n    display: inline-block;\r\n    height: 44px;\r\n    margin: 0;\r\n    padding: 10px;\r\n    position: relative;\r\n    transition: color .2s;\r\n    vertical-align: top;\r\n    visibility: inherit;\r\n    width: 44px;\r\n}\r\n\r\n.fancybox-button,\r\n.fancybox-button:visited,\r\n.fancybox-button:link {\r\n    color: #ccc;\r\n}\r\n\r\n.fancybox-button:hover {\r\n    color: #fff;\r\n}\r\n\r\n.fancybox-button:focus {\r\n    outline: none;\r\n}\r\n\r\n.fancybox-button.fancybox-focus {\r\n    outline: 1px dotted;\r\n}\r\n\r\n.fancybox-button[disabled],\r\n.fancybox-button[disabled]:hover {\r\n    color: #888;\r\n    cursor: default;\r\n    outline: none;\r\n}\r\n\r\n/* Fix IE11 */\r\n.fancybox-button div {\r\n    height: 100%;\r\n}\r\n\r\n.fancybox-button svg {\r\n    display: block;\r\n    height: 100%;\r\n    overflow: visible;\r\n    position: relative;\r\n    width: 100%;\r\n}\r\n\r\n.fancybox-button svg path {\r\n    fill: currentColor;\r\n    stroke-width: 0;\r\n}\r\n\r\n.fancybox-button--play svg:nth-child(2),\r\n.fancybox-button--fsenter svg:nth-child(2) {\r\n    display: none;\r\n}\r\n\r\n.fancybox-button--pause svg:nth-child(1),\r\n.fancybox-button--fsexit svg:nth-child(1) {\r\n    display: none;\r\n}\r\n\r\n.fancybox-progress {\r\n    background: #ff5268;\r\n    height: 2px;\r\n    left: 0;\r\n    position: absolute;\r\n    right: 0;\r\n    top: 0;\r\n    -ms-transform: scaleX(0);\r\n    transform: scaleX(0);\r\n    -ms-transform-origin: 0;\r\n    transform-origin: 0;\r\n    transition-property: transform;\r\n    transition-timing-function: linear;\r\n    z-index: 99998;\r\n}\r\n\r\n/* Close button on the top right corner of html content */\r\n\r\n.fancybox-close-small {\r\n    background: transparent;\r\n    border: 0;\r\n    border-radius: 0;\r\n    color: #ccc;\r\n    cursor: pointer;\r\n    opacity: .8;\r\n    padding: 8px;\r\n    position: absolute;\r\n    right: -12px;\r\n    top: -44px;\r\n    z-index: 401;\r\n}\r\n\r\n.fancybox-close-small:hover {\r\n    color: #fff;\r\n    opacity: 1;\r\n}\r\n\r\n.fancybox-slide--html .fancybox-close-small {\r\n    color: currentColor;\r\n    padding: 10px;\r\n    right: 0;\r\n    top: 0;\r\n}\r\n\r\n.fancybox-slide--image.fancybox-is-scaling .fancybox-content {\r\n    overflow: hidden;\r\n}\r\n\r\n.fancybox-is-scaling .fancybox-close-small,\r\n.fancybox-is-zoomable.fancybox-can-pan .fancybox-close-small {\r\n    display: none;\r\n}\r\n\r\n/* Navigation arrows */\r\n\r\n.fancybox-navigation .fancybox-button {\r\n    background-clip: content-box;\r\n    height: 100px;\r\n    opacity: 0;\r\n    position: absolute;\r\n    top: calc(50% - 50px);\r\n    width: 70px;\r\n}\r\n\r\n.fancybox-navigation .fancybox-button div {\r\n    padding: 7px;\r\n}\r\n\r\n.fancybox-navigation .fancybox-button--arrow_left {\r\n    left: 0;\r\n    left: env(safe-area-inset-left);\r\n    padding: 31px 26px 31px 6px;\r\n}\r\n\r\n.fancybox-navigation .fancybox-button--arrow_right {\r\n    padding: 31px 6px 31px 26px;\r\n    right: 0;\r\n    right: env(safe-area-inset-right);\r\n}\r\n\r\n/* Caption */\r\n\r\n.fancybox-caption {\r\n    background: linear-gradient(to top,\r\n        rgba(0, 0, 0, .85) 0%,\r\n        rgba(0, 0, 0, .3) 50%,\r\n        rgba(0, 0, 0, .15) 65%,\r\n        rgba(0, 0, 0, .075) 75.5%,\r\n        rgba(0, 0, 0, .037) 82.85%,\r\n        rgba(0, 0, 0, .019) 88%,\r\n        rgba(0, 0, 0, 0) 100%);\r\n    bottom: 0;\r\n    color: #eee;\r\n    font-size: 14px;\r\n    font-weight: 400;\r\n    left: 0;\r\n    line-height: 1.5;\r\n    padding: 75px 44px 25px 44px;\r\n    pointer-events: none;\r\n    right: 0;\r\n    text-align: center;\r\n    z-index: 99996;\r\n}\r\n\r\n@supports (padding: max(0px)) {\r\n    .fancybox-caption {\r\n        padding: 75px max(44px, env(safe-area-inset-right)) max(25px, env(safe-area-inset-bottom)) max(44px, env(safe-area-inset-left));\r\n    }\r\n}\r\n\r\n.fancybox-caption--separate {\r\n    margin-top: -50px;\r\n}\r\n\r\n.fancybox-caption__body {\r\n    max-height: 50vh;\r\n    overflow: auto;\r\n    pointer-events: all;\r\n}\r\n\r\n.fancybox-caption a,\r\n.fancybox-caption a:link,\r\n.fancybox-caption a:visited {\r\n    color: #ccc;\r\n    text-decoration: none;\r\n}\r\n\r\n.fancybox-caption a:hover {\r\n    color: #fff;\r\n    text-decoration: underline;\r\n}\r\n\r\n/* Loading indicator */\r\n\r\n.fancybox-loading {\r\n    animation: fancybox-rotate 1s linear infinite;\r\n    background: transparent;\r\n    border: 4px solid #888;\r\n    border-bottom-color: #fff;\r\n    border-radius: 50%;\r\n    height: 50px;\r\n    left: 50%;\r\n    margin: -25px 0 0 -25px;\r\n    opacity: .7;\r\n    padding: 0;\r\n    position: absolute;\r\n    top: 50%;\r\n    width: 50px;\r\n    z-index: 99999;\r\n}\r\n\r\n@keyframes fancybox-rotate {\r\n    100% {\r\n        transform: rotate(360deg);\r\n    }\r\n}\r\n\r\n/* Transition effects */\r\n\r\n.fancybox-animated {\r\n    transition-timing-function: cubic-bezier(0, 0, .25, 1);\r\n}\r\n\r\n/* transitionEffect: slide */\r\n\r\n.fancybox-fx-slide.fancybox-slide--previous {\r\n    opacity: 0;\r\n    transform: translate3d(-100%, 0, 0);\r\n}\r\n\r\n.fancybox-fx-slide.fancybox-slide--next {\r\n    opacity: 0;\r\n    transform: translate3d(100%, 0, 0);\r\n}\r\n\r\n.fancybox-fx-slide.fancybox-slide--current {\r\n    opacity: 1;\r\n    transform: translate3d(0, 0, 0);\r\n}\r\n\r\n/* transitionEffect: fade */\r\n\r\n.fancybox-fx-fade.fancybox-slide--previous,\r\n.fancybox-fx-fade.fancybox-slide--next {\r\n    opacity: 0;\r\n    transition-timing-function: cubic-bezier(.19, 1, .22, 1);\r\n}\r\n\r\n.fancybox-fx-fade.fancybox-slide--current {\r\n    opacity: 1;\r\n}\r\n\r\n/* transitionEffect: zoom-in-out */\r\n\r\n.fancybox-fx-zoom-in-out.fancybox-slide--previous {\r\n    opacity: 0;\r\n    transform: scale3d(1.5, 1.5, 1.5);\r\n}\r\n\r\n.fancybox-fx-zoom-in-out.fancybox-slide--next {\r\n    opacity: 0;\r\n    transform: scale3d(.5, .5, .5);\r\n}\r\n\r\n.fancybox-fx-zoom-in-out.fancybox-slide--current {\r\n    opacity: 1;\r\n    transform: scale3d(1, 1, 1);\r\n}\r\n\r\n/* transitionEffect: rotate */\r\n\r\n.fancybox-fx-rotate.fancybox-slide--previous {\r\n    opacity: 0;\r\n    -ms-transform: rotate(-360deg);\r\n    transform: rotate(-360deg);\r\n}\r\n\r\n.fancybox-fx-rotate.fancybox-slide--next {\r\n    opacity: 0;\r\n    -ms-transform: rotate(360deg);\r\n    transform: rotate(360deg);\r\n}\r\n\r\n.fancybox-fx-rotate.fancybox-slide--current {\r\n    opacity: 1;\r\n    -ms-transform: rotate(0deg);\r\n    transform: rotate(0deg);\r\n}\r\n\r\n/* transitionEffect: circular */\r\n\r\n.fancybox-fx-circular.fancybox-slide--previous {\r\n    opacity: 0;\r\n    transform: scale3d(0, 0, 0) translate3d(-100%, 0, 0);\r\n}\r\n\r\n.fancybox-fx-circular.fancybox-slide--next {\r\n    opacity: 0;\r\n    transform: scale3d(0, 0, 0) translate3d(100%, 0, 0);\r\n}\r\n\r\n.fancybox-fx-circular.fancybox-slide--current {\r\n    opacity: 1;\r\n    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);\r\n}\r\n\r\n/* transitionEffect: tube */\r\n\r\n.fancybox-fx-tube.fancybox-slide--previous {\r\n    transform: translate3d(-100%, 0, 0) scale(.1) skew(-10deg);\r\n}\r\n\r\n.fancybox-fx-tube.fancybox-slide--next {\r\n    transform: translate3d(100%, 0, 0) scale(.1) skew(10deg);\r\n}\r\n\r\n.fancybox-fx-tube.fancybox-slide--current {\r\n    transform: translate3d(0, 0, 0) scale(1);\r\n}\r\n\r\n/* Styling for Small-Screen Devices */\r\n@media all and (max-height: 576px) {\r\n    .fancybox-slide {\r\n        padding-left: 6px;\r\n        padding-right: 6px;\r\n    }\r\n\r\n    .fancybox-slide--image {\r\n        padding: 6px 0;\r\n    }\r\n\r\n    .fancybox-close-small {\r\n        right: -6px;\r\n    }\r\n\r\n    .fancybox-slide--image .fancybox-close-small {\r\n        background: #4e4e4e;\r\n        color: #f2f4f6;\r\n        height: 36px;\r\n        opacity: 1;\r\n        padding: 6px;\r\n        right: 0;\r\n        top: 0;\r\n        width: 36px;\r\n    }\r\n\r\n    .fancybox-caption {\r\n        padding-left: 12px;\r\n        padding-right: 12px;\r\n    }\r\n\r\n    @supports (padding: max(0px)) {\r\n        .fancybox-caption {\r\n            padding-left: max(12px, env(safe-area-inset-left));\r\n            padding-right: max(12px, env(safe-area-inset-right));\r\n        }\r\n    }\r\n}\n/* Share */\r\n\r\n.fancybox-share {\r\n    background: #f4f4f4;\r\n    border-radius: 3px;\r\n    max-width: 90%;\r\n    padding: 30px;\r\n    text-align: center;\r\n}\r\n\r\n.fancybox-share h1 {\r\n    color: #222;\r\n    font-size: 35px;\r\n    font-weight: 700;\r\n    margin: 0 0 20px 0;\r\n}\r\n\r\n.fancybox-share p {\r\n    margin: 0;\r\n    padding: 0;\r\n}\r\n\r\n.fancybox-share__button {\r\n    border: 0;\r\n    border-radius: 3px;\r\n    display: inline-block;\r\n    font-size: 14px;\r\n    font-weight: 700;\r\n    line-height: 40px;\r\n    margin: 0 5px 10px 5px;\r\n    min-width: 130px;\r\n    padding: 0 15px;\r\n    text-decoration: none;\r\n    transition: all .2s;\r\n    -webkit-user-select: none;\r\n    -moz-user-select: none;\r\n    -ms-user-select: none;\r\n    user-select: none;\r\n    white-space: nowrap;\r\n}\r\n\r\n.fancybox-share__button:visited,\r\n.fancybox-share__button:link {\r\n    color: #fff;\r\n}\r\n\r\n.fancybox-share__button:hover {\r\n    text-decoration: none;\r\n}\r\n\r\n.fancybox-share__button--fb {\r\n    background: #3b5998;\r\n}\r\n\r\n.fancybox-share__button--fb:hover {\r\n    background: #344e86;\r\n}\r\n\r\n.fancybox-share__button--pt {\r\n    background: #bd081d;\r\n}\r\n\r\n.fancybox-share__button--pt:hover {\r\n    background: #aa0719;\r\n}\r\n\r\n.fancybox-share__button--tw {\r\n    background: #1da1f2;\r\n}\r\n\r\n.fancybox-share__button--tw:hover {\r\n    background: #0d95e8;\r\n}\r\n\r\n.fancybox-share__button svg {\r\n    height: 25px;\r\n    margin-right: 7px;\r\n    position: relative;\r\n    top: -1px;\r\n    vertical-align: middle;\r\n    width: 25px;\r\n}\r\n\r\n.fancybox-share__button svg path {\r\n    fill: #fff;\r\n}\r\n\r\n.fancybox-share__input {\r\n    background: transparent;\r\n    border: 0;\r\n    border-bottom: 1px solid #d7d7d7;\r\n    border-radius: 0;\r\n    color: #5d5b5b;\r\n    font-size: 14px;\r\n    margin: 10px 0 0 0;\r\n    outline: none;\r\n    padding: 10px 15px;\r\n    width: 100%;\r\n}\n/* Thumbs */\r\n\r\n.fancybox-thumbs {\r\n    background: #ddd;\r\n    bottom: 0;\r\n    display: none;\r\n    margin: 0;\r\n    -webkit-overflow-scrolling: touch;\r\n    -ms-overflow-style: -ms-autohiding-scrollbar;\r\n    padding: 2px 2px 4px 2px;\r\n    position: absolute;\r\n    right: 0;\r\n    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\r\n    top: 0;\r\n    width: 212px;\r\n    z-index: 99995;\r\n}\r\n\r\n.fancybox-thumbs-x {\r\n    overflow-x: auto;\r\n    overflow-y: hidden;\r\n}\r\n\r\n.fancybox-show-thumbs .fancybox-thumbs {\r\n    display: block;\r\n}\r\n\r\n.fancybox-show-thumbs .fancybox-inner {\r\n    right: 212px;\r\n}\r\n\r\n.fancybox-thumbs__list {\r\n    font-size: 0;\r\n    height: 100%;\r\n    list-style: none;\r\n    margin: 0;\r\n    overflow-x: hidden;\r\n    overflow-y: auto;\r\n    padding: 0;\r\n    position: absolute;\r\n    position: relative;\r\n    white-space: nowrap;\r\n    width: 100%;\r\n}\r\n\r\n.fancybox-thumbs-x .fancybox-thumbs__list {\r\n    overflow: hidden;\r\n}\r\n\r\n.fancybox-thumbs-y .fancybox-thumbs__list::-webkit-scrollbar {\r\n    width: 7px;\r\n}\r\n\r\n.fancybox-thumbs-y .fancybox-thumbs__list::-webkit-scrollbar-track {\r\n    background: #fff;\r\n    border-radius: 10px;\r\n    box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);\r\n}\r\n\r\n.fancybox-thumbs-y .fancybox-thumbs__list::-webkit-scrollbar-thumb {\r\n    background: #2a2a2a;\r\n    border-radius: 10px;\r\n}\r\n\r\n.fancybox-thumbs__list a {\r\n    -webkit-backface-visibility: hidden;\r\n    backface-visibility: hidden;\r\n    background-color: rgba(0, 0, 0, .1);\r\n    background-position: center center;\r\n    background-repeat: no-repeat;\r\n    background-size: cover;\r\n    cursor: pointer;\r\n    float: left;\r\n    height: 75px;\r\n    margin: 2px;\r\n    max-height: calc(100% - 8px);\r\n    max-width: calc(50% - 4px);\r\n    outline: none;\r\n    overflow: hidden;\r\n    padding: 0;\r\n    position: relative;\r\n    -webkit-tap-highlight-color: transparent;\r\n    width: 100px;\r\n}\r\n\r\n.fancybox-thumbs__list a::before {\r\n    border: 6px solid #ff5268;\r\n    bottom: 0;\r\n    content: '';\r\n    left: 0;\r\n    opacity: 0;\r\n    position: absolute;\r\n    right: 0;\r\n    top: 0;\r\n    transition: all .2s cubic-bezier(.25, .46, .45, .94);\r\n    z-index: 99991;\r\n}\r\n\r\n.fancybox-thumbs__list a:focus::before {\r\n    opacity: .5;\r\n}\r\n\r\n.fancybox-thumbs__list a.fancybox-thumbs-active::before {\r\n    opacity: 1;\r\n}\r\n\r\n/* Styling for Small-Screen Devices */\r\n@media all and (max-width: 576px) {\r\n    .fancybox-thumbs {\r\n        width: 110px;\r\n    }\r\n\r\n    .fancybox-show-thumbs .fancybox-inner {\r\n        right: 110px;\r\n    }\r\n\r\n    .fancybox-thumbs__list a {\r\n        max-width: calc(100% - 10px);\r\n    }\r\n}";
 inject(css, undefined, '_t6b4ek');
@@ -38063,223 +38063,6 @@ inject(css, undefined, '_xhba26');
 module.exports = css;
 
 },{"./../../node_modules/cssify":7}],14:[function(require,module,exports){
-/**
- * main.js
- * http://www.codrops.com
- *
- * Licensed under the MIT license.
- * http://www.opensource.org/licenses/mit-license.php
- * 
- * Copyright 2016, Codrops
- * http://www.codrops.com
- */
-;(function(window) {
-
-	'use strict';
-
-	// Helper vars and functions.
-	function extend(a, b) {
-		for(var key in b) { 
-			if( b.hasOwnProperty( key ) ) {
-				a[key] = b[key];
-			}
-		}
-		return a;
-	}
-
-	function createDOMEl(type, className, content) {
-		var el = document.createElement(type);
-		el.className = className || '';
-		el.innerHTML = content || '';
-		return el;
-	}
-
-	/**
-	 * RevealFx obj.
-	 */
-	function RevealFx(el, options) {
-		this.el = el;
-		this.options = extend({}, this.options);
-		extend(this.options, options);
-		this._init();
-	}
-
-	/**
-	 * RevealFx options.
-	 */
-	RevealFx.prototype.options = {
-		// If true, then the content will be hidden until it´s "revealed".
-		isContentHidden: true,
-		// The animation/reveal settings. This can be set initially or passed when calling the reveal method.
-		revealSettings: {
-			// Animation direction: left right (lr) || right left (rl) || top bottom (tb) || bottom top (bt).
-			direction: 'lr',
-			// Revealer´s background color.
-			bgcolor: '#f0f0f0',
-			// Animation speed. This is the speed to "cover" and also "uncover" the element (seperately, not the total time).
-			duration: 500,
-			// Animation easing. This is the easing to "cover" and also "uncover" the element.
-			easing: 'easeInOutQuint',
-			// percentage-based value representing how much of the area should be left covered.
-			coverArea: 0,
-			// Callback for when the revealer is covering the element (halfway through of the whole animation).
-			onCover: function(contentEl, revealerEl) { return false; },
-			// Callback for when the animation starts (animation start).
-			onStart: function(contentEl, revealerEl) { return false; },
-			// Callback for when the revealer has completed uncovering (animation end).
-			onComplete: function(contentEl, revealerEl) { return false; }
-		}
-	};
-
-	/**
-	 * Init.
-	 */
-	RevealFx.prototype._init = function() {
-		this._layout();
-	};
-
-	/**
-	 * Build the necessary structure.
-	 */
-	RevealFx.prototype._layout = function() {
-		var position = getComputedStyle(this.el).position;
-		if( position !== 'fixed' && position !== 'absolute' && position !== 'relative' ) {
-			this.el.style.position = 'relative';
-		}
-		// Content element.
-		this.content = createDOMEl('div', 'block-revealer__content', this.el.innerHTML);
-		if( this.options.isContentHidden) {
-			this.content.style.opacity = 0;
-		}
-		// Revealer element (the one that animates)
-		this.revealer = createDOMEl('div', 'block-revealer__element');
-		this.el.classList.add('block-revealer');
-		this.el.innerHTML = '';
-		this.el.appendChild(this.content);
-		this.el.appendChild(this.revealer);
-	};
-
-	/**
-	 * Gets the revealer element´s transform and transform origin.
-	 */
-	RevealFx.prototype._getTransformSettings = function(direction) {
-		var val, origin, origin_2;
-
-		switch (direction) {
-			case 'lr' : 
-				val = 'scale3d(0,1,1)';
-				origin = '0 50%';
-				origin_2 = '100% 50%';
-				break;
-			case 'rl' : 
-				val = 'scale3d(0,1,1)';
-				origin = '100% 50%';
-				origin_2 = '0 50%';
-				break;
-			case 'tb' : 
-				val = 'scale3d(1,0,1)';
-				origin = '50% 0';
-				origin_2 = '50% 100%';
-				break;
-			case 'bt' : 
-				val = 'scale3d(1,0,1)';
-				origin = '50% 100%';
-				origin_2 = '50% 0';
-				break;
-			default : 
-				val = 'scale3d(0,1,1)';
-				origin = '0 50%';
-				origin_2 = '100% 50%';
-				break;
-		};
-
-		return {
-			// transform value.
-			val: val,
-			// initial and halfway/final transform origin.
-			origin: {initial: origin, halfway: origin_2},
-		};
-	};
-
-	/**
-	 * Reveal animation. If revealSettings is passed, then it will overwrite the options.revealSettings.
-	 */
-	RevealFx.prototype.reveal = function(revealSettings) {
-		// Do nothing if currently animating.
-		if( this.isAnimating ) {
-			return false;
-		}
-		this.isAnimating = true;
-		
-		// Set the revealer element´s transform and transform origin.
-		var defaults = { // In case revealSettings is incomplete, its properties deafault to:
-				duration: 500,
-				easing: 'easeInOutQuint',
-				delay: 0,
-				bgcolor: '#f0f0f0',
-				direction: 'lr',
-				coverArea: 0
-			},
-			revealSettings = revealSettings || this.options.revealSettings,
-			direction = revealSettings.direction || defaults.direction,
-			transformSettings = this._getTransformSettings(direction);
-
-		this.revealer.style.WebkitTransform = this.revealer.style.transform =  transformSettings.val;
-		this.revealer.style.WebkitTransformOrigin = this.revealer.style.transformOrigin =  transformSettings.origin.initial;
-		
-		// Set the Revealer´s background color.
-		this.revealer.style.backgroundColor = revealSettings.bgcolor || defaults.bgcolor;
-		
-		// Show it. By default the revealer element has opacity = 0 (CSS).
-		this.revealer.style.opacity = 1;
-
-		// Animate it.
-		var self = this,
-			// Second animation step.
-			animationSettings_2 = {
-				complete: function() {
-					self.isAnimating = false;
-					if( typeof revealSettings.onComplete === 'function' ) {
-						revealSettings.onComplete(self.content, self.revealer);
-					}
-				}
-			},
-			// First animation step.
-			animationSettings = {
-				delay: revealSettings.delay || defaults.delay,
-				complete: function() {
-					self.revealer.style.WebkitTransformOrigin = self.revealer.style.transformOrigin = transformSettings.origin.halfway;		
-					if( typeof revealSettings.onCover === 'function' ) {
-						revealSettings.onCover(self.content, self.revealer);
-					}
-					anime(animationSettings_2);		
-				}
-			};
-
-		animationSettings.targets = animationSettings_2.targets = this.revealer;
-		animationSettings.duration = animationSettings_2.duration = revealSettings.duration || defaults.duration;
-		animationSettings.easing = animationSettings_2.easing = revealSettings.easing || defaults.easing;
-
-		var coverArea = revealSettings.coverArea || defaults.coverArea;
-		if( direction === 'lr' || direction === 'rl' ) {
-			animationSettings.scaleX = [0,1];
-			animationSettings_2.scaleX = [1,coverArea/100];
-		}
-		else {
-			animationSettings.scaleY = [0,1];
-			animationSettings_2.scaleY = [1,coverArea/100];
-		}
-
-		if( typeof revealSettings.onStart === 'function' ) {
-			revealSettings.onStart(self.content, self.revealer);
-		}
-		anime(animationSettings);
-	};
-	
-	window.RevealFx = RevealFx;
-
-})(window);
-},{}],15:[function(require,module,exports){
 var $ = require('jquery');
 var MobileDetect = require('mobile-detect'),
 	md = new MobileDetect(window.navigator.userAgent);
@@ -38395,7 +38178,7 @@ var cursor = {
 
 if (!md.mobile() && !md.tablet())
 	cursor.init();
-},{"jquery":8,"mobile-detect":10}],16:[function(require,module,exports){
+},{"jquery":8,"mobile-detect":10}],15:[function(require,module,exports){
 /**
  * Navigation
  */
