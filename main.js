@@ -20,7 +20,7 @@ $(document).ready(function () {
 
   splash.insertBefore(canvas, splash.firstChild);
 
-  console.log("hii");
+  // console.log("hii");
   /** END THREE JS SPLASH */
 
   $('[data-fancybox="images"]').fancybox({
@@ -187,9 +187,11 @@ $(document).ready(function () {
     namespace: 'about',
     onEnter: function() {
       $('#nav-icon').addClass('nav-icon-dark');
+      $('.light-link').addClass('.dark-link').removeClass('.light-link');
     },
     onLeave: function() {
       $('#nav-icon').removeClass('nav-icon-dark');
+      $('.dark-link').addClass('.light-link').removeClass('.dark-link');
     }
   });
 
@@ -199,9 +201,11 @@ $(document).ready(function () {
     namespace: 'STEM',
     onEnter: function() {
       $('#nav-icon').addClass('nav-icon-dark');
+      $('.light-link').addClass('.dark-link').removeClass('.light-link');
     },
     onLeave: function() {
       $('#nav-icon').removeClass('nav-icon-dark');
+      $('.dark-link').addClass('.light-link').removeClass('.dark-link');
     }
   });
 

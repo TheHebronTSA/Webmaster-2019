@@ -6,10 +6,8 @@ var $ = require('jquery');
 
 $('#nav-icon').click(function() {
 	$('#popup').toggleClass('menu-open');
-});
-
-$('#nav-icon').click(function () {
 	$(this).toggleClass('open');
+	$('.band-link').toggleClass('band-link-menu-open');
 });
 
 $('.menu-link').click(function () {

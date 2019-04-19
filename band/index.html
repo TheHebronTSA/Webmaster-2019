@@ -6,10 +6,11 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="An overview of the STEM programs at Hebron.">
+	<meta name="description"
+		content="The official website Hebron High School's Technology Student Association (TSA) chapter.">
 	<meta name="author" content="Bruce Moe, Eeshaan Pirani, Sonal Verma, Faizaan Vidhani, Sanjana Yadav">
 
-	<title>Hebron TSA &raquo; STEM @ Hebron</title>
+	<title>Hebron TSA &raquo; glitch.</title>
 
 	<!--Favicon/Theme-->
 	<link rel="apple-touch-icon" sizes="180x180" href="/resources/favicon/apple-touch-icon.png">
@@ -25,8 +26,9 @@
 	<meta name="theme-color" content="#044bda">
 
 	<!--OG Protocol Tags-->
-	<meta property="og:title" content="Hebron TSA &raquo; STEM @ Hebron">
-	<meta property="og:description" content="An overview of the STEM programs at Hebron.">
+	<meta property="og:title" content="Hebron TSA &raquo; Home">
+	<meta property="og:description"
+		content="The official website Hebron High School's Technology Student Association (TSA) chapter.">
 	<meta property="og:image"
 		content="https://github.com/TheHebronTSA/Webmaster-2019/blob/master/resources/design-assets/fresh.jpg?raw=true">
 	<meta property="og:image:secure_url"
@@ -39,62 +41,39 @@
 		href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:200,400,400i,600,700|IBM+Plex+Sans+Condensed:400,400i,500i,700"
 		rel="stylesheet">
 
-	<script src="/bundle.js" charset="utf-8"></script>
+	<link rel="stylesheet" href="/resources/css/band.css">
+
+
+	<!-- <script src="/bundle.js" charset="utf-8"></script> -->
 </head>
-
+<div class="cursor-dot-outline"></div>
+<div class="cursor-dot"></div>
 <body>
-
-	<div id="popup" class="popup scale-rotate">
-		<a>
-			<div id="nav-icon" class="nav-icon-dark" data-effect="scale-rotate">
-				<span></span>
-				<span></span>
+	<div class="back-link">
+		<a class="light-link" href="/">Back to Hebron TSA</a>
+	</div>
+	<div class="splash">
+		<div class="container">
+			<h1 class="main-header no-select">
+				glitch.
+			</h1>
+		</div>
+		<div id="p5_loading" class="p5_loading">
+			<div class="p5_loading__inner">
 				<span></span>
 			</div>
-		</a>
-		<div class="cursor-dot-outline"></div>
-		<div class="cursor-dot"></div>
-		<nav class="menu scale-rotate" id="menu">
-			<ul>
-				<li>
-					<a class="menu-link" href="/">Home</a>
-				</li>
-				<li>
-					<a class="menu-link" href="/what-is-tsa">What is TSA?</a>
-				</li>
-				<li>
-					<a class="menu-link" href="/our-members">Our Members</a>
-				</li>
-				<li>
-					<a class="menu-link" href="/stem">STEM @ Hebron</a>
-				</li>
-				<li>
-					<a class="menu-link" href="/gallery">Gallery</a>
-				</li>
-				<li>
-					<a class="menu-link" href="/about">About</a>
-				</li>
-			</ul>
-		</nav>
-		<div class="band-link">
-			<a class="dark-link" href="/band">Design Brief</a>
 		</div>
-		<div id="barba-wrapper" class="pusher">
-			<div class="barba-container inner inner-stem" data-namespace="STEM">
-				<div class="inner-content">
-					<div class="splash">
-						<!-- <div class="container">
-							<h1 class="main-header no-select">
-								STEM @ Hebron
-							</h1>
-						</div> -->
-					</div>
-				</div>
+		<div id="uploading-animation" class="p5_loading">
+			<div class="p5_loading__inner">
+				<span></span>
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript" src="/resources/js/vendors.js"></script>
-	<script type="text/javascript" src="/resources/js/energy.js"></script>
+	<script src="/node_modules/p5/lib/p5.min.js"></script>
+	<script src="/node_modules/p5/lib/addons/p5.dom.min.js"></script>
+	<script src="/node_modules/p5/lib/addons/p5.sound.min.js"></script>
+	<script src="/resources/js/glitch.js"></script>
+
 </body>
 
 </html>

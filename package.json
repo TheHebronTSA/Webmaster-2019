@@ -27,6 +27,7 @@
     "jquery": "^3.3.1",
     "mo-js": "^0.288.2",
     "mobile-detect": "^1.4.3",
+    "p5": "^0.8.0",
     "popper.js": "^1.14.7",
     "scrollmonitor": "^1.2.4",
     "three": "^0.103.0",
