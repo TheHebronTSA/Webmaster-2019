@@ -12,6 +12,7 @@ $(document).ready(function () {
   var navigation = require('./resources/js/navigation');
   var fancybox = require('@fancyapps/fancybox');
   var cursorjs = require('./resources/js/cursor');
+  var animejs = require('animejs')
   // var RevealFx = require('./resources/js/blockReveal');
 
   // var rev_1 = new RevealFx($('#rev-1'), {
