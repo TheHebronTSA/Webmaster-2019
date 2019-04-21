@@ -557,3 +557,19 @@ img.box-shadow-left {
 div.col-md-8 {
 	transform: translateY(12.5%);
 }
+
+.btn {
+	border-radius: 0px;
+	transition: 0.25s;
+	background: none;
+	color: #000;
+	border: none;
+	font-weight: 700;
+}
+
+.offset {
+  box-shadow: 0.3em 0.3em 0 0 rgba(191, 2, 34, 1), inset 0.3em 0.3em 0 0 rgba(191, 2, 34, 1);
+}
+.offset:hover, .offset:focus {
+  box-shadow: 0 0 0 0 rgba(191, 2, 34, 1), inset 6em 3.5em 0 0 rgba(191, 2, 34, 1);
+}
