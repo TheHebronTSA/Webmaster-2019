@@ -17,6 +17,11 @@ body,
 	overflow: hidden;
 }
 
+.splash canvas {
+	position: relative !important;
+	z-index: 5 !important;
+}
+
 .inner {
 	overflow-x: hidden;
 	overflow-y: scroll;
@@ -33,6 +38,10 @@ body {
 	font-family: 'IBM Plex Sans', 'Work Sans', 'Karla', 'Lato', sans-serif;
 }
 
+::selection {
+	background: #BF0222;
+}
+
 .condensed {
 	font-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;
 }
@@ -46,6 +55,7 @@ body {
 	background: #000;
 	pointer-events: none;
 	opacity: 0;
+	z-index: 6;
 }
 
 .splash {
@@ -86,6 +96,47 @@ h5,
 h6 {
 	font-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;
 	font-style: italic;
+}
+
+a.light-link {
+	background: linear-gradient(to bottom, #BF0222 0%, #BF0222 100%);
+	background-position: 0 100%;
+	background-repeat: repeat-x;
+	background-size: 3px 3px;
+	font-weight: 600;
+	color: #fff;
+	text-decoration: none;
+	-webkit-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+}
+
+a:hover.light-link {
+	color: #fff;
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23bf0222' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E");
+	background-position: 0 100%;
+	background-size: auto 6px;
+	background-repeat: repeat-x;
+	text-decoration: none;
+}
+
+a:visited.light-link {
+	background: linear-gradient(to bottom, #4d0099 0%, #4d0099 100%);
+	background-position: 0 100%;
+	background-repeat: repeat-x;
+	background-size: 3px 3px;
+	font-weight: 600;
+	color: #fff;
+	text-decoration: none;
+	transition: all ease-in-out 0.5s;
+}
+
+a:visited:hover.light-link {
+	color: #fff;
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%234d0099' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E");
+	background-position: 0 100%;
+	background-size: auto 6px;
+	background-repeat: repeat-x;
+	text-decoration: none;
 }
 
 a.dark-link {
@@ -161,11 +212,11 @@ a:visited:hover.dark-link {
 }
 
 .inner-our-members {
-	background: #E20069;
+	background: #FF3292;
 }
 
 .inner-stem {
-	background: #F5B800;
+	background: #FFCD37;
 }
 
 .inner-gallery {
@@ -314,6 +365,12 @@ a:visited:hover.dark-link {
 	}
 }
 
+@media (max-width: 440px) {
+	.band-link-menu-open {
+		background: #000;
+	}
+}
+
 @media (min-width: 630px) {
 	.main-header {
 		white-space: nowrap;
@@ -401,7 +458,7 @@ a:visited:hover.dark-link {
 	transition: .25s ease-in-out;
 }
 
-#nav-icon.nav-icon-about span {
+#nav-icon.nav-icon-dark span {
 	background: #000;
 }
 
@@ -438,6 +495,18 @@ a:visited:hover.dark-link {
 	transform: rotate(-135deg);
 }
 
+.band-link {
+	position: absolute;
+	color: #fff;
+	top: 0;
+	right: 0;
+	margin: 25px;
+	padding: 5px;
+	z-index: 6;
+	text-transform: uppercase;
+	transition: all 0.3s ease-in-out;
+}
+
 .color-block {
 	width: 100%;
 	height: 2rem;
@@ -452,9 +521,55 @@ blockquote {
 	font-style: oblique;
 }
 
-@media (max-width: 360px)
-{
-	.main-header{
+@media (max-width: 360px) {
+	.main-header {
 		font-size: 3.5rem;
 	}
+}
+
+.table {
+	color: #fff;
+}
+
+.table::hover {
+	color: #fff;
+}
+
+img {
+	height: 100%;
+	padding: 0;
+}
+
+img.box-shadow-right {
+	padding: 0;
+	-webkit-box-shadow: 10px 10px 0px 0px rgba(191, 2, 34, 1);
+	-moz-box-shadow: 10px 10px 0px 0px rgba(191, 2, 34, 1);
+	box-shadow: 10px 10px 0px 0px rgba(191, 2, 34, 1);
+}
+
+img.box-shadow-left {
+	padding: 0;
+	-webkit-box-shadow: -10px 10px 0px 0px rgba(191, 2, 34, 1);
+	-moz-box-shadow: -10px 10px 0px 0px rgba(191, 2, 34, 1);
+	box-shadow: -10px 10px 0px 0px rgba(191, 2, 34, 1);
+}
+
+div.col-md-8 {
+	transform: translateY(12.5%);
+}
+
+.btn {
+	border-radius: 0px;
+	transition: 0.25s;
+	background: none;
+	color: #000;
+	border: none;
+	font-weight: 700;
+}
+
+.offset {
+  box-shadow: 0.3em 0.3em 0 0 rgba(191, 2, 34, 1), inset 0.3em 0.3em 0 0 rgba(191, 2, 34, 1);
+}
+.offset:hover, .offset:focus {
+  box-shadow: 0 0 0 0 rgba(191, 2, 34, 1), inset 6em 3.5em 0 0 rgba(191, 2, 34, 1);
 }

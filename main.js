@@ -10,9 +10,29 @@ $(document).ready(function () {
   var mojs = require('mo-js');
   var Barba = require('barba.js');
   var navigation = require('./resources/js/navigation');
-  var blockReveal = require('./resources/js/blockReveal');
   var fancybox = require('@fancyapps/fancybox');
   var cursorjs = require('./resources/js/cursor');
+  var animejs = require('animejs')
+  // var RevealFx = require('./resources/js/blockReveal');
+
+  // var rev_1 = new RevealFx($('#rev-1'), {
+  //   revealSettings : {
+  //     bgcolor: '#7f40f1',
+  //     onCover: function(contentEl, revealerEl) {
+  //       contentEl.style.opacity = 1;
+  //     }
+  //   }
+  // });
+  // rev_1.reveal();
+
+  /** THREE JS SPLASH */
+  var splash = document.getElementsByClassName("splash")[0];
+  var canvas = document.getElementsByTagName("canvas")[0];
+
+  splash.insertBefore(canvas, splash.firstChild);
+
+  // console.log("hii");
+  /** END THREE JS SPLASH */
 
   $('[data-fancybox="images"]').fancybox({
     animationEffect: "zoom-in-out",
@@ -171,20 +191,36 @@ $(document).ready(function () {
     return FadeTransition;
   };
 
-  Barba.Pjax.start();
+  // Barba.Pjax.start();
   Barba.Prefetch.init();
 
-  var Aboutpage = Barba.BaseView.extend({
+  var AboutPage = Barba.BaseView.extend({
     namespace: 'about',
     onEnter: function() {
-      $('#nav-icon').addClass('nav-icon-about');
+      $('#nav-icon').addClass('nav-icon-dark');
+      $('.light-link').addClass('.dark-link').removeClass('.light-link');
     },
     onLeave: function() {
-      $('#nav-icon').removeClass('nav-icon-about');
+      $('#nav-icon').removeClass('nav-icon-dark');
+      $('.dark-link').addClass('.light-link').removeClass('.dark-link');
     }
   });
 
-  Aboutpage.init();
+  AboutPage.init();
+
+  var STEMPage = Barba.BaseView.extend({
+    namespace: 'STEM',
+    onEnter: function() {
+      $('#nav-icon').addClass('nav-icon-dark');
+      $('.light-link').addClass('.dark-link').removeClass('.light-link');
+    },
+    onLeave: function() {
+      $('#nav-icon').removeClass('nav-icon-dark');
+      $('.dark-link').addClass('.light-link').removeClass('.dark-link');
+    }
+  });
+
+  STEMPage.init();
 });
 
 //alert('Welcome to Hebron TSA');
