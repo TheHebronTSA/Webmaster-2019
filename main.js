@@ -191,7 +191,7 @@ $(document).ready(function () {
     return FadeTransition;
   };
 
-  Barba.Pjax.start();
+  // Barba.Pjax.start();
   Barba.Prefetch.init();
 
   var AboutPage = Barba.BaseView.extend({
