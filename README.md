@@ -4,6 +4,23 @@
 
 # Webmaster 2019
 
+## Getting Started
+### Requirements
+* [Git](https://git-scm.com/downloads)
+* [Node.js](https://nodejs.org/)
+* [Yarn](https://yarnpkg.com)
+
+### Commands
+* Run `git clone https://github.com/TheHebronTSA/Webmaster-2019.git` to clone the repository locally.
+* Run `cd Webmaster-2019` to change directories.
+* Run `yarn install` to install all of the dependencies.
+* Run `yarn run build` to build the site.
+* Run `yarn run watch` to watch for changes while editing JavaScript and CSS.
+
+_Never commit directly to the `master` branch. All new branches should be based on `dev`._
+
+The `dev` branch can be viewed live at [dev.hebrontsa.org](https://dev.hebrontsa.org).
+
 ## Frequently Asked Questions
 
 ### What are your goals associated with this project?
