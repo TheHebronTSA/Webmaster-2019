@@ -587,3 +587,7 @@ div.col-md-8 {
 .modal-content {
 	border-radius: 0px;
 }
+
+.no-break {
+	white-space: nowrap;
+}

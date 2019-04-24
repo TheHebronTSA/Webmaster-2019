@@ -25,26 +25,6 @@ $(document).ready(function () {
   // });
   // rev_1.reveal();
 
-  /** THREE JS SPLASH */
-  var splash = document.getElementsByClassName("splash")[0];
-  var canvas = document.getElementsByTagName("canvas")[0];
-
-  splash.insertBefore(canvas, splash.firstChild);
-
-  // console.log("hii");
-  /** END THREE JS SPLASH */
-
-  $('[data-fancybox="images"]').fancybox({
-    animationEffect: "zoom-in-out",
-    parentEl: '.gallery-container',
-    padding: 0,
-    helpers: {
-      overlay: {
-        locked: false
-      }
-    }
-  });
-
   /** DEFINE MOJS BURSTS */
 
   const COLORS = {
@@ -122,6 +102,26 @@ $(document).ready(function () {
       .replay();
   });
 
+  /** THREE JS SPLASH */
+  var splash = document.getElementsByClassName("splash")[0];
+  var canvas = document.getElementsByTagName("canvas")[0];
+
+  splash.insertBefore(canvas, splash.firstChild);
+
+  // console.log("hii");
+  /** END THREE JS SPLASH */
+
+  $('[data-fancybox="images"]').fancybox({
+    animationEffect: "zoom-in-out",
+    parentEl: '.gallery-container',
+    padding: 0,
+    helpers: {
+      overlay: {
+        locked: false
+      }
+    }
+  });
+
   // DEFINE BARBA.JS FADE TRANSITION
 
   var FadeTransition = Barba.BaseTransition.extend({
@@ -196,11 +196,11 @@ $(document).ready(function () {
 
   var AboutPage = Barba.BaseView.extend({
     namespace: 'about',
-    onEnter: function() {
+    onEnter: function () {
       $('#nav-icon').addClass('nav-icon-dark');
       $('.light-link').addClass('.dark-link').removeClass('.light-link');
     },
-    onLeave: function() {
+    onLeave: function () {
       $('#nav-icon').removeClass('nav-icon-dark');
       $('.dark-link').addClass('.light-link').removeClass('.dark-link');
     }
@@ -210,11 +210,11 @@ $(document).ready(function () {
 
   var STEMPage = Barba.BaseView.extend({
     namespace: 'STEM',
-    onEnter: function() {
+    onEnter: function () {
       $('#nav-icon').addClass('nav-icon-dark');
       $('.light-link').addClass('.dark-link').removeClass('.light-link');
     },
-    onLeave: function() {
+    onLeave: function () {
       $('#nav-icon').removeClass('nav-icon-dark');
       $('.dark-link').addClass('.light-link').removeClass('.dark-link');
     }
