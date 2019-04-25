@@ -15,6 +15,7 @@ $(document).ready(function () {
   var fancybox = require('@fancyapps/fancybox');
   var cursorjs = require('./resources/js/cursor');
   var animejs = require('animejs')
+  var VanillaTilt = require('vanilla-tilt');
   // var RevealFx = require('./resources/js/blockReveal');
 
   // var rev_1 = new RevealFx($('#rev-1'), {
@@ -102,6 +103,12 @@ $(document).ready(function () {
         y: e.pageY
       })
       .replay();
+  });
+
+  VanillaTilt.init(document.querySelectorAll(".hover-box"), {
+    reverse: true,
+    scale: 1,
+    "max-glare": 1,
   });
 
   /** THREE JS SPLASH */
@@ -227,7 +234,7 @@ $(document).ready(function () {
 
 //alert('Welcome to Hebron TSA');
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./node_modules/@fancyapps/fancybox/dist/jquery.fancybox.css":2,"./node_modules/bootstrap/dist/css/bootstrap.min.css":6,"./resources/css/cursor.css":13,"./resources/css/main.css":14,"./resources/js/cursor":15,"./resources/js/navigation":16,"@fancyapps/fancybox":3,"animejs":4,"barba.js":5,"bootstrap":7,"jquery":9,"mo-js":10}],2:[function(require,module,exports){
+},{"./node_modules/@fancyapps/fancybox/dist/jquery.fancybox.css":2,"./node_modules/bootstrap/dist/css/bootstrap.min.css":6,"./resources/css/cursor.css":14,"./resources/css/main.css":15,"./resources/js/cursor":16,"./resources/js/navigation":17,"@fancyapps/fancybox":3,"animejs":4,"barba.js":5,"bootstrap":7,"jquery":9,"mo-js":10,"vanilla-tilt":13}],2:[function(require,module,exports){
 var inject = require('./../../../cssify');
 var css = "body.compensate-for-scrollbar {\r\n    overflow: hidden;\r\n}\r\n\r\n.fancybox-active {\r\n    height: auto;\r\n}\r\n\r\n.fancybox-is-hidden {\r\n    left: -9999px;\r\n    margin: 0;\r\n    position: absolute !important;\r\n    top: -9999px;\r\n    visibility: hidden;\r\n}\r\n\r\n.fancybox-container {\r\n    -webkit-backface-visibility: hidden;\r\n    height: 100%;\r\n    left: 0;\r\n    outline: none;\r\n    position: fixed;\r\n    -webkit-tap-highlight-color: transparent;\r\n    top: 0;\r\n    -ms-touch-action: manipulation;\r\n    touch-action: manipulation;\r\n    transform: translateZ(0);\r\n    width: 100%;\r\n    z-index: 99992;\r\n}\r\n\r\n.fancybox-container * {\r\n    box-sizing: border-box;\r\n}\r\n\r\n.fancybox-outer,\r\n.fancybox-inner,\r\n.fancybox-bg,\r\n.fancybox-stage {\r\n    bottom: 0;\r\n    left: 0;\r\n    position: absolute;\r\n    right: 0;\r\n    top: 0;\r\n}\r\n\r\n.fancybox-outer {\r\n    -webkit-overflow-scrolling: touch;\r\n    overflow-y: auto;\r\n}\r\n\r\n.fancybox-bg {\r\n    background: rgb(30, 30, 30);\r\n    opacity: 0;\r\n    transition-duration: inherit;\r\n    transition-property: opacity;\r\n    transition-timing-function: cubic-bezier(.47, 0, .74, .71);\r\n}\r\n\r\n.fancybox-is-open .fancybox-bg {\r\n    opacity: .9;\r\n    transition-timing-function: cubic-bezier(.22, .61, .36, 1);\r\n}\r\n\r\n.fancybox-infobar,\r\n.fancybox-toolbar,\r\n.fancybox-caption,\r\n.fancybox-navigation .fancybox-button {\r\n    direction: ltr;\r\n    opacity: 0;\r\n    position: absolute;\r\n    transition: opacity .25s ease, visibility 0s ease .25s;\r\n    visibility: hidden;\r\n    z-index: 99997;\r\n}\r\n\r\n.fancybox-show-infobar .fancybox-infobar,\r\n.fancybox-show-toolbar .fancybox-toolbar,\r\n.fancybox-show-caption .fancybox-caption,\r\n.fancybox-show-nav .fancybox-navigation .fancybox-button {\r\n    opacity: 1;\r\n    transition: opacity .25s ease 0s, visibility 0s ease 0s;\r\n    visibility: visible;\r\n}\r\n\r\n.fancybox-infobar {\r\n    color: #ccc;\r\n    font-size: 13px;\r\n    -webkit-font-smoothing: subpixel-antialiased;\r\n    height: 44px;\r\n    left: 0;\r\n    line-height: 44px;\r\n    min-width: 44px;\r\n    mix-blend-mode: difference;\r\n    padding: 0 10px;\r\n    pointer-events: none;\r\n    top: 0;\r\n    -webkit-touch-callout: none;\r\n    -webkit-user-select: none;\r\n    -moz-user-select: none;\r\n    -ms-user-select: none;\r\n    user-select: none;\r\n}\r\n\r\n.fancybox-toolbar {\r\n    right: 0;\r\n    top: 0;\r\n}\r\n\r\n.fancybox-stage {\r\n    direction: ltr;\r\n    overflow: visible;\r\n    transform: translateZ(0);\r\n    z-index: 99994;\r\n}\r\n\r\n.fancybox-is-open .fancybox-stage {\r\n    overflow: hidden;\r\n}\r\n\r\n.fancybox-slide {\r\n    -webkit-backface-visibility: hidden;\r\n    /* Using without prefix would break IE11 */\r\n    display: none;\r\n    height: 100%;\r\n    left: 0;\r\n    outline: none;\r\n    overflow: auto;\r\n    -webkit-overflow-scrolling: touch;\r\n    padding: 44px;\r\n    position: absolute;\r\n    text-align: center;\r\n    top: 0;\r\n    transition-property: transform, opacity;\r\n    white-space: normal;\r\n    width: 100%;\r\n    z-index: 99994;\r\n}\r\n\r\n.fancybox-slide::before {\r\n    content: '';\r\n    display: inline-block;\r\n    font-size: 0;\r\n    height: 100%;\r\n    vertical-align: middle;\r\n    width: 0;\r\n}\r\n\r\n.fancybox-is-sliding .fancybox-slide,\r\n.fancybox-slide--previous,\r\n.fancybox-slide--current,\r\n.fancybox-slide--next {\r\n    display: block;\r\n}\r\n\r\n.fancybox-slide--image {\r\n    overflow: hidden;\r\n    padding: 44px 0;\r\n}\r\n\r\n.fancybox-slide--image::before {\r\n    display: none;\r\n}\r\n\r\n.fancybox-slide--html {\r\n    padding: 6px;\r\n}\r\n\r\n.fancybox-content {\r\n    background: #fff;\r\n    display: inline-block;\r\n    margin: 0;\r\n    max-width: 100%;\r\n    overflow: auto;\r\n    -webkit-overflow-scrolling: touch;\r\n    padding: 44px;\r\n    position: relative;\r\n    text-align: left;\r\n    vertical-align: middle;\r\n}\r\n\r\n.fancybox-slide--image .fancybox-content {\r\n    animation-timing-function: cubic-bezier(.5, 0, .14, 1);\r\n    -webkit-backface-visibility: hidden;\r\n    background: transparent;\r\n    background-repeat: no-repeat;\r\n    background-size: 100% 100%;\r\n    left: 0;\r\n    max-width: none;\r\n    overflow: visible;\r\n    padding: 0;\r\n    position: absolute;\r\n    top: 0;\r\n    -ms-transform-origin: top left;\r\n    transform-origin: top left;\r\n    transition-property: transform, opacity;\r\n    -webkit-user-select: none;\r\n    -moz-user-select: none;\r\n    -ms-user-select: none;\r\n    user-select: none;\r\n    z-index: 99995;\r\n}\r\n\r\n.fancybox-can-zoomOut .fancybox-content {\r\n    cursor: zoom-out;\r\n}\r\n\r\n.fancybox-can-zoomIn .fancybox-content {\r\n    cursor: zoom-in;\r\n}\r\n\r\n.fancybox-can-swipe .fancybox-content,\r\n.fancybox-can-pan .fancybox-content {\r\n    cursor: -webkit-grab;\r\n    cursor: grab;\r\n}\r\n\r\n.fancybox-is-grabbing .fancybox-content {\r\n    cursor: -webkit-grabbing;\r\n    cursor: grabbing;\r\n}\r\n\r\n.fancybox-container [data-selectable='true'] {\r\n    cursor: text;\r\n}\r\n\r\n.fancybox-image,\r\n.fancybox-spaceball {\r\n    background: transparent;\r\n    border: 0;\r\n    height: 100%;\r\n    left: 0;\r\n    margin: 0;\r\n    max-height: none;\r\n    max-width: none;\r\n    padding: 0;\r\n    position: absolute;\r\n    top: 0;\r\n    -webkit-user-select: none;\r\n    -moz-user-select: none;\r\n    -ms-user-select: none;\r\n    user-select: none;\r\n    width: 100%;\r\n}\r\n\r\n.fancybox-spaceball {\r\n    z-index: 1;\r\n}\r\n\r\n.fancybox-slide--video .fancybox-content,\r\n.fancybox-slide--map .fancybox-content,\r\n.fancybox-slide--pdf .fancybox-content,\r\n.fancybox-slide--iframe .fancybox-content {\r\n    height: 100%;\r\n    overflow: visible;\r\n    padding: 0;\r\n    width: 100%;\r\n}\r\n\r\n.fancybox-slide--video .fancybox-content {\r\n    background: #000;\r\n}\r\n\r\n.fancybox-slide--map .fancybox-content {\r\n    background: #e5e3df;\r\n}\r\n\r\n.fancybox-slide--iframe .fancybox-content {\r\n    background: #fff;\r\n}\r\n\r\n.fancybox-video,\r\n.fancybox-iframe {\r\n    background: transparent;\r\n    border: 0;\r\n    display: block;\r\n    height: 100%;\r\n    margin: 0;\r\n    overflow: hidden;\r\n    padding: 0;\r\n    width: 100%;\r\n}\r\n\r\n/* Fix iOS */\r\n.fancybox-iframe {\r\n    left: 0;\r\n    position: absolute;\r\n    top: 0;\r\n}\r\n\r\n.fancybox-error {\r\n    background: #fff;\r\n    cursor: default;\r\n    max-width: 400px;\r\n    padding: 40px;\r\n    width: 100%;\r\n}\r\n\r\n.fancybox-error p {\r\n    color: #444;\r\n    font-size: 16px;\r\n    line-height: 20px;\r\n    margin: 0;\r\n    padding: 0;\r\n}\r\n\r\n/* Buttons */\r\n\r\n.fancybox-button {\r\n    background: rgba(30, 30, 30, .6);\r\n    border: 0;\r\n    border-radius: 0;\r\n    box-shadow: none;\r\n    cursor: pointer;\r\n    display: inline-block;\r\n    height: 44px;\r\n    margin: 0;\r\n    padding: 10px;\r\n    position: relative;\r\n    transition: color .2s;\r\n    vertical-align: top;\r\n    visibility: inherit;\r\n    width: 44px;\r\n}\r\n\r\n.fancybox-button,\r\n.fancybox-button:visited,\r\n.fancybox-button:link {\r\n    color: #ccc;\r\n}\r\n\r\n.fancybox-button:hover {\r\n    color: #fff;\r\n}\r\n\r\n.fancybox-button:focus {\r\n    outline: none;\r\n}\r\n\r\n.fancybox-button.fancybox-focus {\r\n    outline: 1px dotted;\r\n}\r\n\r\n.fancybox-button[disabled],\r\n.fancybox-button[disabled]:hover {\r\n    color: #888;\r\n    cursor: default;\r\n    outline: none;\r\n}\r\n\r\n/* Fix IE11 */\r\n.fancybox-button div {\r\n    height: 100%;\r\n}\r\n\r\n.fancybox-button svg {\r\n    display: block;\r\n    height: 100%;\r\n    overflow: visible;\r\n    position: relative;\r\n    width: 100%;\r\n}\r\n\r\n.fancybox-button svg path {\r\n    fill: currentColor;\r\n    stroke-width: 0;\r\n}\r\n\r\n.fancybox-button--play svg:nth-child(2),\r\n.fancybox-button--fsenter svg:nth-child(2) {\r\n    display: none;\r\n}\r\n\r\n.fancybox-button--pause svg:nth-child(1),\r\n.fancybox-button--fsexit svg:nth-child(1) {\r\n    display: none;\r\n}\r\n\r\n.fancybox-progress {\r\n    background: #ff5268;\r\n    height: 2px;\r\n    left: 0;\r\n    position: absolute;\r\n    right: 0;\r\n    top: 0;\r\n    -ms-transform: scaleX(0);\r\n    transform: scaleX(0);\r\n    -ms-transform-origin: 0;\r\n    transform-origin: 0;\r\n    transition-property: transform;\r\n    transition-timing-function: linear;\r\n    z-index: 99998;\r\n}\r\n\r\n/* Close button on the top right corner of html content */\r\n\r\n.fancybox-close-small {\r\n    background: transparent;\r\n    border: 0;\r\n    border-radius: 0;\r\n    color: #ccc;\r\n    cursor: pointer;\r\n    opacity: .8;\r\n    padding: 8px;\r\n    position: absolute;\r\n    right: -12px;\r\n    top: -44px;\r\n    z-index: 401;\r\n}\r\n\r\n.fancybox-close-small:hover {\r\n    color: #fff;\r\n    opacity: 1;\r\n}\r\n\r\n.fancybox-slide--html .fancybox-close-small {\r\n    color: currentColor;\r\n    padding: 10px;\r\n    right: 0;\r\n    top: 0;\r\n}\r\n\r\n.fancybox-slide--image.fancybox-is-scaling .fancybox-content {\r\n    overflow: hidden;\r\n}\r\n\r\n.fancybox-is-scaling .fancybox-close-small,\r\n.fancybox-is-zoomable.fancybox-can-pan .fancybox-close-small {\r\n    display: none;\r\n}\r\n\r\n/* Navigation arrows */\r\n\r\n.fancybox-navigation .fancybox-button {\r\n    background-clip: content-box;\r\n    height: 100px;\r\n    opacity: 0;\r\n    position: absolute;\r\n    top: calc(50% - 50px);\r\n    width: 70px;\r\n}\r\n\r\n.fancybox-navigation .fancybox-button div {\r\n    padding: 7px;\r\n}\r\n\r\n.fancybox-navigation .fancybox-button--arrow_left {\r\n    left: 0;\r\n    left: env(safe-area-inset-left);\r\n    padding: 31px 26px 31px 6px;\r\n}\r\n\r\n.fancybox-navigation .fancybox-button--arrow_right {\r\n    padding: 31px 6px 31px 26px;\r\n    right: 0;\r\n    right: env(safe-area-inset-right);\r\n}\r\n\r\n/* Caption */\r\n\r\n.fancybox-caption {\r\n    background: linear-gradient(to top,\r\n        rgba(0, 0, 0, .85) 0%,\r\n        rgba(0, 0, 0, .3) 50%,\r\n        rgba(0, 0, 0, .15) 65%,\r\n        rgba(0, 0, 0, .075) 75.5%,\r\n        rgba(0, 0, 0, .037) 82.85%,\r\n        rgba(0, 0, 0, .019) 88%,\r\n        rgba(0, 0, 0, 0) 100%);\r\n    bottom: 0;\r\n    color: #eee;\r\n    font-size: 14px;\r\n    font-weight: 400;\r\n    left: 0;\r\n    line-height: 1.5;\r\n    padding: 75px 44px 25px 44px;\r\n    pointer-events: none;\r\n    right: 0;\r\n    text-align: center;\r\n    z-index: 99996;\r\n}\r\n\r\n@supports (padding: max(0px)) {\r\n    .fancybox-caption {\r\n        padding: 75px max(44px, env(safe-area-inset-right)) max(25px, env(safe-area-inset-bottom)) max(44px, env(safe-area-inset-left));\r\n    }\r\n}\r\n\r\n.fancybox-caption--separate {\r\n    margin-top: -50px;\r\n}\r\n\r\n.fancybox-caption__body {\r\n    max-height: 50vh;\r\n    overflow: auto;\r\n    pointer-events: all;\r\n}\r\n\r\n.fancybox-caption a,\r\n.fancybox-caption a:link,\r\n.fancybox-caption a:visited {\r\n    color: #ccc;\r\n    text-decoration: none;\r\n}\r\n\r\n.fancybox-caption a:hover {\r\n    color: #fff;\r\n    text-decoration: underline;\r\n}\r\n\r\n/* Loading indicator */\r\n\r\n.fancybox-loading {\r\n    animation: fancybox-rotate 1s linear infinite;\r\n    background: transparent;\r\n    border: 4px solid #888;\r\n    border-bottom-color: #fff;\r\n    border-radius: 50%;\r\n    height: 50px;\r\n    left: 50%;\r\n    margin: -25px 0 0 -25px;\r\n    opacity: .7;\r\n    padding: 0;\r\n    position: absolute;\r\n    top: 50%;\r\n    width: 50px;\r\n    z-index: 99999;\r\n}\r\n\r\n@keyframes fancybox-rotate {\r\n    100% {\r\n        transform: rotate(360deg);\r\n    }\r\n}\r\n\r\n/* Transition effects */\r\n\r\n.fancybox-animated {\r\n    transition-timing-function: cubic-bezier(0, 0, .25, 1);\r\n}\r\n\r\n/* transitionEffect: slide */\r\n\r\n.fancybox-fx-slide.fancybox-slide--previous {\r\n    opacity: 0;\r\n    transform: translate3d(-100%, 0, 0);\r\n}\r\n\r\n.fancybox-fx-slide.fancybox-slide--next {\r\n    opacity: 0;\r\n    transform: translate3d(100%, 0, 0);\r\n}\r\n\r\n.fancybox-fx-slide.fancybox-slide--current {\r\n    opacity: 1;\r\n    transform: translate3d(0, 0, 0);\r\n}\r\n\r\n/* transitionEffect: fade */\r\n\r\n.fancybox-fx-fade.fancybox-slide--previous,\r\n.fancybox-fx-fade.fancybox-slide--next {\r\n    opacity: 0;\r\n    transition-timing-function: cubic-bezier(.19, 1, .22, 1);\r\n}\r\n\r\n.fancybox-fx-fade.fancybox-slide--current {\r\n    opacity: 1;\r\n}\r\n\r\n/* transitionEffect: zoom-in-out */\r\n\r\n.fancybox-fx-zoom-in-out.fancybox-slide--previous {\r\n    opacity: 0;\r\n    transform: scale3d(1.5, 1.5, 1.5);\r\n}\r\n\r\n.fancybox-fx-zoom-in-out.fancybox-slide--next {\r\n    opacity: 0;\r\n    transform: scale3d(.5, .5, .5);\r\n}\r\n\r\n.fancybox-fx-zoom-in-out.fancybox-slide--current {\r\n    opacity: 1;\r\n    transform: scale3d(1, 1, 1);\r\n}\r\n\r\n/* transitionEffect: rotate */\r\n\r\n.fancybox-fx-rotate.fancybox-slide--previous {\r\n    opacity: 0;\r\n    -ms-transform: rotate(-360deg);\r\n    transform: rotate(-360deg);\r\n}\r\n\r\n.fancybox-fx-rotate.fancybox-slide--next {\r\n    opacity: 0;\r\n    -ms-transform: rotate(360deg);\r\n    transform: rotate(360deg);\r\n}\r\n\r\n.fancybox-fx-rotate.fancybox-slide--current {\r\n    opacity: 1;\r\n    -ms-transform: rotate(0deg);\r\n    transform: rotate(0deg);\r\n}\r\n\r\n/* transitionEffect: circular */\r\n\r\n.fancybox-fx-circular.fancybox-slide--previous {\r\n    opacity: 0;\r\n    transform: scale3d(0, 0, 0) translate3d(-100%, 0, 0);\r\n}\r\n\r\n.fancybox-fx-circular.fancybox-slide--next {\r\n    opacity: 0;\r\n    transform: scale3d(0, 0, 0) translate3d(100%, 0, 0);\r\n}\r\n\r\n.fancybox-fx-circular.fancybox-slide--current {\r\n    opacity: 1;\r\n    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);\r\n}\r\n\r\n/* transitionEffect: tube */\r\n\r\n.fancybox-fx-tube.fancybox-slide--previous {\r\n    transform: translate3d(-100%, 0, 0) scale(.1) skew(-10deg);\r\n}\r\n\r\n.fancybox-fx-tube.fancybox-slide--next {\r\n    transform: translate3d(100%, 0, 0) scale(.1) skew(10deg);\r\n}\r\n\r\n.fancybox-fx-tube.fancybox-slide--current {\r\n    transform: translate3d(0, 0, 0) scale(1);\r\n}\r\n\r\n/* Styling for Small-Screen Devices */\r\n@media all and (max-height: 576px) {\r\n    .fancybox-slide {\r\n        padding-left: 6px;\r\n        padding-right: 6px;\r\n    }\r\n\r\n    .fancybox-slide--image {\r\n        padding: 6px 0;\r\n    }\r\n\r\n    .fancybox-close-small {\r\n        right: -6px;\r\n    }\r\n\r\n    .fancybox-slide--image .fancybox-close-small {\r\n        background: #4e4e4e;\r\n        color: #f2f4f6;\r\n        height: 36px;\r\n        opacity: 1;\r\n        padding: 6px;\r\n        right: 0;\r\n        top: 0;\r\n        width: 36px;\r\n    }\r\n\r\n    .fancybox-caption {\r\n        padding-left: 12px;\r\n        padding-right: 12px;\r\n    }\r\n\r\n    @supports (padding: max(0px)) {\r\n        .fancybox-caption {\r\n            padding-left: max(12px, env(safe-area-inset-left));\r\n            padding-right: max(12px, env(safe-area-inset-right));\r\n        }\r\n    }\r\n}\n/* Share */\r\n\r\n.fancybox-share {\r\n    background: #f4f4f4;\r\n    border-radius: 3px;\r\n    max-width: 90%;\r\n    padding: 30px;\r\n    text-align: center;\r\n}\r\n\r\n.fancybox-share h1 {\r\n    color: #222;\r\n    font-size: 35px;\r\n    font-weight: 700;\r\n    margin: 0 0 20px 0;\r\n}\r\n\r\n.fancybox-share p {\r\n    margin: 0;\r\n    padding: 0;\r\n}\r\n\r\n.fancybox-share__button {\r\n    border: 0;\r\n    border-radius: 3px;\r\n    display: inline-block;\r\n    font-size: 14px;\r\n    font-weight: 700;\r\n    line-height: 40px;\r\n    margin: 0 5px 10px 5px;\r\n    min-width: 130px;\r\n    padding: 0 15px;\r\n    text-decoration: none;\r\n    transition: all .2s;\r\n    -webkit-user-select: none;\r\n    -moz-user-select: none;\r\n    -ms-user-select: none;\r\n    user-select: none;\r\n    white-space: nowrap;\r\n}\r\n\r\n.fancybox-share__button:visited,\r\n.fancybox-share__button:link {\r\n    color: #fff;\r\n}\r\n\r\n.fancybox-share__button:hover {\r\n    text-decoration: none;\r\n}\r\n\r\n.fancybox-share__button--fb {\r\n    background: #3b5998;\r\n}\r\n\r\n.fancybox-share__button--fb:hover {\r\n    background: #344e86;\r\n}\r\n\r\n.fancybox-share__button--pt {\r\n    background: #bd081d;\r\n}\r\n\r\n.fancybox-share__button--pt:hover {\r\n    background: #aa0719;\r\n}\r\n\r\n.fancybox-share__button--tw {\r\n    background: #1da1f2;\r\n}\r\n\r\n.fancybox-share__button--tw:hover {\r\n    background: #0d95e8;\r\n}\r\n\r\n.fancybox-share__button svg {\r\n    height: 25px;\r\n    margin-right: 7px;\r\n    position: relative;\r\n    top: -1px;\r\n    vertical-align: middle;\r\n    width: 25px;\r\n}\r\n\r\n.fancybox-share__button svg path {\r\n    fill: #fff;\r\n}\r\n\r\n.fancybox-share__input {\r\n    background: transparent;\r\n    border: 0;\r\n    border-bottom: 1px solid #d7d7d7;\r\n    border-radius: 0;\r\n    color: #5d5b5b;\r\n    font-size: 14px;\r\n    margin: 10px 0 0 0;\r\n    outline: none;\r\n    padding: 10px 15px;\r\n    width: 100%;\r\n}\n/* Thumbs */\r\n\r\n.fancybox-thumbs {\r\n    background: #ddd;\r\n    bottom: 0;\r\n    display: none;\r\n    margin: 0;\r\n    -webkit-overflow-scrolling: touch;\r\n    -ms-overflow-style: -ms-autohiding-scrollbar;\r\n    padding: 2px 2px 4px 2px;\r\n    position: absolute;\r\n    right: 0;\r\n    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\r\n    top: 0;\r\n    width: 212px;\r\n    z-index: 99995;\r\n}\r\n\r\n.fancybox-thumbs-x {\r\n    overflow-x: auto;\r\n    overflow-y: hidden;\r\n}\r\n\r\n.fancybox-show-thumbs .fancybox-thumbs {\r\n    display: block;\r\n}\r\n\r\n.fancybox-show-thumbs .fancybox-inner {\r\n    right: 212px;\r\n}\r\n\r\n.fancybox-thumbs__list {\r\n    font-size: 0;\r\n    height: 100%;\r\n    list-style: none;\r\n    margin: 0;\r\n    overflow-x: hidden;\r\n    overflow-y: auto;\r\n    padding: 0;\r\n    position: absolute;\r\n    position: relative;\r\n    white-space: nowrap;\r\n    width: 100%;\r\n}\r\n\r\n.fancybox-thumbs-x .fancybox-thumbs__list {\r\n    overflow: hidden;\r\n}\r\n\r\n.fancybox-thumbs-y .fancybox-thumbs__list::-webkit-scrollbar {\r\n    width: 7px;\r\n}\r\n\r\n.fancybox-thumbs-y .fancybox-thumbs__list::-webkit-scrollbar-track {\r\n    background: #fff;\r\n    border-radius: 10px;\r\n    box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);\r\n}\r\n\r\n.fancybox-thumbs-y .fancybox-thumbs__list::-webkit-scrollbar-thumb {\r\n    background: #2a2a2a;\r\n    border-radius: 10px;\r\n}\r\n\r\n.fancybox-thumbs__list a {\r\n    -webkit-backface-visibility: hidden;\r\n    backface-visibility: hidden;\r\n    background-color: rgba(0, 0, 0, .1);\r\n    background-position: center center;\r\n    background-repeat: no-repeat;\r\n    background-size: cover;\r\n    cursor: pointer;\r\n    float: left;\r\n    height: 75px;\r\n    margin: 2px;\r\n    max-height: calc(100% - 8px);\r\n    max-width: calc(50% - 4px);\r\n    outline: none;\r\n    overflow: hidden;\r\n    padding: 0;\r\n    position: relative;\r\n    -webkit-tap-highlight-color: transparent;\r\n    width: 100px;\r\n}\r\n\r\n.fancybox-thumbs__list a::before {\r\n    border: 6px solid #ff5268;\r\n    bottom: 0;\r\n    content: '';\r\n    left: 0;\r\n    opacity: 0;\r\n    position: absolute;\r\n    right: 0;\r\n    top: 0;\r\n    transition: all .2s cubic-bezier(.25, .46, .45, .94);\r\n    z-index: 99991;\r\n}\r\n\r\n.fancybox-thumbs__list a:focus::before {\r\n    opacity: .5;\r\n}\r\n\r\n.fancybox-thumbs__list a.fancybox-thumbs-active::before {\r\n    opacity: 1;\r\n}\r\n\r\n/* Styling for Small-Screen Devices */\r\n@media all and (max-width: 576px) {\r\n    .fancybox-thumbs {\r\n        width: 110px;\r\n    }\r\n\r\n    .fancybox-show-thumbs .fancybox-inner {\r\n        right: 110px;\r\n    }\r\n\r\n    .fancybox-thumbs__list a {\r\n        max-width: calc(100% - 10px);\r\n    }\r\n}";
 inject(css, undefined, '_t6b4ek');
@@ -39352,18 +39359,536 @@ return Popper;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],13:[function(require,module,exports){
+'use strict';
+
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+/**
+ * Created by Sergiu Șandor (micku7zu) on 1/27/2017.
+ * Original idea: https://github.com/gijsroge/tilt.js
+ * MIT License.
+ * Version 1.7.0
+ */
+
+var VanillaTilt = function () {
+  function VanillaTilt(element) {
+    var settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    classCallCheck(this, VanillaTilt);
+
+    if (!(element instanceof Node)) {
+      throw "Can't initialize VanillaTilt because " + element + " is not a Node.";
+    }
+
+    this.width = null;
+    this.height = null;
+    this.clientWidth = null;
+    this.clientHeight = null;
+    this.left = null;
+    this.top = null;
+
+    // for Gyroscope sampling
+    this.gammazero = null;
+    this.betazero = null;
+    this.lastgammazero = null;
+    this.lastbetazero = null;
+
+    this.transitionTimeout = null;
+    this.updateCall = null;
+    this.event = null;
+
+    this.updateBind = this.update.bind(this);
+    this.resetBind = this.reset.bind(this);
+
+    this.element = element;
+    this.settings = this.extendSettings(settings);
+
+    this.reverse = this.settings.reverse ? -1 : 1;
+    this.glare = VanillaTilt.isSettingTrue(this.settings.glare);
+    this.glarePrerender = VanillaTilt.isSettingTrue(this.settings["glare-prerender"]);
+    this.fullPageListening = VanillaTilt.isSettingTrue(this.settings["full-page-listening"]);
+    this.gyroscope = VanillaTilt.isSettingTrue(this.settings.gyroscope);
+    this.gyroscopeSamples = this.settings.gyroscopeSamples;
+
+    this.elementListener = this.getElementListener();
+
+    if (this.glare) {
+      this.prepareGlare();
+    }
+
+    if (this.fullPageListening) {
+      this.updateClientSize();
+    }
+
+    this.addEventListeners();
+    this.updateInitialPosition();
+  }
+
+  VanillaTilt.isSettingTrue = function isSettingTrue(setting) {
+    return setting === "" || setting === true || setting === 1;
+  };
+
+  /**
+   * Method returns element what will be listen mouse events
+   * @return {Node}
+   */
+
+
+  VanillaTilt.prototype.getElementListener = function getElementListener() {
+    if (this.fullPageListening) {
+      return window.document;
+    }
+
+    if (typeof this.settings["mouse-event-element"] === "string") {
+      var mouseEventElement = document.querySelector(this.settings["mouse-event-element"]);
+
+      if (mouseEventElement) {
+        return mouseEventElement;
+      }
+    }
+
+    if (this.settings["mouse-event-element"] instanceof Node) {
+      return this.settings["mouse-event-element"];
+    }
+
+    return this.element;
+  };
+
+  /**
+   * Method set listen methods for this.elementListener
+   * @return {Node}
+   */
+
+
+  VanillaTilt.prototype.addEventListeners = function addEventListeners() {
+    this.onMouseEnterBind = this.onMouseEnter.bind(this);
+    this.onMouseMoveBind = this.onMouseMove.bind(this);
+    this.onMouseLeaveBind = this.onMouseLeave.bind(this);
+    this.onWindowResizeBind = this.onWindowResize.bind(this);
+    this.onDeviceOrientationBind = this.onDeviceOrientation.bind(this);
+
+    this.elementListener.addEventListener("mouseenter", this.onMouseEnterBind);
+    this.elementListener.addEventListener("mouseleave", this.onMouseLeaveBind);
+    this.elementListener.addEventListener("mousemove", this.onMouseMoveBind);
+
+    if (this.glare || this.fullPageListening) {
+      window.addEventListener("resize", this.onWindowResizeBind);
+    }
+
+    if (this.gyroscope) {
+      window.addEventListener("deviceorientation", this.onDeviceOrientationBind);
+    }
+  };
+
+  /**
+   * Method remove event listeners from current this.elementListener
+   */
+
+
+  VanillaTilt.prototype.removeEventListeners = function removeEventListeners() {
+    this.elementListener.removeEventListener("mouseenter", this.onMouseEnterBind);
+    this.elementListener.removeEventListener("mouseleave", this.onMouseLeaveBind);
+    this.elementListener.removeEventListener("mousemove", this.onMouseMoveBind);
+
+    if (this.gyroscope) {
+      window.removeEventListener("deviceorientation", this.onDeviceOrientationBind);
+    }
+
+    if (this.glare || this.fullPageListening) {
+      window.removeEventListener("resize", this.onWindowResizeBind);
+    }
+  };
+
+  VanillaTilt.prototype.destroy = function destroy() {
+    clearTimeout(this.transitionTimeout);
+    if (this.updateCall !== null) {
+      cancelAnimationFrame(this.updateCall);
+    }
+
+    this.reset();
+
+    this.removeEventListeners();
+    this.element.vanillaTilt = null;
+    delete this.element.vanillaTilt;
+
+    this.element = null;
+  };
+
+  VanillaTilt.prototype.onDeviceOrientation = function onDeviceOrientation(event) {
+    if (event.gamma === null || event.beta === null) {
+      return;
+    }
+
+    this.updateElementPosition();
+
+    if (this.gyroscopeSamples > 0) {
+      this.lastgammazero = this.gammazero;
+      this.lastbetazero = this.betazero;
+
+      if (this.gammazero === null) {
+        this.gammazero = event.gamma;
+        this.betazero = event.beta;
+      } else {
+        this.gammazero = (event.gamma + this.lastgammazero) / 2;
+        this.betazero = (event.beta + this.lastbetazero) / 2;
+      }
+
+      this.gyroscopeSamples -= 1;
+    }
+
+    var totalAngleX = this.settings.gyroscopeMaxAngleX - this.settings.gyroscopeMinAngleX;
+    var totalAngleY = this.settings.gyroscopeMaxAngleY - this.settings.gyroscopeMinAngleY;
+
+    var degreesPerPixelX = totalAngleX / this.width;
+    var degreesPerPixelY = totalAngleY / this.height;
+
+    var angleX = event.gamma - (this.settings.gyroscopeMinAngleX + this.gammazero);
+    var angleY = event.beta - (this.settings.gyroscopeMinAngleY + this.betazero);
+
+    var posX = angleX / degreesPerPixelX;
+    var posY = angleY / degreesPerPixelY;
+
+    if (this.updateCall !== null) {
+      cancelAnimationFrame(this.updateCall);
+    }
+
+    this.event = {
+      clientX: posX + this.left,
+      clientY: posY + this.top
+    };
+
+    this.updateCall = requestAnimationFrame(this.updateBind);
+  };
+
+  VanillaTilt.prototype.onMouseEnter = function onMouseEnter() {
+    this.updateElementPosition();
+    this.element.style.willChange = "transform";
+    this.setTransition();
+  };
+
+  VanillaTilt.prototype.onMouseMove = function onMouseMove(event) {
+    if (this.updateCall !== null) {
+      cancelAnimationFrame(this.updateCall);
+    }
+
+    this.event = event;
+    this.updateCall = requestAnimationFrame(this.updateBind);
+  };
+
+  VanillaTilt.prototype.onMouseLeave = function onMouseLeave() {
+    this.setTransition();
+
+    if (this.settings.reset) {
+      requestAnimationFrame(this.resetBind);
+    }
+  };
+
+  VanillaTilt.prototype.reset = function reset() {
+    this.event = {
+      clientX: this.left + this.width / 2,
+      clientY: this.top + this.height / 2
+    };
+
+    if (this.element && this.element.style) {
+      this.element.style.transform = "perspective(" + this.settings.perspective + "px) " + "rotateX(0deg) " + "rotateY(0deg) " + "scale3d(1, 1, 1)";
+    }
+
+    this.resetGlare();
+  };
+
+  VanillaTilt.prototype.resetGlare = function resetGlare() {
+    if (this.glare) {
+      this.glareElement.style.transform = "rotate(180deg) translate(-50%, -50%)";
+      this.glareElement.style.opacity = "0";
+    }
+  };
+
+  VanillaTilt.prototype.updateInitialPosition = function updateInitialPosition() {
+    if (this.settings.startX === 0 && this.settings.startY === 0) {
+      return;
+    }
+
+    this.onMouseEnter();
+
+    if (this.fullPageListening) {
+      this.event = {
+        clientX: (this.settings.startX + this.settings.max) / (2 * this.settings.max) * this.clientWidth,
+        clientY: (this.settings.startY + this.settings.max) / (2 * this.settings.max) * this.clientHeight
+      };
+    } else {
+      this.event = {
+        clientX: this.left + (this.settings.startX + this.settings.max) / (2 * this.settings.max) * this.width,
+        clientY: this.top + (this.settings.startY + this.settings.max) / (2 * this.settings.max) * this.height
+      };
+    }
+
+    var backupScale = this.settings.scale;
+    this.settings.scale = 1;
+    this.update();
+    this.settings.scale = backupScale;
+    this.resetGlare();
+  };
+
+  VanillaTilt.prototype.getValues = function getValues() {
+    var x = void 0,
+        y = void 0;
+
+    if (this.fullPageListening) {
+      x = this.event.clientX / this.clientWidth;
+      y = this.event.clientY / this.clientHeight;
+    } else {
+      x = (this.event.clientX - this.left) / this.width;
+      y = (this.event.clientY - this.top) / this.height;
+    }
+
+    x = Math.min(Math.max(x, 0), 1);
+    y = Math.min(Math.max(y, 0), 1);
+
+    var tiltX = (this.reverse * (this.settings.max - x * this.settings.max * 2)).toFixed(2);
+    var tiltY = (this.reverse * (y * this.settings.max * 2 - this.settings.max)).toFixed(2);
+    var angle = Math.atan2(this.event.clientX - (this.left + this.width / 2), -(this.event.clientY - (this.top + this.height / 2))) * (180 / Math.PI);
+
+    return {
+      tiltX: tiltX,
+      tiltY: tiltY,
+      percentageX: x * 100,
+      percentageY: y * 100,
+      angle: angle
+    };
+  };
+
+  VanillaTilt.prototype.updateElementPosition = function updateElementPosition() {
+    var rect = this.element.getBoundingClientRect();
+
+    this.width = this.element.offsetWidth;
+    this.height = this.element.offsetHeight;
+    this.left = rect.left;
+    this.top = rect.top;
+  };
+
+  VanillaTilt.prototype.update = function update() {
+    var values = this.getValues();
+
+    this.element.style.transform = "perspective(" + this.settings.perspective + "px) " + "rotateX(" + (this.settings.axis === "x" ? 0 : values.tiltY) + "deg) " + "rotateY(" + (this.settings.axis === "y" ? 0 : values.tiltX) + "deg) " + "scale3d(" + this.settings.scale + ", " + this.settings.scale + ", " + this.settings.scale + ")";
+
+    if (this.glare) {
+      this.glareElement.style.transform = "rotate(" + values.angle + "deg) translate(-50%, -50%)";
+      this.glareElement.style.opacity = "" + values.percentageY * this.settings["max-glare"] / 100;
+    }
+
+    this.element.dispatchEvent(new CustomEvent("tiltChange", {
+      "detail": values
+    }));
+
+    this.updateCall = null;
+  };
+
+  /**
+   * Appends the glare element (if glarePrerender equals false)
+   * and sets the default style
+   */
+
+
+  VanillaTilt.prototype.prepareGlare = function prepareGlare() {
+    // If option pre-render is enabled we assume all html/css is present for an optimal glare effect.
+    if (!this.glarePrerender) {
+      // Create glare element
+      var jsTiltGlare = document.createElement("div");
+      jsTiltGlare.classList.add("js-tilt-glare");
+
+      var jsTiltGlareInner = document.createElement("div");
+      jsTiltGlareInner.classList.add("js-tilt-glare-inner");
+
+      jsTiltGlare.appendChild(jsTiltGlareInner);
+      this.element.appendChild(jsTiltGlare);
+    }
+
+    this.glareElementWrapper = this.element.querySelector(".js-tilt-glare");
+    this.glareElement = this.element.querySelector(".js-tilt-glare-inner");
+
+    if (this.glarePrerender) {
+      return;
+    }
+
+    Object.assign(this.glareElementWrapper.style, {
+      "position": "absolute",
+      "top": "0",
+      "left": "0",
+      "width": "100%",
+      "height": "100%",
+      "overflow": "hidden",
+      "pointer-events": "none"
+    });
+
+    Object.assign(this.glareElement.style, {
+      "position": "absolute",
+      "top": "50%",
+      "left": "50%",
+      "pointer-events": "none",
+      "background-image": "linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
+      "width": this.element.offsetWidth * 2 + "px",
+      "height": this.element.offsetWidth * 2 + "px",
+      "transform": "rotate(180deg) translate(-50%, -50%)",
+      "transform-origin": "0% 0%",
+      "opacity": "0"
+    });
+  };
+
+  VanillaTilt.prototype.updateGlareSize = function updateGlareSize() {
+    if (this.glare) {
+      Object.assign(this.glareElement.style, {
+        "width": "" + this.element.offsetWidth * 2,
+        "height": "" + this.element.offsetWidth * 2
+      });
+    }
+  };
+
+  VanillaTilt.prototype.updateClientSize = function updateClientSize() {
+    this.clientWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+    this.clientHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+  };
+
+  VanillaTilt.prototype.onWindowResize = function onWindowResize() {
+    this.updateGlareSize();
+    this.updateClientSize();
+  };
+
+  VanillaTilt.prototype.setTransition = function setTransition() {
+    var _this = this;
+
+    clearTimeout(this.transitionTimeout);
+    this.element.style.transition = this.settings.speed + "ms " + this.settings.easing;
+    if (this.glare) this.glareElement.style.transition = "opacity " + this.settings.speed + "ms " + this.settings.easing;
+
+    this.transitionTimeout = setTimeout(function () {
+      _this.element.style.transition = "";
+      if (_this.glare) {
+        _this.glareElement.style.transition = "";
+      }
+    }, this.settings.speed);
+  };
+
+  /**
+   * Method return patched settings of instance
+   * @param {boolean} settings.reverse - reverse the tilt direction
+   * @param {number} settings.max - max tilt rotation (degrees)
+   * @param {startX} settings.startX - the starting tilt on the X axis, in degrees. Default: 0
+   * @param {startY} settings.startY - the starting tilt on the Y axis, in degrees. Default: 0
+   * @param {number} settings.perspective - Transform perspective, the lower the more extreme the tilt gets
+   * @param {string} settings.easing - Easing on enter/exit
+   * @param {number} settings.scale - 2 = 200%, 1.5 = 150%, etc..
+   * @param {number} settings.speed - Speed of the enter/exit transition
+   * @param {boolean} settings.transition - Set a transition on enter/exit
+   * @param {string|null} settings.axis - What axis should be disabled. Can be X or Y
+   * @param {boolean} settings.glare - What axis should be disabled. Can be X or Y
+   * @param {number} settings.max-glare - the maximum "glare" opacity (1 = 100%, 0.5 = 50%)
+   * @param {boolean} settings.glare-prerender - false = VanillaTilt creates the glare elements for you, otherwise
+   * @param {boolean} settings.full-page-listening - If true, parallax effect will listen to mouse move events on the whole document, not only the selected element
+   * @param {string|object} settings.mouse-event-element - String selector or link to HTML-element what will be listen mouse events
+   * @param {boolean} settings.reset - false = If the tilt effect has to be reset on exit
+   * @param {gyroscope} settings.gyroscope - Enable tilting by deviceorientation events
+   * @param {gyroscopeSensitivity} settings.gyroscopeSensitivity - Between 0 and 1 - The angle at which max tilt position is reached. 1 = 90deg, 0.5 = 45deg, etc..
+   * @param {gyroscopeSamples} settings.gyroscopeSamples - How many gyroscope moves to decide the starting position.
+   */
+
+
+  VanillaTilt.prototype.extendSettings = function extendSettings(settings) {
+    var defaultSettings = {
+      reverse: false,
+      max: 15,
+      startX: 0,
+      startY: 0,
+      perspective: 1000,
+      easing: "cubic-bezier(.03,.98,.52,.99)",
+      scale: 1,
+      speed: 300,
+      transition: true,
+      axis: null,
+      glare: false,
+      "max-glare": 1,
+      "glare-prerender": false,
+      "full-page-listening": false,
+      "mouse-event-element": null,
+      reset: true,
+      gyroscope: true,
+      gyroscopeMinAngleX: -45,
+      gyroscopeMaxAngleX: 45,
+      gyroscopeMinAngleY: -45,
+      gyroscopeMaxAngleY: 45,
+      gyroscopeSamples: 10
+    };
+
+    var newSettings = {};
+    for (var property in defaultSettings) {
+      if (property in settings) {
+        newSettings[property] = settings[property];
+      } else if (this.element.hasAttribute("data-tilt-" + property)) {
+        var attribute = this.element.getAttribute("data-tilt-" + property);
+        try {
+          newSettings[property] = JSON.parse(attribute);
+        } catch (e) {
+          newSettings[property] = attribute;
+        }
+      } else {
+        newSettings[property] = defaultSettings[property];
+      }
+    }
+
+    return newSettings;
+  };
+
+  VanillaTilt.init = function init(elements, settings) {
+    if (elements instanceof Node) {
+      elements = [elements];
+    }
+
+    if (elements instanceof NodeList) {
+      elements = [].slice.call(elements);
+    }
+
+    if (!(elements instanceof Array)) {
+      return;
+    }
+
+    elements.forEach(function (element) {
+      if (!("vanillaTilt" in element)) {
+        element.vanillaTilt = new VanillaTilt(element, settings);
+      }
+    });
+  };
+
+  return VanillaTilt;
+}();
+
+if (typeof document !== "undefined") {
+  /* expose the class to window */
+  window.VanillaTilt = VanillaTilt;
+
+  /**
+   * Auto load
+   */
+  VanillaTilt.init(document.querySelectorAll("[data-tilt]"));
+}
+
+module.exports = VanillaTilt;
+
+},{}],14:[function(require,module,exports){
 var inject = require('./../../node_modules/cssify');
 var css = "html,\nhtml *,\nbody,\nbody * {\n  cursor: none !important;\n}\n\n.cursor-dot,\n.cursor-dot-outline {\n  z-index: 2147483647;\n  pointer-events: none;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  border-radius: 50%;\n  opacity: 0;\n  -webkit-transform: translate(-50%, -50%);\n  transform: translate(-50%, -50%);\n  transition: opacity 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;\n  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;\n  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;\n}\n\n.cursor-dot {\n  width: 8px;\n  height: 8px;\n  background-color: #dc5656;\n}\n\n.cursor-dot-outline {\n  width: 60px;\n  height: 60px;\n  background-color: rgba(229, 128, 128, 0.5);\n}";
 inject(css, undefined, '_7adszz');
 module.exports = css;
 
-},{"./../../node_modules/cssify":8}],14:[function(require,module,exports){
+},{"./../../node_modules/cssify":8}],15:[function(require,module,exports){
 var inject = require('./../../node_modules/cssify');
 var css = "*,\n*:after,\n*::before {\n\tmargin: 0;\n\tpadding: 0;\n\t-moz-box-sizing: border-box;\n\tbox-sizing: border-box;\n}\n\nhtml,\nbody,\n.popup,\n.pusher,\n.inner {\n\theight: 100%;\n\twidth: 100%;\n\toverflow: hidden;\n}\n\n.splash canvas {\n\tposition: relative !important;\n\tz-index: 5 !important;\n}\n\n.inner {\n\toverflow-x: hidden;\n\toverflow-y: scroll;\n\t-webkit-overflow-scrolling: touch;\n}\n\n.inner-content {\n\theight: 100%;\n}\n\nbody {\n\tbackground-color: #BF0222;\n\tcolor: #fff;\n\tfont-family: 'IBM Plex Sans', 'Work Sans', 'Karla', 'Lato', sans-serif;\n}\n\n::selection {\n\tbackground: #BF0222;\n}\n\n.condensed {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n}\n\n.block-revealer__element {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbackground: #000;\n\tpointer-events: none;\n\topacity: 0;\n\tz-index: 6;\n}\n\n.splash {\n\twidth: 100%;\n\theight: 100%;\n}\n\n.container {\n\twidth: 100%;\n\theight: 100%;\n}\n\n.main-header {\n\tfont-size: 4.74rem;\n\tfont-weight: 700;\n\tfont-family: 'IBM Plex Sans', sans-serif;\n\ttext-transform: uppercase;\n\tposition: relative;\n\ttop: 50%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n\ttext-align: center;\n}\n\n.main-header .thin {\n\tfont-weight: 200;\n}\n\nh2,\nh3,\nh4 {\n\ttext-transform: uppercase;\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-weight: 700;\n}\n\nh5,\nh6 {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-style: italic;\n}\n\na.light-link {\n\tbackground: linear-gradient(to bottom, #BF0222 0%, #BF0222 100%);\n\tbackground-position: 0 100%;\n\tbackground-repeat: repeat-x;\n\tbackground-size: 3px 3px;\n\tfont-weight: 600;\n\tcolor: #fff;\n\ttext-decoration: none;\n\t-webkit-transition: all 0.3s ease-in-out;\n\ttransition: all 0.3s ease-in-out;\n}\n\na:hover.light-link {\n\tcolor: #fff;\n\tbackground-image: url(\"data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23bf0222' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E\");\n\tbackground-position: 0 100%;\n\tbackground-size: auto 6px;\n\tbackground-repeat: repeat-x;\n\ttext-decoration: none;\n}\n\na:visited.light-link {\n\tbackground: linear-gradient(to bottom, #4d0099 0%, #4d0099 100%);\n\tbackground-position: 0 100%;\n\tbackground-repeat: repeat-x;\n\tbackground-size: 3px 3px;\n\tfont-weight: 600;\n\tcolor: #fff;\n\ttext-decoration: none;\n\ttransition: all ease-in-out 0.5s;\n}\n\na:visited:hover.light-link {\n\tcolor: #fff;\n\tbackground-image: url(\"data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%234d0099' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E\");\n\tbackground-position: 0 100%;\n\tbackground-size: auto 6px;\n\tbackground-repeat: repeat-x;\n\ttext-decoration: none;\n}\n\na.dark-link {\n\tbackground: linear-gradient(to bottom, #BF0222 0%, #BF0222 100%);\n\tbackground-position: 0 100%;\n\tbackground-repeat: repeat-x;\n\tbackground-size: 3px 3px;\n\tfont-weight: 600;\n\tcolor: #000;\n\ttext-decoration: none;\n\t-webkit-transition: all 0.3s ease-in-out;\n\ttransition: all 0.3s ease-in-out;\n}\n\na:hover.dark-link {\n\tcolor: #000;\n\tbackground-image: url(\"data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23bf0222' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E\");\n\tbackground-position: 0 100%;\n\tbackground-size: auto 6px;\n\tbackground-repeat: repeat-x;\n\ttext-decoration: none;\n}\n\na:visited.dark-link {\n\tbackground: linear-gradient(to bottom, #4d0099 0%, #4d0099 100%);\n\tbackground-position: 0 100%;\n\tbackground-repeat: repeat-x;\n\tbackground-size: 3px 3px;\n\tfont-weight: 600;\n\tcolor: #000;\n\ttext-decoration: none;\n\ttransition: all ease-in-out 0.5s;\n}\n\na:visited:hover.dark-link {\n\tcolor: #000;\n\tbackground-image: url(\"data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%234d0099' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E\");\n\tbackground-position: 0 100%;\n\tbackground-size: auto 6px;\n\tbackground-repeat: repeat-x;\n\ttext-decoration: none;\n}\n\n@media(min-width: 1350px) {\n\t.main-header {\n\t\tfont-size: 5rem;\n\t}\n}\n\n.no-select {\n\t-webkit-touch-callout: none;\n\t-webkit-user-select: none;\n\t-moz-user-select: none;\n\t-ms-user-select: none;\n\tuser-select: none;\n}\n\n.overlay {\n\tdisplay: block;\n\topacity: 0.5;\n}\n\n.inner-nav {\n\tbackground: #BF0222;\n}\n\n.inner {\n\tbackground: #044BDA;\n}\n\n.inner-what-is-tsa {\n\tbackground: #07A9DF;\n}\n\n.inner-our-members {\n\tbackground: #FF3292;\n}\n\n.inner-stem {\n\tbackground: #FFCD37;\n}\n\n.inner-gallery {\n\tbackground: #000;\n}\n\n.inner-about {\n\tbackground: #fff;\n\tcolor: #000;\n}\n\n.pusher {\n\tposition: relative;\n\tleft: 0;\n\tz-index: 3;\n\theight: 100%;\n\twidth: 100%;\n\t-webkit-transition: -webkit-transform 0.5s;\n\ttransition: transform 0.5s;\n\t-webkit-box-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n\t-moz-box-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n\tbox-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.55);\n}\n\n.pusher::after {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n\twidth: 0;\n\theight: 0;\n\tbackground: rgba(0, 0, 0, 0.2);\n\tcontent: '';\n\topacity: 0;\n\t-webkit-transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n\ttransition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n}\n\n.menu-open .pusher::after {\n\twidth: 100%;\n\theight: 100%;\n\topacity: 1;\n\t-webkit-transition: opacity 0.5s;\n\ttransition: opacity 0.5s;\n}\n\n.menu ul {\n\tlist-style-type: none;\n}\n\n.menu {\n\tfont-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;\n\tfont-weight: 700;\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tz-index: 4;\n\tvisibility: hidden;\n\theight: 100%;\n\tbackground: #BF0222;\n\t-webkit-transition: all 0.5s;\n\ttransition: all 0.5s;\n}\n\n.menu::after {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbackground: rgba(0, 0, 0, 0.2);\n\tcontent: '';\n\topacity: 1;\n\t-webkit-transition: opacity 0.5s;\n\ttransition: opacity 0.5s;\n}\n\n.menu-open .menu::after {\n\twidth: 0;\n\theight: 0;\n\topacity: 0;\n\t-webkit-transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n\ttransition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;\n}\n\n.menu ul li a {\n\tdisplay: block;\n\tpadding: 1em 1em 1em 1.2em;\n\toutline: none;\n\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0.2);\n\tcolor: #f3efe0;\n\ttext-transform: uppercase;\n\ttext-decoration: none;\n\ttext-shadow: 0 0 1px rgba(255, 255, 255, 0.1);\n\tfont-weight: 700;\n\t-webkit-transition: all 0.3s;\n\ttransition: all 0.3s;\n}\n\n/* .menu ul li:first-child a {\n\tbox-shadow: inset 0 -1px rgba(0,0,0,0.2), inset 0 1px rgba(0,0,0,0.2);\n} */\n\n.menu ul li a:hover {\n\tbackground: rgba(0, 0, 0, 0.2);\n\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0);\n\tcolor: #fff;\n}\n\n.scale-rotate.popup {\n\t-webkit-perspective: 1500px;\n\tperspective: 1500px;\n}\n\n.scale-rotate.menu {\n\topacity: 1;\n\t-webkit-transform: translate3d(-100%, 0, 0);\n\ttransform: translate3d(-100%, 0, 0);\n}\n\n.scale-rotate.menu-open .scale-rotate.menu {\n\tvisibility: visible;\n\t-webkit-transition: -webkit-transform 0.5s;\n\ttransition: transform 0.5s;\n\t-webkit-transform: translate3d(0, 0, 0);\n\ttransform: translate3d(0, 0, 0);\n}\n\n.scale-rotate.menu::after {\n\tdisplay: none;\n}\n\n@media (max-width: 630px) {\n\t.menu {\n\t\twidth: 300px;\n\t\tpadding-top: 95px;\n\t}\n\n\t.col-12 ul {\n\t\tcolumns: 2;\n\t\t-webkit-columns: 2;\n\t\t-moz-columns: 2;\n\t}\n\n\t.main-header {\n\t\tfont-size: 4.5rem;\n\t}\n}\n\n@media (max-width: 440px) {\n\t.band-link-menu-open {\n\t\tbackground: #000;\n\t}\n}\n\n@media (min-width: 630px) {\n\t.main-header {\n\t\twhite-space: nowrap;\n\t}\n\n\t.scale-rotate .pusher {\n\t\t-webkit-transform-style: preserve-3d;\n\t\ttransform-style: preserve-3d;\n\t}\n\n\t.scale-rotate.menu-open .pusher {\n\t\t-webkit-transform: translate3d(250px, 0, -500px) rotateY(-50deg);\n\t\ttransform: translate3d(250px, 0, -500px) rotateY(-50deg);\n\t}\n\n\t.menu {\n\t\tfont-size: 2rem;\n\t\tpadding-left: 9%;\n\t\ttransform: translate(-50%, -50%);\n\t\tmin-height: 100%;\n\t\t/* Fallback for browsers do NOT support vh unit */\n\t\tmin-height: 100vh;\n\t\t/* These two lines are counted as one :-)       */\n\t\tdisplay: flex;\n\t\talign-items: center;\n\t}\n\n\t.menu ul li a {\n\t\tbox-shadow: none;\n\t\tpadding: 0.25em 0.25em 0.25em 0.36em;\n\t}\n\n\t.menu ul:hover li:hover a:hover {\n\t\tbox-shadow: none;\n\t\t-moz-text-fill-color: transparent;\n\t\t-webkit-text-fill-color: transparent;\n\t\t-moz-text-stroke-color: #fff;\n\t\t-webkit-text-stroke-color: #fff;\n\t\t-moz-text-stroke-width: 1px;\n\t\t-webkit-text-stroke-width: 1px;\n\t}\n\n\t.menu ul li a:hover {\n\t\tbackground: rgba(0, 0, 0, 0);\n\t\tbox-shadow: inset 0 -1px rgba(0, 0, 0, 0);\n\t\tcolor: #fff;\n\t}\n\n\t.col-12 ul {\n\t\tcolumns: 3;\n\t\t-webkit-columns: 3;\n\t\t-moz-columns: 3;\n\t}\n}\n\n/* Fallback example for browsers that don't support 3D transforms (and no JS fallback) */\n.no-csstransforms3d .pusher,\n.no-js .pusher {\n\tpadding-left: 300px;\n}\n\n#nav-icon {\n\twidth: 60px;\n\theight: 45px;\n\tposition: absolute;\n\tmargin: 25px;\n\tz-index: 5;\n\t-webkit-transition: .5s ease-in-out;\n\t-moz-transition: .5s ease-in-out;\n\t-o-transition: .5s ease-in-out;\n\ttransition: .5s ease-in-out;\n}\n\n#nav-icon span {\n\tdisplay: block;\n\tposition: absolute;\n\theight: 5px;\n\twidth: 100%;\n\tbackground: #fff;\n\topacity: 1;\n\tleft: 0;\n\t-webkit-transition: .25s ease-in-out;\n\t-moz-transition: .25s ease-in-out;\n\t-o-transition: .25s ease-in-out;\n\ttransition: .25s ease-in-out;\n}\n\n#nav-icon.nav-icon-dark span {\n\tbackground: #000;\n}\n\n#nav-icon span:nth-child(1) {\n\ttop: 0px;\n}\n\n#nav-icon span:nth-child(2) {\n\ttop: 15px;\n}\n\n#nav-icon span:nth-child(3) {\n\ttop: 30px;\n}\n\n#nav-icon.open span:nth-child(1) {\n\ttop: 18px;\n\t-webkit-transform: rotate(135deg);\n\t-moz-transform: rotate(135deg);\n\t-o-transform: rotate(135deg);\n\ttransform: rotate(135deg);\n}\n\n#nav-icon.open span:nth-child(2) {\n\topacity: 0;\n\tleft: -60px;\n}\n\n#nav-icon.open span:nth-child(3) {\n\ttop: 18px;\n\t-webkit-transform: rotate(-135deg);\n\t-moz-transform: rotate(-135deg);\n\t-o-transform: rotate(-135deg);\n\ttransform: rotate(-135deg);\n}\n\n.band-link {\n\tposition: absolute;\n\tcolor: #fff;\n\ttop: 0;\n\tright: 0;\n\tmargin: 25px;\n\tpadding: 5px;\n\tz-index: 6;\n\ttext-transform: uppercase;\n\ttransition: all 0.3s ease-in-out;\n}\n\n.color-block {\n\twidth: 100%;\n\theight: 2rem;\n\toverflow: hidden;\n}\n\nblockquote {\n\tdisplay: block;\n\tmargin: 0 auto;\n\tfont-size: 2rem;\n\tfont-weight: 400;\n\tfont-style: oblique;\n}\n\n@media (max-width: 360px) {\n\t.main-header {\n\t\tfont-size: 3.5rem;\n\t}\n}\n\n.table {\n\tcolor: #fff;\n}\n\n.table::hover {\n\tcolor: #fff;\n}\n\nimg {\n\theight: 100%;\n\tpadding: 0;\n}\n\nimg.box-shadow-right {\n\tpadding: 0;\n\t-webkit-box-shadow: 10px 10px 0px 0px rgba(191, 2, 34, 1);\n\t-moz-box-shadow: 10px 10px 0px 0px rgba(191, 2, 34, 1);\n\tbox-shadow: 10px 10px 0px 0px rgba(191, 2, 34, 1);\n}\n\nimg.box-shadow-left {\n\tpadding: 0;\n\t-webkit-box-shadow: -10px 10px 0px 0px rgba(191, 2, 34, 1);\n\t-moz-box-shadow: -10px 10px 0px 0px rgba(191, 2, 34, 1);\n\tbox-shadow: -10px 10px 0px 0px rgba(191, 2, 34, 1);\n}\n\n.box-shadow-right {\n\t-webkit-box-shadow: 10px 10px 0px 0px rgba(191, 2, 34, 1);\n\t-moz-box-shadow: 10px 10px 0px 0px rgba(191, 2, 34, 1);\n\tbox-shadow: 10px 10px 0px 0px rgba(191, 2, 34, 1);\n}\n\ndiv.col-md-8 {\n\ttransform: translateY(12.5%);\n}\n\n.btn {\n\tborder-radius: 0px;\n\ttransition: 0.25s;\n\tbackground: none;\n\tcolor: #000;\n\tborder: none;\n\tfont-weight: 700;\n}\n\n.offset {\n\tbox-shadow: 0.3em 0.3em 0 0 rgba(191, 2, 34, 1), inset 0.3em 0.3em 0 0 rgba(191, 2, 34, 1);\n}\n\n.offset:hover {\n\tbox-shadow: 0 0 0 0 rgba(191, 2, 34, 1), inset 6em 3.5em 0 0 rgba(191, 2, 34, 1);\n}\n\n.modal-backdrop {\n\tposition: inherit;\n}\n\n.modal-title {\n\tfont-weight: 700;\n\tfont-style: initial;\n\tfont-family: 'IBM Plex Sans', 'IBM Plex Sans Condensed', 'Lato', 'Work Sans', sans-serif;\n}\n\n.modal-content {\n\tborder-radius: 0px;\n}\n\n.no-break {\n\twhite-space: nowrap;\n}\n\n.embed-responsive {\n\theight: 300px;\n}";
 inject(css, undefined, '_xhba26');
 module.exports = css;
 
-},{"./../../node_modules/cssify":8}],15:[function(require,module,exports){
+},{"./../../node_modules/cssify":8}],16:[function(require,module,exports){
 var $ = require('jquery');
 var MobileDetect = require('mobile-detect'),
 	md = new MobileDetect(window.navigator.userAgent);
@@ -39479,7 +40004,7 @@ var cursor = {
 
 if (!md.mobile() && !md.tablet())
 	cursor.init();
-},{"jquery":9,"mobile-detect":11}],16:[function(require,module,exports){
+},{"jquery":9,"mobile-detect":11}],17:[function(require,module,exports){
 /**
  * Navigation
  */
