@@ -27,7 +27,9 @@ function setup() {
 
     uploadAnim = select('#uploading-animation');
 
-    createCanvas(windowWidth, windowHeight);
+    var canvas = createCanvas(windowWidth, windowHeight);
+
+    canvas.parent('sketch-holder');
 
     toggleBtn = createDiv("Mute/Unmute");
 
