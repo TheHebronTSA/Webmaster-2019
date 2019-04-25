@@ -312,36 +312,36 @@
 	</div>
 	<script src="/resources/js/blockReveal.js"></script>
 	<!-- <script src="https://cdn.jsdelivr.net/npm/animejs@3.0.1/lib/anime.min.js"></script> -->
-	<script src="/node_modules/animejs/lib/anime.min.js"></script>
-	<script src="/node_modules/scrollmonitor/scrollMonitor.js"></script>
+	<!-- <script src="/node_modules/animejs/lib/anime.min.js"></script>
+	<script src="/node_modules/scrollmonitor/scrollMonitor.js"></script> -->
 	<script>
-		var rev1 = new RevealFx(document.querySelector('#rev-1'), {
-			revealSettings: {
-				bgcolor: '#7f40f1',
-				duration: 900,
-				onCover: function (contentEl, revealerEl) {
-					contentEl.style.opacity = 1;
-				}
-			}
-		});
-		rev1.reveal();
+		// var rev1 = new RevealFx(document.querySelector('#rev-1'), {
+		// 	revealSettings: {
+		// 		bgcolor: '#7f40f1',
+		// 		duration: 900,
+		// 		onCover: function (contentEl, revealerEl) {
+		// 			contentEl.style.opacity = 1;
+		// 		}
+		// 	}
+		// });
+		// rev1.reveal();
 
-		var scrollElemToWatch_1 = document.getElementById('rev-3'),
-			watcher_1 = scrollMonitor.create(scrollElemToWatch_1),
-			rev3 = new RevealFx(scrollElemToWatch_1, {
-				revealSettings: {
-					bgcolor: '#fcf652',
-					direction: 'rl',
-					onCover: function (contentEl, revealerEl) {
-						contentEl.style.opacity = 1;
-					}
-				}
-			});
+		// var scrollElemToWatch_1 = document.getElementById('rev-3'),
+		// 	watcher_1 = scrollMonitor.create(scrollElemToWatch_1),
+		// 	rev3 = new RevealFx(scrollElemToWatch_1, {
+		// 		revealSettings: {
+		// 			bgcolor: '#fcf652',
+		// 			direction: 'rl',
+		// 			onCover: function (contentEl, revealerEl) {
+		// 				contentEl.style.opacity = 1;
+		// 			}
+		// 		}
+		// 	});
 
-		watcher_1.enterViewport(function () {
-			rev3.reveal();
-			watcher_1.destroy();
-		});
+		// watcher_1.enterViewport(function () {
+		// 	rev3.reveal();
+		// 	watcher_1.destroy();
+		// });
 	</script>
 </body>
 
