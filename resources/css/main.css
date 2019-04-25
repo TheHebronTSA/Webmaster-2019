@@ -217,6 +217,7 @@ a:visited:hover.dark-link {
 
 .inner-stem {
 	background: #FFCD37;
+	color: #000;
 }
 
 .inner-gallery {
@@ -601,4 +602,9 @@ div.col-md-8 {
 
 .embed-responsive {
 	height: 300px;
+}
+
+.box {
+	background: #000;
+	color: #fff;
 }
