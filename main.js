@@ -13,6 +13,7 @@ $(document).ready(function () {
   var fancybox = require('@fancyapps/fancybox');
   var cursorjs = require('./resources/js/cursor');
   var animejs = require('animejs')
+  var VanillaTilt = require('vanilla-tilt');
   // var RevealFx = require('./resources/js/blockReveal');
 
   // var rev_1 = new RevealFx($('#rev-1'), {
@@ -100,6 +101,12 @@ $(document).ready(function () {
         y: e.pageY
       })
       .replay();
+  });
+
+  VanillaTilt.init(document.querySelectorAll(".hover-box"), {
+    reverse: true,
+    scale: 1,
+    "max-glare": 1,
   });
 
   /** THREE JS SPLASH */
