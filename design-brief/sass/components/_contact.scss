@@ -1,0 +1,121 @@
+/* ==========================================================================
+   13. CONTACT
+   ========================================================================== */
+
+.contact {
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-title {
+    color: $blue;
+    text-align: center;
+    font-weight: 700;
+    span {
+        position: relative;
+    }
+}
+
+.contact-title span::after {
+    border-bottom: 10px solid #bcc8f0;
+    content: "";
+    position: absolute;
+    width: 100%;
+    left: 0;
+    right: 0;
+    bottom: -13px;
+}
+
+.contact-subtitle {
+    color: $dead-black;
+    text-align: center;
+    padding: 65px 159px;
+    font-weight: 700;
+    font-size: 31px;
+    line-height: 1.6;
+}
+
+.contact-form {
+    width: 58%;
+    margin: 0 auto;
+}
+
+.form-control:focus {
+    border-color: #4e75f8;
+    box-shadow: none;
+}
+
+.form-width {
+    width: 50%;
+    float: left;
+    border-radius: 0;
+    padding: 13px 22px;
+    border: 3px solid #577cf7;
+    color: #4e75f8;
+    font-size: 20px;
+    height: auto;
+}
+
+.form-primary {
+    border-right: 0px!important;
+}
+
+.form-width::-webkit-input-placeholder {
+    color: #4e75f8;
+}
+
+.form-width:-ms-input-placeholder {
+    color: #4e75f8;
+}
+
+.form-control::-moz-placeholder {
+    color: #4e75f8;
+    opacity: 1;
+}
+
+textarea.form-comments {
+    width: 100%;
+    border-radius: 0;
+    padding: 26px 22px;
+    border-left: 3px solid #577cf7;
+    border-right: 3px solid #577cf7;
+    border-bottom: 3px solid #577cf7;
+    border-top: 0;
+    color: #4e75f8;
+    height: 228px;
+    font-size: 20px;
+}
+
+.form-comments::-webkit-input-placeholder {
+    color: #4e75f8;
+}
+
+.form-comments:-ms-input-placeholder {
+    color: #4e75f8;
+}
+
+.form-comments::-moz-placeholder {
+    color: #4e75f8;
+}
+
+.form-control.has-error,
+.form-control.has-error::-webkit-input-placeholder {
+    color: #F00;
+}
+
+.form-control.has-error:-ms-input-placeholder {
+    color: #F00;
+}
+
+.form-control.has-error::-moz-placeholder {
+    color: #F00;
+}
+
+.error-msg {
+    text-align: center;
+}
+
+.google_map {
+    width: 100%;
+    height: 500px;
+}
