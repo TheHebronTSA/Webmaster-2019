@@ -1,0 +1,655 @@
+/* ==========================================================================
+   16. RESPONSIVE STYLES 
+   ========================================================================== */
+
+
+/* 
+   Screens less than 1200px
+   ------------------------ */
+
+@media (max-width: 1200px) {
+    .hero-title {
+        top: -55px;
+        font-size: 52px;
+    }
+    .hero-text {
+        font-size: 52px;
+        margin-top: -55px;
+    }
+    .hero-title:after {
+        left: 100%;
+    }
+    .hero-title:before,
+    .hero-title:after {
+        top: 46px;
+    }
+    .hero-title-fit1:after {
+        left: 100%!important;
+    }
+    .hero-title-fit:after {
+        left: 100%!important;
+    }
+    .slide-img-title {
+        span {
+            font-size: 24px;
+        }
+        .slide-img-subtitle {
+            font-size: 16px;
+        }
+    }
+    .hamburger {
+        right: 6%;
+    }
+    .nav-toggle {
+        right: 6%;
+    }
+    .photos-wrap {
+        li {
+            margin-right: 80px;
+            width: 166px;
+            height: 166px;
+        }
+        img {
+            max-width: 90%!important;
+        }
+    }
+    .photos-wrap li:last-child {
+        margin-right: 0;
+    }
+    .img-rotation {
+        li {
+            width: 166px;
+            height: 166px;
+            margin-left: -30px;
+        }
+        img {
+            max-width: 90%;
+        }
+    }
+    .img-rotation li:first-child {
+        margin: -20px 110px 0 83px;
+    }
+    .img-rotation li:last-child {
+        margin: -20px 0px 0 80px;
+    }
+    .rotation-wrap {
+        padding: 0 0 0 32px;
+    }
+    .btn-danger {
+        padding: 16px 33px;
+    }
+    .btn-warning {
+        padding: 16px 33px;
+    }
+    .btn-success {
+        padding: 16px 33px;
+    }
+    .btn-primary {
+        padding: 16px 33px;
+    }
+    .btn-default {
+        padding: 16px 33px;
+    }
+    .btn-subscribe {
+        padding: 16px 33px;
+    }
+    .circle-listing ul li {
+        padding: 0 5px;
+    }
+}
+
+
+/* 
+   Screens less than 992px
+   ----------------------- */
+
+@media (max-width: 992px) {
+    .navbar-nav {
+        text-align: center;
+    }
+    .dropdown-menu {
+        text-align: center;
+    }
+    .hero-title {
+        top: -38px;
+        font-size: 36px;
+    }
+    .hero-text {
+        font-size: 36px;
+        margin-top: -34px;
+    }
+    .hero-title:before,
+    .hero-title:after {
+        top: 30px;
+    }
+    .band-wrap {
+        .section-title {
+            font-size: 48px!important;
+            padding: 0;
+            border-bottom: 4px solid #ffcdcd;
+        }
+        p {
+            font-size: 18px;
+        }
+    }
+    .section-padding {
+        padding: 92px 0;
+    }
+    .team-wrap {
+        .team-title {
+            font-size: 48px!important;
+        }
+        p {
+            font-size: 21px;
+            padding: 40px 0;
+        }
+    }
+    .slide-img-title {
+        span {
+            font-size: 20px;
+        }
+    }
+    .admire-block {
+        .admire-title {
+            font-size: 41px!important;
+        }
+        p {
+            font-size: 21px;
+            padding: 40px 0;
+        }
+    }
+    .testimonial-title {
+        font-size: 41px!important;
+        padding: 0;
+    }
+    .testimonial-space {
+        padding: 120px 0;
+    }
+    .admire-title-clr {
+        font-size: 41px!important;
+    }
+    .admire-subtitle02 {
+        font-size: 21px;
+    }
+    .event-block {
+        padding: 14px 0;
+    }
+    .event-title {
+        font-size: 48px!important;
+    }
+    .event {
+        .event-date {
+            font-size: 20px;
+            padding: 18px 0;
+            display: inline-block;
+        }
+        .event-caption {
+            font-size: 24px!important;
+        }
+        .event-subtitle {
+            padding: 40px 30px;
+            font-size: 21px;
+        }
+        p {
+            font-size: 18px;
+            padding: 0 0 9px 0;
+            line-height: 1.5;
+        }
+        .event-country {
+            font-size: 20px;
+            padding: 9px 0 0 0;
+        }
+    }
+    .album-wrap {
+        .album-title {
+            font-size: 48px!important;
+        }
+        .album-subtitle {
+            padding: 40px 0;
+            font-size: 21px;
+        }
+        p {
+            font-size: 16px;
+            padding: 0;
+        }
+    }
+    .media-title {
+        font-size: 48px!important;
+    }
+    .media-subtitle {
+        font-size: 21px;
+        padding: 40px 0;
+    }
+    .photos-title {
+        font-size: 48px!important;
+    }
+    .fan-page-title {
+        font-size: 48px !important;
+    }
+    .fan-title {
+        font-size: 41px!important;
+    }
+    .contact-title {
+        font-size: 48px!important;
+    }
+    .contact-subtitle {
+        font-size: 21px;
+        padding: 40px 0!important;
+    }
+    .photos-wrap li:nth-child(3) {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .photos-wrap li:last-child {
+        margin: -41px 0 0 123px;
+    }
+    .img-rotation {
+        margin: -138px 0 0 237px;
+    }
+    .img-rotation li {
+        margin-left: -32px;
+    }
+    .img-rotation li:first-child {
+        margin: -20px 110px 0 93px;
+    }
+    .rotation-wrap {
+        padding: 0 0 0 38px;
+    }
+    .object-fit-container {
+        position: inherit;
+        width: 100%;
+    }
+    .img-wrap-right {
+        position: inherit;
+        width: 100%;
+    }
+    .btn-default {
+        font-size: 16px;
+        padding: 10px 18px!important;
+    }
+    .btn-subscribe {
+        font-size: 16px;
+        padding: 10px 18px!important;
+    }
+    .subscribe-title {
+        font-size: 48px!important;
+    }
+}
+
+
+/* 
+   Screens less than 768px
+   ----------------------- */
+
+@media (max-width: 768px) {
+    .slick-dots {
+        bottom: 40px;
+    }
+    .hero-title,
+    .hero-text {
+        font-size: 40px;
+    }
+    .hero-text {
+        margin-top: -38px;
+    }
+    .hero-title:before,
+    .hero-title:after {
+        display: none;
+    }
+    .hero-block {
+        border: none;
+    }
+    .slide-img-title {
+        top: 75%;
+    }
+    .img-wrap-left {
+        position: inherit;
+        width: 100%;
+    }
+    .img-wrap-left img {
+        width: 100%;
+    }
+    .testimonial-title {
+        font-size: 28px!important;
+    }
+    .testimonial-space {
+        padding: 80px 0;
+        .slick-dots {
+            bottom: -20px;
+        }
+    }
+    .flaticon-left::before {
+        font-size: 58px;
+    }
+    .btn-danger {
+        font-size: 16px;
+        padding: 12px 26px;
+        margin: 0 0 10px 0;
+    }
+    .btn-warning {
+        font-size: 16px;
+        padding: 12px 26px;
+        margin: 0 0 10px 0;
+    }
+    .object-fit-container {
+        position: inherit;
+        width: 100%;
+    }
+    .img-wrap-right {
+        position: inherit;
+        width: 100%;
+    }
+    .btn-success {
+        font-size: 16px;
+        padding: 12px 26px;
+        margin: 0 0 10px 0;
+    }
+    .btn-primary {
+        font-size: 16px;
+        padding: 12px 26px;
+        margin: 0 0 10px 0;
+    }
+    .photos-wrap {
+        padding: 65px 0 0 0;
+        li {
+            transform: none;
+            width: 45%;
+            margin: 0 5% 0px 0;
+            height: auto;
+            &:nth-child(even) {
+                margin-right: 0;
+                margin-left: 0;
+                margin-top: 0;
+            }
+        }
+        img {
+            transform: none;
+            min-width: 112%;
+        }
+    }
+    .photos-wrap li:nth-child(3) {
+        margin-right: 5%;
+    }
+    .img-rotation {
+        margin: 0;
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+        li {
+            transform: none;
+            width: 45%;
+            margin: 0 5% 0 0 !important;
+            height: auto;
+        }
+        img {
+            transform: none;
+            min-width: 112%;
+        }
+    }
+    .event-wrap {
+        text-align: center;
+        .event-country {
+            text-align: center;
+        }
+        .event-city {
+            text-align: center;
+        }
+    }
+    .btn-info {
+        margin-bottom: 28px;
+    }
+    .audio-play-btn {
+        margin: 0 auto;
+        display: block;
+    }
+    .audio-title {
+        text-align: center;
+    }
+    .fan-title {
+        font-size: 28px!important;
+        padding: 0 8px!important;
+    }
+    .fan-slide span {
+        font-size: 16px;
+    }
+    .slider-wrap {
+        padding: 80px 0px;
+    }
+    .section-padding {
+        padding: 76px 0;
+    }
+    .form-primary {
+        font-size: 14px;
+    }
+    .form-width {
+        font-size: 14px;
+    }
+    .form-password {
+        font-size: 14px;
+    }
+    .form-subscribe {
+        font-size: 14px;
+    }
+    .event-subcaption {
+        padding: 6px 0!important;
+    }
+    .event-city {
+        padding: 6px 0!important;
+    }
+    .feed-set {
+        padding: 0 0 55px 0;
+    }
+    .contact-form {
+        width: 80%;
+    }
+}
+
+
+/* 
+   Screens less than 480px
+   ----------------------- */
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 30px !important;
+    }
+    p {
+        font-size: 18px!important;
+    }
+    legend,
+    .legend {
+        font-size: 50px;
+    }
+    .team-wrap .team-title {
+        font-size: 34px!important;
+    }
+    .hero-wrap {
+        padding: 130px 15px 0;
+    }
+    .slider-wrap {
+        padding: 0;
+    }
+    .section-padding {
+        padding: 60px 0;
+    }
+    .band-wrap {
+        text-align: center;
+    }
+    .admire-block {
+        text-align: center;
+        padding: 42px 24px;
+        p {
+            padding: 8px 0;
+        }
+    }
+    .admire-block {
+        .admire-title {
+            font-size: 26px !important;
+        }
+    }
+    .admire-title-clr {
+        font-size: 26px !important;
+    }
+    .album-play-button {
+        top: 35%;
+        left: 35%;
+    }
+    .album-play-button::before {
+        font-size: 70px;
+    }
+    .testimonial-title::before {
+        left: 38%
+    }
+    .event-block {
+        text-align: center;
+    }
+    .audio-play-btn {
+        text-align: center;
+    }
+    .audio-title {
+        text-align: center;
+    }
+    .audio-wrap {
+        padding: 32px 0;
+    }
+    .tabset-left {
+        padding: 0 24px;
+        font-size: 16px;
+    }
+    .tabset-right {
+        padding: 0 24px;
+        font-size: 16px;
+    }
+    .photos-wrap {
+        padding: 60px 0 0 0;
+        li {
+            transform: none;
+            min-width: 100%;
+        }
+        img {
+            min-width: 100%;
+            transform: none;
+        }
+    }
+    .img-rotation {
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+        li {
+            transform: none;
+            min-width: 90%;
+        }
+        img {
+            width: 100%;
+            transform: none;
+        }
+    }
+    .background-bg-06 .event-title {
+        font-size: 34px!important;
+    }
+    .section-title {
+        font-size: 34px!important;
+    }
+    .event-title {
+        font-size: 34px!important;
+    }
+    .event-title span::after {
+        border-bottom: 6px solid #ffce80;
+        bottom: -6px;
+    }
+    .album-wrap .album-title {
+        font-size: 34px!important;
+    }
+    .album-title span::after {
+        border-bottom: 6px solid #bababb;
+        bottom: -6px;
+    }
+    .media-title {
+        font-size: 34px!important;
+    }
+    .media-title span::after {
+        border-bottom: 6px solid #19e68c;
+        bottom: -6px;
+    }
+    .photos-title {
+        font-size: 34px!important;
+    }
+    .photos-title span::after {
+        border-bottom: 6px solid #afb3bb;
+        bottom: -6px;
+    }
+    .fan-page-title {
+        font-size: 34px!important;
+    }
+    .fan-page-title span::after {
+        border-bottom: 6px solid #bbb1d7;
+        bottom: -6px;
+    }
+    .hello-page-title {
+        font-size: 34px!important;
+    }
+    .hello-page-title span::after {
+        border-bottom: 6px solid #bcc8f0;
+        bottom: -6px;
+    }
+    .contact-title {
+        font-size: 34px!important;
+    }
+    .contact-title span::after {
+        border-bottom: 6px solid #bcc8f0;
+        bottom: -6px;
+    }
+    .subscribe-title {
+        font-size: 34px!important;
+    }
+    .subscribe-title span::after {
+        border-bottom: 6px solid #d09db0;
+        bottom: -6px;
+    }
+    .form-width {
+        .img-rotation li img {
+            width: 100%;
+        }
+        width: 100%!important;
+        border-right: 3px solid #577cf7!important;
+        font-size: 14px;
+        padding: 22px 10px;
+    }
+    .form-comments {
+        font-size: 14px;
+        padding: 12px 10px;
+    }
+    .form-primary {
+        border-bottom: 0!important;
+    }
+    .form-password {
+        font-size: 14px;
+        padding: 22px 10px;
+    }
+    .btn-default {
+        font-size: 15px!important;
+        width: 100%;
+    }
+    .flaticon-sm-shape::before {
+        font-size: 16px;
+        padding: 14px 14px;
+    }
+    .form-subscribe {
+        width: 100%;
+        border-right: 3px solid #fff!important;
+    }
+    .fan-slide span {
+        padding: 10px 0 64px 0;
+    }
+    .contact-form {
+        width: 100%;
+    }
+    .social-icons ul li {
+        padding: 0 4px;
+    }
+    .form-single {
+        border-right: 3px solid #F87474!important;
+    }
+}

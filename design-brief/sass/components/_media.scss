@@ -1,0 +1,210 @@
+/* ==========================================================================
+   10. MEDIA
+   ========================================================================== */
+
+.our-media {
+    background: url(../images/background-bg-05.jpg) no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    @media (max-width: 767px) {
+        background-attachment: scroll;
+    }
+}
+
+.media-title {
+    color: $light-green;
+    text-align: center;
+    font-weight: 700;
+    span {
+        position: relative;
+    }
+}
+
+.media-title span::after {
+    border-bottom: 10px solid $light-green;
+    content: "";
+    position: absolute;
+    width: 100%;
+    left: 0;
+    right: 0;
+    bottom: -13px;
+}
+
+.media-subtitle {
+    color: $white;
+    text-align: center;
+    padding: 65px 122px;
+    font-weight: 700;
+    font-size: 31px;
+    line-height: 1.6;
+}
+
+.btn-position {
+    text-align: center;
+}
+
+.tab-position {
+    text-align: center;
+    display: inline-block;
+}
+
+.nav-tabs {
+    border: none;
+    font-family: $primary-font;
+}
+
+.tabset-left {
+    background: $white;
+    border-radius: 40px 0px 0px 40px;
+    padding: 0 50px;
+    color: $white;
+    font-weight: 700;
+    font-size: 24px;
+    a {
+        color: #2d283e;
+        border: none;
+    }
+    .light & {
+        background: #efefef;
+    }
+}
+
+.nav-tabs> .active {
+    background: #19E68C;
+    color: #fff;
+    .light & {
+        background: #19E68C;
+    }
+}
+
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:focus,
+.nav-tabs>li.active>a:hover {
+    color: #fff;
+}
+
+.tabset-right {
+    background: $white;
+    border-radius: 0 40px 40px 0;
+    padding: 0 50px;
+    color: $white;
+    font-weight: 700;
+    font-size: 24px;
+    a {
+        color: #000;
+        border: none;
+    }
+    .light & {
+        background: #efefef;
+    }
+}
+
+.nav-tabs>li>a {
+    border: none;
+}
+
+.nav-tabs>li>a:hover {
+    background: none;
+    border: none;
+}
+
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:focus,
+.nav-tabs>li.active>a:hover {
+    border: none;
+    background: none;
+}
+
+.audio-tab {
+    padding: 70px 0;
+}
+
+.audio-wrap {
+    padding: 12px 0px;
+    border-bottom: 2px solid rgba(77, 43, 109, 0.35);
+    display: inline-block;
+    width: 100%;
+    .light & {
+        border-bottom: 2px solid rgba(219, 219, 219, 0.4);
+    }
+}
+
+.audio-play-btn {
+    font-weight: 100;
+    text-align: left;
+    a {
+        color: #a89fb1;
+        text-decoration: none;
+    }
+}
+
+.audio-title {
+    font-size: 30px;
+    color: #fff;
+    text-align: left;
+    p {
+        color: #a89fb1;
+        font-size: 18px;
+        font-weight: normal;
+    }
+    .light & {
+        color: #333;
+        font-weight: bold;
+    }
+}
+
+.audio-buy {
+    .btn-defualt {
+        background: #fff;
+        color: #433f52;
+        border-radius: 30px;
+        font-weight: 800;
+        padding: 10px 15px;
+        font-size: 15px;
+        margin: 20px 0 0 0;
+        font-family: $primary-font;
+    }
+    :hover {
+        background: #E3E3E3;
+        color: #433f52;
+    }
+}
+
+.sound-cloud iframe {
+    width: 100%;
+    margin: 78px 0 0 0;
+    height: 166px;
+    border: none;
+}
+
+.video-wrap {
+    display: inline-block;
+    margin: 65px 0 15px;
+}
+
+.video-img-block {
+    img {
+        position: relative;
+        margin-bottom: 30px;
+    }
+    a {
+        outline: none;
+    }
+}
+
+.video-play-btn {
+    position: absolute;
+    top: 35%;
+    left: 43%;
+    a {
+        color: #a89fb1;
+    }
+}
+
+.video-play-btn .flaticon-play:before {
+    color: #FFF;
+}
+
+.audio-play-btn.is_playing .flaticon-sm::before {
+    color: #00c85f;
+}

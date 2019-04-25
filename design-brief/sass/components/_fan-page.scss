@@ -1,0 +1,95 @@
+/* ==========================================================================
+   12. FAN PAGE
+   ========================================================================== */
+
+.our-clients {
+    background: url(../images/background-bg-06.jpg) no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    @media (max-width: 767px) {
+        background-attachment: scroll;
+    }
+}
+
+.fan-page-title {
+    color: $white;
+    text-align: center;
+    font-weight: 700;
+    span {
+        position: relative;
+    }
+}
+
+.fan-slider-wrap {
+    position: relative;
+    margin: 80px 0;
+}
+
+.slider .tabs {
+    height: 380px;
+}
+
+.fan-page-title span::after {
+    border-bottom: 10px solid #bbb1d7;
+    content: "";
+    position: absolute;
+    width: 100%;
+    left: 0;
+    right: 0;
+    bottom: -13px;
+}
+
+.fan-slide {
+    font-family: $secondary-font;
+    .fan-title {
+        text-align: center;
+        font-size: 52px;
+        color: $white;
+        border: none;
+        padding: 0 46px;
+    }
+    span {
+        text-align: center;
+        display: block;
+        color: $white;
+        font-size: 25px;
+        font-weight: 700;
+        padding: 21px 0;
+    }
+}
+
+.twitter-feed-wrap {
+    display: block;
+}
+
+.twitter-feed {
+    margin: 0;
+    padding: 0;
+    width: 100%!important;
+}
+
+.twitter-listing {
+    float: left;
+    list-style: none;
+    width: 33%;
+    padding: 0 13px;
+}
+
+.embed-tweet-item {
+    width: 100%;
+    blockquote {
+        width: 100%;
+        min-height: 200px;
+        background: url('../images/twitter-placeholder.png') no-repeat center top;
+        background-size: contain;
+        border: none;
+    }
+}
+
+.flex-direction-nav {
+    display: none;
+}
+
+.twitter-feed .slick-dots {
+    bottom: 0;
+}

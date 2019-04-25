@@ -1,0 +1,33 @@
+/* ==========================================================================
+   4. ABOUT THE BAND
+   ========================================================================== */
+
+.about {
+    background-image: url(../images/background-bg-01.jpg);
+    background-size: cover;
+    background-position: center top;
+    padding: 260px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.band-wrap {
+    display: inline-block;
+    .section-title {
+        color: $red;
+        border-bottom: 10px solid #ffcdcd;
+        display: inline-block;
+        padding: 45px 0 4px 0;
+        font-weight: 700;
+    }
+    .section-subtitle {
+        padding: 14px 20px 24px 0;
+        font-weight: 700;
+        font-size: 31px;
+        line-height: 1.5;
+    }
+    .section-subtitle-thin {
+        font-size: 23px;
+        padding: 0 18px 0 0;
+    }
+}

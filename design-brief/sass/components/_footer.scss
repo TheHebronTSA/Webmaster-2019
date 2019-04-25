@@ -1,0 +1,193 @@
+/* ==========================================================================
+   14. FOOTER
+   ========================================================================== */
+
+footer {
+    background: url(../images/background-bg-07.jpg) no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.subscribe-title {
+    color: $white;
+    text-align: center;
+    font-weight: 700;
+    span {
+        position: relative;
+    }
+}
+
+.subscribe-title span::after {
+    border-bottom: 10px solid #d09db0;
+    content: "";
+    position: absolute;
+    width: 100%;
+    left: 0;
+    right: 0;
+    bottom: -13px;
+}
+
+.subscribe-email {
+    padding: 74px 0 0;
+}
+
+.form-subscribe {
+    background: none;
+    width: 50%;
+    float: left;
+    border-radius: 0;
+    padding: 13px 22px;
+    border: 3px solid #fff;
+    color: #fff;
+    font-size: 20px;
+    height: auto;
+}
+
+.form-subscribe::-webkit-input-placeholder {
+    color: #fff;
+}
+
+.form-subscribe:-ms-input-placeholder {
+    color: #fff;
+}
+
+.form-subscribe::-moz-placeholder {
+    color: #fff;
+}
+
+.subscribe-block .form-control.has-error,
+.subscribe-block .form-control.has-error::-webkit-input-placeholder {
+    color: #000;
+}
+
+.subscribe-block .form-control.has-error:-ms-input-placeholder {
+    color: #000;
+}
+
+.subscribe-block .form-control.has-error::-moz-placeholder {
+    color: #000;
+}
+
+.form-subscribe:hover {
+    color: #fff;
+}
+
+.form-subscribe:active {
+    color: #fff;
+}
+
+.form-subscribe:active:hover {
+    color: #fff;
+}
+
+.form-subscribe:focus {
+    color: #fff;
+    border-color: #fff;
+}
+
+.subscribe-block {
+    display: block;
+}
+
+.shape-line img {
+    margin: 0 auto;
+    padding: 28px 0;
+    display: block;
+}
+
+.social-icons {
+    text-align: center;
+    padding: 30px 0;
+    ul {
+        padding: 0;
+        list-style: none;
+        text-align: center;
+        display: inline-block;
+        li {
+            float: left;
+            padding: 0 8px;
+        }
+        a {
+            text-decoration: none;
+        }
+    }
+}
+
+
+/* Social media icons*/
+
+.flaticon-sm::before {
+    font-size: 48px;
+    text-decoration: none;
+    text-align: left;
+    margin: 0;
+    color: #abacb5;
+}
+
+.flaticon-sm-shape::before {
+    font-size: 20px;
+    text-decoration: none;
+    text-align: left;
+    margin: 0;
+    color: #fff;
+    background: #cdb1c3;
+    border-radius: 50%;
+    padding: 18px 18px;
+}
+
+.shape1::before {
+    background: #366199;
+}
+
+.shape2::before {
+    background: #0f96cc;
+}
+
+.shape3::before {
+    background: #316198;
+}
+
+.shape4::before {
+    background: #ff8800;
+}
+
+.shape5::before {
+    background: #e02f2f;
+}
+
+
+/* End Social media icons*/
+
+.address {
+    color: #fff;
+    text-align: center;
+    h4 {
+        font-size: 20px;
+        line-height: 2;
+    }
+    span,
+    h5,
+    p {
+        font-size: 16px;
+        display: block;
+    }
+}
+
+
+/*Call to Action*/
+
+.cta-title {
+    color: #494949;
+    font-size: 50px !important;
+    text-align: center;
+    padding-bottom: 30px;
+    font-weight: 700;
+    line-height: 1.4;
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+.call-to-action {
+    padding: 65px 0 80px;
+    background: #f8f8f8;
+}
