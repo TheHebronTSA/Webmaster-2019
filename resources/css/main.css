@@ -370,6 +370,10 @@ a:visited:hover.dark-link {
 	.band-link-menu-open {
 		background: #000;
 	}
+
+	.band-link-menu-open a.dark-link {
+		color: #fff !important;
+	}
 }
 
 @media (min-width: 630px) {
